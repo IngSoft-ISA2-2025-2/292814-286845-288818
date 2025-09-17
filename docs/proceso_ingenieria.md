@@ -1,7 +1,5 @@
 # Primer Proceso de Ingenieria
 
----
-
 ## Definition of Ready (DoR)
 **Descripción Clara**
 - La tarjeta en el tablero debe tener una descripción completa de lo que se necesita construir, redactada en el formato 
