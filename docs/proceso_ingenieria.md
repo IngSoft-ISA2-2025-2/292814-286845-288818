@@ -1,5 +1,51 @@
 # Primer Proceso de Ingenieria
 
+---
+
+## Definition of Ready (DoR)
+**Descripción Clara**
+- La tarjeta en el tablero debe tener una descripción completa de lo que se necesita construir, redactada en el formato 
+```
+Como [tipo de usuario] 
+Quiero [hacer algo] 
+Para [conseguir un beneficio]
+```
+- Se han definido los criterios de aceptación, que deben ser verificables y estar detallados con al menos dos escenarios diferentes, escritos en formato Gherkin.
+```
+Escenario: [Nombre del escenario]
+Dado [Un contexto inicial]
+Cuando [Ocurre una acción]
+Entonces [Se obtiene un resultado esperado]
+```
+- Escenario Positivo: Un escenario que describe el resultado esperado cuando todo funciona correctamente.
+- Escenarios Negativos: Escenarios que describen cómo debe comportarse el sistema en cada caso de error o comportamiento inesperado.
+
+**Prioridad Asignada** 
+- La tarea tiene una prioridad clara (alta, media, baja) para que el equipo sepa qué es lo más importante a abordar.
+
+**Tamaño Manejable**
+- La tarea es lo suficientemente pequeña como para ser completada por una sola persona en un tiempo razonable, reduciendo el riesgo de bloqueos.
+
+---
+
+## Definition of Done (DoD)
+**Pasa las pruebas**
+- Todas las pruebas (unitarias, de integración, funcionales) han sido ejecutadas y pasadas sin errores.
+
+**Revisión de código** 
+- Un miembro del equipo que no haya trabajado en la tarea ha revisado y aprobado el código.
+
+**Cumple con los criterios de aceptación**
+- La funcionalidad cumple con todos los criterios de aceptación definidos en la DoR.
+
+**Código documentado** 
+- El código tiene comentarios claros donde es necesario y se han actualizado los archivos de documentación.
+
+**Rama de código fusionada**
+- El código ha sido fusionado a la rama principal
+
+---
+
 ## Estrategia de branching
 - Elegimos utilizar un modelo simplificado de Git Flow o GitHub Flow.
 - main: Siempre debe estar en un estado estable y lista para ser desplegada en producción.
