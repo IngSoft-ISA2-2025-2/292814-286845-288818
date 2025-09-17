@@ -1,4 +1,6 @@
-# Primer Proceso de Ingenieria
+# Reglas de trabajo y configuración del repositorio
+
+> En este edocumento hablaremos sobre DoR, CA, DoD, buenas prácticas, branching, commits, nomenclatura y estructura.
 
 ## Estructura de carpetas
 - `docs/` — proceso, kanban, calidad/deuda, actas
