@@ -6,6 +6,7 @@
 - Christian Ingrey
 
 Todos somos desarrollador y tester en todas las entregas. 
+> Rol de la etapa: **Product Owner (Etapa 1)** → Juan Pedro Michelini. El PO rota en las siguientes etapas.
 
 ## Flujo del tablero
 Backlog → Ready → In-Progress → In Review → Done
@@ -57,6 +58,11 @@ Entonces [Se obtiene un resultado esperado]
 ---
 
 ### Políticas por columna
+
+**Backlog**
+- Ideas y necesidades del producto. No necesariamente listas para empezar.
+- Se prioriza y refina en el siguiente paso, ya teniendo definido la Definition of Ready (DoR) del equipo.
+
 **Ready:**
 - Una tarea se mueve a Ready cuando ha sido analizada y está lista para ser desarrollada.
 - Para pasar a esta columna, la tarea debe cumplir con la Definition of Ready (DoR) del equipo.
@@ -77,8 +83,12 @@ Entonces [Se obtiene un resultado esperado]
 - Una tarea solo se mueve a la columna Done cuando ha cumplido con la Definition of Done (DoD) del equipo.
 - Esto asegura que la funcionalidad es estable, de alta calidad y está lista para su despliegue o entrega al cliente.
 
-
 ## Ceremonias
 
-
-
+- **Sprint Planning (inicio de cada entrega/sprint)**
+  - **Objetivo:** Acordar junto al equipo el objetivo y el alcance del sprint. Seleccionar del Backlog las tarjetas que cumplan con la Definition of Ready, pudiendolas mover asi a Ready, para luego pasarlas poco a poco a In Progress, respetando el WIP. Identificar dependencias/riesgos entre las tarjetas y, si hace falta, descomponer en subtareas.
+  - **Salida:** Objetivo y alcance del sprint, lista de tarjetas seleccionadas (con su prioridad y tamaño) y dependencias y riesgos anotados.
+  
+- **Sprint Retrospective (al finalizar cada entrega/sprint)**
+  - **Objetivo:** Mejorar el proceso y el flujo de trabajo, ver que aspectos fueron positivos y aportaron valor al sprint, como tambien ver que aspectos se pueden mejorar y añadir para mejorar el proceso del siguiente sprint.
+  - **Salida:** Lista de objetivos y acciones grupales con el objetivo de cumplirlas y respetarlas para el/los proximo/s sprint/s.
