@@ -1,5 +1,9 @@
 # Primer Proceso de Ingenieria
 
+## Estructura de carpetas
+- `docs/` — proceso, kanban, calidad/deuda, actas
+- `Obligatorio/Material/` — código fuente de la solución (API .NET y app Angular), base de datos y documentacion
+
 ## Definition of Ready (DoR)
 **Descripción Clara**
 - La tarjeta en el tablero debe tener una descripción completa de lo que se necesita construir, redactada en el formato 
@@ -86,4 +90,13 @@ tipo(ámbito): descripción
   refactor: simplificar función de cálculo de precios
   docs: actualizar README con instrucciones de instalación
   ```
+## Estándares de nomenclatura
+- **C#**: Clases/Interfaces `PascalCase` (interfaces con `I`), métodos `PascalCase`, variables `camelCase`.
+- **Angular/TS**: archivos `kebab-case` (`user-list.component.ts`), clases `PascalCase`, variables `camelCase`.
+- **Ramas**: minúsculas con guiones (`feat/gestion-usuarios`).
 
+## Pull Requests
+- Linkear el PR al issue correspondiente (GitHub Projects).
+- Incluir breve descripción y evidencia (captura/pasos).
+- No self-merge. Se requiere 1 aprobación.
+- Si el PR queda bloqueado, avisar al equipo para swarming.
