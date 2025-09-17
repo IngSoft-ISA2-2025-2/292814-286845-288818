@@ -53,7 +53,7 @@ Entonces [Se obtiene un resultado esperado]
 - main: Siempre debe estar en un estado estable y lista para ser desplegada en producción.
 - **Ramificación de tareas**: por cada tarea que el equipo toma del tablero Kanban, se crea una nueva rama a partir de main.
 
-### Nomenclatura de Ramas
+## Estandares de nomenclatura
 El nombre de una rama debe comunicar su propósito de manera inmediata.
 - Cada rama debe tener **prefijos de tipo**
   - feature/: Para nuevas funcionalidades o características.
@@ -68,7 +68,7 @@ El nombre de una rama debe comunicar su propósito de manera inmediata.
   chore/actualizar-dependencias-npm
   hotfix/parche-critico-pagos
   ```
-### Nomenclatura de Commits
+### Nomenclatura de commits
 El formato que se utilizara es el sigiente: 
 ```
 tipo(ámbito): descripción
@@ -90,10 +90,9 @@ tipo(ámbito): descripción
   refactor: simplificar función de cálculo de precios
   docs: actualizar README con instrucciones de instalación
   ```
-## Estándares de nomenclatura
+### Nomenclatura de codigo
 - **C#**: Clases/Interfaces `PascalCase` (interfaces con `I`), métodos `PascalCase`, variables `camelCase`.
 - **Angular/TS**: archivos `kebab-case` (`user-list.component.ts`), clases `PascalCase`, variables `camelCase`.
-- **Ramas**: minúsculas con guiones (`feat/gestion-usuarios`).
 
 ## Pull Requests
 - Linkear el PR al issue correspondiente (GitHub Projects).
