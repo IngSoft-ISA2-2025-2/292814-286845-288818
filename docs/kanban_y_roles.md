@@ -34,7 +34,7 @@ Backlog → Ready → In-Progress → In Review → Done
 - Si se encuentran errores, la tarea vuelve a In-Progress. La persona que la revisó debe agregar comentarios o indicaciones claras para que el desarrollador original pueda corregirla.
   
 **Done:**
-- Una tarea solo se mueve a la columna Done cuando ha cumplido con la Definition of Done (DoD) del equipo.
+- Una tarea solo se mueve a la columna Done cuando ha cumplido con la Definition of Done [DoD](proceso_ingenieria.md#definition-of-done-dod) del equipo.
 - Esto asegura que la funcionalidad es estable, de alta calidad y está lista para su despliegue o entrega al cliente.
 
 ## Ceremonias
@@ -46,5 +46,6 @@ Backlog → Ready → In-Progress → In Review → Done
 - **Sprint Retrospective (al finalizar cada entrega/sprint)**
   - **Objetivo:** Mejorar el proceso y el flujo de trabajo, ver que aspectos fueron positivos y aportaron valor al sprint, como tambien ver que aspectos se pueden mejorar y añadir para mejorar el proceso del siguiente sprint.
   - **Salida:** Lista de objetivos y acciones grupales con el objetivo de cumplirlas y respetarlas para el/los proximo/s sprint/s.
+
 
 
