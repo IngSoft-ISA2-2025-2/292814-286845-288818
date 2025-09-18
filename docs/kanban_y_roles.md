@@ -19,7 +19,7 @@ Backlog → Ready → In-Progress → In Review → Done
 
 **Ready:**
 - Una tarea se mueve a Ready cuando ha sido analizada y está lista para ser desarrollada.
-- Para pasar a esta columna, la tarea debe cumplir con la Definition of Ready [DoR](proceso_ingenieria.md#definition-of-ready-dor) del equipo.
+- Para pasar a esta columna, la tarea debe cumplir con la Definition of Ready [DoR](reglas_de_trabajo_y_configuracion_repo.md#definition-of-ready-dor) del equipo.
   
 **In-Progress (WIP):**
 - El límite de WIP (Work In Progress) es de 2 tareas que pueden estar en esta columna al mismo tiempo (por persona), es decir como somos 3 integrantes 6 tareas es lo maximo permitido en esta columna.
