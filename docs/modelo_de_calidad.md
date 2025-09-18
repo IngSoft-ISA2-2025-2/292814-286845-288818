@@ -1,5 +1,5 @@
 # Modelo de Calidad (ISO/IEC 25010) - E1
-Este modelo toma como referencia el estándar ISO/IEC 25010, que define las principales características para evaluar la calidad del software. Seleccionamos los atributos más relevantes para el proyecto, a fin de guiar el análisis y la mejora continua.
+Para nuestro modelo de calidad tomamos como referencia el estándar ISO/IEC 25010, con este definimos las principales características para evaluar la calidad del software. Seleccionamos los atributos más relevantes para el proyecto, a fin de guiar el análisis y la mejora continua.
 
 ## Propósito y alcance
 Definir cómo se medirá y mejorará la **calidad** del producto durante el proyecto. El modelo aplica a backend, frontend e infraestructura del repositorio.
