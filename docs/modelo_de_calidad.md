@@ -1,61 +1,35 @@
-# Modelo de Calidad (ISO/IEC 25010) - E1
-Para nuestro modelo de calidad tomamos como referencia el estándar ISO/IEC 25010, con este definimos las principales características para evaluar la calidad del software. Seleccionamos los atributos más relevantes para el proyecto, a fin de guiar el análisis y la mejora continua.
+# Modelo de Calidad (ISO 25010) - E1
+Para nuestro modelo de calidad tomamos como referencia el estándar ISO 25010, con este definimos las principales características para evaluar la calidad del software. Seleccionamos los atributos más relevantes para el proyecto, a fin de guiar el análisis y la mejora continua.
 
-## Propósito y alcance
-Definir cómo se medirá y mejorará la **calidad** del producto durante el proyecto. El modelo aplica a backend, frontend e infraestructura del repositorio.
+## Propósito y alcance del modelo
+Definir cómo se medirá y mejorará la calidad del producto durante el proyecto. El modelo aplica a backend, frontend y repositorio.
 
 ## Atributos priorizados y cómo se evaluarán
 
 1) **Mantenibilidad**  
-- *Justificación*: reduce el costo de cambio y acelera los tiempos de entrega.  
-- **Indicadores**:  
-  - Ausencia de violaciones críticas en lints y analizadores.  
-  - Nivel de cobertura de pruebas.  
-  - Baja duplicación y clases/métodos de tamaño reducido.  
+- *Por qué lo elegimos*: nos permite reducir el costo de realizar cambios y facilita entregar nuevas.  
+- **Lo mediremos basándonos en**:  
+  - Cobertura de pruebas alcanzada.  
+  - Nivel de duplicación de código y tamaño de clases/métodos.
   - Dependencias actualizadas.  
 
-2) **Confiabilidad**  
-- *Justificación*: evita regresiones y asegura estabilidad.  
-- **Indicadores**:  
-  - Pruebas de rutas críticas en estado correcto.  
-  - Manejo uniforme de errores en la API y registros adecuados de logs.  
+2) **Seguridad**  
+- *Por qué lo elegimos*: es clave proteger los datos y garantizar la confianza de los usuarios.
+- **Lo mediremos basándonos en**:  
+  - Que no existan vulnerabilidades críticas en dependencias.
+  - Que la configuración de CORS sea la adecuada según el entorno.  
+  - Que no se expongan secretos en el repositorio.
 
-3) **Rendimiento**  
-- *Justificación*: garantizar tiempos de respuesta adecuados para la experiencia de usuario y cumplir con objetivos de nivel de servicio.  
-- **Indicadores previstos**: latencia percentil 95/99 y tasa de errores 5xx por endpoint.  
-- *Nota*: estas métricas se medirán mediante telemetría en etapas posteriores.  
+3) **Completitud Funcional**
+- *Por qué lo elegimos*: el sistema debe cumplir con los requerimientos definidos y entregar valor real al usuario final.
+- **Lo mediremos basándonos en**:  
+  - Porcentaje de requisitos funcionales implementados respecto al backlog definido.
+  - Cantidad de bugs funcionales abiertos frente a los cerrados en cada entrega.
+  - Evidencia de pruebas de aceptación (BDD) que validen los criterios de usuario definidios con el PO.
+  - Cobertura de escenarios de negocio clave en tests end-to-end (frontend y backend).
 
-4) **Seguridad**  
-- *Justificación*: proteger datos y usuarios.  
-- **Indicadores**:  
-  - Ausencia de vulnerabilidades críticas reportadas en dependencias.  
-  - Configuración de CORS acotada.  
-  - No existencia de secretos expuestos en el repositorio.  
-
-5) **Usabilidad**  
-- *Justificación*: reduce errores funcionales y retrabajo.  
-- **Indicadores**:  
-  - Validaciones consistentes en formularios.  
-  - Mensajes de error claros y comprensibles.  
-  - Consistencia en la interfaz de usuario.  
-
-## Baseline E1
-
-- **Backend (.NET)**  
-  - Analyzers/format: pendiente de medición inicial (resultado esperado: sin violaciones críticas).  
-  - Dependencias desactualizadas: pendiente de medición inicial.  
-  - Cobertura de pruebas unitarias: pendiente de medición inicial.  
-
-- **Frontend (Angular)**  
-  - Lint: pendiente de medición inicial.  
-  - Dependencias desactualizadas: pendiente de medición inicial.  
-  - Vulnerabilidades reportadas por npm audit: pendiente de medición inicial.  
-  - Cobertura de pruebas unitarias: pendiente de medición inicial.  
-
-- **Repositorio/Infraestructura**  
-  - Presencia de secretos en el repositorio: pendiente de revisión.  
-  - Presencia de rutas con espacios o acentos: pendiente de revisión.  
-
+En resumen, este modelo de calidad nos da un marco de referencia claro para evaluar el estado actual del producto y orientar las mejoras en cada entrega.
+ 
 ## Compromisos de mejora (a validar en retrospectiva)  
 - Incrementar la cobertura de pruebas en el backend en la Entrega 2 (TDD aplicado a corrección de bugs).  
 - Eliminar vulnerabilidades críticas detectadas en dependencias para la Entrega 2.  
