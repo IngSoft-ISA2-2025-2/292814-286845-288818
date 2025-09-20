@@ -26,7 +26,21 @@ En cada punto encontrado decidimos brindar ejemplos a forma de evidenciar la pre
 
 **Mensajes de error detallados:** En managers como `PharmacyManager.cs` y `PurchasesManager.cs`, los mensajes de excepción pueden revelar información interna del sistema (por ejemplo, "Pharmacy not found"), lo que puede ser explotado por atacantes.
 
-## 3) Completitud funcional
+**Mensajes de error en login que revelan información:**  
+- Por ejemplo, `Error Login failed: The user does not exist` puede revelar información sobre la existencia de usuarios, lo que puede ser explotado en ataques de enumeración.
+
+## 3) Usabilidad
+
+**Redirección al login:** La aplicación no redirige automáticamente al login al abrirla, lo que puede confundir al usuario.
+
+**Acceso al registro:** Falta un botón "No tengo cuenta" en la pantalla de login para facilitar el acceso al registro.
+
+**Mensajes de error y formato claro en registro:**  
+En la pantalla de registro, los mensajes de error no son claros respecto al formato requerido:
+- Ejemplo: `Error Create User failed: Invalid UserCode` (el formato requerido es `^[0-9]{6}$`).
+- Ejemplo: `Error Create User failed: Invalid Password` (no se indica el formato requerido, que es `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&.*-]).{8,}$`).
+
+## 4) Completitud funcional
 
 **No hay logging:** Ningún controller ni manager registra acciones o errores, por ejemplo, en `LoginController.cs` y `PurchasesController.cs` no se registra ningún intento de login o compra.
 
@@ -42,16 +56,3 @@ En cada punto encontrado decidimos brindar ejemplos a forma de evidenciar la pre
 
 Durante el correr de las siguientes entregas continuaremos probando y analizando distintos casos bordes para asegurar la completitud funcional.
 
-
-
-usabilidad
-- mandar al login apenas abris la app
-- boton no tengo cuenta en login
-
-    EN REGISTER
-    - Mensajes de error y formato claro.
-        - Error Create User failed: Invalid UserCode (string validUserCode = @"^[0-9]{6}$";)
-        - Error Create User failed: Invalid Password (No dice formato             string validPassword = @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&.*-]).{8,}$";)
-
-seguridad
-- Error Login failed: The user does not exist
