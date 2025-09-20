@@ -41,3 +41,17 @@ En cada punto encontrado decidimos brindar ejemplos a forma de evidenciar la pre
 **Cobertura de casos borde:** En la validación de contraseñas en `UsersManager.cs`, se exige un formato más estricto que el solicitado en la consigna, lo que puede generar confusión y errores funcionales.
 
 Durante el correr de las siguientes entregas continuaremos probando y analizando distintos casos bordes para asegurar la completitud funcional.
+
+
+
+usabilidad
+- mandar al login apenas abris la app
+- boton no tengo cuenta en login
+
+    EN REGISTER
+    - Mensajes de error y formato claro.
+        - Error Create User failed: Invalid UserCode (string validUserCode = @"^[0-9]{6}$";)
+        - Error Create User failed: Invalid Password (No dice formato             string validPassword = @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&.*-]).{8,}$";)
+
+seguridad
+- Error Login failed: The user does not exist
