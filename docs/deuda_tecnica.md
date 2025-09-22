@@ -4,7 +4,7 @@ Para la deuda tecnica nos basamos en el modelo de calidad que definimos previame
 
 ## 1) Mantenibilidad
 
-**Métodos largos y lógica repetida:** Por ejemplo, el método CreateInvitation realiza validaciones, consultas y persistencia en un solo bloque, dificultando su mantenimiento y comprensión.
+**Métodos largos y lógica repetida:** Por ejemplo, el método `CreateInvitation` realiza validaciones, consultas y persistencia en un solo bloque, dificultando su mantenimiento y comprensión.
 
 **Acoplamiento elevado:** En `DrugManager.cs`, la clase depende de varios repositorios (`_drugRepository`, `_pharmacyRepository`, etc.), lo que complica la refactorización y el testeo.
 
