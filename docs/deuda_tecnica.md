@@ -14,6 +14,10 @@ Para la deuda tecnica nos basamos en el modelo de calidad que definimos previame
 Por ejemplo, en `DrugController.cs` los métodos `GetAll` y `User` convierten la lista de entidades `Drug` a `DrugBasicModel` usando `.Select(...)`, y en `PharmacyController.cs` ocurre lo mismo en `GetAll`, `Create` y `Update` con la conversión a `PharmacyBasicModel` o `PharmacyDetailModel`.  
 Esta práctica genera duplicación de lógica y dificulta la evolución futura del modelo de datos.
 
+**Rutas de archivos hardcodeadas:** En la funcionalidad de exportación, el error "Could not find a part of the path '/app/Exporters'" indica rutas absolutas hardcodeadas que fallan en diferentes entornos.
+
+**Rutas de archivos hardcodeadas:** En la funcionalidad de exportación, el error "Could not find a part of the path '/app/Exporters'" indica rutas absolutas hardcodeadas que fallan en diferentes entornos.
+
 En cada punto encontrado decidimos brindar ejemplos a forma de evidenciar la presencia de las deudas tecnicas mencionadas, eso no significa que se pueda encontrar la misma deuda tecnica multiples veces.
 
 ## 2) Seguridad 
@@ -40,6 +44,8 @@ En la pantalla de registro, los mensajes de error no son claros respecto al form
 - Ejemplo: `Error Create User failed: Invalid UserCode` (el formato requerido es `^[0-9]{6}$`).
 - Ejemplo: `Error Create User failed: Invalid Password` (no se indica el formato requerido, que es `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&.*-]).{8,}$`).
 
+**Mensajes de error poco descriptivos:** Al crear una droga con datos erróneos, el sistema muestra "Error Create Drug failed: undefined" en lugar de especificar qué validación falló.
+
 ## 4) Completitud funcional
 
 **No hay logging:** Ningún controller ni manager registra acciones o errores, por ejemplo, en `LoginController.cs` y `PurchasesController.cs` no se registra ningún intento de login o compra.
@@ -48,6 +54,16 @@ En la pantalla de registro, los mensajes de error no son claros respecto al form
 
 **Falta de manejo de errores inesperados:** En managers como `PurchasesManager.cs` y `StockRequestManager.cs`, no se implementa manejo de excepciones para errores no previstos (por ejemplo, fallos de base de datos).
 
+**Validación insuficiente en frontend:** En formularios de registro y creación de farmacia, la validación de dirección permite cualquier valor sin verificar formato o estructura mínima.
+
+**Rutas de archivos hardcodeadas:** En la funcionalidad de exportación, el error "Could not find a part of the path '/app/Exporters'" indica rutas absolutas hardcodeadas que fallan en diferentes entornos.
+
+**Referencias nulas no controladas:** En funcionalidades como "Purchase by date range" y "Purchase Approve/Reject", se producen errores "Object reference not set to an instance of an object", indicando falta de validación de objetos antes de su uso.
+
+**Mensajes de error no informativos:** Al crear una droga errónea, el mensaje "Error Create Drug failed: undefined" no proporciona información útil al usuario sobre qué validación falló específicamente.
+
+**Rutas de archivos hardcodeadas:** En la funcionalidad de exportación, el error "Could not find a part of the path '/app/Exporters'" indica rutas absolutas hardcodeadas que fallan en diferentes entornos.
+
 **Validaciones incompletas:** En `UsersManager.cs`, no se valida si el usuario está activo o bloqueado antes de permitir la creación o login.
 
 **Eliminación física vs. lógica:** En `PharmacyManager.cs`, la eliminación de farmacias es física, lo que puede causar pérdida de información relevante.
@@ -55,4 +71,3 @@ En la pantalla de registro, los mensajes de error no son claros respecto al form
 **Cobertura de casos borde:** En la validación de contraseñas en `UsersManager.cs`, se exige un formato más estricto que el solicitado en la consigna, lo que puede generar confusión y errores funcionales.
 
 Durante el correr de las siguientes entregas continuaremos probando y analizando distintos casos bordes para asegurar la completitud funcional.
-
