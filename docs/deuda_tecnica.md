@@ -4,7 +4,7 @@ Para la deuda tecnica nos basamos en el modelo de calidad que definimos previame
 
 ## 1) Mantenibilidad
 
-**Métodos largos y lógica repetida:** Por ejemplo, el método `CreateInvitation` en `InvitationManager.cs` realiza validaciones, consultas y persistencia en un solo bloque, dificultando su mantenimiento y comprensión.
+**Métodos largos y lógica repetida:** Por ejemplo, el método [`CreateInvitation`](https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/blob/main/Obligatorio/Material/Codigo/Backend/PharmaGo.BusinessLogic/InvitationManager.cs) realiza validaciones, consultas y persistencia en un solo bloque, dificultando su mantenimiento y comprensión.
 
 **Acoplamiento elevado:** En `DrugManager.cs`, la clase depende de varios repositorios (`_drugRepository`, `_pharmacyRepository`, etc.), lo que complica la refactorización y el testeo.
 
@@ -14,6 +14,8 @@ Para la deuda tecnica nos basamos en el modelo de calidad que definimos previame
 Por ejemplo, en `DrugController.cs` los métodos `GetAll` y `User` convierten la lista de entidades `Drug` a `DrugBasicModel` usando `.Select(...)`, y en `PharmacyController.cs` ocurre lo mismo en `GetAll`, `Create` y `Update` con la conversión a `PharmacyBasicModel` o `PharmacyDetailModel`.  
 Esta práctica genera duplicación de lógica y dificulta la evolución futura del modelo de datos.
 
+- ApprobePurchaseDetail, generateTrackingCode formato de nombre de metodos inconsitentes
+ 
 En cada punto encontrado decidimos brindar ejemplos a forma de evidenciar la presencia de las deudas tecnicas mencionadas, eso no significa que se pueda encontrar la misma deuda tecnica multiples veces.
 
 ## 2) Seguridad 
@@ -26,7 +28,25 @@ En cada punto encontrado decidimos brindar ejemplos a forma de evidenciar la pre
 
 **Mensajes de error detallados:** En managers como `PharmacyManager.cs` y `PurchasesManager.cs`, los mensajes de excepción pueden revelar información interna del sistema (por ejemplo, "Pharmacy not found"), lo que puede ser explotado por atacantes.
 
-## 3) Completitud funcional
+**Mensajes de error en login que revelan información:**  
+- Por ejemplo, `Error Login failed: The user does not exist` puede revelar información sobre la existencia de usuarios, lo que puede ser explotado en ataques de enumeración.
+
+## 3) Usabilidad
+
+**Acceso al registro:** Falta un botón "No tengo cuenta" en la pantalla de login para facilitar el acceso al registro.
+
+**Mensajes de error y formato claro en registro:**  
+En la pantalla de registro, los mensajes de error no son claros respecto al formato requerido:
+- Ejemplo: `Error Create User failed: Invalid UserCode` (el formato requerido es `^[0-9]{6}$`).
+- Ejemplo: `Error Create User failed: Invalid Password` (no se indica el formato requerido, que es `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&.*-]).{8,}$`).
+
+- el mensaje de error deberia desaparecer una vez que te vas de la pagina o haces otra cosa.
+
+- No funciono creacion de drug: Error Create Drug failed: undefined, mensaje de error no explicativo
+
+- cuando se achica la pantalla el boton de logout desaparece en employee
+
+## 4) Completitud funcional
 
 **No hay logging:** Ningún controller ni manager registra acciones o errores, por ejemplo, en `LoginController.cs` y `PurchasesController.cs` no se registra ningún intento de login o compra.
 
@@ -39,5 +59,7 @@ En cada punto encontrado decidimos brindar ejemplos a forma de evidenciar la pre
 **Eliminación física vs. lógica:** En `PharmacyManager.cs`, la eliminación de farmacias es física, lo que puede causar pérdida de información relevante.
 
 **Cobertura de casos borde:** En la validación de contraseñas en `UsersManager.cs`, se exige un formato más estricto que el solicitado en la consigna, lo que puede generar confusión y errores funcionales.
+
+- No se pueden ver los purcheses como un employee: Error Get Purchases failed: Object reference not set to an instance of an object.
 
 Durante el correr de las siguientes entregas continuaremos probando y analizando distintos casos bordes para asegurar la completitud funcional.
