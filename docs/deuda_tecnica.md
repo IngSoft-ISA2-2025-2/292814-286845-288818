@@ -70,4 +70,9 @@ En la pantalla de registro, los mensajes de error no son claros respecto al form
 
 **Cobertura de casos borde:** En la validación de contraseñas en `UsersManager.cs`, se exige un formato más estricto que el solicitado en la consigna, lo que puede generar confusión y errores funcionales.
 
+**Se permiten auto-invitaciones**: la funcionalidad de crear invitación no valida una regla básica de negocio: el usuario logueado no debería poder invitarse a si mismo. La falta de esta validación puede generar datos inconsistentes y confusión en el flujo de uso
+
+**Click en confiuración**: al clickear en el símbolo de configuraciones no ocurre nada.
+
+
 Durante el correr de las siguientes entregas continuaremos probando y analizando distintos casos bordes para asegurar la completitud funcional.
