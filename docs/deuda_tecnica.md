@@ -4,7 +4,7 @@ Para la deuda tecnica nos basamos en el modelo de calidad que definimos previame
 
 ## 1) Mantenibilidad
 
-**Métodos largos y lógica repetida:** Por ejemplo, el método [`CreateInvitation`](https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/blob/main/Obligatorio/Material/Codigo/Backend/PharmaGo.BusinessLogic/InvitationManager.cs) realiza validaciones, consultas y persistencia en un solo bloque, dificultando su mantenimiento y comprensión.
+**Métodos largos y lógica repetida:** Por ejemplo, el método CreateInvitation realiza validaciones, consultas y persistencia en un solo bloque, dificultando su mantenimiento y comprensión.
 
 **Acoplamiento elevado:** En `DrugManager.cs`, la clase depende de varios repositorios (`_drugRepository`, `_pharmacyRepository`, etc.), lo que complica la refactorización y el testeo.
 
