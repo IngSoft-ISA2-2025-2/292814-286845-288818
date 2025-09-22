@@ -6,12 +6,13 @@ Definir cómo se medirá y mejorará la calidad del producto durante el proyecto
 
 ## Atributos priorizados y cómo se evaluarán
 
-1) **Mantenibilidad**  
-- *Por qué lo elegimos*: nos permite reducir el costo de realizar cambios y facilita entregar nuevas.  
+1) **Completitud Funcional**
+- *Por qué lo elegimos*: el sistema debe cumplir con los requerimientos definidos y entregar valor real al usuario final.
 - **Lo mediremos basándonos en**:  
-  - Cobertura de pruebas alcanzada.  
-  - Nivel de duplicación de código y tamaño de clases/métodos.
-  - Dependencias actualizadas.  
+  - Porcentaje de requisitos funcionales implementados respecto al backlog definido.
+  - Cantidad de bugs funcionales abiertos frente a los cerrados en cada entrega.
+  - Evidencia de pruebas de aceptación (BDD) que validen los criterios de usuario definidios con el PO.
+  - Cobertura de escenarios de negocio clave en tests end-to-end (frontend y backend).
 
 2) **Seguridad**  
 - *Por qué lo elegimos*: es clave proteger los datos y garantizar la confianza de los usuarios.
@@ -20,13 +21,12 @@ Definir cómo se medirá y mejorará la calidad del producto durante el proyecto
   - Que la configuración de CORS sea la adecuada según el entorno.  
   - Que no se expongan secretos en el repositorio.
 
-3) **Completitud Funcional**
-- *Por qué lo elegimos*: el sistema debe cumplir con los requerimientos definidos y entregar valor real al usuario final.
+3) **Mantenibilidad**  
+- *Por qué lo elegimos*: nos permite reducir el costo de realizar cambios y facilita entregar nuevas.  
 - **Lo mediremos basándonos en**:  
-  - Porcentaje de requisitos funcionales implementados respecto al backlog definido.
-  - Cantidad de bugs funcionales abiertos frente a los cerrados en cada entrega.
-  - Evidencia de pruebas de aceptación (BDD) que validen los criterios de usuario definidios con el PO.
-  - Cobertura de escenarios de negocio clave en tests end-to-end (frontend y backend).
+  - Cobertura de pruebas alcanzada.  
+  - Nivel de duplicación de código y tamaño de clases/métodos.
+  - Dependencias actualizadas.
 
 4) **Usabilidad**
 - *Por qué lo elegimos*: la experiencia del usuario es fundamental y para ello priorizamos que la aplicación sea fácil de utilizar, intuitiva y atractiva.
