@@ -18,6 +18,9 @@ Esta práctica genera duplicación de lógica y dificulta la evolución futura d
 
 **Rutas de archivos hardcodeadas:** En la funcionalidad de exportación, el error "Could not find a part of the path '/app/Exporters'" indica rutas absolutas hardcodeadas que fallan en diferentes entornos.
 
+**Inconsistencia en el formato de nombres de métodos:**  
+En el código se observan métodos como `ApprobePurchaseDetail` y `generateTrackingCode` que no siguen una convención uniforme de nomenclatura (por ejemplo, mezcla de camelCase y PascalCase, errores ortográficos como "Approbe" en vez de "Approve"). Esta falta de consistencia dificulta la lectura, el mantenimiento y la búsqueda de métodos en el proyecto, y puede generar confusión entre los desarrolladores.
+ 
 En cada punto encontrado decidimos brindar ejemplos a forma de evidenciar la presencia de las deudas tecnicas mencionadas, eso no significa que se pueda encontrar la misma deuda tecnica multiples veces.
 
 ## 2) Seguridad 
@@ -44,7 +47,14 @@ En la pantalla de registro, los mensajes de error no son claros respecto al form
 - Ejemplo: `Error Create User failed: Invalid UserCode` (el formato requerido es `^[0-9]{6}$`).
 - Ejemplo: `Error Create User failed: Invalid Password` (no se indica el formato requerido, que es `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&.*-]).{8,}$`).
 
-**Mensajes de error poco descriptivos:** Al crear una droga con datos erróneos, el sistema muestra "Error Create Drug failed: undefined" en lugar de especificar qué validación falló.
+**Persistencia innecesaria de mensajes de error en la interfaz:**  
+El mensaje de error debería desaparecer automáticamente cuando el usuario navega fuera de la página o realiza otra acción, pero actualmente permanece visible, lo que puede generar confusión y mala experiencia de usuario.
+
+**Mensaje de error no explicativo al crear un drug:**  
+Al intentar crear un nuevo drug, se muestra el mensaje `Error Create Drug failed: undefined`, que no brinda información útil al usuario sobre la causa del error ni cómo solucionarlo.
+
+**Desaparición del botón de logout en modo employee al achicar la pantalla:**  
+Cuando la pantalla se reduce de tamaño, el botón de logout desaparece para los usuarios con rol employee, lo que dificulta cerrar sesión y afecta la usabilidad en dispositivos móviles o ventanas pequeñas.
 
 ## 4) Completitud funcional
 
@@ -74,5 +84,7 @@ En la pantalla de registro, los mensajes de error no son claros respecto al form
 
 **Click en confiuración**: al clickear en el símbolo de configuraciones no ocurre nada.
 
+**No es posible visualizar compras como empleado:**  
+Al intentar acceder a la vista de compras con un usuario de tipo "employee", se produce el error `Get Purchases failed: Object reference not set to an instance of an object`. Esto evidencia una falta de manejo de errores y validaciones en el backend o frontend, lo que impide que los empleados puedan consultar sus compras correctamente y afecta la completitud funcional del sistema.
 
 Durante el correr de las siguientes entregas continuaremos probando y analizando distintos casos bordes para asegurar la completitud funcional.
