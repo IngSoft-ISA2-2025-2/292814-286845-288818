@@ -2,7 +2,7 @@ name: Backend CI Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ develop, feature/* ]
     paths:
       - 'Obligatorio/Material/Codigo/Backend/**'
   pull_request:
@@ -12,6 +12,20 @@ on:
   workflow_dispatch:
 
 jobs:
+  # Job para verificar que PRs a main vengan desde develop
+  check-source-branch:
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check if PR is from develop
+      run: |
+        if [[ "${{ github.head_ref }}" != "develop" ]]; then
+          echo "❌ PRs to main are only allowed from develop branch"
+          echo "Current source branch: ${{ github.head_ref }}"
+          exit 1
+        fi
+        echo "✅ PR from develop branch - allowed"
+
   # Job para verificar cambios
   detect-changes:
     runs-on: ubuntu-latest
@@ -43,13 +57,23 @@ jobs:
   # Job de resumen final
   ci-summary:
     runs-on: ubuntu-latest
-    needs: [detect-changes, backend-ci]
+    needs: [check-source-branch, detect-changes, backend-ci]
     if: always()
     steps:
     - name: CI Pipeline Summary
       run: |
         echo "## 🔍 Backend CI Pipeline Results" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Check source branch results (only for PRs to main)
+        if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.base_ref }}" == "main" ]]; then
+          if [[ "${{ needs.check-source-branch.result }}" == "success" ]]; then
+            echo "✅ **Source Branch Check**: PR from develop - allowed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Source Branch Check**: PRs to main only allowed from develop" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+        fi
         
         # Backend results
         if [[ "${{ needs.detect-changes.outputs.backend-changed }}" == "true" || "${{ github.event_name }}" == "workflow_dispatch" ]]; then
@@ -66,6 +90,15 @@ jobs:
 
     - name: Check overall status
       run: |
+        # Check source branch first (for PRs to main)
+        if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.base_ref }}" == "main" ]]; then
+          if [[ "${{ needs.check-source-branch.result }}" != "success" ]]; then
+            echo "❌ Pipeline failed: PRs to main are only allowed from develop branch"
+            exit 1
+          fi
+        fi
+        
+        # Check backend CI
         if [[ "${{ needs.detect-changes.outputs.backend-changed }}" == "true" || "${{ github.event_name }}" == "workflow_dispatch" ]]; then
           if [[ "${{ needs.backend-ci.result }}" == "success" ]]; then
             echo "🎉 Backend CI Pipeline completed successfully!"
