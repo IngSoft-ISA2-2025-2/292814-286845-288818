@@ -84,7 +84,7 @@ jobs:
 
     - name: Upload formatting report
       if: failure()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: dotnet-formatting-report
         path: ${{ env.WORKING_DIRECTORY }}/formatting-report.json
