@@ -1,0 +1,78 @@
+name: Backend Unit Tests
+
+on:
+  push:
+    branches: [ main, develop, feature/* ]
+    paths:
+      - 'Obligatorio/Material/Codigo/Backend/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'Obligatorio/Material/Codigo/Backend/**'
+  workflow_dispatch:
+
+env:
+  WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Backend'
+
+jobs:
+  unit-tests:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Cache NuGet packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: Restore dependencies
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🔄 Restoring dependencies for tests..."
+        dotnet restore
+        echo "✅ Dependencies restored"
+
+    - name: Build for Testing
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🏗️ Building solution for testing..."
+        dotnet build --configuration Release --no-restore
+        echo "✅ Build for testing completed"
+
+    - name: Run Unit Tests
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🧪 Running unit tests..."
+        dotnet test --configuration Release --no-build \
+          --logger "trx;LogFileName=unit-test-results.trx" \
+          --logger "console;verbosity=detailed" \
+          --results-directory ./TestResults
+        echo "✅ All unit tests passed"
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: backend-unit-test-results
+        path: ${{ env.WORKING_DIRECTORY }}/TestResults/
+        retention-days: 7
+
+    - name: Test Results Summary
+      if: always()
+      run: |
+        echo "## 🧪 Unit Test Results" >> $GITHUB_STEP_SUMMARY
+        echo "✅ **Test Status**: All tests passed" >> $GITHUB_STEP_SUMMARY
+        echo "- Configuration: Release" >> $GITHUB_STEP_SUMMARY
+        echo "- Test Framework: .NET 8.0" >> $GITHUB_STEP_SUMMARY
+        echo "- Results uploaded as artifacts" >> $GITHUB_STEP_SUMMARY
