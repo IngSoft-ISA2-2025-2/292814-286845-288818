@@ -1,4 +1,4 @@
-﻿
+
 namespace PharmaGo.Domain.Entities
 {
     public class Purchase

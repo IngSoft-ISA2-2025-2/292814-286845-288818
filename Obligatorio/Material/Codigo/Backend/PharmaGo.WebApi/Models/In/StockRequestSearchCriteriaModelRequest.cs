@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using PharmaGo.Domain.Entities;
 using PharmaGo.Domain.SearchCriterias;
 
 namespace PharmaGo.WebApi.Models.In
 {
-	public class StockRequestSearchCriteriaModelRequest
-	{
+    public class StockRequestSearchCriteriaModelRequest
+    {
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public string? Code { get; set; }

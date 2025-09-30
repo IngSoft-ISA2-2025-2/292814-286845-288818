@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PharmaGo.IDataAccess;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+using PharmaGo.IDataAccess;
 
 
 namespace PharmaGo.DataAccess.Repositories
@@ -42,7 +42,11 @@ namespace PharmaGo.DataAccess.Repositories
         public virtual bool Exists(T elem)
         {
             T? _elem = _context.Set<T>().Find(elem);
-            if (_elem is null) return false;
+            if (_elem is null)
+            {
+                return false;
+            }
+
             return true;
         }
 

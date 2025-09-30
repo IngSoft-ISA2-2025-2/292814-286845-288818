@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using PharmaGo.IBusinessLogic;
 using PharmaGo.WebApi.Converters;
 using PharmaGo.WebApi.Enums;

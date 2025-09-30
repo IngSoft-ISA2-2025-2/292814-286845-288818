@@ -1,6 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using PharmaGo.Factory;
 using PharmaGo.WebApi.Filters;
-using System.Diagnostics.CodeAnalysis;
 
 var builder = WebApplication.CreateBuilder(args);
 

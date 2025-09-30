@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PharmaGo.DataAccess;
 using PharmaGo.DataAccess.Repositories;
 using PharmaGo.Domain.Entities;
@@ -15,12 +15,15 @@ namespace PharmaGo.Test.DataAccess.Test
         [TestInitialize]
         public void InitializeTest()
         {
-            _user = new User { Id = 1, 
-                               UserName = "pedro001", 
-                               Email = "pedro@gmail.com", 
-                               Address = "Av. Italia 002", 
-                               Password = "Abcdef12345678.", 
-                               RegistrationDate = new DateTime(2022, 10, 4, 14, 0, 0)};
+            _user = new User
+            {
+                Id = 1,
+                UserName = "pedro001",
+                Email = "pedro@gmail.com",
+                Address = "Av. Italia 002",
+                Password = "Abcdef12345678.",
+                RegistrationDate = new DateTime(2022, 10, 4, 14, 0, 0)
+            };
         }
 
         [TestCleanup]

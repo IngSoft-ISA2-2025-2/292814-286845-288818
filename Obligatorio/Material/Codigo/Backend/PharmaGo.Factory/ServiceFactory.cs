@@ -1,15 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Instrumentation;
+using InstrumentationInterface;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using PharmaGo.BusinessLogic;
 using PharmaGo.DataAccess;
 using PharmaGo.DataAccess.Repositories;
 using PharmaGo.Domain.Entities;
 using PharmaGo.IBusinessLogic;
 using PharmaGo.IDataAccess;
-using Microsoft.Extensions.Hosting;
-using InstrumentationInterface;
-using Instrumentation;
 
 
 namespace PharmaGo.Factory

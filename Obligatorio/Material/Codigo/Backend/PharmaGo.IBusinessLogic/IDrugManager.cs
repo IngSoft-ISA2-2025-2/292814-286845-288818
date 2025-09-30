@@ -1,4 +1,4 @@
-﻿using ExportationModel.ExportDomain;
+using ExportationModel.ExportDomain;
 using PharmaGo.Domain.Entities;
 using PharmaGo.Domain.SearchCriterias;
 

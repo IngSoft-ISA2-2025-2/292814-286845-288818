@@ -1,4 +1,4 @@
-﻿using Moq;
+using Moq;
 using PharmaGo.BusinessLogic;
 using PharmaGo.DataAccess.Repositories;
 using PharmaGo.Domain.Entities;

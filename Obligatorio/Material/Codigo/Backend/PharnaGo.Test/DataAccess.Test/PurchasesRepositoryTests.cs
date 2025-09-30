@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PharmaGo.DataAccess.Repositories;
-using PharmaGo.DataAccess;
-using PharmaGo.Domain.Entities;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+using PharmaGo.DataAccess;
+using PharmaGo.DataAccess.Repositories;
+using PharmaGo.Domain.Entities;
 using PharmaGo.Domain.Enums;
 
 namespace PharmaGo.Test.DataAccess.Test
@@ -94,7 +94,7 @@ namespace PharmaGo.Test.DataAccess.Test
                 }
             }
         }
-        
+
         [TestMethod]
         public void TestInsertOne()
         {
