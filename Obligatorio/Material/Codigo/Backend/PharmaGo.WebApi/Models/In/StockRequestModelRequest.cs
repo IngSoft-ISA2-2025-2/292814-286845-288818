@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using PharmaGo.Domain.Entities;
 
 namespace PharmaGo.WebApi.Models.In
 {
-	public class StockRequestModelRequest
-	{
+    public class StockRequestModelRequest
+    {
         public List<StockRequestDetailModelRequest> Details { get; set; }
 
         public StockRequest ToEntity()

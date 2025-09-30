@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PharmaGo.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PharmaGo.Domain.Entities;
 
 namespace PharmaGo.DataAccess.Repositories
 {
@@ -13,7 +13,7 @@ namespace PharmaGo.DataAccess.Repositories
     {
         private readonly PharmacyGoDbContext _context;
 
-        public DrugRepository(PharmacyGoDbContext context) : base(context) 
+        public DrugRepository(PharmacyGoDbContext context) : base(context)
         {
             _context = context;
         }
@@ -29,7 +29,8 @@ namespace PharmaGo.DataAccess.Repositories
             _context.Set<Drug>().Add(drug);
         }
 
-        public override IEnumerable<Drug> GetAllByExpression(Expression<Func<Drug, bool>> expression) {
+        public override IEnumerable<Drug> GetAllByExpression(Expression<Func<Drug, bool>> expression)
+        {
             return _context.Set<Drug>().Include(x => x.Pharmacy).Where(expression);
         }
     }

@@ -1,4 +1,4 @@
-﻿using ExportationModel.ExportDomain;
+using ExportationModel.ExportDomain;
 
 namespace PharmaGo.WebApi.Models.In.Exports
 {

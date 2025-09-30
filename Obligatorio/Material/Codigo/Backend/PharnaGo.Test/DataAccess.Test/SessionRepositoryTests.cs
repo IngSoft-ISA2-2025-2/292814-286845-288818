@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PharmaGo.DataAccess;
-using PharmaGo.DataAccess.Repositories;
-using PharmaGo.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PharmaGo.DataAccess;
+using PharmaGo.DataAccess.Repositories;
+using PharmaGo.Domain.Entities;
 
 namespace PharmaGo.Test.DataAccess.Test
 {
@@ -21,7 +21,7 @@ namespace PharmaGo.Test.DataAccess.Test
         [TestInitialize]
         public void InitializeTest()
         {
-            _session = new Session { Id = 4, Token = _token, UserId = 3};
+            _session = new Session { Id = 4, Token = _token, UserId = 3 };
         }
 
         [TestCleanup]

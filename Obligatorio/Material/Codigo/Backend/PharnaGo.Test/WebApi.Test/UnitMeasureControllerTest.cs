@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using PharmaGo.Domain.Entities;
 using PharmaGo.IBusinessLogic;

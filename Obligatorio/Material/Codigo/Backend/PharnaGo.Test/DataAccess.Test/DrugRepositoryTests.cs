@@ -1,16 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PharmaGo.DataAccess;
-using PharmaGo.DataAccess.Repositories;
-using PharmaGo.Domain.Entities;
-using PharmaGo.Domain.Enums;
-using PharmaGo.Domain.SearchCriterias;
-using PharmaGo.WebApi.Models.Out;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PharmaGo.DataAccess;
+using PharmaGo.DataAccess.Repositories;
+using PharmaGo.Domain.Entities;
+using PharmaGo.Domain.Enums;
+using PharmaGo.Domain.SearchCriterias;
+using PharmaGo.WebApi.Models.Out;
 
 namespace PharmaGo.Test.DataAccess.Test
 {
@@ -99,7 +99,7 @@ namespace PharmaGo.Test.DataAccess.Test
         {
             CreateDataBase("getDrugsByIdTestDb");
             Drug drug = drugsSaved[0];
-            var retrievedDrug = _drugRepository.GetOneByExpression(d=> d.Id == drug.Id);
+            var retrievedDrug = _drugRepository.GetOneByExpression(d => d.Id == drug.Id);
             Assert.AreEqual(drug.Code, retrievedDrug.Code);
         }
 
@@ -118,7 +118,7 @@ namespace PharmaGo.Test.DataAccess.Test
             _drugRepository.InsertOne(newDrug);
             _drugRepository.Save();
             var retrievedDrug = _drugRepository.GetOneByExpression(d => d.Id == newDrug.Id);
-            Assert.AreEqual(retrievedDrug.Code,newDrug.Code);
+            Assert.AreEqual(retrievedDrug.Code, newDrug.Code);
         }
 
         [TestMethod]

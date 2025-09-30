@@ -1,10 +1,3 @@
-﻿using Moq;
-using PharmaGo.BusinessLogic;
-using PharmaGo.Domain.Entities;
-using PharmaGo.Domain.SearchCriterias;
-using PharmaGo.Exceptions;
-using PharmaGo.IDataAccess;
-using PharmaGo.WebApi.Models.In;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +5,13 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Moq;
+using PharmaGo.BusinessLogic;
+using PharmaGo.Domain.Entities;
+using PharmaGo.Domain.SearchCriterias;
+using PharmaGo.Exceptions;
+using PharmaGo.IDataAccess;
+using PharmaGo.WebApi.Models.In;
 
 namespace PharmaGo.Test.BusinessLogic.Test
 {
@@ -238,4 +238,3 @@ namespace PharmaGo.Test.BusinessLogic.Test
         }
     }
 }
- 

@@ -1,4 +1,5 @@
-﻿using ExportationModel.ExportDomain;
+using System.Linq.Expressions;
+using ExportationModel.ExportDomain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -9,7 +10,6 @@ using PharmaGo.IDataAccess;
 using PharmaGo.WebApi.Controllers;
 using PharmaGo.WebApi.Models.In.Exports;
 using PharmaGo.WebApi.Models.Out;
-using System.Linq.Expressions;
 
 namespace PharmaGo.Test.WebApi.Test
 {
@@ -86,7 +86,7 @@ namespace PharmaGo.Test.WebApi.Test
             _sessionRepository.Setup(r => r.GetOneByExpression(It.IsAny<Expression<Func<Session, bool>>>())).Returns(session);
             _userRepository.Setup(r => r.GetOneDetailByExpression(It.IsAny<Expression<Func<User, bool>>>())).Returns(user);
             _transactionsManagerMock.Setup(u => u.ExportDrugs(drugExportationModel.FormatName, drugExportationModel.Parameters, token));
-            
+
             var result = _transactionController.ExportDrugs(drugExportationModel);
 
             // Assert

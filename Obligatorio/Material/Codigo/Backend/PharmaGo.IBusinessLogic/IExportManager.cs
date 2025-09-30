@@ -1,4 +1,4 @@
-﻿using ExportationModel.ExportDomain;
+using ExportationModel.ExportDomain;
 
 namespace PharmaGo.IBusinessLogic
 {

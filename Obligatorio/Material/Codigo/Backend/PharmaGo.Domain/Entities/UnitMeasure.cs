@@ -1,4 +1,4 @@
-﻿using PharmaGo.Domain.Enums;
+using PharmaGo.Domain.Enums;
 
 namespace PharmaGo.Domain.Entities
 {

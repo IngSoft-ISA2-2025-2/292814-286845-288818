@@ -1,6 +1,6 @@
-﻿using PharmaGo.Exceptions;
 using System.Collections.Generic;
 using System.Diagnostics;
+using PharmaGo.Exceptions;
 
 namespace PharmaGo.Domain.Entities
 {

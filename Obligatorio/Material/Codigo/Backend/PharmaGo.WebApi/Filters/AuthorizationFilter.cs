@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using PharmaGo.IBusinessLogic;
 
@@ -26,7 +26,8 @@ namespace PharmaGo.WebApi.Filters
             {
                 context.Result = new JsonResult(new { Message = "Invalid authorization token" })
                 { StatusCode = 401 };
-            } else if (!_loginManager.IsRoleValid(_roles, token))
+            }
+            else if (!_loginManager.IsRoleValid(_roles, token))
             {
                 context.Result = new JsonResult(new { Message = "Forbidden role" })
                 { StatusCode = 403 };

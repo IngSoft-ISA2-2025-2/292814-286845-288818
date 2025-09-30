@@ -1,5 +1,5 @@
-﻿using PharmaGo.Domain.Entities;
 using System.Net;
+using PharmaGo.Domain.Entities;
 
 namespace PharmaGo.WebApi.Models.Out
 {

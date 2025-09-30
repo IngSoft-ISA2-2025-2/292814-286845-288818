@@ -1,11 +1,12 @@
-﻿using PharmaGo.Domain.Entities;
+using PharmaGo.Domain.Entities;
 
 namespace PharmaGo.DataAccess.Repositories
 {
     public class SessionRepository : BaseRepository<Session>
     {
         PharmacyGoDbContext _context;
-        public SessionRepository(PharmacyGoDbContext context) : base(context) {
+        public SessionRepository(PharmacyGoDbContext context) : base(context)
+        {
             _context = context;
         }
 

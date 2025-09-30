@@ -1,4 +1,4 @@
-﻿using PharmaGo.Domain.Entities;
+using PharmaGo.Domain.Entities;
 using PharmaGo.Domain.SearchCriterias;
 using PharmaGo.Exceptions;
 using PharmaGo.IBusinessLogic;

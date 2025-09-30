@@ -15,7 +15,7 @@ env:
   WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Backend'
 
 jobs:
-  code-formatting:
+  formatting:
     name: Check Code Formatting
     runs-on: ubuntu-latest
     
@@ -26,114 +26,107 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '6.0.x'
 
-    - name: Install dotnet format tool
-      run: |
-        echo "🔧 Installing dotnet format tool..."
-        dotnet tool install -g dotnet-format || echo "Tool already installed"
-        echo "✅ dotnet format tool ready"
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
 
     - name: Restore dependencies
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
         echo "🔄 Restoring dependencies for formatting check..."
-        dotnet restore
-        echo "✅ Dependencies restored"
+        dotnet restore > /dev/null
 
-    - name: Check code formatting
+    - name: Install dotnet format tool
+      run: |
+        echo "🔧 Installing dotnet format tool..."
+        dotnet tool install -g dotnet-format || echo "Tool already installed"
+        dotnet tool list -g | grep dotnet-format || echo "Tool not found in global list"
+
+    - name: Verify .editorconfig exists
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
-        echo "🎨 Checking .NET code formatting..."
-        echo "Running dotnet format --verify-no-changes..."
-        
-        # Run dotnet format in verify mode (doesn't modify files, just checks)
-        dotnet format --verify-no-changes --verbosity diagnostic
-        
-        if [ $? -eq 0 ]; then
-          echo "✅ Code formatting is correct - no changes needed"
+        echo "� Checking for .editorconfig file..."
+        if [ -f ".editorconfig" ]; then
+          echo "✅ .editorconfig found"
+          echo "Content preview:"
+          head -20 .editorconfig
         else
-          echo "❌ Code formatting issues found!"
+          echo "❌ .editorconfig not found - this might cause formatting issues"
+          echo "Current directory contents:"
+          ls -la
+        fi
+
+    - name: Apply and verify code formatting
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🔍 Checking and fixing code formatting..."
+        
+        # First pass: Apply formatting to fix any issues
+        echo "📝 Applying code formatting..."
+        dotnet format --verbosity minimal
+        
+        echo "🔍 Verifying formatting is now correct..."
+        # Second pass: Verify no more changes are needed
+        if dotnet format --verify-no-changes --verbosity minimal; then
+          echo "✅ Code formatting is correct"
+        else
+          echo "❌ Code formatting still has issues after applying fixes"
           echo ""
-          echo "🔧 To fix formatting issues, run:"
-          echo "   dotnet format"
+          echo "This could indicate a configuration problem. Running diagnostic check..."
+          dotnet format --verify-no-changes --verbosity diagnostic
+          
           echo ""
-          echo "📋 Common formatting issues:"
-          echo "   - Inconsistent indentation"
-          echo "   - Missing/extra whitespace"
-          echo "   - Brace placement"
-          echo "   - Line endings"
-          echo ""
+          echo "🔧 The code has been formatted, but you may need to:"
+          echo "1. Check .editorconfig settings"
+          echo "2. Ensure consistent line endings (LF vs CRLF)"
+          echo "3. Verify all files follow the same formatting rules"
           exit 1
         fi
 
-    - name: Generate formatting report (on failure)
-      if: failure()
+    - name: Check for common formatting issues
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
-        echo "📊 Generating detailed formatting report..."
-        echo "Running dotnet format --report to show specific issues..."
+        echo "🔍 Checking for common formatting issues..."
         
-        # Generate a detailed report of formatting issues
-        dotnet format --report ./formatting-report.json --verbosity diagnostic || true
+        # Check for tabs vs spaces
+        if grep -r $'\t' --include="*.cs" .; then
+          echo "❌ Found tabs in C# files (should use spaces)"
+        else
+          echo "✅ No tabs found in C# files"
+        fi
         
-        if [ -f "./formatting-report.json" ]; then
-          echo "📄 Formatting report generated:"
-          cat ./formatting-report.json
+        # Check for trailing whitespace
+        if grep -r ' $' --include="*.cs" .; then
+          echo "❌ Found trailing whitespace in C# files"
+        else
+          echo "✅ No trailing whitespace found"
         fi
 
     - name: Upload formatting report
       if: failure()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: dotnet-formatting-report
-        path: ${{ env.WORKING_DIRECTORY }}/formatting-report.json
-        retention-days: 7
-
-    - name: Code style verification
-      working-directory: ${{ env.WORKING_DIRECTORY }}
-      run: |
-        echo "🔍 Additional code style verification..."
-        
-        # Check for common style issues
-        echo "Checking for tabs vs spaces..."
-        if grep -r $'\t' --include="*.cs" . ; then
-          echo "⚠️  Warning: Found tab characters in C# files"
-          echo "   Consider using spaces for consistency"
-        else
-          echo "✅ No tab characters found"
-        fi
-        
-        # Check for trailing whitespace
-        echo "Checking for trailing whitespace..."
-        if grep -r " $" --include="*.cs" . ; then
-          echo "⚠️  Warning: Found trailing whitespace in C# files"
-        else
-          echo "✅ No trailing whitespace found"
-        fi
+        name: formatting-report
+        path: |
+          ${{ env.WORKING_DIRECTORY }}/format-report.json
+          ${{ env.WORKING_DIRECTORY }}/.editorconfig
+        retention-days: 5
 
     - name: Formatting Summary
       if: always()
       run: |
         echo "## 🎨 Code Formatting Results" >> $GITHUB_STEP_SUMMARY
-        
         if [[ "${{ job.status }}" == "success" ]]; then
-          echo "✅ **Formatting Status**: All code is properly formatted" >> $GITHUB_STEP_SUMMARY
-          echo "- .NET Format: Passed" >> $GITHUB_STEP_SUMMARY
-          echo "- Code Style: Consistent" >> $GITHUB_STEP_SUMMARY
-          echo "- No formatting changes needed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Formatting Status**: All code properly formatted" >> $GITHUB_STEP_SUMMARY
         else
-          echo "❌ **Formatting Status**: Code formatting issues found" >> $GITHUB_STEP_SUMMARY
-          echo "- .NET Format: Failed" >> $GITHUB_STEP_SUMMARY
-          echo "- **Action Required**: Run \`dotnet format\` to fix issues" >> $GITHUB_STEP_SUMMARY
-          echo "- Report available in artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "❌ **Formatting Status**: Issues found" >> $GITHUB_STEP_SUMMARY
         fi
-        
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### 🔧 How to fix formatting issues:" >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-        echo "cd ${{ env.WORKING_DIRECTORY }}" >> $GITHUB_STEP_SUMMARY
-        echo "dotnet format" >> $GITHUB_STEP_SUMMARY
-        echo "git add ." >> $GITHUB_STEP_SUMMARY
-        echo "git commit -m \"Fix code formatting\"" >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "- .NET Version: 6.0" >> $GITHUB_STEP_SUMMARY
+        echo "- Working Directory: ${{ env.WORKING_DIRECTORY }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Tool: dotnet format" >> $GITHUB_STEP_SUMMARY

@@ -1,4 +1,4 @@
-﻿using PharmaGo.Domain.Entities;
+using PharmaGo.Domain.Entities;
 using PharmaGo.WebApi.Models.In;
 
 namespace PharmaGo.WebApi.Converters
