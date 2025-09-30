@@ -1,0 +1,136 @@
+name: Backend Code Coverage
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'Obligatorio/Material/Codigo/Backend/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'Obligatorio/Material/Codigo/Backend/**'
+  workflow_dispatch:
+
+env:
+  WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Backend'
+  MINIMUM_COVERAGE: 90
+
+jobs:
+  code-coverage:
+    name: Generate Code Coverage Report
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Cache NuGet packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: Install ReportGenerator tool
+      run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+    - name: Restore dependencies
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🔄 Restoring dependencies for coverage analysis..."
+        dotnet restore
+        echo "✅ Dependencies restored"
+
+    - name: Build for Coverage
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🏗️ Building solution for coverage analysis..."
+        dotnet build --configuration Release --no-restore
+        echo "✅ Build completed"
+
+    - name: Run Tests with Coverage
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🧪 Running tests with code coverage..."
+        dotnet test --configuration Release --no-build \
+          --collect:"XPlat Code Coverage" \
+          --logger "trx;LogFileName=coverage-test-results.trx" \
+          --results-directory ./TestResults \
+          --verbosity normal
+        echo "✅ Tests with coverage completed"
+
+    - name: Generate Coverage Report
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "📊 Generating coverage report..."
+        reportgenerator \
+          -reports:"./TestResults/**/coverage.cobertura.xml" \
+          -targetdir:"./TestResults/CoverageReport" \
+          -reporttypes:"Html;Cobertura;TextSummary;Badges"
+        echo "✅ Coverage report generated"
+
+    - name: Check Coverage Threshold
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🎯 Checking coverage threshold..."
+        
+        if [ -f "./TestResults/CoverageReport/Summary.txt" ]; then
+          COVERAGE=$(grep -oP 'Line coverage: \K[0-9.]+' ./TestResults/CoverageReport/Summary.txt | head -1)
+          echo "Current coverage: ${COVERAGE}%"
+          echo "Minimum required: ${{ env.MINIMUM_COVERAGE }}%"
+          
+          if (( $(echo "$COVERAGE >= ${{ env.MINIMUM_COVERAGE }}" | bc -l) )); then
+            echo "✅ Coverage ${COVERAGE}% meets minimum threshold of ${{ env.MINIMUM_COVERAGE }}%"
+          else
+            echo "❌ Coverage ${COVERAGE}% is below minimum threshold of ${{ env.MINIMUM_COVERAGE }}%"
+            exit 1
+          fi
+        else
+          echo "⚠️ Coverage report not found. Setting coverage to 0%"
+          echo "❌ Coverage 0% is below minimum threshold of ${{ env.MINIMUM_COVERAGE }}%"
+          exit 1
+        fi
+
+    - name: Upload Coverage Report
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: backend-coverage-report
+        path: ${{ env.WORKING_DIRECTORY }}/TestResults/CoverageReport/
+        retention-days: 30
+
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: backend-coverage-test-results
+        path: ${{ env.WORKING_DIRECTORY }}/TestResults/**/*.trx
+        retention-days: 7
+
+    - name: Coverage Summary
+      if: always()
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "## 📊 Code Coverage Results" >> $GITHUB_STEP_SUMMARY
+        
+        if [ -f "./TestResults/CoverageReport/Summary.txt" ]; then
+          COVERAGE=$(grep -oP 'Line coverage: \K[0-9.]+' ./TestResults/CoverageReport/Summary.txt | head -1)
+          
+          if (( $(echo "$COVERAGE >= ${{ env.MINIMUM_COVERAGE }}" | bc -l) )); then
+            echo "✅ **Coverage Status**: Passed (${COVERAGE}%)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Coverage Status**: Failed (${COVERAGE}%)" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "- **Current Coverage**: ${COVERAGE}%" >> $GITHUB_STEP_SUMMARY
+          echo "- **Minimum Required**: ${{ env.MINIMUM_COVERAGE }}%" >> $GITHUB_STEP_SUMMARY
+          echo "- **Report**: Available in artifacts" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ **Coverage Status**: Report generation failed" >> $GITHUB_STEP_SUMMARY
+        fi

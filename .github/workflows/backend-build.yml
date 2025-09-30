@@ -1,0 +1,68 @@
+name: Backend Build
+
+on:
+  push:
+    branches: [ main, develop, feature/* ]
+    paths:
+      - 'Obligatorio/Material/Codigo/Backend/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'Obligatorio/Material/Codigo/Backend/**'
+  workflow_dispatch:
+
+env:
+  WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Backend'
+
+jobs:
+  build:
+    name: Build Backend Application
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Cache NuGet packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: Restore dependencies
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🔄 Restoring NuGet packages..."
+        dotnet restore
+        echo "✅ Dependencies restored successfully"
+
+    - name: Build Application
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🏗️ Building .NET application..."
+        dotnet build --configuration Release --no-restore --verbosity normal
+        echo "✅ Build completed successfully"
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: backend-build-artifacts
+        path: |
+          ${{ env.WORKING_DIRECTORY }}/**/bin/Release/
+          ${{ env.WORKING_DIRECTORY }}/**/obj/Release/
+        retention-days: 1
+
+    - name: Build Summary
+      run: |
+        echo "## 🏗️ Backend Build Results" >> $GITHUB_STEP_SUMMARY
+        echo "✅ **Build Status**: Successful" >> $GITHUB_STEP_SUMMARY
+        echo "- Configuration: Release" >> $GITHUB_STEP_SUMMARY
+        echo "- .NET Version: 8.0" >> $GITHUB_STEP_SUMMARY
+        echo "- Working Directory: ${{ env.WORKING_DIRECTORY }}" >> $GITHUB_STEP_SUMMARY
