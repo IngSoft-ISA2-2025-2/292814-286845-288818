@@ -16,39 +16,39 @@ Este documento fue creado para fundamentar la elección de dos bugs de alta prio
 ## Issues Seleccionados
 
 ### Issue #2: Contraseñas en texto plano
-**Tipo:** Bug de Seguridad  
-**Severidad:** P0 (Crítica)  
+**Tipo:** Bug  
+**Prioridad:** P0 (Crítica)  
 **Clasificación:** Técnico/Seguridad
 
 #### Descripción del Problema
-Las contraseñas de los usuarios se almacenan en texto plano en la base de datos, violando principios fundamentales de seguridad y representando un riesgo crítico para la protección de datos sensibles.
+Las contraseñas se almacenan en texto plano en la base de datos, violando los principios fundamentales de seguridad y generando un riesgo crítico sobre la protección de datos sensibles de los usuarios.
 
 #### Fundamentación de la Elección
 
-**1. Severidad Crítica**
-- **Impacto en Seguridad**: Violación directa del atributo "Seguridad" de nuestro modelo de calidad
-- **Riesgo de Datos**: Exposición de credenciales de usuarios en caso de breach
-- **Cumplimiento**: Incumplimiento de estándares de protección de datos (GDPR, ISO 27001)
-- **Clasificación P0**: Requiere resolución inmediata antes de cualquier deploy a producción
+**1. Prioridad Alta**
+- **Impacto en Seguridad**: Violación directa del atributo Seguridad del modelo de calidad definido.
+- **Riesgo de Datos**: Exposición de credenciales de los usuarios por filtración de datos.
+- **Cumplimiento**: Incumplimiento de estándares de protección de datos (ISO 25010).
+- **Clasificación P0**: Requiere resolución inmediata antes de cualquier deploy a producción.
 
 **2. Impacto en Modelo de Calidad**
-- **Seguridad**: Afecta directamente la confidencialidad e integridad de datos
-- **Mantenibilidad**: Implementación incorrecta que debe ser refactorizada
-- **Usabilidad**: Potencial pérdida de confianza del usuario
+- **Seguridad**: Afecta directamente la confidencialidad e integridad de datos.
+- **Mantenibilidad**: Implementación incorrecta que debe ser refactorizada con urgencia.
+- **Usabilidad**: Potencial pérdida de confianza del usuario.
 
 **3. Viabilidad para TDD**
-- **Testeable**: Fácil verificación de hashing de contraseñas
+- **Testeable**: Fácil verificación de hashing de contraseñas.
 - **Casos de prueba claros**: 
-  - Password no debe almacenarse en texto plano
-  - Hash debe ser verificable con password original
-  - Salt debe ser único por contraseña
-- **Refactorización incremental**: Permite aplicar ciclo RED-GREEN-REFACTOR
+  - Password no debe almacenarse en texto plano.
+  - Hash debe ser verificable con password original.
+  - Salt (cadena de caracteres aleatoria) debe ser único por contraseña.
+- **Refactorización incremental**: Permite aplicar ciclo RED-GREEN-REFACTOR.
 
 **4. Impacto Técnico**
 ```csharp
 // Estado Actual (Problemático)
 public void CreateUser(string username, string password) {
-    user.Password = password; // TEXTO PLANO ❌
+    user.Password = password; // TEXTO PLANO 
 }
 
 // Estado Esperado (Seguro)
@@ -60,7 +60,7 @@ public void CreateUser(string username, string password) {
 #### Plan de Reparación TDD
 1. **[RED]** Crear test que falle verificando que password no se almacena en texto plano
 2. **[GREEN]** Implementar hashing básico para pasar el test
-3. **[REFACTOR]** Mejorar implementación con salt, pepper y algoritmo robusto (bcrypt)
+3. **[REFACTOR]** Mejorar implementación con salt.
 
 ## Justificación Final
 
@@ -82,7 +82,7 @@ public void CreateUser(string username, string password) {
 
 **Issue #2 (Contraseñas):**
 - Vulnerabilidad de seguridad crítica
-- Potencial breach de datos
+- Potencial filtración de datos
 - Incumplimiento regulatorio
 - Pérdida de confianza
 
