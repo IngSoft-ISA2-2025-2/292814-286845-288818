@@ -3,6 +3,7 @@ using PharmaGo.Domain.Entities;
 using PharmaGo.Exceptions;
 using PharmaGo.IBusinessLogic;
 using PharmaGo.IDataAccess;
+using BCrypt.Net;
 
 namespace PharmaGo.BusinessLogic
 {
@@ -74,7 +75,7 @@ namespace PharmaGo.BusinessLogic
                 UserName = UserName,
                 Email = Email,
                 Address = Address,
-                Password = Password,
+                Password = BCrypt.Net.BCrypt.HashPassword(Password),
                 RegistrationDate = RegistrationDate,
                 Pharmacy = invitation.Pharmacy,
                 Role = invitation.Role
