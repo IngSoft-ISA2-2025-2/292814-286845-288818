@@ -687,7 +687,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
         }
 
         [TestMethod]
-        public void GetAllPurchases_Should_ThrowNullReferenceException_When_User_Has_No_Pharmacy()
+        public void GetAllPurchases_Should_Return_EmptyList_When_User_Has_No_Pharmacy()
         {
             // Arrange
             string token = "f0c4ca1b-d7a8-4cf7-8eed-b6cfdce557cd";
@@ -703,37 +703,17 @@ namespace PharmaGo.Test.BusinessLogic.Test
             
             var session = new Session { Id = 1, Token = guidToken, UserId = 1 };
             
-            // Configurar el mock para purchases con al menos una compra para que se ejecute el bucle donde ocurre el error
-            var purchaseList = new List<Purchase>
-            {
-                new Purchase
-                {
-                    Id = 1,
-                    BuyerEmail = "test@test.com",
-                    PurchaseDate = DateTime.Now,
-                    details = new List<PurchaseDetail>
-                    {
-                        new PurchaseDetail
-                        {
-                            Id = 1,
-                            Pharmacy = pharmacy, // Esto causará el problema cuando se compare con pharmacy.Id (que será null)
-                            Status = "Pending",
-                            Quantity = 1,
-                            Price = 100
-                        }
-                    }
-                }
-            };
-            
             _sessionRespository.Setup(s => s.GetOneByExpression(It.IsAny<System.Linq.Expressions.Expression<Func<Session, bool>>>()))
                 .Returns(session);
             _userRespository.Setup(u => u.GetOneDetailByExpression(It.IsAny<System.Linq.Expressions.Expression<Func<User, bool>>>()))
                 .Returns(userWithoutPharmacy);
-            _purchaseRespository.Setup(p => p.GetAllByExpression(It.IsAny<System.Linq.Expressions.Expression<Func<Purchase, bool>>>()))
-                .Returns(purchaseList);
 
-            // Act & Assert - Esperamos que se lance NullReferenceException cuando se intente acceder a pharmacy.Id
-            Assert.ThrowsException<NullReferenceException>(() => _purchasesManager.GetAllPurchases(token));
+            // Act
+            var result = _purchasesManager.GetAllPurchases(token);
+
+            // Assert - Ahora esperamos una lista vacía en lugar de una excepción
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Count);
         }
 
     }

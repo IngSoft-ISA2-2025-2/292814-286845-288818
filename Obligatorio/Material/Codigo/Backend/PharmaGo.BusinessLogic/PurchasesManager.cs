@@ -210,6 +210,13 @@ namespace PharmaGo.BusinessLogic
             Session session = _sessionRepository.GetOneByExpression(s => s.Token == guidToken);
             var userId = session.UserId;
             User user = _userRepository.GetOneDetailByExpression(u => u.Id == userId);
+            
+            // Si el usuario no tiene farmacia asignada, retornar lista vacía
+            if (user.Pharmacy == null)
+            {
+                return new List<Purchase>();
+            }
+            
             Pharmacy pharmacy = user.Pharmacy;
 
             var purchases = _purchasesRepository.GetAllByExpression(s => s.Id > 0);
