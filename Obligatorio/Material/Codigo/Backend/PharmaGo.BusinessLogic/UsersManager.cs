@@ -11,6 +11,10 @@ namespace PharmaGo.BusinessLogic
     {
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<Invitation> _invitationRepository;
+        
+        private static readonly Regex UserCodeRegex = new(@"^[0-9]{6}$");
+        private static readonly Regex EmailRegex = new(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+        private static readonly Regex PasswordRegex = new(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&.*-]).{8,}$");
 
         public UsersManager(IRepository<User> repository, IRepository<Invitation> invitationRepository)
         {
@@ -20,66 +24,91 @@ namespace PharmaGo.BusinessLogic
 
         public User CreateUser(string UserName, string UserCode, string Email, string Password, string Address, DateTime RegistrationDate)
         {
-            string validUserCode = @"^[0-9]{6}$";
-            Regex rgUserCode = new(validUserCode);
-            string validEmail = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
-            Regex rgEmail = new(validEmail);
-            string validPassword = @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&.*-]).{8,}$";
-            Regex rgPassword = new(validPassword);
+            ValidateUserInput(UserName, UserCode, Email, Password, Address);
 
-            if (String.IsNullOrEmpty(UserName))
+            Invitation invitation = GetValidInvitation(UserName, UserCode);
+            ValidateUserUniqueness(UserName, Email);
+
+            User user = CreateUserEntity(UserName, Email, Password, Address, RegistrationDate, invitation);
+            SaveUserAndDeactivateInvitation(user, invitation);
+
+            return user;
+        }
+
+        private void ValidateUserInput(string userName, string userCode, string email, string password, string address)
+        {
+            if (string.IsNullOrEmpty(userName))
             {
                 throw new InvalidResourceException("Invalid Username");
             }
 
-            if (String.IsNullOrEmpty(UserCode) || !rgUserCode.IsMatch(UserCode))
+            if (string.IsNullOrEmpty(userCode) || !UserCodeRegex.IsMatch(userCode))
             {
                 throw new InvalidResourceException("Invalid UserCode");
             }
 
-            if (String.IsNullOrEmpty(Email) || !rgEmail.IsMatch(Email))
+            if (string.IsNullOrEmpty(email) || !EmailRegex.IsMatch(email))
             {
                 throw new InvalidResourceException("Invalid Email");
             }
 
-            if (String.IsNullOrEmpty(Password) || !rgPassword.IsMatch(Password))
+            if (string.IsNullOrEmpty(password) || !PasswordRegex.IsMatch(password))
             {
                 throw new InvalidResourceException("Invalid Password");
             }
 
-            if (String.IsNullOrEmpty(Address))
+            if (string.IsNullOrEmpty(address))
             {
                 throw new InvalidResourceException("Invalid Address");
             }
+        }
 
-            Invitation invitation = _invitationRepository.GetOneDetailByExpression(x => x.UserName.ToLower() == UserName.ToLower() && x.UserCode == UserCode && x.IsActive);
+        private Invitation GetValidInvitation(string userName, string userCode)
+        {
+            Invitation invitation = _invitationRepository.GetOneDetailByExpression(x => 
+                x.UserName.ToLower() == userName.ToLower() && 
+                x.UserCode == userCode && 
+                x.IsActive);
+
             if (invitation == null)
             {
                 throw new ResourceNotFoundException("Invitation not found or is not currently active");
             }
 
-            User exists = _userRepository.GetOneByExpression(u => u.UserName.ToLower() == UserName.ToLower());
-            if (exists != null)
+            return invitation;
+        }
+
+        private void ValidateUserUniqueness(string userName, string email)
+        {
+            User existingUser = _userRepository.GetOneByExpression(u => u.UserName.ToLower() == userName.ToLower());
+            if (existingUser != null)
             {
                 throw new InvalidResourceException("Invalid Username, Username already exists");
             }
 
-            exists = _userRepository.GetOneByExpression(u => u.Email.ToLower() == Email.ToLower());
-            if (exists != null)
+            existingUser = _userRepository.GetOneByExpression(u => u.Email.ToLower() == email.ToLower());
+            if (existingUser != null)
             {
                 throw new InvalidResourceException("Invalid Email, Email already exists");
             }
+        }
 
-            User user = new User
+        private User CreateUserEntity(string userName, string email, string password, string address, DateTime registrationDate, Invitation invitation)
+        {
+            return new User
             {
-                UserName = UserName,
-                Email = Email,
-                Address = Address,
-                Password = BCrypt.Net.BCrypt.HashPassword(Password),
-                RegistrationDate = RegistrationDate,
+                UserName = userName,
+                Email = email,
+                Address = address,
+                Password = BCrypt.Net.BCrypt.HashPassword(password),
+                RegistrationDate = registrationDate,
                 Pharmacy = invitation.Pharmacy,
                 Role = invitation.Role
             };
+        }
+
+        private void SaveUserAndDeactivateInvitation(User user, Invitation invitation)
+        {
             _userRepository.InsertOne(user);
 
             invitation.IsActive = false;
@@ -87,9 +116,6 @@ namespace PharmaGo.BusinessLogic
 
             _userRepository.Save();
             _invitationRepository.Save();
-
-            return user;
-
         }
     }
 
