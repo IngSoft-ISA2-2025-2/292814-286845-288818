@@ -378,7 +378,6 @@ namespace PharmaGo.Test.BusinessLogic.Test
 
             var result = _userManager.CreateUser(UserName, UserCode, Email, Password, Address, RegistrationDate);
 
-            // Debe fallar porque actualmente la contraseña se guarda como texto plano
             Assert.AreNotEqual(Password, result.Password, 
                 "Password should not be stored in plain text");
             Assert.IsFalse(string.IsNullOrEmpty(result.Password), 
@@ -386,6 +385,32 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.IsTrue(result.Password.Length > 20, 
                 "Hashed password should be significantly longer than plain text");
         }
-    }
 
+        [TestMethod]
+        public void CreateUser_ShouldGenerateVerifiablePasswordHash()
+        {
+            var UserName = "pedro902";
+            var UserCode = "980358";
+            var Address = "Av. Italia 4478";
+            var Email = "juan2@gmail.com";
+            var Password = "Abcdef12345678.";
+            var RegistrationDate = new DateTime(2022, 09, 20, 14, 00, 00);
+
+            // Setup mocks
+            _userRespository.Setup(x => x.GetOneByExpression(u => u.UserName.ToLower() == UserName.ToLower())).Returns(exists);
+            _userRespository.Setup(x => x.GetOneByExpression(u => u.Email.ToLower() == Email.ToLower())).Returns(exists);
+            _invitationRespository.Setup(x => x.GetOneDetailByExpression(i => i.UserName.ToLower() == UserName.ToLower() && i.UserCode == UserCode && i.IsActive)).Returns(invitation);
+            
+            _userRespository.Setup(x => x.InsertOne(It.IsAny<User>()));
+            _userRespository.Setup(x => x.Save());
+            _invitationRespository.Setup(x => x.UpdateOne(invitation));
+            _invitationRespository.Setup(x => x.Save());
+
+            var result = _userManager.CreateUser(UserName, UserCode, Email, Password, Address, RegistrationDate);
+
+            bool canVerify = BCrypt.Net.BCrypt.Verify(Password, result.Password);
+            Assert.IsTrue(canVerify, 
+                "Should be able to verify original password against stored hash");
+        }
+    }
 }
