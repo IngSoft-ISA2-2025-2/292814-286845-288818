@@ -39,12 +39,12 @@ namespace PharmaGo.WebApi.Models.Out
                     Details.Add(new PurchaseDetailModelResponse
                     {
                         Id = detail.Id,
-                        Name = detail.Drug.Name,
-                        Code = detail.Drug.Code,
-                        Price = detail.Drug.Price,
+                        Name = detail.Drug?.Name ?? "",
+                        Code = detail.Drug?.Code ?? "",
+                        Price = detail.Drug?.Price ?? 0,
                         Quantity = detail.Quantity,
-                        PharmacyId = detail.Pharmacy.Id,
-                        PharmacyName = detail.Pharmacy.Name,
+                        PharmacyId = detail.Pharmacy?.Id ?? 0,
+                        PharmacyName = detail.Pharmacy?.Name ?? "",
                         Status = detail.Status
                     });
                 }

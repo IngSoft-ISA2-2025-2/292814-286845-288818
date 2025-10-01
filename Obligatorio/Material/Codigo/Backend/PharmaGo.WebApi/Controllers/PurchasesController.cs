@@ -27,7 +27,6 @@ namespace PharmaGo.WebApi.Controllers
             var retrievedPuerchases = _purchasesManager.GetAllPurchases(token)
                 .Select(p => new PurchaseModelResponse(p)).ToList();
             return Ok(retrievedPuerchases);
-
         }
 
         [HttpGet]

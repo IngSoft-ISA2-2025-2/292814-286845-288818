@@ -206,8 +206,8 @@ namespace PharmaGo.BusinessLogic
 
         public ICollection<Purchase> GetAllPurchases(string token)
         {
-            // Obtener la farmacia del usuario autenticado
             var pharmacy = GetUserPharmacyFromToken(token);
+            
             if (pharmacy == null)
             {
                 return new List<Purchase>();
@@ -220,12 +220,15 @@ namespace PharmaGo.BusinessLogic
             {
                 ICollection<PurchaseDetail> _details = new List<PurchaseDetail>();
                 decimal total = 0;
-                foreach (PurchaseDetail detail in purchase.details)
+                if (purchase.details != null)
                 {
-                    if (IsDetailVisibleForPharmacy(detail, pharmacy))
+                    foreach (PurchaseDetail detail in purchase.details)
                     {
-                        total += (detail.Price * detail.Quantity);
-                        _details.Add(detail);
+                        if (IsDetailVisibleForPharmacy(detail, pharmacy))
+                        {
+                            total += (detail.Price * detail.Quantity);
+                            _details.Add(detail);
+                        }
                     }
                 }
                 purchase.details = _details;
@@ -324,11 +327,6 @@ namespace PharmaGo.BusinessLogic
             return _purchasesRepository.GetOneDetailByExpression(p => p.TrackingCode == trackingCode);
         }
 
-        /// <summary>
-        /// Obtiene la farmacia asociada al usuario autenticado por el token
-        /// </summary>
-        /// <param name="token">Token de sesión del usuario</param>
-        /// <returns>La farmacia del usuario o null si no tiene farmacia asignada</returns>
         private Pharmacy? GetUserPharmacyFromToken(string token)
         {
             var guidToken = new Guid(token);
@@ -339,14 +337,11 @@ namespace PharmaGo.BusinessLogic
             return user.Pharmacy;
         }
 
-        /// <summary>
-        /// Determina si un detalle de compra debe ser visible para una farmacia específica
-        /// </summary>
-        /// <param name="detail">Detalle de compra a evaluar</param>
-        /// <param name="pharmacy">Farmacia del usuario autenticado</param>
-        /// <returns>True si el detalle debe ser visible, false en caso contrario</returns>
         private bool IsDetailVisibleForPharmacy(PurchaseDetail detail, Pharmacy pharmacy)
         {
+            if (detail?.Pharmacy == null || pharmacy == null)
+                return false;
+                
             return detail.Pharmacy.Id == pharmacy.Id &&
                    (detail.Status.Equals(PENDING) || detail.Status.Equals(APPROVED));
         }
