@@ -12,14 +12,23 @@ namespace PharmaGo.BusinessLogic
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<Invitation> _invitationRepository;
         
-        private static readonly Regex UserCodeRegex = new(@"^[0-9]{6}$");
+        private const int BCRYPT_WORK_FACTOR = 12;
+        private const int USER_CODE_LENGTH = 6;
+        private const int MIN_PASSWORD_LENGTH = 8;
+        
+        private static readonly Regex UserCodeRegex = new(@"^[0-9]{" + USER_CODE_LENGTH + @"}$");
         private static readonly Regex EmailRegex = new(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-        private static readonly Regex PasswordRegex = new(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&.*-]).{8,}$");
+        private static readonly Regex PasswordRegex = new(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&.*-]).{" + MIN_PASSWORD_LENGTH + @",}$");
 
         public UsersManager(IRepository<User> repository, IRepository<Invitation> invitationRepository)
         {
             _userRepository = repository;
             _invitationRepository = invitationRepository;
+        }
+
+        private string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password, BCRYPT_WORK_FACTOR);
         }
 
         public User CreateUser(string UserName, string UserCode, string Email, string Password, string Address, DateTime RegistrationDate)
@@ -100,7 +109,7 @@ namespace PharmaGo.BusinessLogic
                 UserName = userName,
                 Email = email,
                 Address = address,
-                Password = BCrypt.Net.BCrypt.HashPassword(password),
+                Password = HashPassword(password),
                 RegistrationDate = registrationDate,
                 Pharmacy = invitation.Pharmacy,
                 Role = invitation.Role
