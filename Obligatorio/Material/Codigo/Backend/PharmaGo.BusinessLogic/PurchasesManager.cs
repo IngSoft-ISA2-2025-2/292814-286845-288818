@@ -206,11 +206,12 @@ namespace PharmaGo.BusinessLogic
 
         public ICollection<Purchase> GetAllPurchases(string token)
         {
-            var guidToken = new Guid(token);
-            Session session = _sessionRepository.GetOneByExpression(s => s.Token == guidToken);
-            var userId = session.UserId;
-            User user = _userRepository.GetOneDetailByExpression(u => u.Id == userId);
-            Pharmacy pharmacy = user.Pharmacy;
+            var pharmacy = GetUserPharmacyFromToken(token);
+            
+            if (pharmacy == null)
+            {
+                return new List<Purchase>();
+            }
 
             var purchases = _purchasesRepository.GetAllByExpression(s => s.Id > 0);
 
@@ -219,13 +220,15 @@ namespace PharmaGo.BusinessLogic
             {
                 ICollection<PurchaseDetail> _details = new List<PurchaseDetail>();
                 decimal total = 0;
-                foreach (PurchaseDetail detail in purchase.details)
+                if (purchase.details != null)
                 {
-                    if (detail.Pharmacy.Id == pharmacy.Id &&
-                        (detail.Status.Equals(PENDING) || detail.Status.Equals(APPROVED)))
+                    foreach (PurchaseDetail detail in purchase.details)
                     {
-                        total += (detail.Price * detail.Quantity);
-                        _details.Add(detail);
+                        if (IsDetailVisibleForPharmacy(detail, pharmacy))
+                        {
+                            total += (detail.Price * detail.Quantity);
+                            _details.Add(detail);
+                        }
                     }
                 }
                 purchase.details = _details;
@@ -322,6 +325,25 @@ namespace PharmaGo.BusinessLogic
             }
 
             return _purchasesRepository.GetOneDetailByExpression(p => p.TrackingCode == trackingCode);
+        }
+
+        private Pharmacy? GetUserPharmacyFromToken(string token)
+        {
+            var guidToken = new Guid(token);
+            Session session = _sessionRepository.GetOneByExpression(s => s.Token == guidToken);
+            var userId = session.UserId;
+            User user = _userRepository.GetOneDetailByExpression(u => u.Id == userId);
+            
+            return user.Pharmacy;
+        }
+
+        private bool IsDetailVisibleForPharmacy(PurchaseDetail detail, Pharmacy pharmacy)
+        {
+            if (detail?.Pharmacy == null || pharmacy == null)
+                return false;
+                
+            return detail.Pharmacy.Id == pharmacy.Id &&
+                   (detail.Status.Equals(PENDING) || detail.Status.Equals(APPROVED));
         }
     }
 }
