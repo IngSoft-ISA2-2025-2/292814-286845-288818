@@ -31,6 +31,11 @@ namespace PharmaGo.DataAccess
             modelBuilder.Entity<UnitMeasure>().Property(u => u.Name).HasConversion<string>();
             modelBuilder.Entity<Presentation>().Property(u => u.Name).HasConversion<string>();
 
+            // Configuración explícita para el campo Password - soporta hashes BCrypt completos
+            modelBuilder.Entity<User>()
+                .Property(u => u.Password)
+                .HasMaxLength(100);
+
             base.OnModelCreating(modelBuilder);
 
         }
