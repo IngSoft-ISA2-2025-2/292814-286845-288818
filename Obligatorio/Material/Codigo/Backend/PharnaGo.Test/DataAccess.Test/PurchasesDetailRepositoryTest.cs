@@ -85,8 +85,8 @@ namespace PharmaGo.Test.DataAccess.Test
                     _purchasesDetailRepository.Save();
                 }
 
-                //Act
-                var p_ = _purchasesDetailRepository.GetOneByExpression(p => p.Id == 1);
+                //Act - Use the actual ID of the inserted purchaseDetail instead of hardcoded 1
+                var p_ = _purchasesDetailRepository.GetOneByExpression(p => p.Id == purchaseDetail.Id);
 
                 // Assert
                 Assert.IsNotNull(p_);
