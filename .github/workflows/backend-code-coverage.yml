@@ -54,41 +54,68 @@ jobs:
         dotnet build --configuration Release --no-restore
         echo "✅ Build completed"
 
+    - name: Identify Migration Files
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🔍 Identifying migration files to exclude from coverage..."
+        if find . -name "Migrations" -type d 2>/dev/null | head -10; then
+          echo "📂 Found migration directories:"
+          find . -name "Migrations" -type d | head -10
+          echo ""
+          echo "📄 Migration files found:"
+          find . -path "*/Migrations/*" -name "*.cs" | head -10 || echo "No migration files found"
+        else
+          echo "ℹ️ No migration directories found"
+        fi
+        echo ""
+        echo "🚫 These files will be excluded from coverage analysis"
+
     - name: Run Tests with Coverage
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
-        echo "🧪 Running tests with code coverage..."
+        echo "🧪 Running tests with code coverage (excluding migrations)..."
         dotnet test --configuration Release --no-build \
-          --collect:"XPlat Code Coverage" \
+          --collect:"XPlat Code Coverage;ExcludeByFile=**/Migrations/**" \
           --logger "trx;LogFileName=coverage-test-results.trx" \
           --results-directory ./TestResults \
           --verbosity normal
-        echo "✅ Tests with coverage completed"
+        echo "✅ Tests with coverage completed (migrations excluded)"
 
     - name: Generate Coverage Report
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
-        echo "📊 Generating coverage report..."
+        echo "📊 Generating coverage report (excluding migrations)..."
         reportgenerator \
           -reports:"./TestResults/**/coverage.cobertura.xml" \
           -targetdir:"./TestResults/CoverageReport" \
-          -reporttypes:"Html;Cobertura;TextSummary;Badges"
-        echo "✅ Coverage report generated"
+          -reporttypes:"Html;Cobertura;TextSummary;Badges" \
+          -classfilters:"-*Migration*;-*Migrations*" \
+          -filefilters:"-**/Migrations/**"
+        echo "✅ Coverage report generated (migrations excluded from analysis)"
 
     - name: Check Coverage Threshold
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
-        echo "🎯 Checking coverage threshold..."
+        echo "🎯 Checking coverage threshold (excluding migrations)..."
+        echo "📋 Exclusions applied:"
+        echo "   - Database migration files (**/Migrations/**)"
+        echo "   - Migration classes (*Migration*, *Migrations*)"
+        echo ""
         
         if [ -f "./TestResults/CoverageReport/Summary.txt" ]; then
           COVERAGE=$(grep -oP 'Line coverage: \K[0-9.]+' ./TestResults/CoverageReport/Summary.txt | head -1)
-          echo "Current coverage: ${COVERAGE}%"
-          echo "Minimum required: ${{ env.MINIMUM_COVERAGE }}%"
+          echo "📊 Coverage Results:"
+          echo "   Current coverage: ${COVERAGE}%"
+          echo "   Minimum required: ${{ env.MINIMUM_COVERAGE }}%"
+          echo "   Scope: Application code (migrations excluded)"
+          echo ""
           
           if (( $(echo "$COVERAGE >= ${{ env.MINIMUM_COVERAGE }}" | bc -l) )); then
             echo "✅ Coverage ${COVERAGE}% meets minimum threshold of ${{ env.MINIMUM_COVERAGE }}%"
+            echo "🎉 Quality gate passed!"
           else
             echo "❌ Coverage ${COVERAGE}% is below minimum threshold of ${{ env.MINIMUM_COVERAGE }}%"
+            echo "💡 Add more unit tests to increase coverage"
             exit 1
           fi
         else
@@ -130,6 +157,7 @@ jobs:
           
           echo "- **Current Coverage**: ${COVERAGE}%" >> $GITHUB_STEP_SUMMARY
           echo "- **Minimum Required**: ${{ env.MINIMUM_COVERAGE }}%" >> $GITHUB_STEP_SUMMARY
+          echo "- **Excluded**: Database migrations (DataAccess/Migrations)" >> $GITHUB_STEP_SUMMARY
           echo "- **Report**: Available in artifacts" >> $GITHUB_STEP_SUMMARY
         else
           echo "❌ **Coverage Status**: Report generation failed" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,85 @@
+name: Frontend Build
+
+on:
+  push:
+    branches: [ main, develop, feature/* ]
+    paths:
+      - 'Obligatorio/Material/Codigo/Frontend/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'Obligatorio/Material/Codigo/Frontend/**'
+  workflow_dispatch:
+
+env:
+  WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Frontend'
+
+jobs:
+  build:
+    name: Build Angular Application
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+        cache-dependency-path: ${{ env.WORKING_DIRECTORY }}/package-lock.json
+
+    - name: Cache node modules
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.WORKING_DIRECTORY }}/node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install dependencies
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🔄 Installing npm dependencies..."
+        npm ci
+        echo "✅ Dependencies installed successfully"
+
+    - name: Build Application
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🏗️ Building Angular application..."
+        npm run build --prod
+        echo "✅ Build completed successfully"
+
+    - name: Run Unit Tests
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🧪 Running unit tests..."
+        npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
+        echo "✅ Unit tests completed successfully"
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-build-artifacts
+        path: |
+          ${{ env.WORKING_DIRECTORY }}/dist/
+        retention-days: 1
+
+    - name: Upload test coverage
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-coverage-report
+        path: |
+          ${{ env.WORKING_DIRECTORY }}/coverage/
+        retention-days: 1
+
+    - name: Build Summary
+      run: |
+        echo "## 🏗️ Frontend Build Results" >> $GITHUB_STEP_SUMMARY
+        echo "✅ **Build Status**: Successful" >> $GITHUB_STEP_SUMMARY
+        echo "- Framework: Angular 14" >> $GITHUB_STEP_SUMMARY
+        echo "- Node.js Version: 18.x" >> $GITHUB_STEP_SUMMARY
+        echo "- Working Directory: ${{ env.WORKING_DIRECTORY }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Tests: Unit tests executed with coverage" >> $GITHUB_STEP_SUMMARY
