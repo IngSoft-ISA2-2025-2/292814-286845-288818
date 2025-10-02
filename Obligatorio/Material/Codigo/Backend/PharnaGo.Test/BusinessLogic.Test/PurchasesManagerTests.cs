@@ -686,6 +686,36 @@ namespace PharmaGo.Test.BusinessLogic.Test
             var response = _purchasesManager.RejectPurchaseDetail(1, 1, "XF324");
         }
 
+        [TestMethod]
+        public void GetAllPurchases_Should_Return_EmptyList_When_User_Has_No_Pharmacy()
+        {
+            // Arrange
+            string token = "f0c4ca1b-d7a8-4cf7-8eed-b6cfdce557cd";
+            var guidToken = new Guid(token);
+            
+            var userWithoutPharmacy = new User
+            {
+                Id = 1,
+                UserName = "TestEmployee",
+                Email = "employee@test.com",
+                Pharmacy = null // Usuario sin farmacia asignada
+            };
+            
+            var session = new Session { Id = 1, Token = guidToken, UserId = 1 };
+            
+            _sessionRespository.Setup(s => s.GetOneByExpression(It.IsAny<System.Linq.Expressions.Expression<Func<Session, bool>>>()))
+                .Returns(session);
+            _userRespository.Setup(u => u.GetOneDetailByExpression(It.IsAny<System.Linq.Expressions.Expression<Func<User, bool>>>()))
+                .Returns(userWithoutPharmacy);
+
+            // Act
+            var result = _purchasesManager.GetAllPurchases(token);
+
+            // Assert - Ahora esperamos una lista vacía en lugar de una excepción
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Count);
+        }
+
     }
 }
 
