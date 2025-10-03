@@ -6,7 +6,7 @@
 - Christian Ingrey
 
 Todos somos desarrollador y tester en todas las entregas. 
-> Rol de la etapa: **Product Owner (Etapa 1)** → Juan Pedro Michelini. El PO rota en las siguientes etapas.
+> Rol de la etapa: **Product Owner (Etapa 2)** → Christian Ingrey. El PO rota en las siguientes etapas.
 
 ## Flujo del tablero
 Backlog → Ready → In-Progress → In Review → Done
@@ -42,6 +42,16 @@ Backlog → Ready → In-Progress → In Review → Done
 - **Sprint Planning (inicio de cada entrega/sprint)**
   - **Objetivo:** Acordar junto al equipo el objetivo y el alcance del sprint. Seleccionar del Backlog las tarjetas que cumplan con la Definition of Ready, pudiendolas mover asi a Ready, para luego pasarlas poco a poco a In Progress, respetando el WIP. Identificar dependencias/riesgos entre las tarjetas y, si hace falta, descomponer en subtareas.
   - **Salida:** Objetivo y alcance del sprint, lista de tarjetas seleccionadas (con su prioridad y tamaño) y dependencias y riesgos anotados.
+
+- **Sprint Review (al finalizar cada entrega/sprint - antes de la Retrospective)**
+  - **Objetivo:** Presentar el trabajo completado durante el sprint al Product Owner y stakeholders. Demostrar las funcionalidades desarrolladas, validar que cumplen con los criterios de aceptación y recopilar feedback para futuras iteraciones.
+  - **Participantes:** Todo el equipo + Product Owner + stakeholders (si los hay)
+  - **Actividades:** 
+    - Demostración de funcionalidades completadas (tarjetas en Done)
+    - Revisión de bugs corregidos con evidencia de funcionamiento
+    - Validación de criterios de aceptación por parte del PO
+    - Feedback y nuevas ideas para el Product Backlog
+  - **Salida:** Funcionalidades validadas por el PO, feedback documentado, nuevos items para el Backlog (si surgen), y decisión sobre si el objetivo del sprint fue cumplido.
   
 - **Sprint Retrospective (al finalizar cada entrega/sprint)**
   - **Objetivo:** Mejorar el proceso y el flujo de trabajo, ver que aspectos fueron positivos y aportaron valor al sprint, como tambien ver que aspectos se pueden mejorar y añadir para mejorar el proceso del siguiente sprint.

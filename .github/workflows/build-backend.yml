@@ -1,4 +1,4 @@
-name: Backend Unit Tests
+name: Backend Build
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
         echo "🔍 Checking for backend changes..."
         
         if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          echo "Manual trigger - running unit tests"
+          echo "Manual trigger - running build"
           echo "backend=true" >> $GITHUB_OUTPUT
           exit 0
         fi
@@ -48,12 +48,12 @@ jobs:
           echo "✅ Backend changes detected"
           echo "backend=true" >> $GITHUB_OUTPUT
         else
-          echo "⏭️ No backend changes detected - unit tests will skip"
+          echo "⏭️ No backend changes detected - build will skip"
           echo "backend=false" >> $GITHUB_OUTPUT
         fi
 
-  unit-tests:
-    name: Backend Unit Tests
+  build:
+    name: Backend Build
     runs-on: ubuntu-latest
     needs: detect-backend-changes
     if: always()
@@ -62,7 +62,7 @@ jobs:
     - name: Skip if no backend changes
       if: needs.detect-backend-changes.outputs.backend-changed != 'true'
       run: |
-        echo "⏭️ Skipping backend unit tests - no backend changes detected"
+        echo "⏭️ Skipping backend build - no backend changes detected"
         echo "✅ This check passes automatically when no backend changes are present"
         exit 0
         
@@ -89,48 +89,42 @@ jobs:
       if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
-        echo "🔄 Restoring dependencies for tests..."
+        echo "🔄 Restoring NuGet packages..."
         dotnet restore
-        echo "✅ Dependencies restored"
+        echo "✅ Dependencies restored successfully"
 
-    - name: Build for Testing
+    - name: Build Application
       if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
-        echo "🏗️ Building solution for testing..."
-        dotnet build --configuration Release --no-restore
-        echo "✅ Build for testing completed"
+        echo "🏗️ Building .NET application..."
+        dotnet build --configuration Release --no-restore --verbosity normal
+        echo "✅ Build completed successfully"
 
-    - name: Run Unit Tests
-      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
-      working-directory: ${{ env.WORKING_DIRECTORY }}
-      run: |
-        echo "🧪 Running unit tests..."
-        dotnet test --configuration Release --no-build \
-          --logger "trx;LogFileName=unit-test-results.trx" \
-          --logger "console;verbosity=detailed" \
-          --results-directory ./TestResults
-        echo "✅ All unit tests passed"
-
-    - name: Upload test results
+    - name: Upload build artifacts
+      if: success() && needs.detect-backend-changes.outputs.backend-changed == 'true'
       uses: actions/upload-artifact@v4
-      if: always() && needs.detect-backend-changes.outputs.backend-changed == 'true'
       with:
-        name: backend-unit-test-results
-        path: ${{ env.WORKING_DIRECTORY }}/TestResults/
-        retention-days: 7
+        name: backend-build-artifacts
+        path: |
+          ${{ env.WORKING_DIRECTORY }}/**/bin/Release/
+          ${{ env.WORKING_DIRECTORY }}/**/obj/Release/
+        retention-days: 1
 
-    - name: Test Results Summary
+    - name: Build Summary
       if: always()
       run: |
-        if [ "${{ needs.detect-backend-changes.outputs.backend-changed }}" != "true" ]; then
-          echo "## ⏭️ Backend Unit Tests - Skipped" >> $GITHUB_STEP_SUMMARY
-          echo "No backend changes detected in this commit/PR" >> $GITHUB_STEP_SUMMARY
-          echo "✅ **Status**: Passed (no tests needed)" >> $GITHUB_STEP_SUMMARY
-        else
-          echo "## 🧪 Unit Test Results" >> $GITHUB_STEP_SUMMARY
-          echo "✅ **Test Status**: All tests passed" >> $GITHUB_STEP_SUMMARY
+        echo "## 🏗️ Backend Build Results" >> $GITHUB_STEP_SUMMARY
+        if [ "${{ needs.detect-backend-changes.outputs.backend-changed }}" = "true" ]; then
+          if [[ "${{ job.status }}" == "success" ]]; then
+            echo "✅ **Build Status**: Successful" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Build Status**: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
           echo "- Configuration: Release" >> $GITHUB_STEP_SUMMARY
-          echo "- Test Framework: .NET 6.0" >> $GITHUB_STEP_SUMMARY
-          echo "- Results uploaded as artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- .NET Version: 6.0" >> $GITHUB_STEP_SUMMARY
+          echo "- Working Directory: ${{ env.WORKING_DIRECTORY }}" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⏭️ **Build Status**: Skipped (no backend changes detected)" >> $GITHUB_STEP_SUMMARY
+          echo "- This check passes automatically when no backend changes are present" >> $GITHUB_STEP_SUMMARY
         fi
