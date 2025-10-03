@@ -93,15 +93,17 @@ jobs:
         dotnet restore > /dev/null
 
     - name: Install dotnet format tool
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       run: |
         echo "🔧 Installing dotnet format tool..."
         dotnet tool install -g dotnet-format || echo "Tool already installed"
         dotnet tool list -g | grep dotnet-format || echo "Tool not found in global list"
 
     - name: Verify .editorconfig exists
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
-        echo "� Checking for .editorconfig file..."
+        echo "🔍 Checking for .editorconfig file..."
         if [ -f ".editorconfig" ]; then
           echo "✅ .editorconfig found"
           echo "Content preview:"
@@ -141,6 +143,7 @@ jobs:
         fi
 
     - name: Check for common formatting issues
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
         echo "🔍 Checking for common formatting issues..."
