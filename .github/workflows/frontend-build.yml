@@ -1,152 +1,300 @@
-name: Frontend Build
+name: Frontend Buildname: Frontend Build
 
-on:
-  push:
-    branches: [ main, develop, feature/* ]
-  pull_request:    - name: Build Application
-          - name: Build Summary
-      if: always()
+
+
+on:on:
+
+  push:  push:
+
+    branches: [ main, develop, feature/* ]    branches: [ main, develop, feature/* ]
+
+  pull_request:  pull_request:    - name: Build Application
+
+    branches: [ main, develop ]          - name: Build Summary
+
+  workflow_dispatch:      if: always()
+
       run: |
-        echo "## 🏥️ Frontend Build Results" >> $GITHUB_STEP_SUMMARY
-        if [ "${{ needs.detect-frontend-changes.outputs.frontend-changed }}" = "true" ]; then
+
+env:        echo "## 🏥️ Frontend Build Results" >> $GITHUB_STEP_SUMMARY
+
+  WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Frontend'        if [ "${{ needs.detect-frontend-changes.outputs.frontend-changed }}" = "true" ]; then
+
           if [[ "${{ job.status }}" == "success" ]]; then
-            echo "✅ **Build Status**: Successful" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ **Build Status**: Failed" >> $GITHUB_STEP_SUMMARY
-          fi
-          echo "- Framework: Angular" >> $GITHUB_STEP_SUMMARY
-          echo "- Node.js Version: 18.x" >> $GITHUB_STEP_SUMMARY
-          echo "- Working Directory: ${{ env.WORKING_DIRECTORY }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Tests: Unit tests executed with coverage" >> $GITHUB_STEP_SUMMARY
-        else
-          echo "⏭️ **Build Status**: Skipped (no frontend changes detected)" >> $GITHUB_STEP_SUMMARY
-          echo "- This check passes automatically when no frontend changes are present" >> $GITHUB_STEP_SUMMARY
+
+jobs:            echo "✅ **Build Status**: Successful" >> $GITHUB_STEP_SUMMARY
+
+  detect-frontend-changes:          else
+
+    name: Detect Frontend Changes            echo "❌ **Build Status**: Failed" >> $GITHUB_STEP_SUMMARY
+
+    runs-on: ubuntu-latest          fi
+
+    outputs:          echo "- Framework: Angular" >> $GITHUB_STEP_SUMMARY
+
+      frontend-changed: ${{ steps.changes.outputs.frontend }}          echo "- Node.js Version: 18.x" >> $GITHUB_STEP_SUMMARY
+
+    steps:          echo "- Working Directory: ${{ env.WORKING_DIRECTORY }}" >> $GITHUB_STEP_SUMMARY
+
+    - name: Checkout code          echo "- Tests: Unit tests executed with coverage" >> $GITHUB_STEP_SUMMARY
+
+      uses: actions/checkout@v4        else
+
+      with:          echo "⏭️ **Build Status**: Skipped (no frontend changes detected)" >> $GITHUB_STEP_SUMMARY
+
+        fetch-depth: 0          echo "- This check passes automatically when no frontend changes are present" >> $GITHUB_STEP_SUMMARY
+
         fis.detect-frontend-changes.outputs.frontend-changed == 'true'
-      working-directory: ${{ env.WORKING_DIRECTORY }}
-      run: |
-        echo "🏥️ Building Angular application..."
-        npm run build --prod
-        echo "✅ Build completed successfully"branches: [ main, develop ]
-  workflow_dispatch:
 
-env:
-  WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Frontend'
+    - name: Check for frontend changes      working-directory: ${{ env.WORKING_DIRECTORY }}
 
-jobs:
-  detect-frontend-changes:
-    name: Detect Frontend Changes
-    runs-on: ubuntu-latest
-    outputs:
-      frontend-changed: ${{ steps.changes.outputs.frontend }}
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      id: changes      run: |
 
-    - name: Check for frontend changes
-      id: changes
-      run: |
-        echo "🔍 Checking for frontend changes..."
-        
-        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+      run: |        echo "🏥️ Building Angular application..."
+
+        echo "🔍 Checking for frontend changes..."        npm run build --prod
+
+                echo "✅ Build completed successfully"branches: [ main, develop ]
+
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then  workflow_dispatch:
+
           echo "Manual trigger - running frontend build"
-          echo "frontend=true" >> $GITHUB_OUTPUT
-          exit 0
+
+          echo "frontend=true" >> $GITHUB_OUTPUTenv:
+
+          exit 0  WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Frontend'
+
         fi
-        
-        # For pull requests, compare against base branch
-        if [ "${{ github.event_name }}" = "pull_request" ]; then
-          BASE_SHA="${{ github.event.pull_request.base.sha }}"
-          HEAD_SHA="${{ github.sha }}"
-        else
-          # For pushes, compare with previous commit
-          BASE_SHA="${{ github.event.before }}"
-          HEAD_SHA="${{ github.sha }}"
-        fi
-        
+
+        jobs:
+
+        # For pull requests, compare against base branch  detect-frontend-changes:
+
+        if [ "${{ github.event_name }}" = "pull_request" ]; then    name: Detect Frontend Changes
+
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"    runs-on: ubuntu-latest
+
+          HEAD_SHA="${{ github.sha }}"    outputs:
+
+        else      frontend-changed: ${{ steps.changes.outputs.frontend }}
+
+          # For pushes, compare with previous commit    steps:
+
+          BASE_SHA="${{ github.event.before }}"    - name: Checkout code
+
+          HEAD_SHA="${{ github.sha }}"      uses: actions/checkout@v4
+
+        fi      with:
+
+                fetch-depth: 0
+
         # Check if frontend files changed
-        if git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -q "Obligatorio/Material/Codigo/Frontend"; then
-          echo "✅ Frontend changes detected"
+
+        if git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -q "Obligatorio/Material/Codigo/Frontend"; then    - name: Check for frontend changes
+
+          echo "✅ Frontend changes detected"      id: changes
+
+          echo "frontend=true" >> $GITHUB_OUTPUT      run: |
+
+        else        echo "🔍 Checking for frontend changes..."
+
+          echo "⏭️ No frontend changes detected - build will skip"        
+
+          echo "frontend=false" >> $GITHUB_OUTPUT        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+
+        fi          echo "Manual trigger - running frontend build"
+
           echo "frontend=true" >> $GITHUB_OUTPUT
+
+  build:          exit 0
+
+    name: Frontend Build        fi
+
+    runs-on: ubuntu-latest        
+
+    needs: detect-frontend-changes        # For pull requests, compare against base branch
+
+    if: always()        if [ "${{ github.event_name }}" = "pull_request" ]; then
+
+              BASE_SHA="${{ github.event.pull_request.base.sha }}"
+
+    steps:          HEAD_SHA="${{ github.sha }}"
+
+    - name: Skip if no frontend changes        else
+
+      if: needs.detect-frontend-changes.outputs.frontend-changed != 'true'          # For pushes, compare with previous commit
+
+      run: |          BASE_SHA="${{ github.event.before }}"
+
+        echo "⏭️ Skipping frontend build - no frontend changes detected"          HEAD_SHA="${{ github.sha }}"
+
+        echo "✅ This check passes automatically when no frontend changes are present"        fi
+
+        exit 0        
+
+                # Check if frontend files changed
+
+    - name: Checkout code        if git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -q "Obligatorio/Material/Codigo/Frontend"; then
+
+      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'          echo "✅ Frontend changes detected"
+
+      uses: actions/checkout@v4          echo "frontend=true" >> $GITHUB_OUTPUT
+
         else
-          echo "⏭️ No frontend changes detected - build will skip"
-          echo "frontend=false" >> $GITHUB_OUTPUT
-        fi
 
-  build:
-    name: Frontend Build
-    runs-on: ubuntu-latest
+    - name: Setup Node.js          echo "⏭️ No frontend changes detected - build will skip"
+
+      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'          echo "frontend=false" >> $GITHUB_OUTPUT
+
+      uses: actions/setup-node@v4        fi
+
+      with:
+
+        node-version: '18.x'  build:
+
+        cache: 'npm'    name: Frontend Build
+
+        cache-dependency-path: ${{ env.WORKING_DIRECTORY }}/package-lock.json    runs-on: ubuntu-latest
+
     needs: detect-frontend-changes
-    if: always()
-    
-    steps:
-    - name: Skip if no frontend changes
-      if: needs.detect-frontend-changes.outputs.frontend-changed != 'true'
-      run: |
-        echo "⏭️ Skipping frontend build - no frontend changes detected"
-        echo "✅ This check passes automatically when no frontend changes are present"
+
+    - name: Cache node modules    if: always()
+
+      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'    
+
+      uses: actions/cache@v4    steps:
+
+      with:    - name: Skip if no frontend changes
+
+        path: ${{ env.WORKING_DIRECTORY }}/node_modules      if: needs.detect-frontend-changes.outputs.frontend-changed != 'true'
+
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}      run: |
+
+        restore-keys: |        echo "⏭️ Skipping frontend build - no frontend changes detected"
+
+          ${{ runner.os }}-node-        echo "✅ This check passes automatically when no frontend changes are present"
+
         exit 0
-        
-    - name: Checkout code
-      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
-      uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18.x'
-        cache: 'npm'
-        cache-dependency-path: ${{ env.WORKING_DIRECTORY }}/package-lock.json
+    - name: Install dependencies        
 
-    - name: Cache node modules
-      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
-      uses: actions/cache@v4
-      with:
-        path: ${{ env.WORKING_DIRECTORY }}/node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'    - name: Checkout code
 
-    - name: Install dependencies
-      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
-      working-directory: ${{ env.WORKING_DIRECTORY }}
-      run: |
+      working-directory: ${{ env.WORKING_DIRECTORY }}      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
+
+      run: |      uses: actions/checkout@v4
+
         echo "🔄 Installing npm dependencies..."
-        npm ci
-        echo "✅ Dependencies installed successfully"
 
-    - name: Build Application
-      working-directory: ${{ env.WORKING_DIRECTORY }}
-      run: |
+        npm ci    - name: Setup Node.js
+
+        echo "✅ Dependencies installed successfully"      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
+
+      uses: actions/setup-node@v4
+
+    - name: Build Application      with:
+
+      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'        node-version: '18.x'
+
+      working-directory: ${{ env.WORKING_DIRECTORY }}        cache: 'npm'
+
+      run: |        cache-dependency-path: ${{ env.WORKING_DIRECTORY }}/package-lock.json
+
         echo "🏗️ Building Angular application..."
-        npm run build --prod
-        echo "✅ Build completed successfully"
 
-    - name: Run Unit Tests
-      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
-      working-directory: ${{ env.WORKING_DIRECTORY }}
-      run: |
-        echo "🧪 Running unit tests..."
+        npm run build --prod    - name: Cache node modules
+
+        echo "✅ Build completed successfully"      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
+
+      uses: actions/cache@v4
+
+    - name: Run Unit Tests      with:
+
+      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'        path: ${{ env.WORKING_DIRECTORY }}/node_modules
+
+      working-directory: ${{ env.WORKING_DIRECTORY }}        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+      run: |        restore-keys: |
+
+        echo "🧪 Running unit tests..."          ${{ runner.os }}-node-
+
         npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
-        echo "✅ Unit tests completed successfully"
 
-    - name: Upload build artifacts
-      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
-      uses: actions/upload-artifact@v4
-      with:
-        name: frontend-build-artifacts
-        path: |
-          ${{ env.WORKING_DIRECTORY }}/dist/
-        retention-days: 1
+        echo "✅ Unit tests completed successfully"    - name: Install dependencies
 
-    - name: Upload test coverage
       if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
-      uses: actions/upload-artifact@v4
-      with:
-        name: frontend-coverage-report
+
+    - name: Upload build artifacts      working-directory: ${{ env.WORKING_DIRECTORY }}
+
+      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'      run: |
+
+      uses: actions/upload-artifact@v4        echo "🔄 Installing npm dependencies..."
+
+      with:        npm ci
+
+        name: frontend-build-artifacts        echo "✅ Dependencies installed successfully"
+
         path: |
+
+          ${{ env.WORKING_DIRECTORY }}/dist/    - name: Build Application
+
+        retention-days: 1      working-directory: ${{ env.WORKING_DIRECTORY }}
+
+      run: |
+
+    - name: Upload test coverage        echo "🏗️ Building Angular application..."
+
+      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'        npm run build --prod
+
+      uses: actions/upload-artifact@v4        echo "✅ Build completed successfully"
+
+      with:
+
+        name: frontend-coverage-report    - name: Run Unit Tests
+
+        path: |      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
+
+          ${{ env.WORKING_DIRECTORY }}/coverage/      working-directory: ${{ env.WORKING_DIRECTORY }}
+
+        retention-days: 1      run: |
+
+        echo "🧪 Running unit tests..."
+
+    - name: Build Summary        npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
+
+      if: always()        echo "✅ Unit tests completed successfully"
+
+      run: |
+
+        echo "## 🏗️ Frontend Build Results" >> $GITHUB_STEP_SUMMARY    - name: Upload build artifacts
+
+        if [ "${{ needs.detect-frontend-changes.outputs.frontend-changed }}" = "true" ]; then      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
+
+          if [[ "${{ job.status }}" == "success" ]]; then      uses: actions/upload-artifact@v4
+
+            echo "✅ **Build Status**: Successful" >> $GITHUB_STEP_SUMMARY      with:
+
+          else        name: frontend-build-artifacts
+
+            echo "❌ **Build Status**: Failed" >> $GITHUB_STEP_SUMMARY        path: |
+
+          fi          ${{ env.WORKING_DIRECTORY }}/dist/
+
+          echo "- Framework: Angular" >> $GITHUB_STEP_SUMMARY        retention-days: 1
+
+          echo "- Node.js Version: 18.x" >> $GITHUB_STEP_SUMMARY
+
+          echo "- Working Directory: ${{ env.WORKING_DIRECTORY }}" >> $GITHUB_STEP_SUMMARY    - name: Upload test coverage
+
+          echo "- Tests: Unit tests executed with coverage" >> $GITHUB_STEP_SUMMARY      if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
+
+        else      uses: actions/upload-artifact@v4
+
+          echo "⏭️ **Build Status**: Skipped (no frontend changes detected)" >> $GITHUB_STEP_SUMMARY      with:
+
+          echo "- This check passes automatically when no frontend changes are present" >> $GITHUB_STEP_SUMMARY        name: frontend-coverage-report
+
+        fi        path: |
           ${{ env.WORKING_DIRECTORY }}/coverage/
         retention-days: 1
 
