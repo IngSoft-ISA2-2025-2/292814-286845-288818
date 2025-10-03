@@ -6,7 +6,7 @@ on:
 
 jobs:
   check-source-branch:
-    name: Frontend Code Formatting
+    name: Main Branch Merge Protection
     runs-on: ubuntu-latest
     
     steps:
