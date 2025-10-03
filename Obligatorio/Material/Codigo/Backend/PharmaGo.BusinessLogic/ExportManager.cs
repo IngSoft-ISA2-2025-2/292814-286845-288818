@@ -1,8 +1,8 @@
-﻿using ExportationModel.ExportDomain;
+using System.Reflection;
+using ExportationModel.ExportDomain;
 using ExportationModel.Interfaces;
 using PharmaGo.Exceptions;
 using PharmaGo.IBusinessLogic;
-using System.Reflection;
 
 namespace PharmaGo.BusinessLogic
 {
@@ -20,7 +20,9 @@ namespace PharmaGo.BusinessLogic
             List<IFormat> exporters = ReadDlls();
             IFormat? desiredImplementation = exporters.FirstOrDefault(e => e.GetFormatName() == exporterName);
             if (desiredImplementation == null)
+            {
                 throw new ResourceNotFoundException("The selected exporter could not be found.");
+            }
 
             IEnumerable<DrugExportationModel> drugsToExport = _drugManager.GetDrugsToExport(token);
             desiredImplementation.Export(drugsToExport, parameters);
@@ -36,7 +38,9 @@ namespace PharmaGo.BusinessLogic
             List<IFormat> exporters = ReadDlls();
             IFormat? desiredImplementation = exporters.FirstOrDefault(e => e.GetFormatName() == exporterName);
             if (desiredImplementation == null)
+            {
                 throw new ResourceNotFoundException("The selected exporter could not be found.");
+            }
 
             return desiredImplementation.GetParameters();
         }
@@ -60,7 +64,9 @@ namespace PharmaGo.BusinessLogic
                         {
                             IFormat exporter = (IFormat)Activator.CreateInstance(type);
                             if (exporter != null)
+                            {
                                 availableExporters.Add(exporter);
+                            }
                         }
                     }
                 }

@@ -1,7 +1,7 @@
-﻿using System.Threading;
+using System.Diagnostics.Metrics;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using System.Diagnostics.Metrics;
 
 public class TestMetricService : BackgroundService
 {

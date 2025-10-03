@@ -1,10 +1,10 @@
-﻿using PharmaGo.Domain.Entities;
-using PharmaGo.Domain.SearchCriterias;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PharmaGo.Domain.Entities;
+using PharmaGo.Domain.SearchCriterias;
 
 namespace PharmaGo.IBusinessLogic
 {

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using PharmaGo.IBusinessLogic;
 using PharmaGo.WebApi.Converters;
 using PharmaGo.WebApi.Enums;
@@ -27,7 +27,6 @@ namespace PharmaGo.WebApi.Controllers
             var retrievedPuerchases = _purchasesManager.GetAllPurchases(token)
                 .Select(p => new PurchaseModelResponse(p)).ToList();
             return Ok(retrievedPuerchases);
-
         }
 
         [HttpGet]

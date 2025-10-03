@@ -1,0 +1,166 @@
+name: Frontend Code Formatting
+
+on:
+  push:
+    branches: [ main, develop, feature/* ]
+    paths:
+      - 'Obligatorio/Material/Codigo/Frontend/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'Obligatorio/Material/Codigo/Frontend/**'
+  workflow_dispatch:
+
+env:
+  WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Frontend'
+
+jobs:
+  formatting:
+    name: Frontend Code Formatting
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+        cache-dependency-path: ${{ env.WORKING_DIRECTORY }}/package-lock.json
+
+    - name: Cache node modules
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.WORKING_DIRECTORY }}/node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install dependencies
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🔄 Installing dependencies for formatting check..."
+        npm ci > /dev/null
+
+    - name: Install formatting tools
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🔧 Installing formatting tools..."
+        npm install --save-dev prettier eslint @angular-eslint/builder @angular-eslint/eslint-plugin @angular-eslint/eslint-plugin-template @angular-eslint/schematics @angular-eslint/template-parser @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-plugin-prettier
+        echo "✅ Formatting tools installed"
+
+    - name: Check Prettier configuration
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "📋 Checking for Prettier configuration..."
+        if [ -f ".prettierrc" ] || [ -f ".prettierrc.json" ] || [ -f ".prettierrc.js" ] || [ -f "prettier.config.js" ]; then
+          echo "✅ Prettier config found"
+        else
+          echo "❌ Prettier config not found - creating default configuration"
+          cat > .prettierrc << EOF
+        {
+          "semi": true,
+          "trailingComma": "es5",
+          "singleQuote": true,
+          "printWidth": 80,
+          "tabWidth": 2,
+          "useTabs": false
+        }
+        EOF
+          echo "✅ Default .prettierrc created"
+        fi
+
+    - name: Check ESLint configuration
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "📋 Checking for ESLint configuration..."
+        if [ -f ".eslintrc.json" ] || [ -f ".eslintrc.js" ] || [ -f "eslint.config.js" ]; then
+          echo "✅ ESLint config found"
+        else
+          echo "❌ ESLint config not found - this might cause linting issues"
+        fi
+
+    - name: Run Prettier check
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🎨 Checking code formatting with Prettier..."
+        npx prettier --check "src/**/*.{ts,js,html,css,scss,json}" || {
+          echo "❌ Code formatting issues found"
+          echo "🔧 Running Prettier to show differences..."
+          npx prettier --check "src/**/*.{ts,js,html,css,scss,json}" --list-different
+          echo ""
+          echo "To fix formatting issues, run:"
+          echo "npx prettier --write \"src/**/*.{ts,js,html,css,scss,json}\""
+          exit 1
+        }
+        echo "✅ Code formatting is correct"
+
+    - name: Run ESLint check
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🔍 Running ESLint checks..."
+        if [ -f ".eslintrc.json" ] || [ -f ".eslintrc.js" ] || [ -f "eslint.config.js" ]; then
+          npx eslint "src/**/*.{ts,js}" --max-warnings 0 || {
+            echo "❌ ESLint found issues"
+            echo ""
+            echo "To fix auto-fixable issues, run:"
+            echo "npx eslint \"src/**/*.{ts,js}\" --fix"
+            exit 1
+          }
+          echo "✅ ESLint checks passed"
+        else
+          echo "⚠️ ESLint configuration not found - skipping ESLint checks"
+        fi
+
+    - name: Check for common formatting issues
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        echo "🔍 Checking for common formatting issues..."
+        
+        # Check for tabs vs spaces in TypeScript files
+        if grep -r $'\t' --include="*.ts" --include="*.js" --include="*.html" --include="*.css" --include="*.scss" src/; then
+          echo "❌ Found tabs in source files (should use spaces)"
+        else
+          echo "✅ No tabs found in source files"
+        fi
+        
+        # Check for trailing whitespace
+        if grep -r ' $' --include="*.ts" --include="*.js" --include="*.html" --include="*.css" --include="*.scss" src/; then
+          echo "❌ Found trailing whitespace in source files"
+        else
+          echo "✅ No trailing whitespace found"
+        fi
+        
+        # Check for CRLF line endings (should be LF)
+        if grep -r $'\r' --include="*.ts" --include="*.js" --include="*.html" --include="*.css" --include="*.scss" src/; then
+          echo "❌ Found CRLF line endings (should be LF)"
+        else
+          echo "✅ Correct line endings (LF) found"
+        fi
+
+    - name: Upload formatting report
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-formatting-report
+        path: |
+          ${{ env.WORKING_DIRECTORY }}/.prettierrc*
+          ${{ env.WORKING_DIRECTORY }}/.eslintrc*
+          ${{ env.WORKING_DIRECTORY }}/eslint.config.js
+        retention-days: 1
+
+    - name: Formatting Summary
+      if: always()
+      run: |
+        echo "## 🎨 Frontend Code Formatting Results" >> $GITHUB_STEP_SUMMARY
+        if [[ "${{ job.status }}" == "success" ]]; then
+          echo "✅ **Formatting Status**: All code properly formatted" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ **Formatting Status**: Issues found" >> $GITHUB_STEP_SUMMARY
+        fi
+        echo "- Framework: Angular 14" >> $GITHUB_STEP_SUMMARY
+        echo "- Node.js Version: 18.x" >> $GITHUB_STEP_SUMMARY
+        echo "- Working Directory: ${{ env.WORKING_DIRECTORY }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Tools: Prettier, ESLint" >> $GITHUB_STEP_SUMMARY

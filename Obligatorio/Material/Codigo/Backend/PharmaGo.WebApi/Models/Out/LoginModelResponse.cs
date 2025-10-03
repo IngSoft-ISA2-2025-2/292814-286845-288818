@@ -1,4 +1,4 @@
-﻿namespace PharmaGo.WebApi.Models.Out
+namespace PharmaGo.WebApi.Models.Out
 {
     public class LoginModelResponse
     {

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using PharmaGo.Domain.Entities;
 using PharmaGo.Exceptions;
 using PharmaGo.IBusinessLogic;

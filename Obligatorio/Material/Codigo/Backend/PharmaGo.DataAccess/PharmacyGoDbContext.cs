@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PharmaGo.Domain.Entities;
 using System.Numerics;
+using Microsoft.EntityFrameworkCore;
+using PharmaGo.Domain.Entities;
 
 namespace PharmaGo.DataAccess
 {
@@ -21,7 +21,8 @@ namespace PharmaGo.DataAccess
 
         public PharmacyGoDbContext(DbContextOptions<PharmacyGoDbContext> options) : base(options) { }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
 
             modelBuilder.Entity<Drug>().Property(property => property.Price).HasPrecision(14, 2);
             modelBuilder.Entity<Purchase>().Property(property => property.TotalAmount).HasPrecision(14, 2);
@@ -29,6 +30,11 @@ namespace PharmaGo.DataAccess
 
             modelBuilder.Entity<UnitMeasure>().Property(u => u.Name).HasConversion<string>();
             modelBuilder.Entity<Presentation>().Property(u => u.Name).HasConversion<string>();
+
+            // Configuración explícita para el campo Password - soporta hashes BCrypt completos
+            modelBuilder.Entity<User>()
+                .Property(u => u.Password)
+                .HasMaxLength(100);
 
             base.OnModelCreating(modelBuilder);
 

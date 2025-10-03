@@ -1,4 +1,4 @@
-﻿using PharmaGo.Domain.Entities;
+using PharmaGo.Domain.Entities;
 using PharmaGo.Domain.SearchCriterias;
 using PharmaGo.Exceptions;
 using PharmaGo.IBusinessLogic;
@@ -15,7 +15,7 @@ namespace PharmaGo.BusinessLogic
 
         public StockRequestManager(IRepository<StockRequest> stockRequestRepository,
             IRepository<User> employeeRepository, IRepository<Drug> drugRepository, IRepository<Session> sessionRepository)
-		{
+        {
             _stockRequestRepository = stockRequestRepository;
             _employeeRepository = employeeRepository;
             _drugRepository = drugRepository;
@@ -25,16 +25,31 @@ namespace PharmaGo.BusinessLogic
         public bool ApproveStockRequest(int id)
         {
             var stockRequest = _stockRequestRepository.GetOneByExpression(s => s.Id == id);
-            if (stockRequest == null) throw new InvalidResourceException("Invalid stock request.");
+            if (stockRequest == null)
+            {
+                throw new InvalidResourceException("Invalid stock request.");
+            }
+
             if (stockRequest != null)
             {
-                if (stockRequest.Status == Domain.Enums.StockRequestStatus.Approved) throw new InvalidResourceException("Stock request already approved.");
-                if (stockRequest.Status == Domain.Enums.StockRequestStatus.Rejected) throw new InvalidResourceException("Stock request already rejected.");
+                if (stockRequest.Status == Domain.Enums.StockRequestStatus.Approved)
+                {
+                    throw new InvalidResourceException("Stock request already approved.");
+                }
+
+                if (stockRequest.Status == Domain.Enums.StockRequestStatus.Rejected)
+                {
+                    throw new InvalidResourceException("Stock request already rejected.");
+                }
             }
 
             foreach (var stockRequestDetail in stockRequest.Details)
             {
-                if (stockRequestDetail.Drug.Deleted == true) throw new InvalidResourceException("Stock request has deleted drugs included.");
+                if (stockRequestDetail.Drug.Deleted == true)
+                {
+                    throw new InvalidResourceException("Stock request has deleted drugs included.");
+                }
+
                 var drug = _drugRepository.GetOneByExpression(d => d.Id == stockRequestDetail.Drug.Id);
                 drug.Stock += stockRequestDetail.Quantity;
                 _drugRepository.UpdateOne(drug);
@@ -52,12 +67,23 @@ namespace PharmaGo.BusinessLogic
         public bool RejectStockRequest(int id)
         {
             var stockRequest = _stockRequestRepository.GetOneByExpression(s => s.Id == id);
-            if (stockRequest == null) throw new InvalidResourceException("Invalid stock request.");
+            if (stockRequest == null)
+            {
+                throw new InvalidResourceException("Invalid stock request.");
+            }
+
             if (stockRequest != null)
             {
-                if (stockRequest.Status == Domain.Enums.StockRequestStatus.Approved) throw new InvalidResourceException("Stock request already approved.");
-                if (stockRequest.Status == Domain.Enums.StockRequestStatus.Rejected) throw new InvalidResourceException("Stock request already rejected.");
-            }  
+                if (stockRequest.Status == Domain.Enums.StockRequestStatus.Approved)
+                {
+                    throw new InvalidResourceException("Stock request already approved.");
+                }
+
+                if (stockRequest.Status == Domain.Enums.StockRequestStatus.Rejected)
+                {
+                    throw new InvalidResourceException("Stock request already rejected.");
+                }
+            }
 
             stockRequest.Status = Domain.Enums.StockRequestStatus.Rejected;
             _stockRequestRepository.UpdateOne(stockRequest);
@@ -69,21 +95,39 @@ namespace PharmaGo.BusinessLogic
         public StockRequest CreateStockRequest(StockRequest stockRequest, string token)
         {
             User existEmployee = null;
-            if (stockRequest.Details == null) throw new InvalidResourceException("Invalid stock details.");
-            if (stockRequest.Details.Count == 0) throw new InvalidResourceException("Invalid stock details.");
+            if (stockRequest.Details == null)
+            {
+                throw new InvalidResourceException("Invalid stock details.");
+            }
+
+            if (stockRequest.Details.Count == 0)
+            {
+                throw new InvalidResourceException("Invalid stock details.");
+            }
 
             var session = _sessionRepository.GetOneByExpression(session => session.Token == new Guid(token));
-            if (session == null) throw new InvalidResourceException("Invalid session from employee.");
+            if (session == null)
+            {
+                throw new InvalidResourceException("Invalid session from employee.");
+            }
+
             var userId = session.UserId;
 
             existEmployee = _employeeRepository.GetOneDetailByExpression(u => u.Id == userId);
-            if (existEmployee == null) throw new InvalidResourceException("Invalid employee.");
+            if (existEmployee == null)
+            {
+                throw new InvalidResourceException("Invalid employee.");
+            }
+
             stockRequest.Employee = existEmployee;
 
             foreach (StockRequestDetail item in stockRequest.Details)
             {
                 var drug = _drugRepository.GetOneByExpression(d => d.Code == item.Drug.Code && d.Pharmacy.Id == existEmployee.Pharmacy.Id);
-                if (drug == null) throw new InvalidResourceException("Stock request has invalid drug.");
+                if (drug == null)
+                {
+                    throw new InvalidResourceException("Stock request has invalid drug.");
+                }
 
                 item.Drug = drug;
             }
@@ -97,9 +141,17 @@ namespace PharmaGo.BusinessLogic
 
         public IEnumerable<StockRequest> GetStockRequestsByEmployee(string token, StockRequestSearchCriteria searchCriteria)
         {
-            if (string.IsNullOrEmpty(token.ToString())) throw new InvalidResourceException("Invalid employee.");
+            if (string.IsNullOrEmpty(token.ToString()))
+            {
+                throw new InvalidResourceException("Invalid employee.");
+            }
+
             var session = _sessionRepository.GetOneByExpression(session => session.Token == new Guid(token));
-            if (session == null) throw new InvalidResourceException("Invalid employee.");
+            if (session == null)
+            {
+                throw new InvalidResourceException("Invalid employee.");
+            }
+
             searchCriteria.EmployeeId = session.UserId;
 
             var stockRequests = _stockRequestRepository.GetAllBasicByExpression(searchCriteria.Criteria());
@@ -107,15 +159,27 @@ namespace PharmaGo.BusinessLogic
             return stockRequests;
         }
 
-        public IEnumerable<StockRequest> GetStockRequestsByOwner(string token) {
+        public IEnumerable<StockRequest> GetStockRequestsByOwner(string token)
+        {
 
-            if (string.IsNullOrEmpty(token.ToString())) throw new InvalidResourceException("Invalid owner.");
+            if (string.IsNullOrEmpty(token.ToString()))
+            {
+                throw new InvalidResourceException("Invalid owner.");
+            }
+
             var session = _sessionRepository.GetOneByExpression(session => session.Token == new Guid(token));
-            if (session == null) throw new ResourceNotFoundException("Invalid owner.");
+            if (session == null)
+            {
+                throw new ResourceNotFoundException("Invalid owner.");
+            }
 
             var userId = session.UserId;
             User user = _employeeRepository.GetOneDetailByExpression(u => u.Id == userId);
-            if (user == null) throw new ResourceNotFoundException("Invalid user.");
+            if (user == null)
+            {
+                throw new ResourceNotFoundException("Invalid user.");
+            }
+
             var pharmacyId = user.Pharmacy.Id;
             var stockRequests = _stockRequestRepository.GetAllBasicByExpression(s => s.Employee.Pharmacy.Id == pharmacyId);
 

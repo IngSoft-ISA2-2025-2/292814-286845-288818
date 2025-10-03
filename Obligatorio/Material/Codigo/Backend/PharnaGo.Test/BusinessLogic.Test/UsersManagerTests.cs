@@ -1,8 +1,9 @@
-﻿using Moq;
+using Moq;
 using PharmaGo.BusinessLogic;
 using PharmaGo.Domain.Entities;
 using PharmaGo.Exceptions;
 using PharmaGo.IDataAccess;
+using BCrypt.Net;
 
 namespace PharmaGo.Test.BusinessLogic.Test
 {
@@ -25,9 +26,13 @@ namespace PharmaGo.Test.BusinessLogic.Test
             _invitationRespository = new Mock<IRepository<Invitation>>(MockBehavior.Strict);
             _userManager = new UsersManager(_userRespository.Object, _invitationRespository.Object);
 
-            pharmacy = new Pharmacy {Id = 1, Drugs = new List<Drug>(), 
-                                    Address = "Av. Rivera 1234", Name = "Farmacia 5566", 
-                                    Users = new List<User>()
+            pharmacy = new Pharmacy
+            {
+                Id = 1,
+                Drugs = new List<Drug>(),
+                Address = "Av. Rivera 1234",
+                Name = "Farmacia 5566",
+                Users = new List<User>()
             };
             role = new Role { Id = 1, Name = "Administrador" };
             invitation = new Invitation()
@@ -70,8 +75,8 @@ namespace PharmaGo.Test.BusinessLogic.Test
             var Password = "Abcdef12345678.";
             var RegistrationDate = new DateTime(2022, 09, 20, 14, 00, 00);
 
-           _userRespository.Setup(x => x.GetOneByExpression(u => u.UserName.ToLower() == UserName.ToLower())).Returns(exists);
-           _userRespository.Setup(x => x.GetOneByExpression(u => u.Email.ToLower() == Email.ToLower())).Returns(exists);
+            _userRespository.Setup(x => x.GetOneByExpression(u => u.UserName.ToLower() == UserName.ToLower())).Returns(exists);
+            _userRespository.Setup(x => x.GetOneByExpression(u => u.Email.ToLower() == Email.ToLower())).Returns(exists);
 
             _invitationRespository
                  .Setup(x => x.GetOneDetailByExpression(i => i.UserName.ToLower() == UserName.ToLower() && i.UserCode == UserCode && i.IsActive)).Returns(invitation);
@@ -300,12 +305,12 @@ namespace PharmaGo.Test.BusinessLogic.Test
             var Password = "Abcdef12345678.";
             var RegistrationDate = new DateTime(2022, 09, 20, 14, 00, 00);
 
-            User oldUser = new User { UserName = "pedro901", Email = "juan@gmail.com"};
+            User oldUser = new User { UserName = "pedro901", Email = "juan@gmail.com" };
 
             _invitationRespository
                  .Setup(x => x.GetOneDetailByExpression(i => i.UserName.ToLower() == UserName.ToLower() && i.UserCode == UserCode && i.IsActive)).Returns(invitation);
             _userRespository.Setup(x => x.GetOneByExpression(u => u.UserName.ToLower() == UserName.ToLower())).Returns(oldUser);
-            
+
             //Act
             try
             {
@@ -350,6 +355,62 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 Assert.AreEqual(ex.Message, "Invalid Email, Email already exists");
             }
         }
-    }
 
+        [TestMethod]
+        public void CreateUser_ShouldNotStorePasswordInPlainText()
+        {
+            var UserName = "pedro901";
+            var UserCode = "980357";
+            var Address = "Av. Italia 4478";
+            var Email = "juan@gmail.com";
+            var Password = "Abcdef12345678."; // Contraseña en texto plano
+            var RegistrationDate = new DateTime(2022, 09, 20, 14, 00, 00);
+
+            // Setup mocks
+            _userRespository.Setup(x => x.GetOneByExpression(u => u.UserName.ToLower() == UserName.ToLower())).Returns(exists);
+            _userRespository.Setup(x => x.GetOneByExpression(u => u.Email.ToLower() == Email.ToLower())).Returns(exists);
+            _invitationRespository.Setup(x => x.GetOneDetailByExpression(i => i.UserName.ToLower() == UserName.ToLower() && i.UserCode == UserCode && i.IsActive)).Returns(invitation);
+            
+            _userRespository.Setup(x => x.InsertOne(It.IsAny<User>()));
+            _userRespository.Setup(x => x.Save());
+            _invitationRespository.Setup(x => x.UpdateOne(invitation));
+            _invitationRespository.Setup(x => x.Save());
+
+            var result = _userManager.CreateUser(UserName, UserCode, Email, Password, Address, RegistrationDate);
+
+            Assert.AreNotEqual(Password, result.Password, 
+                "Password should not be stored in plain text");
+            Assert.IsFalse(string.IsNullOrEmpty(result.Password), 
+                "Password should not be null or empty");
+            Assert.IsTrue(result.Password.Length > 20, 
+                "Hashed password should be significantly longer than plain text");
+        }
+
+        [TestMethod]
+        public void CreateUser_ShouldGenerateVerifiablePasswordHash()
+        {
+            var UserName = "pedro902";
+            var UserCode = "980358";
+            var Address = "Av. Italia 4478";
+            var Email = "juan2@gmail.com";
+            var Password = "Abcdef12345678.";
+            var RegistrationDate = new DateTime(2022, 09, 20, 14, 00, 00);
+
+            // Setup mocks
+            _userRespository.Setup(x => x.GetOneByExpression(u => u.UserName.ToLower() == UserName.ToLower())).Returns(exists);
+            _userRespository.Setup(x => x.GetOneByExpression(u => u.Email.ToLower() == Email.ToLower())).Returns(exists);
+            _invitationRespository.Setup(x => x.GetOneDetailByExpression(i => i.UserName.ToLower() == UserName.ToLower() && i.UserCode == UserCode && i.IsActive)).Returns(invitation);
+            
+            _userRespository.Setup(x => x.InsertOne(It.IsAny<User>()));
+            _userRespository.Setup(x => x.Save());
+            _invitationRespository.Setup(x => x.UpdateOne(invitation));
+            _invitationRespository.Setup(x => x.Save());
+
+            var result = _userManager.CreateUser(UserName, UserCode, Email, Password, Address, RegistrationDate);
+
+            bool canVerify = BCrypt.Net.BCrypt.Verify(Password, result.Password);
+            Assert.IsTrue(canVerify, 
+                "Should be able to verify original password against stored hash");
+        }
+    }
 }

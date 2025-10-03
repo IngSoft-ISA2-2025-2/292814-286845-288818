@@ -1,4 +1,4 @@
-﻿namespace PharmaGo.WebApi.Enums
+namespace PharmaGo.WebApi.Enums
 {
     public enum RoleType
     {

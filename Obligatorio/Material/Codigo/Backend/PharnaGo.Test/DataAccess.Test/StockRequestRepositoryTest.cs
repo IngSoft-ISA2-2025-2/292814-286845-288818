@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Options;
@@ -9,9 +9,9 @@ using PharmaGo.Domain.Entities;
 
 namespace PharmaGo.Test.DataAccess.Test
 {
-	[TestClass]
-	public class StockRequestRepositoryTest
-	{
+    [TestClass]
+    public class StockRequestRepositoryTest
+    {
         private StockRequest _stockRequest;
         private PharmacyGoDbContext _context;
         private DbContextOptions<PharmacyGoDbContext> _options;
