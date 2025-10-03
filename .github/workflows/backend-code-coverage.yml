@@ -2,13 +2,9 @@ name: Backend Code Coverage
 
 on:
   push:
-    branches: [ main, develop ]
-    paths:
-      - 'Obligatorio/Material/Codigo/Backend/**'
+    branches: [ main, develop, feature/* ]
   pull_request:
     branches: [ main, develop ]
-    paths:
-      - 'Obligatorio/Material/Codigo/Backend/**'
   workflow_dispatch:
 
 env:
@@ -16,20 +12,73 @@ env:
   MINIMUM_COVERAGE: 85
 
 jobs:
-  code-coverage:
-    name: Backend Code Coverage
+  detect-backend-changes:
+    name: Detect Backend Changes
     runs-on: ubuntu-latest
-    
+    outputs:
+      backend-changed: ${{ steps.changes.outputs.backend }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Check for backend changes
+      id: changes
+      run: |
+        echo "🔍 Checking for backend changes..."
+        
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "Manual trigger - running code coverage"
+          echo "backend=true" >> $GITHUB_OUTPUT
+          exit 0
+        fi
+        
+        # For pull requests, compare against base branch
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.sha }}"
+        else
+          # For pushes, compare with previous commit
+          BASE_SHA="${{ github.event.before }}"
+          HEAD_SHA="${{ github.sha }}"
+        fi
+        
+        # Check if backend files changed
+        if git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -q "Obligatorio/Material/Codigo/Backend"; then
+          echo "✅ Backend changes detected"
+          echo "backend=true" >> $GITHUB_OUTPUT
+        else
+          echo "⏭️ No backend changes detected - coverage will skip"
+          echo "backend=false" >> $GITHUB_OUTPUT
+        fi
+
+  code-coverage:
+    name: Backend Code Coverage
+    runs-on: ubuntu-latest
+    needs: detect-backend-changes
+    if: always()
+    
+    steps:
+    - name: Skip if no backend changes
+      if: needs.detect-backend-changes.outputs.backend-changed != 'true'
+      run: |
+        echo "⏭️ Skipping backend code coverage - no backend changes detected"
+        echo "✅ This check passes automatically when no backend changes are present"
+        exit 0
+        
+    - name: Checkout code
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
+      uses: actions/checkout@v4
 
     - name: Setup .NET
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '6.0.x'
 
     - name: Cache NuGet packages
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       uses: actions/cache@v4
       with:
         path: ~/.nuget/packages
@@ -38,9 +87,11 @@ jobs:
           ${{ runner.os }}-nuget-
 
     - name: Install ReportGenerator tool
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
     - name: Restore dependencies
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
         echo "🔄 Restoring dependencies for coverage analysis..."
@@ -48,6 +99,7 @@ jobs:
         echo "✅ Dependencies restored"
 
     - name: Build for Coverage
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
         echo "🏗️ Building solution for coverage analysis..."
@@ -55,6 +107,7 @@ jobs:
         echo "✅ Build completed"
 
     - name: Identify Migration Files
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
         echo "🔍 Identifying migration files to exclude from coverage..."
@@ -71,6 +124,7 @@ jobs:
         echo "🚫 These files will be excluded from coverage analysis"
 
     - name: Run Tests with Coverage
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
         echo "🧪 Running tests with code coverage (excluding migrations)..."
@@ -82,6 +136,7 @@ jobs:
         echo "✅ Tests with coverage completed (migrations excluded)"
 
     - name: Generate Coverage Report
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
         echo "📊 Generating coverage report (excluding migrations)..."
@@ -94,6 +149,7 @@ jobs:
         echo "✅ Coverage report generated (migrations excluded from analysis)"
 
     - name: Generate Namespace Coverage Report
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
         echo "📋 Generating detailed namespace coverage report..."
@@ -155,6 +211,7 @@ jobs:
         echo "✅ Namespace coverage report generated"
 
     - name: Display Coverage by Namespace
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
         echo "📊 Displaying Coverage by Namespace/Project"
@@ -173,6 +230,7 @@ jobs:
         fi
 
     - name: Check Coverage Threshold
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
         echo "🎯 Checking coverage threshold (excluding migrations)..."
@@ -221,7 +279,7 @@ jobs:
 
     - name: Upload Namespace Coverage Report
       uses: actions/upload-artifact@v4
-      if: always()
+      if: always() && needs.detect-backend-changes.outputs.backend-changed == 'true'
       with:
         name: backend-namespace-coverage
         path: |
@@ -231,11 +289,15 @@ jobs:
 
     - name: Coverage Summary
       if: always()
-      working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
-        echo "## 📊 Code Coverage Results" >> $GITHUB_STEP_SUMMARY
-        
-        if [ -f "./TestResults/CoverageReport/Summary.txt" ]; then
+        if [ "${{ needs.detect-backend-changes.outputs.backend-changed }}" != "true" ]; then
+          echo "## ⏭️ Backend Code Coverage - Skipped" >> $GITHUB_STEP_SUMMARY
+          echo "No backend changes detected in this commit/PR" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Status**: Passed (no coverage analysis needed)" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "## 📊 Code Coverage Results" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "${{ env.WORKING_DIRECTORY }}/TestResults/CoverageReport/Summary.txt" ]; then
           COVERAGE=$(grep -oP 'Line coverage: \K[0-9.]+' ./TestResults/CoverageReport/Summary.txt | head -1)
           
           if (( $(echo "$COVERAGE >= ${{ env.MINIMUM_COVERAGE }}" | bc -l) )); then
@@ -258,7 +320,8 @@ jobs:
             echo "" >> $GITHUB_STEP_SUMMARY
           fi
           
-          echo "- **Detailed Report**: Available in artifacts" >> $GITHUB_STEP_SUMMARY
-        else
-          echo "❌ **Coverage Status**: Report generation failed" >> $GITHUB_STEP_SUMMARY
+            echo "- **Detailed Report**: Available in artifacts" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Coverage Status**: Report generation failed" >> $GITHUB_STEP_SUMMARY
+          fi
         fi
