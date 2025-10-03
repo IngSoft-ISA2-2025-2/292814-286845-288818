@@ -1,133 +1,391 @@
-name: Backend Buildname: Backend Build
+name: Backend Buildname: Backend Buildname: Backend Buildname: Backend Build
 
 
 
-on:on:
+on:
 
-  push:  push:
+  push:
 
-    branches: [ main, develop, feature/* ]    branches: [ main, develop, feature/* ]
+    branches: [ main, develop, feature/* ]on:
 
-  pull_request:  pull_request:
+  pull_request:
 
-    branches: [ main, develop ]    branches: [ main, develop ]
+    branches: [ main, develop ]  push:
 
-  workflow_dispatch:  workflow_dispatch:
+  workflow_dispatch:
 
+    branches: [ main, develop, feature/* ]on:on:
 
+env:
 
-env:env:
-
-  WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Backend'  WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Backend'
-
-
-
-jobs:jobs:
-
-  detect-backend-changes:  detect-backend-changes:
-
-    name: Detect Backend Changes    name: Detect Backend Changes
-
-    runs-on: ubuntu-latest    runs-on: ubuntu-latest
-
-    outputs:    outputs:
-
-      backend-changed: ${{ steps.changes.outputs.backend }}      backend-changed: ${{ steps.changes.outputs.backend }}
-
-    steps:    steps:
-
-    - name: Checkout code    - name: Checkout code
-
-      uses: actions/checkout@v4      uses: actions/checkout@v4
-
-      with:      with:
-
-        fetch-depth: 0        fetch-depth: 0
+  WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Backend'  pull_request:
 
 
 
-    - name: Check for backend changes    - name: Check for backend changes
+jobs:    branches: [ main, develop ]  push:  push:
 
-      id: changes      id: changes
+  detect-backend-changes:
 
-      run: |      run: |
+    name: Detect Backend Changes  workflow_dispatch:
 
-        echo "🔍 Checking for backend changes..."        echo "🔍 Checking for backend changes..."
+    runs-on: ubuntu-latest
 
-                
+    outputs:    branches: [ main, develop, feature/* ]    branches: [ main, develop, feature/* ]
 
-        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+      backend-changed: ${{ steps.changes.outputs.backend }}
 
-          echo "Manual trigger - running build"          echo "Manual trigger - running build"
+    steps:env:
 
-          echo "backend=true" >> $GITHUB_OUTPUT          echo "backend=true" >> $GITHUB_OUTPUT
+    - name: Checkout code
 
-          exit 0          exit 0
+      uses: actions/checkout@v4  WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Backend'  pull_request:  pull_request:
 
-        fi        fi
+      with:
 
-                
-
-        # For pull requests, compare against base branch        # For pull requests, compare against base branch
-
-        if [ "${{ github.event_name }}" = "pull_request" ]; then        if [ "${{ github.event_name }}" = "pull_request" ]; then
-
-          BASE_SHA="${{ github.event.pull_request.base.sha }}"          BASE_SHA="${{ github.event.pull_request.base.sha }}"
-
-          HEAD_SHA="${{ github.sha }}"          HEAD_SHA="${{ github.sha }}"
-
-        else        else
-
-          # For pushes, compare with previous commit          # For pushes, compare with previous commit
-
-          BASE_SHA="${{ github.event.before }}"          BASE_SHA="${{ github.event.before }}"
-
-          HEAD_SHA="${{ github.sha }}"          HEAD_SHA="${{ github.sha }}"
-
-        fi        fi
-
-                
-
-        # Check if backend files changed        # Check if backend files changed
-
-        if git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -q "Obligatorio/Material/Codigo/Backend"; then        if git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -q "Obligatorio/Material/Codigo/Backend"; then
-
-          echo "✅ Backend changes detected"          echo "✅ Backend changes detected"
-
-          echo "backend=true" >> $GITHUB_OUTPUT          echo "backend=true" >> $GITHUB_OUTPUT
-
-        else        else
-
-          echo "⏭️ No backend changes detected - build will skip"          echo "⏭️ No backend changes detected - build will skip"
-
-          echo "backend=false" >> $GITHUB_OUTPUT          echo "backend=false" >> $GITHUB_OUTPUT
-
-        fi        fi
+        fetch-depth: 0
 
 
 
-  build:  build:
+    - name: Check for backend changesjobs:    branches: [ main, develop ]    branches: [ main, develop ]
 
-    name: Backend Build    name: Backend Build
+      id: changes
 
-    runs-on: ubuntu-latest    runs-on: ubuntu-latest
+      run: |  detect-backend-changes:
 
-    needs: detect-backend-changes    needs: detect-backend-changes
+        echo "🔍 Checking for backend changes..."
 
-    if: always()    if: always()
+            name: Detect Backend Changes  workflow_dispatch:  workflow_dispatch:
+
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+
+          echo "Manual trigger - running build"    runs-on: ubuntu-latest
+
+          echo "backend=true" >> $GITHUB_OUTPUT
+
+          exit 0    outputs:
+
+        fi
+
+              backend-changed: ${{ steps.changes.outputs.backend }}
+
+        # For pull requests, compare against base branch
+
+        if [ "${{ github.event_name }}" = "pull_request" ]; then    steps:env:env:
+
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+
+          HEAD_SHA="${{ github.sha }}"    - name: Checkout code
+
+        else
+
+          # For pushes, compare with previous commit      uses: actions/checkout@v4  WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Backend'  WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Backend'
+
+          BASE_SHA="${{ github.event.before }}"
+
+          HEAD_SHA="${{ github.sha }}"      with:
+
+        fi
+
+                fetch-depth: 0
+
+        # Check if backend files changed
+
+        if git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -q "Obligatorio/Material/Codigo/Backend"; then
+
+          echo "✅ Backend changes detected"
+
+          echo "backend=true" >> $GITHUB_OUTPUT    - name: Check for backend changesjobs:jobs:
+
+        else
+
+          echo "⏭️ No backend changes detected - build will skip"      id: changes
+
+          echo "backend=false" >> $GITHUB_OUTPUT
+
+        fi      run: |  detect-backend-changes:  detect-backend-changes:
+
+
+
+  build:        echo "🔍 Checking for backend changes..."
+
+    name: Backend Build
+
+    runs-on: ubuntu-latest            name: Detect Backend Changes    name: Detect Backend Changes
+
+    needs: detect-backend-changes
+
+    if: always()        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+
+    
+
+    steps:          echo "Manual trigger - running build"    runs-on: ubuntu-latest    runs-on: ubuntu-latest
+
+    - name: Skip if no backend changes
+
+      if: needs.detect-backend-changes.outputs.backend-changed != 'true'          echo "backend=true" >> $GITHUB_OUTPUT
+
+      run: |
+
+        echo "⏭️ Skipping backend build - no backend changes detected"          exit 0    outputs:    outputs:
+
+        echo "✅ This check passes automatically when no backend changes are present"
+
+        exit 0        fi
 
         
 
-    steps:    steps:
+    - name: Checkout code              backend-changed: ${{ steps.changes.outputs.backend }}      backend-changed: ${{ steps.changes.outputs.backend }}
 
-    - name: Skip if no backend changes    - name: Skip if no backend changes
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
 
-      if: needs.detect-backend-changes.outputs.backend-changed != 'true'      if: needs.detect-backend-changes.outputs.backend-changed != 'true'
+      uses: actions/checkout@v4        # For pull requests, compare against base branch
 
-      run: |      run: |
 
-        echo "⏭️ Skipping backend build - no backend changes detected"        echo "⏭️ Skipping backend build - no backend changes detected"
 
+    - name: Setup .NET        if [ "${{ github.event_name }}" = "pull_request" ]; then    steps:    steps:
+
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
+
+      uses: actions/setup-dotnet@v4          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+
+      with:
+
+        dotnet-version: '6.0.x'          HEAD_SHA="${{ github.sha }}"    - name: Checkout code    - name: Checkout code
+
+
+
+    - name: Cache NuGet packages        else
+
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
+
+      uses: actions/cache@v4          # For pushes, compare with previous commit      uses: actions/checkout@v4      uses: actions/checkout@v4
+
+      with:
+
+        path: ~/.nuget/packages          BASE_SHA="${{ github.event.before }}"
+
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+
+        restore-keys: |          HEAD_SHA="${{ github.sha }}"      with:      with:
+
+          ${{ runner.os }}-nuget-
+
+        fi
+
+    - name: Restore dependencies
+
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'                fetch-depth: 0        fetch-depth: 0
+
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+
+      run: |        # Check if backend files changed
+
+        echo "🔄 Restoring NuGet packages..."
+
+        dotnet restore        if git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -q "Obligatorio/Material/Codigo/Backend"; then
+
+        echo "✅ Dependencies restored successfully"
+
+          echo "✅ Backend changes detected"
+
+    - name: Build Application
+
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'          echo "backend=true" >> $GITHUB_OUTPUT    - name: Check for backend changes    - name: Check for backend changes
+
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+
+      run: |        else
+
+        echo "🏗️ Building .NET application..."
+
+        dotnet build --configuration Release --no-restore --verbosity normal          echo "⏭️ No backend changes detected - build will skip"      id: changes      id: changes
+
+        echo "✅ Build completed successfully"
+
+          echo "backend=false" >> $GITHUB_OUTPUT
+
+    - name: Upload build artifacts
+
+      if: success() && needs.detect-backend-changes.outputs.backend-changed == 'true'        fi      run: |      run: |
+
+      uses: actions/upload-artifact@v4
+
+      with:
+
+        name: backend-build-artifacts
+
+        path: |  build:        echo "🔍 Checking for backend changes..."        echo "🔍 Checking for backend changes..."
+
+          ${{ env.WORKING_DIRECTORY }}/**/bin/Release/
+
+          ${{ env.WORKING_DIRECTORY }}/**/obj/Release/    name: Backend Build
+
+        retention-days: 1
+
+    runs-on: ubuntu-latest                
+
+    - name: Build Summary
+
+      if: always()    needs: detect-backend-changes
+
+      run: |
+
+        echo "## 🏗️ Backend Build Results" >> $GITHUB_STEP_SUMMARY    if: always()        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+
+        if [ "${{ needs.detect-backend-changes.outputs.backend-changed }}" = "true" ]; then
+
+          if [[ "${{ job.status }}" == "success" ]]; then    
+
+            echo "✅ **Build Status**: Successful" >> $GITHUB_STEP_SUMMARY
+
+          else    steps:          echo "Manual trigger - running build"          echo "Manual trigger - running build"
+
+            echo "❌ **Build Status**: Failed" >> $GITHUB_STEP_SUMMARY
+
+          fi    - name: Skip if no backend changes
+
+          echo "- Configuration: Release" >> $GITHUB_STEP_SUMMARY
+
+          echo "- .NET Version: 6.0" >> $GITHUB_STEP_SUMMARY      if: needs.detect-backend-changes.outputs.backend-changed != 'true'          echo "backend=true" >> $GITHUB_OUTPUT          echo "backend=true" >> $GITHUB_OUTPUT
+
+          echo "- Working Directory: ${{ env.WORKING_DIRECTORY }}" >> $GITHUB_STEP_SUMMARY
+
+        else      run: |
+
+          echo "⏭️ **Build Status**: Skipped (no backend changes detected)" >> $GITHUB_STEP_SUMMARY
+
+          echo "- This check passes automatically when no backend changes are present" >> $GITHUB_STEP_SUMMARY        echo "⏭️ Skipping backend build - no backend changes detected"          exit 0          exit 0
+
+        fi
+        echo "✅ This check passes automatically when no backend changes are present"
+
+        exit 0        fi        fi
+
+        
+
+    - name: Checkout code                
+
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
+
+      uses: actions/checkout@v4        # For pull requests, compare against base branch        # For pull requests, compare against base branch
+
+
+
+    - name: Setup .NET        if [ "${{ github.event_name }}" = "pull_request" ]; then        if [ "${{ github.event_name }}" = "pull_request" ]; then
+
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
+
+      uses: actions/setup-dotnet@v4          BASE_SHA="${{ github.event.pull_request.base.sha }}"          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+
+      with:
+
+        dotnet-version: '6.0.x'          HEAD_SHA="${{ github.sha }}"          HEAD_SHA="${{ github.sha }}"
+
+
+
+    - name: Cache NuGet packages        else        else
+
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'
+
+      uses: actions/cache@v4          # For pushes, compare with previous commit          # For pushes, compare with previous commit
+
+      with:
+
+        path: ~/.nuget/packages          BASE_SHA="${{ github.event.before }}"          BASE_SHA="${{ github.event.before }}"
+
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+
+        restore-keys: |          HEAD_SHA="${{ github.sha }}"          HEAD_SHA="${{ github.sha }}"
+
+          ${{ runner.os }}-nuget-
+
+        fi        fi
+
+    - name: Restore dependencies
+
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'                
+
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+
+      run: |        # Check if backend files changed        # Check if backend files changed
+
+        echo "🔄 Restoring NuGet packages..."
+
+        dotnet restore        if git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -q "Obligatorio/Material/Codigo/Backend"; then        if git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -q "Obligatorio/Material/Codigo/Backend"; then
+
+        echo "✅ Dependencies restored successfully"
+
+          echo "✅ Backend changes detected"          echo "✅ Backend changes detected"
+
+    - name: Build Application
+
+      if: needs.detect-backend-changes.outputs.backend-changed == 'true'          echo "backend=true" >> $GITHUB_OUTPUT          echo "backend=true" >> $GITHUB_OUTPUT
+
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+
+      run: |        else        else
+
+        echo "🏗️ Building .NET application..."
+
+        dotnet build --configuration Release --no-restore --verbosity normal          echo "⏭️ No backend changes detected - build will skip"          echo "⏭️ No backend changes detected - build will skip"
+
+        echo "✅ Build completed successfully"
+
+          echo "backend=false" >> $GITHUB_OUTPUT          echo "backend=false" >> $GITHUB_OUTPUT
+
+    - name: Upload build artifacts
+
+      if: success() && needs.detect-backend-changes.outputs.backend-changed == 'true'        fi        fi
+
+      uses: actions/upload-artifact@v4
+
+      with:
+
+        name: backend-build-artifacts
+
+        path: |  build:  build:
+
+          ${{ env.WORKING_DIRECTORY }}/**/bin/Release/
+
+          ${{ env.WORKING_DIRECTORY }}/**/obj/Release/    name: Backend Build    name: Backend Build
+
+        retention-days: 1
+
+    runs-on: ubuntu-latest    runs-on: ubuntu-latest
+
+    - name: Build Summary
+
+      if: always()    needs: detect-backend-changes    needs: detect-backend-changes
+
+      run: |
+
+        echo "## 🏗️ Backend Build Results" >> $GITHUB_STEP_SUMMARY    if: always()    if: always()
+
+        if [ "${{ needs.detect-backend-changes.outputs.backend-changed }}" = "true" ]; then
+
+          if [[ "${{ job.status }}" == "success" ]]; then        
+
+            echo "✅ **Build Status**: Successful" >> $GITHUB_STEP_SUMMARY
+
+          else    steps:    steps:
+
+            echo "❌ **Build Status**: Failed" >> $GITHUB_STEP_SUMMARY
+
+          fi    - name: Skip if no backend changes    - name: Skip if no backend changes
+
+          echo "- Configuration: Release" >> $GITHUB_STEP_SUMMARY
+
+          echo "- .NET Version: 6.0" >> $GITHUB_STEP_SUMMARY      if: needs.detect-backend-changes.outputs.backend-changed != 'true'      if: needs.detect-backend-changes.outputs.backend-changed != 'true'
+
+          echo "- Working Directory: ${{ env.WORKING_DIRECTORY }}" >> $GITHUB_STEP_SUMMARY
+
+        else      run: |      run: |
+
+          echo "⏭️ **Build Status**: Skipped (no backend changes detected)" >> $GITHUB_STEP_SUMMARY
+
+          echo "- This check passes automatically when no backend changes are present" >> $GITHUB_STEP_SUMMARY        echo "⏭️ Skipping backend build - no backend changes detected"        echo "⏭️ Skipping backend build - no backend changes detected"
+
+        fi
         echo "✅ This check passes automatically when no backend changes are present"        echo "✅ This check passes automatically when no backend changes are present"
 
         exit 0        exit 0
