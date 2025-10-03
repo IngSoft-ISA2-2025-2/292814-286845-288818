@@ -16,7 +16,7 @@ env:
 
 jobs:
   unit-tests:
-    name: Run Unit Tests
+    name: Backend Unit Tests
     runs-on: ubuntu-latest
     
     steps:

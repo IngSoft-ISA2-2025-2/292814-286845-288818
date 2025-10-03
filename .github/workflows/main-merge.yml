@@ -6,7 +6,7 @@ on:
 
 jobs:
   check-source-branch:
-    name: Verify PR Source Branch
+    name: Frontend Code Formatting
     runs-on: ubuntu-latest
     
     steps:

@@ -16,7 +16,7 @@ env:
 
 jobs:
   formatting:
-    name: Check Code Formatting
+    name: Frontend Code Formatting
     runs-on: ubuntu-latest
     
     steps:

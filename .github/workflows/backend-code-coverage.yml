@@ -17,7 +17,7 @@ env:
 
 jobs:
   code-coverage:
-    name: Generate Code Coverage Report
+    name: Backend Code Coverage
     runs-on: ubuntu-latest
     
     steps:

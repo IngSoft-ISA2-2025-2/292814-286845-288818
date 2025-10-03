@@ -16,7 +16,7 @@ env:
 
 jobs:
   build:
-    name: Build Angular Application
+    name: Frontend Build
     runs-on: ubuntu-latest
     
     steps:
