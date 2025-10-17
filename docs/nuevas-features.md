@@ -11,20 +11,20 @@ Los usuarios podrán reservar unidades de medicamentos de una farmacia específi
 **Para** asegurar la disponibilidad del medicamento antes de retirarlo
 
 ### Escenarios Gherkin
-1. Escenario: Usuario no autenticado intenta reservar medicamentos
+1. Escenario: Usuario no autenticado intenta reservar medicamentos sin exito
 **Dado** un usuario no autenticado
 **Cuando** intenta reservar medicamentos de una farmacia
 **Entonces** el sistema responde con un error *unauthorized (401)*
 **Y** muestra un mensaje que dice *"Unautharized user"*
 
-2. Escenario: Usuario intenta reservar un medicamento en una farmacia inválida
+2. Escenario: Usuario intenta reservar un medicamento en una farmacia inválida sin exito
 **Dado** un usuario autenticado
 **Y** selecciona una farmacia que no existe o es inválida
 **Cuando** intenta reservar un medicamento
 **Entonces** el sistema responde con un error *bad request (404)* 
 **Y** muestra un mensaje que dice *"La farmacia seleccionada no existe"*
 
-3. Escenario: Usuario autenticado intenta reservar un medicamento sin stock
+3. Escenario: Usuario autenticado intenta reservar un medicamento sin stock sin exito
 **Dado** un usuario autenticado
 **Y** selecciona una farmacia específica
 **Cuando** intenta reservar un medicamento
@@ -32,7 +32,24 @@ Los usuarios podrán reservar unidades de medicamentos de una farmacia específi
 **Entonces** el sistema muestra responde con un mensaje de error *conflict 409*
 **Y** muestra un mensaje que dice *"No hay stock disponible para el medicamento {nombre_medicamento}*"
 
-4. Escenario: Usuario reserva un medicamento que requiere prescripción con exito
+4. Escenario: Usuario reserva dos medicamentos uno sin stock y otro con stock sin exito
+**Dado** un usuario autenticado  
+**Y** selecciona una farmacia específica  
+**Cuando** intenta reservar dos medicamentos
+**Y** ambos medicamentos no requieren prescripción médica 
+**Y** hay stock disponible para el medicamento 1
+**Y** no hay stock disponible para el medicamento 2
+**Entonces** el sistema muestra responde con un mensaje de error *conflict 409*
+**Y** muestra un mensaje que dice *"No hay stock disponible para el medicamento {nombre_medicamento1}*"
+
+5. Escenario: Usuario intenta reservar más unidades de las disponibles en stock sin exito
+**Dado** un usuario autenticado  
+**Y** selecciona una farmacia específica  
+**Cuando** intenta reservar una cantidad de unidades mayor a la disponible en stock  
+**Entonces** el sistema responde con un error *conflict (409)*  
+**Y** muestra un mensaje que dice *"No hay suficiente stock disponible para el medicamento {nombre_medicamento}"*
+
+6. Escenario: Usuario reserva un medicamento que requiere prescripción con exito
 **Dado** un usuario autenticado  
 **Y** selecciona una farmacia específica  
 **Cuando** intenta reservar un medicamento  
@@ -42,7 +59,7 @@ Los usuarios podrán reservar unidades de medicamentos de una farmacia específi
 **Y** descuenta la unidad del stock de los medicamentos
 **Y** muestra un mensaje que dice *"Reserva creada exitosamente, el medicamento {nombre_medicamento} requiere receta médica. Por favor, preséntela en la farmacia para validar la reserva."*
 
-5. Escenario: Usuario reserva un medicamento que no requiere prescripción con éxito
+7. Escenario: Usuario reserva un medicamento que no requiere prescripción con éxito
 **Dado** un usuario autenticado
 **Y** selecciona una farmacia específica
 **Cuando** intenta reservar un medicamento  
@@ -54,15 +71,27 @@ Los usuarios podrán reservar unidades de medicamentos de una farmacia específi
 **Y** muestra un mensaje que dice *"Reserva creada exitosamente"*
 
 
-6. Escenario: Usuario reserva dos medicamentos uno que requiere prescripción y otro que no requiere con exito
+8. Escenario: Usuario reserva dos medicamentos uno que requiere prescripción y otro que no requiere con exito
 **Dado** un usuario autenticado  
 **Y** selecciona una farmacia específica  
-**Cuando** intenta reservar un medicamento  
-**Y** el medicamento requiere prescripción médica  
-**Y** hay stock disponible  
+**Cuando** intenta reservar dos medicamentos
+**Y** un medicamento requiere prescripción médica  
+**Y** un medicamento no requiere prescripción médica  
+**Y** hay stock disponible para ambos medicamentos
 **Entonces** el sistema crea la reserva con un estado *Pendiente*
-**Y** descuenta la unidad del stock de los medicamentos
+**Y** descuenta la unidad del stock para ambos medicamentos
 **Y** muestra un mensaje que dice *"Reserva creada exitosamente, el medicamento {nombre_medicamento} requiere receta médica. Por favor, preséntela en la farmacia para validar la reserva."*
+
+9. Escenario: Usuario reserva dos medicamentos ambos requieren prescripción con éxito
+**Dado** un usuario autenticado  
+**Y** selecciona una farmacia específica  
+**Cuando** intenta reservar dos medicamentos
+**Y** ambos medicamentos requieren prescripción médica 
+**Y** hay stock disponible para ambos medicamentos
+**Entonces** el sistema crea la reserva con un estado *Pendiente*
+**Y** descuenta la unidad del stock para ambos medicamentos
+**Y** muestra un mensaje que dice *"Reserva creada exitosamente, el medicamento {nombre_medicamento1} y {nombre_medicamento2} requieren receta médica. Por favor, preséntelas en la farmacia para validar la reserva."*
+
 
 2. ## Gestionar reservas
 Los clientes podrán visualizar un listado de sus reservas.
@@ -254,7 +283,62 @@ Para robustecer la seguridad del proceso, cuando se genere una reserva, el siste
 **Quiero** generar un par de claves publico-privada
 **Para** asegurar la autenticidad del cliente y la correcta entrega del medicamento
 
+### Escenarios Gherkin
+1. Escenario: Sistema genera correctamente par de claves al crear una reserva 
+**Dado** un usuario autenticado
+**Cuando** crea exitosamente una reserva de medicamento
+**Entonces** el sistema genera un par de claves público-privada
+**Y** asocia estas claves a la reserva en la base de datos
+**Y** envía la clave pública al usuario para su presentación en farmacia
 
+2. Escenario: Cliente presenta clave pública válida en farmacia 
+**Dado** un cliente con una reserva confirmada
+**Y** posee la clave pública asociada a esa reserva
+**Cuando** presenta la clave pública en la farmacia
+**Entonces** el sistema valida exitosamente la clave
+**Y** autoriza la entrega del medicamento
+**Y** actualiza el estado de la reserva a *"Completada"*
+
+3. Escenario: Cliente presenta clave pública inválida en farmacia 
+**Dado** un cliente con una reserva confirmada
+**Y** presenta una clave pública incorrecta o manipulada
+**Cuando** el sistema intenta validar la clave
+**Entonces** el sistema responde con un error *unauthorized (401)*
+**Y** muestra un mensaje que dice *"La clave de validación no corresponde a esta reserva"*
+
+4. Escenario: Cliente intenta utilizar clave de una reserva expirada 
+**Dado** un cliente con una reserva en estado *"Expirada"*
+**Y** posee la clave pública asociada a esa reserva
+**Cuando** presenta la clave pública en la farmacia
+**Entonces** el sistema responde con un error *gone (410)*
+**Y** muestra un mensaje que dice *"Esta clave corresponde a una reserva expirada"*
+
+5. Escenario: Sistema valida clave pública con restricción temporal 
+**Dado** una reserva confirmada con tiempo límite de validación
+**Y** el cliente presenta la clave pública dentro del período válido
+**Cuando** el sistema verifica la clave
+**Entonces** valida exitosamente la clave
+**Y** permite la entrega del medicamento
+
+6. Escenario: Farmacéutico verifica exitosamente la identidad del cliente mediante clave 
+**Dado** un cliente con una reserva confirmada
+**Y** se presenta personalmente en la farmacia
+**Cuando** el farmacéutico escanea la clave pública presentada por el cliente
+**Entonces** el sistema muestra los detalles de la reserva incluyendo los medicamentos y el nombre del cliente
+**Y** el farmacéutico puede verificar que coincide con la identificación del cliente
+
+7. Escenario: Sistema detecta intento de reutilización de clave 
+**Dado** un cliente que ya utilizó su clave pública para retirar un medicamento
+**Cuando** intenta utilizar la misma clave nuevamente
+**Entonces** el sistema responde con un error *conflict (409)*
+**Y** muestra un mensaje que dice *"Esta clave ya ha sido utilizada"*
+
+8. Escenario: Cliente intenta validar la reserva en una farmacia incorrecta
+**Dado** un cliente con una reserva confirmada
+**Y** posee la clave pública asociada a esa reserva
+**Cuando** presenta la clave pública en una farmacia distinta a la que corresponde la reserva
+**Entonces** el sistema responde con un error *forbidden (403)*
+**Y** muestra un mensaje que dice *"La reserva solo puede ser validada en la farmacia seleccionada al momento de la creación"*
 
 Se debe disponer de endpoints REST para interactuar con estas funcionalidades (crear, listar, confirmar y cancelar reservas). En el frontend, se desarrollarán pantallas para la búsqueda de medicamentos, la creación de reservas y la visualización y gestión de las reservas del usuario.
 
