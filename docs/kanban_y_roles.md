@@ -6,7 +6,7 @@
 - Christian Ingrey
 
 Todos somos desarrollador y tester en todas las entregas. 
-> Rol de la etapa: **Product Owner (Etapa 2)** → Christian Ingrey. El PO rota en las siguientes etapas.
+> Rol de la etapa: **Product Owner (Etapa 3)** → Juan Diego Fagnoni. El PO rota en las siguientes etapas.
 
 ## Flujo del tablero
 Backlog → Ready → In-Progress → In Review → Done
@@ -39,9 +39,15 @@ Backlog → Ready → In-Progress → In Review → Done
 
 ## Ceremonias
 
+- **Discovery (previo al Sprint Planning)**
+  - **Objetivo:** Aplicar Example Mapping a historias nuevas identificadas para el sprint
+  - **Participantes:** Los Tres Amigos (PO + Desarrollador + Tester)
+  - **Duración:** 1 hora máximo
+  - **Salida:** Historias "Discovery-Ready" con reglas claras y ejemplos concretos
+
 - **Sprint Planning (inicio de cada entrega/sprint)**
-  - **Objetivo:** Acordar junto al equipo el objetivo y el alcance del sprint. Seleccionar del Backlog las tarjetas que cumplan con la Definition of Ready, pudiendolas mover asi a Ready, para luego pasarlas poco a poco a In Progress, respetando el WIP. Identificar dependencias/riesgos entre las tarjetas y, si hace falta, descomponer en subtareas.
-  - **Salida:** Objetivo y alcance del sprint, lista de tarjetas seleccionadas (con su prioridad y tamaño) y dependencias y riesgos anotados.
+  - **Objetivo:** Acordar objetivo y alcance del sprint. Seleccionar tarjetas Discovery-Ready y bugs, moverlas a Ready respetando WIP. Identificar dependencias/riesgos.
+  - **Salida:** Objetivo del sprint, tarjetas seleccionadas priorizadas, dependencias documentadas
 
 - **Sprint Review (al finalizar cada entrega/sprint - antes de la Retrospective)**
   - **Objetivo:** Presentar el trabajo completado durante el sprint al Product Owner y stakeholders. Demostrar las funcionalidades desarrolladas, validar que cumplen con los criterios de aceptación y recopilar feedback para futuras iteraciones.

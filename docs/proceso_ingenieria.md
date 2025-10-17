@@ -1,14 +1,47 @@
-# Proceso de Ingeniería — Entrega 2
+# Proceso de Ingeniería — Entrega 3
 
 ## Propósito
-Definiremos de manera clara y sencilla lo que haremos desde que una tarjeta está **Ready** hasta que queda **Done** en `main`.
+Definiremos de manera clara y sencilla lo que haremos desde que una tarjeta está **Ready** hasta que queda **Done** en `main`, incorporando BDD para nuevas funcionalidades y manteniendo TDD para corrección de bugs.
 
 ## Alcance
 Aplicaremos el tablero Kanban: **Backlog → Ready → In-Progress → In Review → Done**, ya definido. Las ceremonias que vamos a llevar a cabo se encuentran en `docs/kanban_y_roles.md`.
 
-**NUEVO**: Todos los cambios deben pasar por el pipeline CI/CD automatizado que incluye build, tests, cobertura y formateo de código (ver carpeta .github/workflows).
+**NUEVO para E3**: 
+- Incorporación de BDD (Behavior Driven Development) para nuevas funcionalidades
+- Proceso de Discovery con Example Mapping y los Tres Amigos (PO, Desarrollador, Tester)
+- Pipeline CI/CD expandido para incluir BDD scenarios y tests E2E
 
 ## Flujo paso a paso
+
+** A CHEQUEAR **
+
+### Para NUEVAS FUNCIONALIDADES (BDD-first): 
+
+1) **Discovery (Los Tres Amigos)**
+   - **Example Mapping Session** (25 min máximo):
+     - Historia (amarilla): "Como... Quiero... Para..."
+     - Reglas (azules): Criterios de aceptación 
+     - Ejemplos (verdes): Casos concretos por regla (min 2: positivo/negativo)
+     - Preguntas (rojas): Resolver antes de continuar
+   - **Salida**: Reglas claras, ejemplos concretos, cero preguntas pendientes
+
+2) **Formulation (si justificado)**
+   - Traducir ejemplos a escenarios Gherkin
+   - **Feature/Rule/Scenario** estructura
+   - Lenguaje de dominio, no técnico
+   - Validar con los Tres Amigos antes de implementar
+
+3) **BDD Frontend-First**
+   - **[BDD-RED]**: Escribir escenarios Cypress que fallen
+   - **[BDD-GREEN]**: Implementación mínima UI para pasar escenarios  
+   - **[BDD-REFACTOR]**: Mejorar UX/código frontend manteniendo comportamiento
+
+4) **TDD Backend (Supporting Frontend)**
+   - **[TDD-RED]**: Tests unitarios que fallen basados en contratos frontend
+   - **[TDD-GREEN]**: Implementación mínima lógica de negocio
+   - **[TDD-REFACTOR]**: Refactorización técnica
+
+### Para CORRECCIÓN DE BUGS (TDD-only):
 
 1) **Tomar tarjeta (Ready)**
    - Confirmar que cumple Definition of Ready [DoR](reglas_de_trabajo_y_configuracion_repo.md#definition-of-ready-dor).
@@ -32,11 +65,12 @@ Aplicaremos el tablero Kanban: **Backlog → Ready → In-Progress → In Review
    - Repetiremos este proceso hasta cubrir criterios de aceptación.
 
 4) **Verificación local con Pipeline**
-   - **Tests locales**: Ejecutar `dotnet test` - deben pasar al 100%
-   - **Cobertura local**: Verificar que se mantiene ≥85%
-   - **Build local**: Confirmar que `dotnet build` es exitoso
-   - **Formateo**: Aplicar estándares de código definidos
-   - **Evidencia**: Captura de pantalla de tests pasando y cobertura
+   - **BDD**: `npm run cypress:run` - escenarios deben pasar
+   - **TDD**: `dotnet test` - tests unitarios al 100%
+   - **Build**: `dotnet build` y `npm run build` exitosos
+   - **Cobertura**: Mantener ≥85% en backend
+   - **Formateo**: Estándares aplicados automáticamente
+   - **E2E**: Validar comportamiento completo si es feature nueva
 
 5) **Integración con Develop (Git Flow)**
 

@@ -8,13 +8,16 @@ El pipeline CI/CD está diseñado para garantizar la calidad del código y autom
 
 ### Backend Workflows
 - **backend-build.yml**: Compilación y verificación de dependencias
-- **backend-unit-test.yml**: Ejecución de suite completa de tests unitarios
-- **backend-code-coverage.yml**: Validación de cobertura mínima (90%)
+- **backend-unit-test.yml**: Ejecución de tests unitarios TDD
+- **backend-code-coverage.yml**: Validación de cobertura mínima (85%)
 - **backend-formatting.yml**: Verificación de estándares de código
 
-### Frontend Workflows
-- **frontend-build.yml**: Compilación y build de la aplicación web
+### Frontend Workflows (BDD + UI)
+- **frontend-build.yml**: Compilación y build de aplicación Angular
 - **frontend-formatting.yml**: Validación de estándares de código frontend
+- **frontend-bdd-tests.yml**: Ejecución de escenarios Cypress BDD
+- **frontend-unit-tests.yml**: Tests unitarios de componentes
+
 
 ### Workflow de Integración
 - **main-merge.yml**: Orquestación completa para merges a `main`
@@ -24,8 +27,9 @@ El pipeline CI/CD está diseñado para garantizar la calidad del código y autom
 ### Integración a Develop
 **Activación**: Pull Request hacia `develop`  
 **Validaciones Automáticas**:
-- Build exitoso (backend y frontend)
-- Tests unitarios pasando
+- Build exitoso (backend + frontend)
+- Tests unitarios TDD pasando
+- Escenarios BDD básicos (smoke tests)
 - Formateo de código correcto
 
 **Proceso Manual**:
@@ -35,13 +39,15 @@ El pipeline CI/CD está diseñado para garantizar la calidad del código y autom
 ### Integración a Main
 **Activación**: Pull Request desde `develop` hacia `main`  
 **Validaciones Automáticas**:
-- Build completo, tanto backend como frontend
-- Tests unitarios con 100% de éxito
+- **Backend**: Build + tests TDD + cobertura ≥85%
+- **Frontend**: Build + tests unitarios + escenarios BDD Cypress- Tests unitarios con 100% de éxito
 - Cobertura de código ≥ 85%
 - Estándares de formateo aplicados
 
 **Proceso Manual**:
 - Revisión de código obligatoria (1 aprobación)
+- Validación de criterios de aceptación BDD
+- Verificación de commits etiquetados ([BDD-*]/[TDD-*])
 - Validación de criterios de aceptación
 - Verificación de documentación actualizada
 
@@ -63,25 +69,52 @@ El pipeline bloquea automáticamente el merge si:
 ## Integración con el Proceso de Desarrollo
 
 ### Responsabilidades del Desarrollador
-Antes de crear un Pull Request:
-- Ejecutar tests localmente: `dotnet test`
+
+**Para Nuevas Funcionalidades (BDD+TDD)**:
+- Ejecutar escenarios BDD: `npm run cypress:run`
+- Ejecutar tests TDD: `dotnet test`
+- Verificar build completo: `dotnet build` + `npm run build`
+- Validar cobertura ≥85%
+- Confirmar integración E2E funcionando
+
+**Para Bugs (TDD)**:
+- Ejecutar tests unitarios: `dotnet test`
 - Verificar build: `dotnet build`
 - Aplicar formateo: `dotnet format`
 - Confirmar cobertura adecuada
+- Confirmar que el bug se reproduce y se corrige
 
 ### Responsabilidades del Revisor
-Para merges a `main`:
-- Validar que el pipeline está verde
-- Revisar cambios de código críticos
-- Confirmar que se mantienen estándares arquitectónicos
-- Verificar trazabilidad con issues del proyecto
+
+**Para merges a `main`**:
+- Validar pipeline completamente verde (BDD+TDD+E2E)
+- Revisar commits etiquetados correctamente
+- Verificar que comportamiento BDD cumple criterios de aceptación
+- Confirmar trazabilidad con Discovery/Example Mapping
+- Validar estándares arquitectónicos mantenidos
 
 ## Configuración Técnica
 
 ### Triggers
-- **Push a develop**: Validación básica automática
-- **Pull Request a main**: Pipeline completo con gates de calidad
+- **Push a develop**: Validación básica (build + tests unitarios + BDD smoke)
+- **Pull Request a main**: Pipeline completo BDD+TDD+E2E
 - **Merge a main**: Validación final y despliegue
+
+### Stack Tecnológico BDD
+
+**Discovery & Formulation**:
+- Example Mapping (físico/digital)
+- Gherkin para especificaciones (.feature files)
+
+**Automation**:
+- **Frontend BDD**: Cypress + Cucumber integration
+- **Backend TDD**: MSTest + Moq (.NET)
+- **E2E Integration**: Cypress end-to-end scenarios
+
+**Reporting**:
+- Living Documentation generada desde .feature files
+- Reportes de cobertura TDD automatizados
+- Dashboard de escenarios BDD (pasando/fallando)
 
 ## Beneficios del Pipeline
 

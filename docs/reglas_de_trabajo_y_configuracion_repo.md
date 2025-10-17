@@ -9,44 +9,103 @@
 ## Definition of Ready (DoR)
 **Descripción Clara**
 - La tarjeta en el tablero debe tener una descripción completa de lo que se necesita construir, redactada en el formato 
+
+### Para NUEVAS FUNCIONALIDADES (BDD):
+
+**Historia de Usuario Completa**
+- Descripción en formato estándar:
 ```
 Como [tipo de usuario] 
 Quiero [hacer algo] 
 Para [conseguir un beneficio]
 ```
+
+**Discovery Completado**
+- Example Mapping realizado con los Tres Amigos (PO + Dev + Tester)
+- Reglas de negocio documentadas (tarjetas azules)
+- Ejemplos concretos definidos: mínimo 2 por regla (positivo/negativo)
+- Cero preguntas pendientes (tarjetas rojas resueltas)
+
 - Se han definido los criterios de aceptación, que deben ser verificables y estar detallados con al menos dos escenarios diferentes, escritos en formato Gherkin.
+
+**Criterios de Aceptación BDD**
+- Escenarios en formato Gherkin derivados de Example Mapping:
 ```
 Escenario: [Nombre del escenario]
 Dado [Un contexto inicial]
 Cuando [Ocurre una acción]
 Entonces [Se obtiene un resultado esperado]
 ```
-- Escenario Positivo: Un escenario que describe el resultado esperado cuando todo funciona correctamente.
-- Escenarios Negativos: Escenarios que describen cómo debe comportarse el sistema en cada caso de error o comportamiento inesperado.
+- Al menos un escenario positivo y uno negativo por regla de negocio
 
+### Para CORRECCIÓN DE BUGS (TDD):
+
+**Descripción del Bug**
+- Pasos claros para reproducir el error
+- Comportamiento actual vs comportamiento esperado
+- Impacto y severidad identificados (crítico/alto/medio/bajo)
+
+**Criterios de Aceptación TDD**
+- Condiciones específicas para considerar el bug resuelto
+- Test cases que validen la corrección
+- Casos edge que previenen regresión
+
+### Común para Ambos:
 **Prioridad Asignada** 
-- La tarea tiene una prioridad clara (alta, media, baja) para que el equipo sepa qué es lo más importante a abordar.
+- Prioridad clara (alta, media, baja) según impacto de negocio
 
 **Tamaño Manejable**
-- La tarea es lo suficientemente pequeña como para ser completada por una sola persona en un tiempo razonable, reduciendo el riesgo de bloqueos.
+- Completable por una persona en tiempo razonable (≤5 días)
+- Si es mayor, debe descomponerse en subtareas
 
 ---
 
 ## Definition of Done (DoD)
+
 **Pasa las pruebas**
 - Todas las pruebas (unitarias, de integración, funcionales) han sido ejecutadas y pasadas sin errores.
 
 **Revisión de código** 
 - Un miembro del equipo que no haya trabajado en la tarea ha revisado y aprobado el código.
 
-**Cumple con los criterios de aceptación**
-- La funcionalidad cumple con todos los criterios de aceptación definidos en la DoR.
+### Para NUEVAS FUNCIONALIDADES (BDD):
 
-**Código documentado** 
-- El código tiene comentarios claros donde es necesario y se han actualizado los archivos de documentación.
+**Frontend BDD Completo**
+- Escenarios Cypress implementados y pasando ([BDD-GREEN], [BDD-REFACTOR])
+- UI cumple comportamiento especificado en Example Mapping
+- Tests E2E validando flujo completo de usuario
 
-**Rama de código fusionada**
-- El código ha sido fusionado a la rama principal
+**Backend TDD Completo**
+- Tests unitarios implementados y pasando ([TDD-GREEN], [TDD-REFACTOR])
+- Cobertura de código ≥85% mantenida
+- Lógica de negocio validada
+
+**Integración BDD+TDD**
+- Frontend y backend integrados correctamente
+- Comportamiento end-to-end según criterios de aceptación
+- Todos los escenarios Gherkin cumplidos
+
+### Para CORRECCIÓN DE BUGS (TDD):
+
+**Bug Resuelto con TDD**
+- Test que reproduce el bug implementado
+- Fix implementado con tests pasando ([TDD-GREEN], [TDD-REFACTOR])
+- Regresión prevenida con test permanente
+
+### Común para Ambos:
+
+**Calidad y Proceso**
+- Pipeline CI/CD completo pasando (build + tests + cobertura)
+- Commits etiquetados correctamente ([BDD-*]/[TDD-*])
+- Revisión de código aprobada (solo develop → main)
+
+**Criterios de Aceptación**
+- Funcionalidad cumple criterios definidos en DoR
+- Validación manual por persona diferente al desarrollador
+
+**Integración**
+- Código mergeado a develop exitosamente
+- Documentación actualizada si es necesario
 
 ---
 
