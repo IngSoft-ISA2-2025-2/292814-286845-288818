@@ -87,6 +87,81 @@ El personal de la farmacia podrá confirmar las reservas una vez que se verifiqu
 **Quiero** poder confirmar reservas
 **Para** avisar al cliente que su reserva fue procesada y que los medicamentos ya se reservaron
 
+### Escenarios Gherkin
+1. Escenario: Empleado no autenticado intenta confirmar una reserva
+**Dado** un empleado no autenticado
+**Cuando** intenta confirmar una reserva
+**Entonces** el sistema responde con un error *unauthorized (401)*
+**Y** muestra un mensaje que dice *"Unautharized user"*
+
+2. Escenario: Empleado autenticado intenta confirmar una reserva inexistente
+**Dado** un empleado autenticado
+**Y** proporcionar un identificador de reserva inexistente
+**Cuando** intenta confirmar una reserva
+**Entonces** el sistema responde con un error *not found (404)*
+**Y** muestra un mensaje que dice *"The specified reservation does not exist"*
+
+3. Escenario: Empleado autenticado intenta confirmar una reserva ya confirmada
+**Dado** un empleado autenticado
+**Y** una reserva que ya esta en estado Confiramda
+**Cuando** intenta confirmar nuevamente la reserva
+**Entonces** el sistema responde con un error *conflict (409)*
+**Y** muestra un mensaje que dice *"The reservation was previously confirmed"*
+
+4. Escenario: Empleado autenticado intenta confirmar una reserva canelada
+**Dado** un empleado autenticado
+**Y** una reserva que esta en estado Cancelada
+**Cuando** intenta confirmar la reserva
+**Entonces** el sistema responde con un error *conflict (409)*
+**Y** muestra un mensaje que dice *"A cancelled reservation cannot be confirmed"*
+
+5. Escenario: Empleado autenticado intenta confirmar una reserva expirada
+**Dado** un empleado autenticado
+**Y** una reserva que esta en estado Expirada
+**Cuando** intenta confirmar la reserva
+**Entonces** el sistema responde con un error *conflict (409)*
+**Y** muestra un mensaje que dice *"The reservation has expired and cannot be confirmed."*
+
+6. Escenario: Empleado autenticado intenta confirmar una reserva pendiente sin validar receta
+**Dado** un empleado autenticado
+**Y** una reserva que requiere receta medica 
+**Y** la receta aun no fue validada
+**Cuando** intenta confirmar la reserva
+**Entonces** el sistema responde con un error *bad request (400)*
+**Y** muestra un mensaje que dice *"The reservation cannot be confirmed until the medical prescription is validated."*
+
+7. Escenario: Empleado autenticado confirma exitosamente una reserva pendiente sin receta
+**Dado** un empleado autenticado
+**Y** una reserva en estado Pendiente que no requiere receta médica 
+**Cuando** cuando confirma la reserva
+**Entonces** el sistema actualiza el estado de la reserva a Confirmada
+**Y** muestra un mensaje que dice *"Reservation successfully confirmed. The medication can be picked up by the customer."*
+**Y** notifica al usuario que su medicamento está listo para retirar 
+
+8. Escenario: Empleado autenticado confirma exitosamente una reserva pendiente con receta validada
+**Dado** un empleado autenticado
+**Y** una reserva en estado Pendiente que no requiere receta médica 
+**Y** la receta fue validada correctamente
+**Cuando** cuando confirma la reserva
+**Entonces** el sistema actualiza el estado de la reserva a Confirmada
+**Y** muestra un mensaje que dice *"Reservation successfully confirmed. The medication can be picked up by the customer."*
+**Y** notifica al usuario que su medicamento está listo para retirar 
+
+9. Escenario: Empleado autenticado intenta confirmar una reserva perteneciente a otra farmacia
+**Dado** un empleado autenticado perteneciente a la farmacia Farmacia X
+**Y** una reserva asociada a la Farmacia Y
+**Cuando** intenta confirmar la reserva
+**Entonces** el sistema responde con un error *forbidden (403)*
+**Y** muestra un mensaje que dice *"You do not have permission to confirm reservations from another pharmacy"*
+
+10. Escenario: Error inesperado durante la confirmación de una reserva
+**Dado** un empleado autenticado
+**Y** una reserva válida en estado pendiente
+**Cuando** intenta confirmar la reserva
+**Y** ocurre un error interno en el sistema
+**Entonces** el sistema responde con un error *internal server error (500)*
+**Y** muestra un mensaje que dice *"An error occurred while confirming your reservation. Please try again later."*
+
 5. ## Gestión de estados
 Internamente, el sistema gestionará las reservas a través de diferentes estados: "Pendiente" (al crearse), "Confirmada" (tras la validación y confirmación), "Expirada" (si no se retira en un tiempo determinado) y "Cancelada" (si el usuario la anula o el sistema la cancela por falta de validación).
 
