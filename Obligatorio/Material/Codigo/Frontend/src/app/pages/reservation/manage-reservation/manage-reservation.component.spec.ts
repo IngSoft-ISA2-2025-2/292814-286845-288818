@@ -116,4 +116,56 @@ describe('ManageReservationComponent', () => {
     expect(mensajeVacio).toBeTruthy();
     expect(mensajeVacio.nativeElement.textContent).toContain('No tienes reservas creadas');
   });
+
+  it('debería mostrar todas las reservas del usuario con información básica y botón de detalles', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'miSecret123';
+    component.reservas = [
+      { id: 1, medicamentos: [{ nombre: 'Aspirina' }], farmacia: 'Farmashop', estado: 'Pendiente', fechaCreacion: '2023-10-01T10:00:00Z' },
+      { id: 2, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmacia Central', estado: 'Confirmada', fechaCreacion: '2023-10-02T11:00:00Z' },
+      { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], farmacia: 'Farmacia Sur', estado: 'Expirada', fechaCreacion: '2023-10-03T12:00:00Z' },
+      { id: 4, medicamentos: [{ nombre: 'Amoxicilina' }], farmacia: 'Farmacia Norte', estado: 'Cancelada', fechaCreacion: '2023-10-04T13:00:00Z' },
+      { id: 5, medicamentos: [{ nombre: 'Diclofenac' }], farmacia: 'Farmacia Este', estado: 'Retirada', fechaCreacion: '2023-10-05T14:00:00Z' }
+    ];
+    fixture.detectChanges();
+
+    // Act: simula click en el botón de consultar reservas
+    const consultarBtn = fixture.debugElement.query(By.css('[data-cy="consultar-reservas-btn"]'));
+    consultarBtn.triggerEventHandler('click');
+    fixture.detectChanges();
+
+    // Assert: verifica que el listado muestra todas las reservas
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItems.length).toBe(5);
+
+    // Verifica información básica de cada reserva
+    const medicamentosElements = fixture.debugElement.queryAll(By.css('[data-cy="reserva-medicamento"]'));
+    const farmaciasElements = fixture.debugElement.queryAll(By.css('[data-cy="reserva-farmacia"]'));
+    const estadosElements = fixture.debugElement.queryAll(By.css('[data-cy="reserva-estado"]'));
+
+    expect(medicamentosElements[0].nativeElement.textContent).toContain('Aspirina');
+    expect(farmaciasElements[0].nativeElement.textContent).toContain('Farmashop');
+    expect(estadosElements[0].nativeElement.textContent).toContain('Pendiente');
+
+    expect(medicamentosElements[1].nativeElement.textContent).toContain('Paracetamol');
+    expect(farmaciasElements[1].nativeElement.textContent).toContain('Farmacia Central');
+    expect(estadosElements[1].nativeElement.textContent).toContain('Confirmada');
+
+    expect(medicamentosElements[2].nativeElement.textContent).toContain('Ibuprofeno');
+    expect(farmaciasElements[2].nativeElement.textContent).toContain('Farmacia Sur');
+    expect(estadosElements[2].nativeElement.textContent).toContain('Expirada');
+
+    expect(medicamentosElements[3].nativeElement.textContent).toContain('Amoxicilina');
+    expect(farmaciasElements[3].nativeElement.textContent).toContain('Farmacia Norte');
+    expect(estadosElements[3].nativeElement.textContent).toContain('Cancelada');
+
+    expect(medicamentosElements[4].nativeElement.textContent).toContain('Diclofenac');
+    expect(farmaciasElements[4].nativeElement.textContent).toContain('Farmacia Este');
+    expect(estadosElements[4].nativeElement.textContent).toContain('Retirada');
+
+    // Verifica que cada reserva tiene botón para ver detalles
+    const verDetallesBtns = fixture.debugElement.queryAll(By.css('[data-cy="ver-detalles-btn"]'));
+    expect(verDetallesBtns.length).toBe(5);
+  });
 });
