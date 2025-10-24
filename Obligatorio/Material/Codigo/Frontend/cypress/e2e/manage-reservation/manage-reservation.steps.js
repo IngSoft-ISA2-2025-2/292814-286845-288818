@@ -8,21 +8,34 @@ Given('estoy en la página de mis reservas', () => {
 });
 
 // ============================================================================
-// ESCENARIO 1: Usuario no autenticado intenta visualizar reservas
+// ESCENARIO 1: Usuario sin email intenta consultar reservas
 // ============================================================================
-Given('un usuario no autenticado', () => {
-  cy.window().then((win) => {
-    win.localStorage.removeItem('login');
-  });
+Given('un email {string}', (email) => {
+  cy.get('[data-cy="email-input"]').clear();
+  if (email) {
+    cy.get('[data-cy="email-input"]').type(email);
+  }
 });
 
-When('intenta acceder al listado de sus reservas', () => {
-  cy.intercept('GET', '/api/reservas/usuario/', {
-    statusCode: 401,
-    body: { error: 'Debe iniciar sesión para ver sus reservas' },
-  }).as('reservasUnauthorized');
-  
-  cy.get('[data-cy="listar-reservas-btn"]').click();
+Given('un secret {string}', (secret) => {
+  cy.get('[data-cy="secret-input"]').clear();
+  if (secret) {
+    cy.get('[data-cy="secret-input"]').type(secret);
+  }
+});
+
+When('hace click en el botón de consultar reservas', () => {
+  cy.get('[data-cy="email-input"]').invoke('val').then((email) => {
+    cy.get('[data-cy="secret-input"]').invoke('val').then((secret) => {
+      if (!email || !secret) {
+        cy.intercept('POST', '/api/reservas/consultar', {
+          statusCode: 400,
+          body: { error: 'Debe ingresar un email y secret para consultar reservas.' },
+        }).as('sinEmailOSecret');
+      }
+      cy.get('[data-cy="consultar-reservas-btn"]').click();
+    });
+  });
 });
 
 Then('el sistema responde con un error y muestra el mensaje {string}', (mensaje) => {
@@ -31,29 +44,19 @@ Then('el sistema responde con un error y muestra el mensaje {string}', (mensaje)
 });
 
 // ============================================================================
-// ESCENARIO 2: Usuario autenticado sin reservas visualiza listado vacío
+// ESCENARIO 2: Usuario con email y secret válidos sin reservas visualiza listado vacío
 // ============================================================================
-Given('un usuario autenticado', () => {
-  cy.window().then((win) => {
-    const login = {
-      userName: 'usuarioTest',
-      role: 'Client',
-      token: 'tokenDeEjemplo123',
-    };
-    win.localStorage.setItem('login', JSON.stringify(login));
-  });
-});
+
+// Steps reutilizados: email, secret
 
 Given('no tiene reservas creadas en el sistema', () => {
-  cy.intercept('GET', '/api/reservas/usuario/usuarioTest', {
+  cy.intercept('POST', '/api/reservas/consultar', {
     statusCode: 200,
     body: [],
   }).as('reservasVacias');
 });
 
-When('solicita visualizar sus reservas', () => {
-  cy.get('[data-cy="listar-reservas-btn"]').click();
-});
+// Step reutilizado: hace click en el botón de consultar reservas
 
 Then('el sistema responde de manera correcta, mostrando un listado vacío', () => {
   cy.get('[data-cy="listado-reservas"]').should('be.visible');
@@ -65,12 +68,15 @@ Then('muestra un mensaje que dice {string}', (mensaje) => {
 });
 
 // ============================================================================
-// ESCENARIO 3: Usuario autenticado visualiza sus reservas exitosamente
+// ESCENARIO 3: Usuario con email y secret válidos visualiza sus reservas exitosamente
 // ============================================================================
+
+// Steps reutilizados: email, secret
+
 Given(
   'tiene reservas creadas en diferentes estados {string}, {string}, {string}, {string} y {string}',
   (estado1, estado2, estado3, estado4, estado5) => {
-    cy.intercept('GET', '/api/reservas/usuario/usuarioTest', {
+    cy.intercept('POST', '/api/reservas/consultar', {
       statusCode: 200,
       body: [
         {
@@ -113,6 +119,8 @@ Given(
   }
 );
 
+// Step reutilizado: hace click en el botón de consultar reservas
+
 Then('el sistema responde de manera correcta, mostrando un listado con todas sus reservas', () => {
   cy.get('[data-cy="listado-reservas"]').should('be.visible');
   cy.get('[data-cy="reserva-item"]').should('have.length', 5);
@@ -131,8 +139,11 @@ Then('cada reserva incluye un botón para ver más detalles', () => {
 // ============================================================================
 // ESCENARIO 4: Usuario filtra reservas por estado
 // ============================================================================
+
+// Steps reutilizados: email, secret
+
 Given('tiene reservas en diferentes estados', () => {
-  cy.intercept('GET', '/api/reservas/usuario/usuarioTest', {
+  cy.intercept('POST', '/api/reservas/consultar', {
     statusCode: 200,
     body: [
       { id: 1, medicamentos: [{ nombre: 'Aspirina' }], farmacia: 'Farmashop', estado: 'Pendiente' },
@@ -144,8 +155,8 @@ Given('tiene reservas en diferentes estados', () => {
 
 When('aplica filtro para ver solo reservas en estado {string}', (estado) => {
   cy.intercept(
-    'GET',
-    new RegExp(`/api/reservas/usuario/usuarioTest\\?estado=${estado}`),
+    'POST',
+    '/api/reservas/consultar',
     {
       statusCode: 200,
       body: [
@@ -167,6 +178,9 @@ Then('el sistema responde de manera correcta, mostrando un listado únicamente c
 // ============================================================================
 // ESCENARIO 5: Usuario intenta acceder a detalles de reserva inexistente
 // ============================================================================
+
+// Steps reutilizados: email, secret
+
 When('intenta acceder a detalles de una reserva que no existe', () => {
   cy.intercept('GET', '/api/reservas/999', {
     statusCode: 404,
@@ -183,6 +197,9 @@ Then('el sistema responde con un error, mostrando un mensaje que dice {string}',
 // ============================================================================
 // ESCENARIO 6: Usuario accede a detalles de una reserva específica
 // ============================================================================
+
+// Steps reutilizados: email, secret
+
 Given('tiene una reserva creada', () => {
   cy.intercept('GET', '/api/reservas/1', {
     statusCode: 200,
@@ -213,10 +230,33 @@ Then(
 );
 
 // ============================================================================
-// ESCENARIO 7: Usuario visualiza reservas pendientes con opciones disponibles
+// ESCENARIO 7: Usuario con email existente pero secret incorrecto intenta consultar reservas
 // ============================================================================
+
+// Steps reutilizados: email, secret
+
+Given('el email {string} ya tiene reservas con secret {string}', (email, secretCorrecto) => {
+  cy.intercept('POST', '/api/reservas/consultar', (req) => {
+    if (req.body.email === email && req.body.secret !== secretCorrecto) {
+      req.reply({
+        statusCode: 403,
+        body: { error: 'El secret no coincide con el registrado para este email' },
+      });
+    }
+  }).as('secretIncorrecto');
+});
+
+// Step reutilizado: hace click en el botón de consultar reservas
+// Step reutilizado: el sistema responde con un error y muestra el mensaje {string}
+
+// ============================================================================
+// ESCENARIO 8: Usuario visualiza reservas pendientes con opciones disponibles
+// ============================================================================
+
+// Steps reutilizados: email, secret
+
 Given('tiene una reserva en estado {string}', (estado) => {
-  cy.intercept('GET', '/api/reservas/usuario/usuarioTest', {
+  cy.intercept('POST', '/api/reservas/consultar', {
     statusCode: 200,
     body: [
       {
@@ -225,10 +265,17 @@ Given('tiene una reserva en estado {string}', (estado) => {
         farmacia: 'Farmashop',
         estado: estado,
         fechaLimite: '2023-10-02T10:00:00Z',
+        fechaExpiracion: '2023-10-01T10:00:00Z',
+        fechaCancelacion: '2023-10-01T15:00:00Z',
+        fechaRetiro: '2023-10-02T09:00:00Z',
+        idReferencia: estado === 'Confirmada' ? 'REF123456' : null,
       },
     ],
   }).as(`reservas${estado}`);
 });
+
+// Step reutilizado: hace click en el botón de consultar reservas
+// Step reutilizado: el sistema responde de manera correcta, mostrando un listado con todas sus reservas
 
 Then('la reserva pendiente muestra claramente el estado {string}', (estado) => {
   cy.get('[data-cy="reserva-estado"]').should('contain', estado);
@@ -247,16 +294,26 @@ Then('no muestra ID de referencia hasta que sea confirmada', () => {
 });
 
 // ============================================================================
-// ESCENARIO 8: Usuario visualiza ID de referencia para reservas confirmadas
+// ESCENARIO 9: Usuario visualiza ID de referencia para reservas confirmadas
 // ============================================================================
+
+// Steps reutilizados: email, secret, tiene una reserva en estado "Confirmada"
+// Step reutilizado: hace click en el botón de consultar reservas
+// Step reutilizado: el sistema responde de manera correcta, mostrando un listado con todas sus reservas
+
 Then('la reserva confirmada muestra un ID de referencia único', () => {
   cy.get('[data-cy="id-referencia"]').should('be.visible');
   cy.get('[data-cy="id-referencia"]').should('not.be.empty');
 });
 
 // ============================================================================
-// ESCENARIO 9: Usuario visualiza reservas expiradas con indicaciones
+// ESCENARIO 10: Usuario visualiza reservas expiradas con indicaciones
 // ============================================================================
+
+// Steps reutilizados: email, secret, tiene una reserva en estado "Expirada"
+// Step reutilizado: hace click en el botón de consultar reservas
+// Step reutilizado: el sistema responde de manera correcta, mostrando un listado con todas sus reservas
+
 Then('la reserva expirada muestra claramente el estado {string}', (estado) => {
   cy.get('[data-cy="reserva-estado"]').should('contain', estado);
 });
@@ -266,10 +323,13 @@ Then('muestra la fecha de expiración', () => {
 });
 
 // ============================================================================
-// ESCENARIO 10: Usuario ordena reservas por fecha de creación descendente
+// ESCENARIO 11: Usuario ordena reservas por fecha de creación descendente
 // ============================================================================
+
+// Steps reutilizados: email, secret
+
 Given('tiene múltiples reservas creadas en diferentes fechas', () => {
-  cy.intercept('GET', '/api/reservas/usuario/usuarioTest', {
+  cy.intercept('POST', '/api/reservas/consultar', {
     statusCode: 200,
     body: [
       { id: 1, medicamentos: [{ nombre: 'Aspirina' }], fechaCreacion: '2023-10-01T10:00:00Z' },
@@ -281,8 +341,8 @@ Given('tiene múltiples reservas creadas en diferentes fechas', () => {
 
 When('solicita ordenar por fecha de creación más reciente', () => {
   cy.intercept(
-    'GET',
-    '/api/reservas/usuario/usuarioTest?orden=fecha_desc',
+    'POST',
+    '/api/reservas/consultar',
     {
       statusCode: 200,
       body: [
@@ -302,10 +362,13 @@ Then('el sistema responde de manera correcta, mostrando las reservas ordenadas d
 });
 
 // ============================================================================
-// ESCENARIO 11: Usuario busca reservas por nombre de medicamento
+// ESCENARIO 12: Usuario busca reservas por nombre de medicamento
 // ============================================================================
+
+// Steps reutilizados: email, secret
+
 Given('tiene reservas de diferentes medicamentos', () => {
-  cy.intercept('GET', '/api/reservas/usuario/usuarioTest', {
+  cy.intercept('POST', '/api/reservas/consultar', {
     statusCode: 200,
     body: [
       { id: 1, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmashop' },
@@ -317,8 +380,8 @@ Given('tiene reservas de diferentes medicamentos', () => {
 
 When('busca reservas por el nombre {string}', (medicamento) => {
   cy.intercept(
-    'GET',
-    new RegExp(`/api/reservas/usuario/usuarioTest\\?medicamento=${medicamento}`),
+    'POST',
+    '/api/reservas/consultar',
     {
       statusCode: 200,
       body: [
@@ -339,10 +402,13 @@ Then('el sistema responde de manera correcta, mostrando únicamente las reservas
 });
 
 // ============================================================================
-// ESCENARIO 12: Usuario busca reservas por nombre de farmacia
+// ESCENARIO 13: Usuario busca reservas por nombre de farmacia
 // ============================================================================
+
+// Steps reutilizados: email, secret
+
 Given('tiene reservas de diferentes farmacias', () => {
-  cy.intercept('GET', '/api/reservas/usuario/usuarioTest', {
+  cy.intercept('POST', '/api/reservas/consultar', {
     statusCode: 200,
     body: [
       { id: 1, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmacia Central' },
@@ -352,22 +418,7 @@ Given('tiene reservas de diferentes farmacias', () => {
   }).as('reservasFarmacias');
 });
 
-When('busca reservas por el nombre {string}', (farmacia) => {
-  cy.intercept(
-    'GET',
-    new RegExp(`/api/reservas/usuario/usuarioTest\\?farmacia=${encodeURIComponent(farmacia)}`),
-    {
-      statusCode: 200,
-      body: [
-        { id: 1, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmacia Central' },
-        { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], farmacia: 'Farmacia Central Norte' },
-      ],
-    }
-  ).as('busquedaFarmacia');
-
-  cy.get('[data-cy="buscar-farmacia-input"]').type(farmacia);
-  cy.get('[data-cy="buscar-btn"]').click();
-});
+// Step reutilizado: When('busca reservas por el nombre {string}') (definido arriba para medicamentos)
 
 Then('el sistema responde de manera correcta, mostrando únicamente las reservas que contienen la farmacia {string}', (farmacia) => {
   cy.get('[data-cy="reserva-farmacia"]').each(($el) => {
@@ -376,8 +427,13 @@ Then('el sistema responde de manera correcta, mostrando únicamente las reservas
 });
 
 // ============================================================================
-// ESCENARIO 13: Usuario visualiza reservas canceladas con información del motivo
+// ESCENARIO 14: Usuario visualiza reservas canceladas con información del motivo
 // ============================================================================
+
+// Steps reutilizados: email, secret, tiene una reserva en estado "Cancelada"
+// Step reutilizado: hace click en el botón de consultar reservas
+// Step reutilizado: el sistema responde de manera correcta, mostrando un listado con todas sus reservas
+
 Then('la reserva cancelada muestra claramente el estado {string}', (estado) => {
   cy.get('[data-cy="reserva-estado"]').should('contain', estado);
 });
@@ -387,8 +443,13 @@ Then('muestra la fecha de cancelación', () => {
 });
 
 // ============================================================================
-// ESCENARIO 14: Usuario visualiza reservas retiradas con confirmación exitosa
+// ESCENARIO 15: Usuario visualiza reservas retiradas con confirmación exitosa
 // ============================================================================
+
+// Steps reutilizados: email, secret, tiene una reserva en estado "Retirada"
+// Step reutilizado: hace click en el botón de consultar reservas
+// Step reutilizado: el sistema responde de manera correcta, mostrando un listado con todas sus reservas
+
 Then('la reserva retirada muestra claramente el estado {string}', (estado) => {
   cy.get('[data-cy="reserva-estado"]').should('contain', estado);
 });
@@ -396,3 +457,4 @@ Then('la reserva retirada muestra claramente el estado {string}', (estado) => {
 Then('muestra la fecha de retiro', () => {
   cy.get('[data-cy="fecha-retiro"]').should('be.visible');
 });
+
