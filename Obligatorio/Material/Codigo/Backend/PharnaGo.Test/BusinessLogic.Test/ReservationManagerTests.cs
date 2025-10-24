@@ -125,20 +125,4 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(_reservations[1].Email, result[1].Email);
         }
     }
-
-    public class ReservationManager : IReservationManager
-    {
-        private readonly IRepository<Reservation> _reservationRepository;
-
-        public ReservationManager(IRepository<Reservation> reservationRepository)
-        {
-            _reservationRepository = reservationRepository;
-        }
-
-        public List<Reservation> GetReservationsByUser(string email, string secret)
-        {
-            var reservations = _reservationRepository.GetAllByExpression(r => r.Email == email && r.Secret == secret);
-            return reservations.ToList();
-        }
-    }
 }
