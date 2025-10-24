@@ -81,23 +81,5 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreNotEqual(reservationReturned.Id, 1);
 
         }
-
-
-        public class ReservationManager : IReservationManager
-        {
-            private IRepository<Reservation> reservationRepository;
-
-            public ReservationManager(IRepository<Reservation> reservationRepository)
-            {
-                this.reservationRepository = reservationRepository;
-            }
-
-            public Reservation CreateReservation(Reservation reservation)
-            {
-                reservationRepository.InsertOne(reservation);
-                reservationRepository.Save();
-                return reservation;
-            }
-        }
     }
 }
