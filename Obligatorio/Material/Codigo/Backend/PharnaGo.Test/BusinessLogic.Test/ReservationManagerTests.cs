@@ -4,6 +4,7 @@ using PharmaGo.BusinessLogic;
 using PharmaGo.Domain.Entities;
 using PharmaGo.Domain.Enums;
 using PharmaGo.IDataAccess;
+using PharmaGo.IBusinessLogic;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -67,7 +68,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                             Quantity = 2
                         }
                     },
-                    Status = ReservationStatus.Pending
+                    Status = ReservationStatus.Pendiente
                 },
                 new Reservation
                 {
@@ -85,7 +86,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                             Quantity = 1
                         }
                     },
-                    Status = ReservationStatus.Confirmed
+                    Status = ReservationStatus.Confirmada
                 }
             };
         }
@@ -122,6 +123,22 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(_reservations[1].PharmacyName, result[1].PharmacyName);
             Assert.AreEqual(_reservations[1].Status, result[1].Status);
             Assert.AreEqual(_reservations[1].Email, result[1].Email);
+        }
+    }
+
+    public class ReservationManager : IReservationManager
+    {
+        private readonly IRepository<Reservation> _reservationRepository;
+
+        public ReservationManager(IRepository<Reservation> reservationRepository)
+        {
+            _reservationRepository = reservationRepository;
+        }
+
+        public List<Reservation> GetReservationsByUser(string email, string secret)
+        {
+            var reservations = _reservationRepository.GetAllByExpression(r => r.Email == email && r.Secret == secret);
+            return reservations.ToList();
         }
     }
 }

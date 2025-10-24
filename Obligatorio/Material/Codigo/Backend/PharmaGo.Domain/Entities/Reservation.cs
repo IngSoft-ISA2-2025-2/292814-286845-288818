@@ -10,6 +10,8 @@ namespace PharmaGo.Domain.Entities
         public Pharmacy Pharmacy { get; set; }
         public ReservationStatus Status { get; set; } = ReservationStatus.Pendiente;
         public ICollection<ReservationDrug> Drugs { get; set; }
+         public string Email { get; set; }
+        public string Secret { get; set; }
     }
 
     public class ReservationDrug
