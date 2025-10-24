@@ -132,23 +132,4 @@ namespace PharmaGo.Test.DataAccess.Test
             Assert.AreEqual(_reservations[1].Email, resultList[1].Email);
         }
     }
-
-    public class ReservationRepository : BaseRepository<Reservation>
-    {
-        private readonly PharmacyGoDbContext _context;
-
-        public ReservationRepository(PharmacyGoDbContext context) : base(context)
-        {
-            _context = context;
-        }
-
-        public override IEnumerable<Reservation> GetAllByExpression(Expression<Func<Reservation, bool>> expression)
-        {
-            return _context.Set<Reservation>()
-                .Include(r => r.Pharmacy)
-                .Include(r => r.Drugs)
-                    .ThenInclude(rd => rd.Drug)
-                .Where(expression);
-        }
-    }
 }
