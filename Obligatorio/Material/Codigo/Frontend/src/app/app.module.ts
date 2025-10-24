@@ -1,6 +1,7 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,28 +11,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 // DatePicker
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
-// QR
-import { QRCodeModule } from 'angularx-qrcode';
-
-// Core Ui Components
-import { FooterModule } from '@coreui/angular';
-import { GridModule } from '@coreui/angular';
-import { HeaderModule } from '@coreui/angular';
-import { NavModule } from '@coreui/angular';
-import { DropdownModule } from '@coreui/angular';
-import { CardModule } from '@coreui/angular';
-import { ButtonModule } from '@coreui/angular';
+// Core UI Components
+import { 
+  CardModule,
+  ButtonModule,
+  GridModule,
+  FormModule,
+  ToastModule
+} from '@coreui/angular';
 import { IconModule, IconSetService } from '@coreui/icons-angular';
-import { BadgeModule } from '@coreui/angular';
-import { UtilitiesModule } from '@coreui/angular';
-import { FormModule } from '@coreui/angular';
-import { TableModule } from '@coreui/angular';
-import { AlertModule } from '@coreui/angular';
-import { ToastModule } from '@coreui/angular';
-import { BreadcrumbModule } from '@coreui/angular';
-import { SidebarModule } from '@coreui/angular';
-import { WidgetModule } from '@coreui/angular';
-import { ModalModule } from '@coreui/angular';
 
 // Pages
 import { HomeComponent } from './pages/home/home/home.component';
@@ -116,41 +104,27 @@ import { StockRequestOwnerComponent } from './pages/owner/stock-request-owner/st
     PurchaseByDateComponent,
     InvitationComponent,
     StockRequestOwnerComponent,
-    
-
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    CommonModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    //core ui
-    FooterModule,
-    GridModule,
-    HeaderModule,
-    NavModule,
-    DropdownModule,
-    CardModule,
-    ButtonModule,
-    IconModule,
-    BadgeModule,
-    UtilitiesModule,
-    FormModule,
-    TableModule,
-    AlertModule,
-    ToastModule,
-    BreadcrumbModule,
-    SidebarModule,
-    WidgetModule,
-    ModalModule,
-    // QR
-    QRCodeModule,
     // DatePicker
     BsDatepickerModule,
+    // CoreUI Modules
+    CardModule,
+    ButtonModule,
+    GridModule,
+    FormModule,
+    ToastModule,
+    IconModule,
   ],
-  providers: [IconSetService, StorageManager, CommonService],
-  bootstrap: [AppComponent]
+  providers: [StorageManager, CommonService],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class AppModule { }

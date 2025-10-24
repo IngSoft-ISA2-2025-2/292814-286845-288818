@@ -1,0 +1,937 @@
+[
+  {
+    "description": "    Como usuario autenticado\n    Quiero poder visualizar mis reservas\n    Para poder hacer seguimiento del estado de cada una y acceder a los detalles cuando los necesite\n\n    Rule: El usuario solo ve sus propias reservas y debe estar autenticado",
+    "keyword": "Feature",
+    "name": "Gestionar reservas",
+    "line": 1,
+    "id": "gestionar-reservas",
+    "tags": [],
+    "uri": "manage-reservation.feature",
+    "elements": [
+      {
+        "id": "gestionar-reservas;usuario-no-autenticado-intenta-visualizar-reservas",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Usuario no autenticado intenta visualizar reservas",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "estoy en la página de mis reservas",
+            "result": {
+              "status": "undefined",
+              "duration": 270000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 12,
+            "name": "un usuario no autenticado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 13,
+            "name": "intenta acceder al listado de sus reservas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 14,
+            "name": "el sistema responde con un error y muestra el mensaje \"Debe iniciar sesión para ver sus reservas\"",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gestionar-reservas;usuario-autenticado-sin-reservas-visualiza-listado-vacío",
+        "keyword": "Scenario",
+        "line": 16,
+        "name": "Usuario autenticado sin reservas visualiza listado vacío",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "estoy en la página de mis reservas",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 17,
+            "name": "un usuario autenticado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "no tiene reservas creadas en el sistema",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 19,
+            "name": "solicita visualizar sus reservas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 20,
+            "name": "el sistema responde de manera correcta, mostrando un listado vacío",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 21,
+            "name": "muestra un mensaje que dice \"No tienes reservas creadas\"",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gestionar-reservas;usuario-autenticado-visualiza-sus-reservas-exitosamente",
+        "keyword": "Scenario",
+        "line": 23,
+        "name": "Usuario autenticado visualiza sus reservas exitosamente",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "estoy en la página de mis reservas",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 24,
+            "name": "un usuario autenticado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 25,
+            "name": "tiene reservas creadas en diferentes estados \"Pendiente\", \"Confirmada\", \"Expirada\", \"Cancelada\" y \"Retirada\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 26,
+            "name": "solicita visualizar sus reservas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 27,
+            "name": "el sistema responde de manera correcta, mostrando un listado con todas sus reservas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 28,
+            "name": "cada reserva muestra información básica: nombre de el/los medicamento/s, farmacia y estado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 29,
+            "name": "cada reserva incluye un botón para ver más detalles",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gestionar-reservas;usuario-filtra-reservas-por-estado",
+        "keyword": "Scenario",
+        "line": 31,
+        "name": "Usuario filtra reservas por estado",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "estoy en la página de mis reservas",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 32,
+            "name": "un usuario autenticado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 33,
+            "name": "tiene reservas en diferentes estados",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 34,
+            "name": "aplica filtro para ver solo reservas en estado \"Confirmada\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 35,
+            "name": "el sistema responde de manera correcta, mostrando un listado únicamente con las reservas en estado \"Confirmada\"",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gestionar-reservas;usuario-intenta-acceder-a-detalles-de-reserva-inexistente",
+        "keyword": "Scenario",
+        "line": 37,
+        "name": "Usuario intenta acceder a detalles de reserva inexistente",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "estoy en la página de mis reservas",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 38,
+            "name": "un usuario autenticado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 39,
+            "name": "intenta acceder a detalles de una reserva que no existe",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 40,
+            "name": "el sistema responde con un error, mostrando un mensaje que dice \"Reserva no encontrada\"",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gestionar-reservas;usuario-accede-a-detalles-de-una-reserva-específica",
+        "keyword": "Scenario",
+        "line": 42,
+        "name": "Usuario accede a detalles de una reserva específica",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "estoy en la página de mis reservas",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 43,
+            "name": "un usuario autenticado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 44,
+            "name": "tiene una reserva creada",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 45,
+            "name": "selecciona ver detalles de la reserva",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 46,
+            "name": "el sistema responde de manera correcta, mostrando la información detallada completa de la reserva: medicamento/s, cantidad, farmacia, estado, fecha de creación, id",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gestionar-reservas;usuario-visualiza-reservas-pendientes-con-opciones-disponibles",
+        "keyword": "Scenario",
+        "line": 48,
+        "name": "Usuario visualiza reservas pendientes con opciones disponibles",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "estoy en la página de mis reservas",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 49,
+            "name": "un usuario autenticado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 50,
+            "name": "tiene una reserva en estado \"Pendiente\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 51,
+            "name": "solicita visualizar sus reservas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 52,
+            "name": "el sistema responde de manera correcta, mostrando un listado con todas sus reservas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 53,
+            "name": "la reserva pendiente muestra claramente el estado \"Pendiente\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 54,
+            "name": "muestra un mensaje que dice \"Reserva pendiente de confirmación por la farmacia\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 55,
+            "name": "incluye un botón para cancelar la reserva",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 56,
+            "name": "muestra la fecha límite para confirmar la reserva",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 57,
+            "name": "no muestra ID de referencia hasta que sea confirmada",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gestionar-reservas;usuario-visualiza-id-de-referencia-para-reservas-confirmadas",
+        "keyword": "Scenario",
+        "line": 59,
+        "name": "Usuario visualiza ID de referencia para reservas confirmadas",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "estoy en la página de mis reservas",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 60,
+            "name": "un usuario autenticado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 61,
+            "name": "tiene una reserva en estado \"Confirmada\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 62,
+            "name": "solicita visualizar sus reservas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 63,
+            "name": "el sistema responde de manera correcta, mostrando un listado con todas sus reservas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 64,
+            "name": "la reserva confirmada muestra un ID de referencia único",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 65,
+            "name": "muestra un mensaje que dice \"Presenta este ID en la farmacia para retirar tu medicamento\"",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gestionar-reservas;usuario-visualiza-reservas-expiradas-con-indicaciones",
+        "keyword": "Scenario",
+        "line": 67,
+        "name": "Usuario visualiza reservas expiradas con indicaciones",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "estoy en la página de mis reservas",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 68,
+            "name": "un usuario autenticado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 69,
+            "name": "tiene una reserva en estado \"Expirada\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 70,
+            "name": "solicita visualizar sus reservas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 71,
+            "name": "el sistema responde de manera correcta, mostrando un listado con todas sus reservas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 72,
+            "name": "la reserva expirada muestra claramente el estado \"Expirada\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 73,
+            "name": "muestra un mensaje que dice \"Esta reserva ha expirado. Puedes crear una nueva reserva si aún necesitas el medicamento\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 74,
+            "name": "muestra la fecha de expiración",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gestionar-reservas;usuario-ordena-reservas-por-fecha-de-creación-descendente",
+        "keyword": "Scenario",
+        "line": 76,
+        "name": "Usuario ordena reservas por fecha de creación descendente",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "estoy en la página de mis reservas",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 77,
+            "name": "un usuario autenticado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 78,
+            "name": "tiene múltiples reservas creadas en diferentes fechas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 79,
+            "name": "solicita ordenar por fecha de creación más reciente",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 80,
+            "name": "el sistema responde de manera correcta, mostrando las reservas ordenadas de más reciente a más antigua",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gestionar-reservas;usuario-busca-reservas-por-nombre-de-medicamento",
+        "keyword": "Scenario",
+        "line": 82,
+        "name": "Usuario busca reservas por nombre de medicamento",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "estoy en la página de mis reservas",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 83,
+            "name": "un usuario autenticado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 84,
+            "name": "tiene reservas de diferentes medicamentos",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 85,
+            "name": "busca reservas por el nombre \"Paracetamol\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 86,
+            "name": "el sistema responde de manera correcta, mostrando únicamente las reservas que contienen medicamentos con \"Paracetamol\"",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gestionar-reservas;usuario-busca-reservas-por-nombre-de-farmacia",
+        "keyword": "Scenario",
+        "line": 88,
+        "name": "Usuario busca reservas por nombre de farmacia",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "estoy en la página de mis reservas",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 89,
+            "name": "un usuario autenticado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 90,
+            "name": "tiene reservas de diferentes farmacias",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 91,
+            "name": "busca reservas por el nombre \"Farmacia Central\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 92,
+            "name": "el sistema responde de manera correcta, mostrando únicamente las reservas que contienen la farmacia \"Farmacia Central\"",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gestionar-reservas;usuario-visualiza-reservas-canceladas-con-información-del-motivo",
+        "keyword": "Scenario",
+        "line": 94,
+        "name": "Usuario visualiza reservas canceladas con información del motivo",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "estoy en la página de mis reservas",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 95,
+            "name": "un usuario autenticado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 96,
+            "name": "tiene una reserva en estado \"Cancelada\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 97,
+            "name": "solicita visualizar sus reservas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 98,
+            "name": "el sistema responde de manera correcta, mostrando un listado con todas sus reservas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 99,
+            "name": "la reserva cancelada muestra claramente el estado \"Cancelada\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 100,
+            "name": "muestra un mensaje que dice \"Reserva cancelada. No es posible reactivarla\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 101,
+            "name": "muestra la fecha de cancelación",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gestionar-reservas;usuario-visualiza-reservas-retiradas-con-confirmación-exitosa",
+        "keyword": "Scenario",
+        "line": 103,
+        "name": "Usuario visualiza reservas retiradas con confirmación exitosa",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "estoy en la página de mis reservas",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 104,
+            "name": "un usuario autenticado",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 105,
+            "name": "tiene una reserva en estado \"Retirada\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 106,
+            "name": "solicita visualizar sus reservas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 107,
+            "name": "el sistema responde de manera correcta, mostrando un listado con todas sus reservas",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 108,
+            "name": "la reserva retirada muestra claramente el estado \"Retirada\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 109,
+            "name": "muestra un mensaje que dice \"Reserva retirada exitosamente\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 110,
+            "name": "muestra la fecha de retiro",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
