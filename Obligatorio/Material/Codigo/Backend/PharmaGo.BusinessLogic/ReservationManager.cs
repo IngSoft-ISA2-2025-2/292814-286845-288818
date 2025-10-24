@@ -12,10 +12,13 @@ namespace PharmaGo.BusinessLogic
     public class ReservationManager : IReservationManager
     {
         private IRepository<Reservation> reservationRepository;
+        private IRepository<Pharmacy> pharmacyRepository;
 
-        public ReservationManager(IRepository<Reservation> reservationRepository)
+        public ReservationManager(IRepository<Reservation> reservationRepositor,
+            IRepository<Pharmacy> pharmacyRepository)
         {
             this.reservationRepository = reservationRepository;
+            this.pharmacyRepository = pharmacyRepository;
         }
 
         public Reservation CreateReservation(Reservation reservation)

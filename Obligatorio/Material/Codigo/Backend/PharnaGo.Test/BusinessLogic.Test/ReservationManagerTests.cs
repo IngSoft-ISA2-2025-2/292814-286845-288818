@@ -2,6 +2,7 @@
 using Moq;
 using PharmaGo.BusinessLogic;
 using PharmaGo.Domain.Entities;
+using PharmaGo.Exceptions;
 using PharmaGo.IDataAccess;
 using PharmaGo.WebApi.Controllers;
 using PharmaGo.WebApi.Models.In;
@@ -11,8 +12,8 @@ namespace PharmaGo.Test.BusinessLogic.Test
     [TestClass]
     public class ReservationManagerTests
     {
-
         private Mock<IRepository<Reservation>> _reservationRepository;
+        private Mock<IRepository<Pharmacy>> _pharmacyRepository;
         private ReservationManager _reservationManager;
         private Reservation _reservation;
         private Pharmacy pharmacyModel;
@@ -22,7 +23,10 @@ namespace PharmaGo.Test.BusinessLogic.Test
         public void InitTest()
         {
             _reservationRepository = new Mock<IRepository<Reservation>>();
-            _reservationManager = new ReservationManager(_reservationRepository.Object);
+            _pharmacyRepository = new Mock<IRepository<Pharmacy>>();
+            _reservationManager = new ReservationManager(
+                _reservationRepository.Object,
+                _pharmacyRepository.Object);
 
             pharmacyModel = new Pharmacy
             {
@@ -93,6 +97,25 @@ namespace PharmaGo.Test.BusinessLogic.Test
             var ex = Assert.ThrowsException<UnauthorizedAccessException>(() =>
                 _reservationManager.CreateReservation(resevation));
             Assert.AreEqual("User is not authorized to create a reservation.", ex.Message);
+        }
+
+        [TestMethod]
+        public void CreateReservation_WhenInvalidPharmacy_ThrowsNotFoundException()
+        {
+            var resevation = _reservation;
+            _reservationRepository
+                .Setup(x => x.Exists((r =>
+                    r.Email == resevation.Email
+                    && r.Secret != resevation.Secret)))
+                .Returns(false);
+
+            _pharmacyRepository
+                .Setup(x=> x.Exists(p=> p.Name == resevation.PharmacyName))
+                .Returns(false);
+
+            var ex = Assert.ThrowsException<ResourceNotFoundException>(() =>
+                _reservationManager.CreateReservation(resevation));
+            Assert.AreEqual("Pharmacy not found", ex.Message);
         }
 
     }
