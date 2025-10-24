@@ -22,6 +22,10 @@ namespace PharmaGo.WebApi.Controllers
         [HttpGet]
         public IActionResult GetReservations([FromQuery] ConsultReservationRequest consultReservationRequest)
         {
+            if (string.IsNullOrWhiteSpace(consultReservationRequest.Email) || string.IsNullOrWhiteSpace(consultReservationRequest.Secret))
+            {
+                return BadRequest("Debe ingresar un email y secret para consultar reservas.");
+            }
             var reservations = _reservationManager.GetReservationsByUser(
                 consultReservationRequest.Email, 
                 consultReservationRequest.Secret);
