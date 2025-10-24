@@ -16,6 +16,9 @@ namespace PharmaGo.Domain.Entities
 
     public class ReservationDrug
     {
+        public int Id { get; set; }
+        public int ReservationId { get; set; }
+        public Reservation Reservation { get; set; }
         public int DrugId { get; set; }
         public Drug Drug { get; set; }
         public int Quantity { get; set; }

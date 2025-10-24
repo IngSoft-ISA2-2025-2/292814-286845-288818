@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -83,12 +84,12 @@ namespace PharmaGo.Test.DataAccess.Test
         }
 
         [TestMethod]
-        public void InsertUserOk()
+        public void InsertReservationOk()
         {
             CreateDataBase("insertDrugTestDb");
             _reservationRepository.InsertOne(newReservation);
             _reservationRepository.Save();
-            var retrievedReservation = _reservationRepository.GetOneByExpression(d => d.Id == newDrug.Id);
+            var retrievedReservation = _reservationRepository.GetOneByExpression(d => d.Id == newReservation.Id);
             Assert.AreEqual(retrievedReservation.Id, retrievedReservation.Id);
         }
 
@@ -143,4 +144,18 @@ namespace PharmaGo.Test.DataAccess.Test
         }
     }
 
+    public class ReservationRepository : BaseRepository<Reservation>
+    {
+        private readonly PharmacyGoDbContext _context;
+
+        public ReservationRepository(PharmacyGoDbContext context) : base(context)
+        {
+            _context = context;
+        }
+        public override void InsertOne(Reservation reservation)
+        {
+            _context.Entry(reservation).State = EntityState.Added;
+            _context.Set<Reservation>().Add(reservation);
+        }
+    }
 }
