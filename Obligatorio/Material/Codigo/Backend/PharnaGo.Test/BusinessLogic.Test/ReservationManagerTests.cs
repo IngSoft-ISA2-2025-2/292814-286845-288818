@@ -117,6 +117,8 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(reservationReturned.PharmacyName, resevation.PharmacyName);
             Assert.AreEqual(reservationReturned.ReservationDrugs.Count, resevation.ReservationDrugs.Count);
             Assert.AreEqual(reservationReturned.Status, "Pending");
+            Assert.AreEqual(reservationReturned.ReservationDrugs.First().Drug.Stock + resevation.ReservationDrugs.First().Quantity
+                , resevation.ReservationDrugs.First().Drug.Stock);
 
         }
 
