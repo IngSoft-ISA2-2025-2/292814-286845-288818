@@ -7,11 +7,15 @@ namespace PharmaGo.WebApi.Models.In
         public string PharmacyName { get; set; }
         public List<ReservationDrugModel> DrugsReserved { get; set; }
 
+        public string Email { get; set; }
+        public string Secret { get; set; }
 
         public Reservation ToEntity()
         {
             return new Reservation()
             {
+                Email = this.Email,
+                Secret = this.Secret,
                 Pharmacy = new Pharmacy() { Name = this.PharmacyName },
                 ReservationDrugs = this.DrugsReserved.Select(d => new ReservationDrug
                 {

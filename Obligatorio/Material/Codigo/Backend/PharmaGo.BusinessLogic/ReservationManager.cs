@@ -20,6 +20,11 @@ namespace PharmaGo.BusinessLogic
 
         public Reservation CreateReservation(Reservation reservation)
         {
+            if (reservationRepository.Exists(
+                r => r.Email == reservation.Email
+                && r.Secret != reservation.Secret))
+                throw new UnauthorizedAccessException("User is not authorized to create a reservation.");
+
             reservationRepository.InsertOne(reservation);
             reservationRepository.Save();
             return reservation;

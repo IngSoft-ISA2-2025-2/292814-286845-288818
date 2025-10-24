@@ -14,7 +14,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
 
         private Mock<IRepository<Reservation>> _reservationRepository;
         private ReservationManager _reservationManager;
-        private ReservationModel reservationModel;
+        private Reservation _reservation;
         private Pharmacy pharmacyModel;
         private Drug drugModel;
 
@@ -47,17 +47,19 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 Pharmacy = pharmacyModel
             };
 
-            reservationModel = new ReservationModel()
+            _reservation = new Reservation
             {
-                DrugsReserved = new List<ReservationDrugModel>
+                Email = "test@email.com",
+                Secret = "1234",
+                PharmacyName = "Farmashop",
+                ReservationDrugs = new List<ReservationDrug>
                 {
-                    new ReservationDrugModel
+                    new ReservationDrug
                     {
-                        DrugName = "Aspirina",
-                        DrugQuantity = 1
+                        Drug = new Drug { Name = "Aspirina" },
+                        Quantity = 1
                     }
-                },
-                PharmacyName = "Farmashop"
+                }
             };
         }
 
@@ -73,7 +75,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
             _reservationRepository.Setup(x => x.InsertOne(It.IsAny<Reservation>()));
             _reservationRepository.Setup(x => x.Save());
 
-            var reservationReturned = _reservationManager.CreateReservation(reservationModel.ToEntity());
+            var reservationReturned = _reservationManager.CreateReservation(_reservation);
             Assert.AreNotEqual(reservationReturned.Id, 1);
 
         }
@@ -81,13 +83,17 @@ namespace PharmaGo.Test.BusinessLogic.Test
         [TestMethod]
         public void CreateReservation_WhenEmailExistsButSecretIsDifferent_ThrowsUnautharizedException()
         {
-            _reservationRepository.Setup(x => x.Exists((r => r.Email == reservationModel.Email && r.Secret != reservationModel.Secret)))
+            var resevation = _reservation;
+            _reservationRepository
+                .Setup(x => x.Exists((r =>
+                    r.Email == resevation.Email
+                    && r.Secret != resevation.Secret)))
                 .Returns(true);
 
             var ex = Assert.ThrowsException<UnauthorizedAccessException>(() =>
-            _reservationManager.CreateReservation(reservationModel.ToEntity()));
+                _reservationManager.CreateReservation(resevation));
             Assert.AreEqual("User is not authorized to create a reservation.", ex.Message);
-
         }
+
     }
 }

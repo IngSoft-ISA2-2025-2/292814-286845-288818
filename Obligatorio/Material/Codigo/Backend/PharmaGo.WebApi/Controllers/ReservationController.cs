@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PharmaGo.IBusinessLogic;
+using PharmaGo.WebApi.Enums;
+using PharmaGo.WebApi.Filters;
 using PharmaGo.WebApi.Models.In;
 using PharmaGo.WebApi.Models.Out;
 
