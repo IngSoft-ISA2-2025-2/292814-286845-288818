@@ -102,6 +102,11 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 .Setup(x => x.Exists(It.IsAny<Expression<Func<Drug, bool>>>()))
                 .Returns(true);
 
+
+            _drugRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Drug, bool>>>()))
+                .Returns(drugModel);
+
             _reservationRepository.Setup(x => x.InsertOne(It.IsAny<Reservation>()));
             _reservationRepository.Setup(x => x.Save());
 
@@ -217,6 +222,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
 
             var ex = Assert.ThrowsException<InvalidResourceException>(() =>
                 _reservationManager.CreateReservation(resevation));
+
             Assert.AreEqual(
                 "The drug Aspirina for the reservation has insufficient stock.",
                 ex.Message

@@ -42,6 +42,15 @@ namespace PharmaGo.BusinessLogic
                     throw new ResourceNotFoundException(
                         $"The drug {reservationDrug.Drug.Name} for the reservation does not exist in the pharmacy {reservation.PharmacyName}.");
                 }
+
+                var drug = drugRepository.GetOneByExpression(d => d.Name == reservationDrug.Drug.Name
+                    && d.Pharmacy.Name == reservation.PharmacyName);
+
+                if(drug.Stock < reservationDrug.Quantity)
+                {
+                    throw new InvalidResourceException(
+                        $"The drug {reservationDrug.Drug.Name} for the reservation has insufficient stock.");
+                }
             }
 
             reservationRepository.InsertOne(reservation);
