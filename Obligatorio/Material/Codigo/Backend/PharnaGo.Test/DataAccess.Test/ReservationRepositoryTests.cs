@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PharmaGo.DataAccess;
+using PharmaGo.IDataAccess;
 using PharmaGo.DataAccess.Repositories;
 using PharmaGo.Domain.Entities;
 using PharmaGo.Domain.Enums;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace PharmaGo.Test.DataAccess.Test
 {
@@ -21,7 +23,7 @@ namespace PharmaGo.Test.DataAccess.Test
         [TestInitialize]
         public void TestInitialize()
         {
-            var contextOptions = new DbContextOptionsBuilder<PharmacyGoContext>()
+            var contextOptions = new DbContextOptionsBuilder<PharmacyGoDbContext>()
                 .UseInMemoryDatabase("ReservationTestDatabase")
                 .Options;
 
@@ -103,7 +105,7 @@ namespace PharmaGo.Test.DataAccess.Test
         public void GetReservationsByUser_Ok()
         {
             // Arrange
-            _context.Pharmacies.Add(_pharmacy);
+            _context.Pharmacys.Add(_pharmacy);
             _context.Drugs.Add(_drug);
             _context.Reservations.AddRange(_reservations);
             _context.SaveChanges();
@@ -128,6 +130,25 @@ namespace PharmaGo.Test.DataAccess.Test
             Assert.AreEqual(_reservations[1].PharmacyName, resultList[1].PharmacyName);
             Assert.AreEqual(_reservations[1].Status, resultList[1].Status);
             Assert.AreEqual(_reservations[1].Email, resultList[1].Email);
+        }
+    }
+
+    public class ReservationRepository : BaseRepository<Reservation>
+    {
+        private readonly PharmacyGoDbContext _context;
+
+        public ReservationRepository(PharmacyGoDbContext context) : base(context)
+        {
+            _context = context;
+        }
+
+        public override IEnumerable<Reservation> GetAllByExpression(Expression<Func<Reservation, bool>> expression)
+        {
+            return _context.Set<Reservation>()
+                .Include(r => r.Pharmacy)
+                .Include(r => r.Drugs)
+                    .ThenInclude(rd => rd.Drug)
+                .Where(expression);
         }
     }
 }
