@@ -85,7 +85,7 @@ namespace PharmaGo.Test.WebApi.Test
         }
 
         [TestMethod]
-        public void Create_Reserva_Ok()
+        public void Create_Reservation_Ok()
         {
             //Arrange
             _reservationManagerMock
