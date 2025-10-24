@@ -1,0 +1,44 @@
+<form (ngSubmit)="reserve()">
+  <input
+    data-cy="email-input"
+    type="email"
+    [(ngModel)]="email"
+    name="email"
+    placeholder="Email"
+    required
+  />
+  <input
+    data-cy="secret-input"
+    type="password"
+    [(ngModel)]="secret"
+    name="secret"
+    placeholder="Secret"
+    required
+  />
+  <input
+    data-cy="medicamento-nombre-input"
+    type="text"
+    [(ngModel)]="medicamentoNombre"
+    name="medicamentoNombre"
+    placeholder="Nombre del medicamento"
+    required
+  />
+  <input
+    data-cy="medicamento-cantidad-input"
+    type="number"
+    [(ngModel)]="medicamentoCantidad"
+    name="medicamentoCantidad"
+    placeholder="Cantidad"
+    required
+  />
+  <input
+    data-cy="farmacia-input"
+    type="text"
+    [(ngModel)]="farmacia"
+    name="farmacia"
+    placeholder="Farmacia"
+    required
+  />
+  <button data-cy="reservar-btn" type="submit">Reserve</button>
+</form>
+<div *ngIf="errorMessage" data-cy="error-mensaje">{{ errorMessage }}</div>

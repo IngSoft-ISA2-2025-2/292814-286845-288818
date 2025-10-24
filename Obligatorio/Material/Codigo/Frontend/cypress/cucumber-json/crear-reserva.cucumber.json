@@ -9,10 +9,10 @@
     "uri": "crear-reserva.feature",
     "elements": [
       {
-        "id": "crear-reservas;usuario-no-autenticado-intenta-reservar-medicamentos",
+        "id": "crear-reservas;usuario-sin-email-intenta-reservar-medicamentos",
         "keyword": "Scenario",
         "line": 9,
-        "name": "Usuario no autenticado intenta reservar medicamentos",
+        "name": "Usuario sin email intenta reservar medicamentos",
         "tags": [],
         "type": "scenario",
         "steps": [
@@ -23,14 +23,14 @@
             "name": "estoy en la página de reservas de medicamentos",
             "result": {
               "status": "undefined",
-              "duration": 60000000
+              "duration": 59000000
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 10,
-            "name": "un usuario no autenticado",
+            "name": "un email \"\"",
             "result": {
               "status": "skipped"
             }
@@ -39,7 +39,7 @@
             "arguments": [],
             "keyword": "And ",
             "line": 11,
-            "name": "un medicamento \"Aspirina\" con cantidad de 1 unidad",
+            "name": "un secret \"\"",
             "result": {
               "status": "skipped"
             }
@@ -48,6 +48,15 @@
             "arguments": [],
             "keyword": "And ",
             "line": 12,
+            "name": "un medicamento \"Aspirina\" con cantidad de 1 unidad",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
             "name": "una farmacia \"Farmashop\"",
             "result": {
               "status": "skipped"
@@ -56,7 +65,7 @@
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 13,
+            "line": 14,
             "name": "hace click en el botón de reservar",
             "result": {
               "status": "skipped"
@@ -65,8 +74,8 @@
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 14,
-            "name": "el sistema responde con un error con un mensaje que dice \"Debe iniciar sesión para reservar medicamentos.\"",
+            "line": 15,
+            "name": "el sistema responde con un error con un mensaje que dice \"Debe ingresar un email y secret para reservar medicamentos.\"",
             "result": {
               "status": "skipped"
             }
@@ -74,10 +83,10 @@
         ]
       },
       {
-        "id": "crear-reservas;usuario-intenta-reservar-un-medicamento-en-una-farmacia-inválida",
+        "id": "crear-reservas;usuario-con-email-y-secret-válidos-reserva-en-farmacia-inválida",
         "keyword": "Scenario",
-        "line": 16,
-        "name": "Usuario intenta reservar un medicamento en una farmacia inválida",
+        "line": 17,
+        "name": "Usuario con email y secret válidos reserva en farmacia inválida",
         "tags": [],
         "type": "scenario",
         "steps": [
@@ -93,17 +102,8 @@
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 17,
-            "name": "un usuario autenticado",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
             "line": 18,
-            "name": "un medicamento \"Aspirina\" con cantidad de 1 unidad",
+            "name": "un email \"usuario@test.com\"",
             "result": {
               "status": "skipped"
             }
@@ -112,134 +112,15 @@
             "arguments": [],
             "keyword": "And ",
             "line": 19,
-            "name": "una farmacia \"FarmaciaInexistente\"",
+            "name": "un secret \"secret123\"",
             "result": {
               "status": "skipped"
             }
           },
           {
             "arguments": [],
-            "keyword": "When ",
+            "keyword": "And ",
             "line": 20,
-            "name": "hace click en el botón de reservar",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 21,
-            "name": "el sistema responde con un error un mensaje que dice \"La farmacia FarmaciaInexistente no existe\"",
-            "result": {
-              "status": "skipped"
-            }
-          }
-        ]
-      },
-      {
-        "id": "crear-reservas;usuario-intenta-reservar-un-medicamento-inexistente-en-una-farmacia-válida",
-        "keyword": "Scenario",
-        "line": 23,
-        "name": "Usuario intenta reservar un medicamento inexistente en una farmacia válida",
-        "tags": [],
-        "type": "scenario",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 7,
-            "name": "estoy en la página de reservas de medicamentos",
-            "result": {
-              "status": "undefined"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 24,
-            "name": "un usuario autenticado",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 25,
-            "name": "un medicamento \"MedicamentoInexistente\" con cantidad de 1 unidad",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 26,
-            "name": "el medicamento no existe en la farmacia \"Farmashop\"",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 27,
-            "name": "una farmacia \"Farmashop\"",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 28,
-            "name": "hace click en el botón de reservar",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 29,
-            "name": "el sistema responde con un error con un mensaje que dice \"El medicamento MedicamentoInexistente no existe en la farmacia Farmashop\"",
-            "result": {
-              "status": "skipped"
-            }
-          }
-        ]
-      },
-      {
-        "id": "crear-reservas;usuario-autenticado-intenta-reservar-un-medicamento-sin-stock",
-        "keyword": "Scenario",
-        "line": 31,
-        "name": "Usuario autenticado intenta reservar un medicamento sin stock",
-        "tags": [],
-        "type": "scenario",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 7,
-            "name": "estoy en la página de reservas de medicamentos",
-            "result": {
-              "status": "undefined"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 32,
-            "name": "un usuario autenticado",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 33,
             "name": "un medicamento \"Aspirina\" con cantidad de 1 unidad",
             "result": {
               "status": "skipped"
@@ -248,17 +129,8 @@
           {
             "arguments": [],
             "keyword": "And ",
-            "line": 34,
-            "name": "no hay stock disponible para el medicamento \"Aspirina\" en la farmacia \"Farmashop\"",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 35,
-            "name": "una farmacia \"Farmashop\"",
+            "line": 21,
+            "name": "una farmacia \"FarmaciaInexistente\"",
             "result": {
               "status": "skipped"
             }
@@ -266,7 +138,7 @@
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 36,
+            "line": 22,
             "name": "hace click en el botón de reservar",
             "result": {
               "status": "skipped"
@@ -275,7 +147,171 @@
           {
             "arguments": [],
             "keyword": "Then ",
+            "line": 23,
+            "name": "el sistema responde con un error un mensaje que dice \"La farmacia FarmaciaInexistente no existe\"",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "crear-reservas;usuario-con-email-y-secret-válidos-intenta-reservar-medicamento-inexistente",
+        "keyword": "Scenario",
+        "line": 25,
+        "name": "Usuario con email y secret válidos intenta reservar medicamento inexistente",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "estoy en la página de reservas de medicamentos",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 26,
+            "name": "un email \"usuario@test.com\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "un secret \"secret123\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 28,
+            "name": "un medicamento \"MedicamentoInexistente\" con cantidad de 1 unidad",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 29,
+            "name": "el medicamento no existe en la farmacia \"Farmashop\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 30,
+            "name": "una farmacia \"Farmashop\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 31,
+            "name": "hace click en el botón de reservar",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 32,
+            "name": "el sistema responde con un error con un mensaje que dice \"El medicamento MedicamentoInexistente no existe en la farmacia Farmashop\"",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "crear-reservas;usuario-con-email-y-secret-válidos-intenta-reservar-medicamento-sin-stock",
+        "keyword": "Scenario",
+        "line": 34,
+        "name": "Usuario con email y secret válidos intenta reservar medicamento sin stock",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "estoy en la página de reservas de medicamentos",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 35,
+            "name": "un email \"usuario@test.com\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 36,
+            "name": "un secret \"secret123\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
             "line": 37,
+            "name": "un medicamento \"Aspirina\" con cantidad de 1 unidad",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 38,
+            "name": "no hay stock disponible para el medicamento \"Aspirina\" en la farmacia \"Farmashop\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 39,
+            "name": "una farmacia \"Farmashop\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 40,
+            "name": "hace click en el botón de reservar",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 41,
             "name": "el sistema muestra responde con un mensaje que dice \"No hay stock disponible para el medicamento Aspirina\"",
             "result": {
               "status": "skipped"
@@ -286,7 +322,7 @@
       {
         "id": "crear-reservas;usuario-reserva-un-medicamento-que-requiere-prescripción-con-exito",
         "keyword": "Scenario",
-        "line": 39,
+        "line": 43,
         "name": "Usuario reserva un medicamento que requiere prescripción con exito",
         "tags": [],
         "type": "scenario",
@@ -303,53 +339,17 @@
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 40,
-            "name": "un usuario autenticado",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 41,
-            "name": "un medicamento \"Aspirina\" con cantidad de 1 unidad que requiere prescripción médica",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 42,
-            "name": "hay stock mayor o igual a una unidad para el medicamento \"Aspirina\" en la farmacia \"Farmashop\"",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 43,
-            "name": "una farmacia \"Farmashop\"",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
             "line": 44,
-            "name": "hace click en el botón de reservar",
+            "name": "un email \"usuario@test.com\"",
             "result": {
               "status": "skipped"
             }
           },
           {
             "arguments": [],
-            "keyword": "Then ",
+            "keyword": "And ",
             "line": 45,
-            "name": "el sistema crea la reserva con un estado Pendiente",
+            "name": "un secret \"secret123\"",
             "result": {
               "status": "skipped"
             }
@@ -358,7 +358,7 @@
             "arguments": [],
             "keyword": "And ",
             "line": 46,
-            "name": "descuenta la unidad del stock de los medicamentos",
+            "name": "un medicamento \"Aspirina\" con cantidad de 1 unidad que requiere prescripción médica",
             "result": {
               "status": "skipped"
             }
@@ -367,6 +367,51 @@
             "arguments": [],
             "keyword": "And ",
             "line": 47,
+            "name": "hay stock mayor o igual a una unidad para el medicamento \"Aspirina\" en la farmacia \"Farmashop\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 48,
+            "name": "una farmacia \"Farmashop\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 49,
+            "name": "hace click en el botón de reservar",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 50,
+            "name": "el sistema crea la reserva con un estado Pendiente",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 51,
+            "name": "descuenta la unidad del stock de los medicamentos",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 52,
             "name": "muestra un mensaje que dice \"Reserva creada exitosamente, el medicamento Aspirina requiere receta médica. Por favor, preséntela en la farmacia para validar la reserva.\"",
             "result": {
               "status": "skipped"
@@ -377,7 +422,7 @@
       {
         "id": "crear-reservas;usuario-reserva-un-medicamento-que-no-requiere-prescripción-con-éxito",
         "keyword": "Scenario",
-        "line": 49,
+        "line": 54,
         "name": "Usuario reserva un medicamento que no requiere prescripción con éxito",
         "tags": [],
         "type": "scenario",
@@ -394,53 +439,8 @@
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 50,
-            "name": "un usuario autenticado",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 51,
-            "name": "un medicamento \"Paracetamol\" con cantidad de 1 unidad que no requiere prescripción médica",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 52,
-            "name": "hay stock mayor o igual a una unidad para el medicamento \"Paracetamol\" en la farmacia \"Farmashop\"",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 53,
-            "name": "una farmacia \"Farmashop\"",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 54,
-            "name": "hace click en el botón de reservar",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
             "line": 55,
-            "name": "el sistema crea la reserva con un estado Pendiente",
+            "name": "un email \"usuario@test.com\"",
             "result": {
               "status": "skipped"
             }
@@ -449,7 +449,7 @@
             "arguments": [],
             "keyword": "And ",
             "line": 56,
-            "name": "descuenta la unidad del stock de los medicamentos",
+            "name": "un secret \"secret123\"",
             "result": {
               "status": "skipped"
             }
@@ -458,6 +458,60 @@
             "arguments": [],
             "keyword": "And ",
             "line": 57,
+            "name": "un medicamento \"Paracetamol\" con cantidad de 1 unidad que no requiere prescripción médica",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 58,
+            "name": "hay stock mayor o igual a una unidad para el medicamento \"Paracetamol\" en la farmacia \"Farmashop\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 59,
+            "name": "una farmacia \"Farmashop\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 60,
+            "name": "hace click en el botón de reservar",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 61,
+            "name": "el sistema crea la reserva con un estado Pendiente",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 62,
+            "name": "descuenta la unidad del stock de los medicamentos",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 63,
             "name": "muestra un mensaje que dice \"Reserva creada exitosamente\"",
             "result": {
               "status": "skipped"
@@ -468,7 +522,7 @@
       {
         "id": "crear-reservas;usuario-reserva-dos-medicamentos-uno-que-requiere-prescripción-y-otro-que-no-requiere-con-éxito",
         "keyword": "Scenario",
-        "line": 59,
+        "line": 65,
         "name": "Usuario reserva dos medicamentos uno que requiere prescripción y otro que no requiere con éxito",
         "tags": [],
         "type": "scenario",
@@ -485,62 +539,8 @@
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 60,
-            "name": "un usuario autenticado",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 61,
-            "name": "un medicamento \"Aspirina\" con cantidad de 1 unidad que requiere prescripción médica",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 62,
-            "name": "un medicamento \"Paracetamol\" con cantidad de 1 unidad que no requiere prescripción médica",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 63,
-            "name": "hay stock mayor o igual a una unidad para ambos medicamentos en la farmacia \"Farmashop\"",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 64,
-            "name": "una farmacia \"Farmashop\"",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 65,
-            "name": "hace click en el botón de reservar",
-            "result": {
-              "status": "skipped"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
             "line": 66,
-            "name": "el sistema crea la reserva con un estado \"Pendiente\"",
+            "name": "un email \"usuario@test.com\"",
             "result": {
               "status": "skipped"
             }
@@ -549,7 +549,7 @@
             "arguments": [],
             "keyword": "And ",
             "line": 67,
-            "name": "descuenta la unidad del stock de los medicamentos",
+            "name": "un secret \"secret123\"",
             "result": {
               "status": "skipped"
             }
@@ -558,7 +558,152 @@
             "arguments": [],
             "keyword": "And ",
             "line": 68,
+            "name": "un medicamento \"Aspirina\" con cantidad de 1 unidad que requiere prescripción médica",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 69,
+            "name": "un medicamento \"Paracetamol\" con cantidad de 1 unidad que no requiere prescripción médica",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 70,
+            "name": "hay stock mayor o igual a una unidad para ambos medicamentos en la farmacia \"Farmashop\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 71,
+            "name": "una farmacia \"Farmashop\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 72,
+            "name": "hace click en el botón de reservar",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 73,
+            "name": "el sistema crea la reserva con un estado \"Pendiente\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 74,
+            "name": "descuenta la unidad del stock de los medicamentos",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 75,
             "name": "muestra un mensaje que dice \"Reserva creada exitosamente, el medicamento Aspirina requiere receta médica. Por favor, preséntela en la farmacia para validar la reserva.\"",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "crear-reservas;usuario-con-email-existente-pero-secret-incorrecto-intenta-reservar",
+        "keyword": "Scenario",
+        "line": 77,
+        "name": "Usuario con email existente pero secret incorrecto intenta reservar",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "estoy en la página de reservas de medicamentos",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 78,
+            "name": "un email \"usuario@test.com\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 79,
+            "name": "un secret \"secretIncorrecto\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 80,
+            "name": "el email \"usuario@test.com\" ya tiene reservas con secret \"secret123\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 81,
+            "name": "un medicamento \"Aspirina\" con cantidad de 1 unidad",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 82,
+            "name": "una farmacia \"Farmashop\"",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 83,
+            "name": "hace click en el botón de reservar",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 84,
+            "name": "el sistema responde con un error con un mensaje que dice \"El secret no coincide con el registrado para este email\"",
             "result": {
               "status": "skipped"
             }

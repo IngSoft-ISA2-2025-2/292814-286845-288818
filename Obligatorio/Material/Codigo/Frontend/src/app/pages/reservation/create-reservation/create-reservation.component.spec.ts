@@ -1,22 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CrearReservaComponent } from './crear-reserva.component';
+import { CreateReservationComponent } from './create-reservation.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 
-describe('CrearReservaComponent', () => {
-  let component: CrearReservaComponent;
-  let fixture: ComponentFixture<CrearReservaComponent>;
+describe('CreateReservationComponent', () => {
+  let component: CreateReservationComponent;
+  let fixture: ComponentFixture<CreateReservationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CrearReservaComponent],
+      declarations: [CreateReservationComponent],
       imports: [FormsModule, ReactiveFormsModule, HttpClientTestingModule],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CrearReservaComponent);
+    fixture = TestBed.createComponent(CreateReservationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
