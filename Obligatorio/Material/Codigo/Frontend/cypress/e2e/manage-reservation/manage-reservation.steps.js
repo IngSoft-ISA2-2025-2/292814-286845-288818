@@ -67,48 +67,51 @@ Then('muestra un mensaje que dice {string}', (mensaje) => {
 // ============================================================================
 // ESCENARIO 3: Usuario autenticado visualiza sus reservas exitosamente
 // ============================================================================
-Given('tiene reservas creadas en diferentes estados {string}, {string}, {string}, {string} y {string}', (estado1, estado2, estado3, estado4, estado5) => {
-  cy.intercept('GET', '/api/reservas/usuario/usuarioTest', {
-    statusCode: 200,
-    body: [
-      { 
-        id: 1, 
-        medicamentos: [{ nombre: 'Aspirina' }], 
-        farmacia: 'Farmashop', 
-        estado: estado1,
-        fechaCreacion: '2023-10-01T10:00:00Z'
-      },
-      { 
-        id: 2, 
-        medicamentos: [{ nombre: 'Paracetamol' }], 
-        farmacia: 'Farmacia Central', 
-        estado: estado2,
-        fechaCreacion: '2023-10-02T11:00:00Z'
-      },
-      { 
-        id: 3, 
-        medicamentos: [{ nombre: 'Ibuprofeno' }], 
-        farmacia: 'Farmashop', 
-        estado: estado3,
-        fechaCreacion: '2023-10-03T12:00:00Z'
-      },
-      { 
-        id: 4, 
-        medicamentos: [{ nombre: 'Amoxicilina' }], 
-        farmacia: 'Farmacia Norte', 
-        estado: estado4,
-        fechaCreacion: '2023-10-04T13:00:00Z'
-      },
-      { 
-        id: 5, 
-        medicamentos: [{ nombre: 'Omeprazol' }], 
-        farmacia: 'Farmacia Sur', 
-        estado: estado5,
-        fechaCreacion: '2023-10-05T14:00:00Z'
-      }
-    ],
-  }).as('reservasExitosas');
-});
+Given(
+  'tiene reservas creadas en diferentes estados {string}, {string}, {string}, {string} y {string}',
+  (estado1, estado2, estado3, estado4, estado5) => {
+    cy.intercept('GET', '/api/reservas/usuario/usuarioTest', {
+      statusCode: 200,
+      body: [
+        {
+          id: 1,
+          medicamentos: [{ nombre: 'Aspirina' }],
+          farmacia: 'Farmashop',
+          estado: estado1,
+          fechaCreacion: '2023-10-01T10:00:00Z',
+        },
+        {
+          id: 2,
+          medicamentos: [{ nombre: 'Paracetamol' }],
+          farmacia: 'Farmacia Central',
+          estado: estado2,
+          fechaCreacion: '2023-10-02T11:00:00Z',
+        },
+        {
+          id: 3,
+          medicamentos: [{ nombre: 'Ibuprofeno' }],
+          farmacia: 'Farmashop',
+          estado: estado3,
+          fechaCreacion: '2023-10-03T12:00:00Z',
+        },
+        {
+          id: 4,
+          medicamentos: [{ nombre: 'Amoxicilina' }],
+          farmacia: 'Farmacia Norte',
+          estado: estado4,
+          fechaCreacion: '2023-10-04T13:00:00Z',
+        },
+        {
+          id: 5,
+          medicamentos: [{ nombre: 'Omeprazol' }],
+          farmacia: 'Farmacia Sur',
+          estado: estado5,
+          fechaCreacion: '2023-10-05T14:00:00Z',
+        },
+      ],
+    }).as('reservasExitosas');
+  }
+);
 
 Then('el sistema responde de manera correcta, mostrando un listado con todas sus reservas', () => {
   cy.get('[data-cy="listado-reservas"]').should('be.visible');
@@ -134,19 +137,23 @@ Given('tiene reservas en diferentes estados', () => {
     body: [
       { id: 1, medicamentos: [{ nombre: 'Aspirina' }], farmacia: 'Farmashop', estado: 'Pendiente' },
       { id: 2, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmacia Central', estado: 'Confirmada' },
-      { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], farmacia: 'Farmashop', estado: 'Expirada' }
+      { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], farmacia: 'Farmashop', estado: 'Expirada' },
     ],
   }).as('reservasVariadas');
 });
 
 When('aplica filtro para ver solo reservas en estado {string}', (estado) => {
-  cy.intercept('GET', /api/reservas/usuario/usuarioTest?estado=${estado}, {
-    statusCode: 200,
-    body: [
-      { id: 2, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmacia Central', estado: estado }
-    ],
-  }).as('reservasFiltradas');
-  
+  cy.intercept(
+    'GET',
+    new RegExp(`/api/reservas/usuario/usuarioTest\\?estado=${estado}`),
+    {
+      statusCode: 200,
+      body: [
+        { id: 2, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmacia Central', estado: estado },
+      ],
+    }
+  ).as('reservasFiltradas');
+
   cy.get('[data-cy="filtro-estado"]').select(estado);
   cy.get('[data-cy="aplicar-filtro-btn"]').click();
 });
@@ -165,7 +172,7 @@ When('intenta acceder a detalles de una reserva que no existe', () => {
     statusCode: 404,
     body: { error: 'Reserva no encontrada' },
   }).as('reservaInexistente');
-  
+
   cy.visit('/reservas/999');
 });
 
@@ -184,7 +191,7 @@ Given('tiene una reserva creada', () => {
       medicamentos: [{ nombre: 'Aspirina', cantidad: 2 }],
       farmacia: 'Farmashop',
       estado: 'Confirmada',
-      fechaCreacion: '2023-10-01T10:00:00Z'
+      fechaCreacion: '2023-10-01T10:00:00Z',
     },
   }).as('detalleReserva');
 });
@@ -193,14 +200,17 @@ When('selecciona ver detalles de la reserva', () => {
   cy.get('[data-cy="ver-detalles-btn"]').first().click();
 });
 
-Then('el sistema responde de manera correcta, mostrando la información detallada completa de la reserva: medicamento/s, cantidad, farmacia, estado, fecha de creación, id', () => {
-  cy.get('[data-cy="detalle-medicamento"]').should('be.visible');
-  cy.get('[data-cy="detalle-cantidad"]').should('be.visible');
-  cy.get('[data-cy="detalle-farmacia"]').should('be.visible');
-  cy.get('[data-cy="detalle-estado"]').should('be.visible');
-  cy.get('[data-cy="detalle-fecha-creacion"]').should('be.visible');
-  cy.get('[data-cy="detalle-id"]').should('be.visible');
-});
+Then(
+  'el sistema responde de manera correcta, mostrando la información detallada completa de la reserva: medicamento/s, cantidad, farmacia, estado, fecha de creación, id',
+  () => {
+    cy.get('[data-cy="detalle-medicamento"]').should('be.visible');
+    cy.get('[data-cy="detalle-cantidad"]').should('be.visible');
+    cy.get('[data-cy="detalle-farmacia"]').should('be.visible');
+    cy.get('[data-cy="detalle-estado"]').should('be.visible');
+    cy.get('[data-cy="detalle-fecha-creacion"]').should('be.visible');
+    cy.get('[data-cy="detalle-id"]').should('be.visible');
+  }
+);
 
 // ============================================================================
 // ESCENARIO 7: Usuario visualiza reservas pendientes con opciones disponibles
@@ -214,10 +224,10 @@ Given('tiene una reserva en estado {string}', (estado) => {
         medicamentos: [{ nombre: 'Aspirina' }],
         farmacia: 'Farmashop',
         estado: estado,
-        fechaLimite: '2023-10-02T10:00:00Z'
-      }
+        fechaLimite: '2023-10-02T10:00:00Z',
+      },
     ],
-  }).as(reservas${estado});
+  }).as(`reservas${estado}`);
 });
 
 Then('la reserva pendiente muestra claramente el estado {string}', (estado) => {
@@ -264,21 +274,25 @@ Given('tiene múltiples reservas creadas en diferentes fechas', () => {
     body: [
       { id: 1, medicamentos: [{ nombre: 'Aspirina' }], fechaCreacion: '2023-10-01T10:00:00Z' },
       { id: 2, medicamentos: [{ nombre: 'Paracetamol' }], fechaCreacion: '2023-10-03T10:00:00Z' },
-      { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], fechaCreacion: '2023-10-02T10:00:00Z' }
+      { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], fechaCreacion: '2023-10-02T10:00:00Z' },
     ],
   }).as('reservasMultiplesFechas');
 });
 
 When('solicita ordenar por fecha de creación más reciente', () => {
-  cy.intercept('GET', '/api/reservas/usuario/usuarioTest?orden=fecha_desc', {
-    statusCode: 200,
-    body: [
-      { id: 2, medicamentos: [{ nombre: 'Paracetamol' }], fechaCreacion: '2023-10-03T10:00:00Z' },
-      { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], fechaCreacion: '2023-10-02T10:00:00Z' },
-      { id: 1, medicamentos: [{ nombre: 'Aspirina' }], fechaCreacion: '2023-10-01T10:00:00Z' }
-    ],
-  }).as('reservasOrdenadas');
-  
+  cy.intercept(
+    'GET',
+    '/api/reservas/usuario/usuarioTest?orden=fecha_desc',
+    {
+      statusCode: 200,
+      body: [
+        { id: 2, medicamentos: [{ nombre: 'Paracetamol' }], fechaCreacion: '2023-10-03T10:00:00Z' },
+        { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], fechaCreacion: '2023-10-02T10:00:00Z' },
+        { id: 1, medicamentos: [{ nombre: 'Aspirina' }], fechaCreacion: '2023-10-01T10:00:00Z' },
+      ],
+    }
+  ).as('reservasOrdenadas');
+
   cy.get('[data-cy="ordenar-fecha-btn"]').click();
 });
 
@@ -296,20 +310,24 @@ Given('tiene reservas de diferentes medicamentos', () => {
     body: [
       { id: 1, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmashop' },
       { id: 2, medicamentos: [{ nombre: 'Aspirina' }], farmacia: 'Farmacia Central' },
-      { id: 3, medicamentos: [{ nombre: 'Paracetamol Extra' }], farmacia: 'Farmacia Norte' }
+      { id: 3, medicamentos: [{ nombre: 'Paracetamol Extra' }], farmacia: 'Farmacia Norte' },
     ],
   }).as('reservasMedicamentos');
 });
 
 When('busca reservas por el nombre {string}', (medicamento) => {
-  cy.intercept('GET', /api/reservas/usuario/usuarioTest?medicamento=${medicamento}, {
-    statusCode: 200,
-    body: [
-      { id: 1, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmashop' },
-      { id: 3, medicamentos: [{ nombre: 'Paracetamol Extra' }], farmacia: 'Farmacia Norte' }
-    ],
-  }).as('busquedaMedicamento');
-  
+  cy.intercept(
+    'GET',
+    new RegExp(`/api/reservas/usuario/usuarioTest\\?medicamento=${medicamento}`),
+    {
+      statusCode: 200,
+      body: [
+        { id: 1, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmashop' },
+        { id: 3, medicamentos: [{ nombre: 'Paracetamol Extra' }], farmacia: 'Farmacia Norte' },
+      ],
+    }
+  ).as('busquedaMedicamento');
+
   cy.get('[data-cy="buscar-medicamento-input"]').type(medicamento);
   cy.get('[data-cy="buscar-btn"]').click();
 });
@@ -329,20 +347,24 @@ Given('tiene reservas de diferentes farmacias', () => {
     body: [
       { id: 1, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmacia Central' },
       { id: 2, medicamentos: [{ nombre: 'Aspirina' }], farmacia: 'Farmashop' },
-      { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], farmacia: 'Farmacia Central Norte' }
+      { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], farmacia: 'Farmacia Central Norte' },
     ],
   }).as('reservasFarmacias');
 });
 
 When('busca reservas por el nombre {string}', (farmacia) => {
-  cy.intercept('GET', /api/reservas/usuario/usuarioTest?farmacia=${encodeURIComponent(farmacia)}, {
-    statusCode: 200,
-    body: [
-      { id: 1, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmacia Central' },
-      { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], farmacia: 'Farmacia Central Norte' }
-    ],
-  }).as('busquedaFarmacia');
-  
+  cy.intercept(
+    'GET',
+    new RegExp(`/api/reservas/usuario/usuarioTest\\?farmacia=${encodeURIComponent(farmacia)}`),
+    {
+      statusCode: 200,
+      body: [
+        { id: 1, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmacia Central' },
+        { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], farmacia: 'Farmacia Central Norte' },
+      ],
+    }
+  ).as('busquedaFarmacia');
+
   cy.get('[data-cy="buscar-farmacia-input"]').type(farmacia);
   cy.get('[data-cy="buscar-btn"]').click();
 });
@@ -374,4 +396,3 @@ Then('la reserva retirada muestra claramente el estado {string}', (estado) => {
 Then('muestra la fecha de retiro', () => {
   cy.get('[data-cy="fecha-retiro"]').should('be.visible');
 });
-    
