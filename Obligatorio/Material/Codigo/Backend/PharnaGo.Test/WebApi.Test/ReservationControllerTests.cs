@@ -111,5 +111,20 @@ namespace PharmaGo.Test.WebApi.Test
                 Assert.AreEqual(reservationModel.DrugsReserved[i].DrugQuantity, value.DrugsReserved[i].DrugQuantity);
             }
         }
+
+        [TestMethod]
+        public void Create_Reservation_UnAuthorizedUser()
+        {
+            // Arrange
+            _reservationManagerMock
+                .Setup(service => service.CreateReservation(It.IsAny<Reservation>()))
+                .Throws(new UnauthorizedAccessException("User is not authorized to create a reservation."));
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<UnauthorizedAccessException>(() =>
+                _reservationController.CreateReserva(reservationModel)
+            );
+            Assert.AreEqual("User is not authorized to create a reservation.", ex.Message);
+        }
     }
 }
