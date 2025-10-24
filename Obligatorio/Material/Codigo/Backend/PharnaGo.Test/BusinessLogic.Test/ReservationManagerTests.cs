@@ -138,5 +138,24 @@ namespace PharmaGo.Test.BusinessLogic.Test
             );
             Assert.AreEqual("Debe ingresar un email y secret para consultar reservas.", ex.Message);
         }
+
+        [TestMethod]
+        public void GetReservationsByUser_NoReservations_ReturnsEmptyList()
+        {
+            // Arrange
+            string email = "usuario@test.com";
+            string secret = "miSecret123";
+            _reservationRepository
+                .Setup(r => r.GetAllByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(new List<Reservation>());
+
+            // Act
+            var result = _reservationManager.GetReservationsByUser(email, secret);
+
+            // Assert
+            _reservationRepository.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Count);
+        }
     }
 }
