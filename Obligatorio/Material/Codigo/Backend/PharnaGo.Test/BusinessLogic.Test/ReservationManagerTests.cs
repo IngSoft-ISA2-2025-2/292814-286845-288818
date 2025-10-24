@@ -66,7 +66,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                     new ReservationDrug
                     {
                         Drug = new Drug { Name = "Aspirina" },
-                        Quantity = 1
+                        Quantity = 2
                     }
                 }
             };
@@ -170,6 +170,55 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 _reservationManager.CreateReservation(resevation));
             Assert.AreEqual(
                 "The drug Aspirina for the reservation does not exist in the pharmacy Farmashop.",
+                ex.Message
+            );
+        }
+
+        [TestMethod]
+        public void CreateReservation_WhenDrugHasNoStock_ThrowsNotFoundException()
+        {
+            var drugModelNoStock = new Drug
+            {
+                Id = 1,
+                Code = "ASP-001",
+                Name = "Aspirina",
+                Symptom = "Dolor de cabeza",
+                Quantity = 1,
+                Price = 50,
+                Stock = 0,
+                Prescription = false,
+                Deleted = false,
+                UnitMeasure = new UnitMeasure { Id = 1, Name = "mg", Deleted = false },
+                Presentation = new Presentation { Id = 1, Name = "Tableta", Deleted = false },
+                Pharmacy = _pharmacy
+            };
+            var resevation = _reservation;
+            _reservationRepository
+                .Setup(x => x.Exists((r =>
+                    r.Email == resevation.Email
+                    && r.Secret != resevation.Secret)))
+                .Returns(false);
+
+            _pharmacyRepository
+                .Setup(x => x.Exists(p => p.Name == resevation.PharmacyName))
+                .Returns(true);
+
+            _pharmacyRepository
+                .Setup(x => x.GetOneByExpression(p => p.Name == resevation.PharmacyName))
+                .Returns(_pharmacy);
+
+            _drugRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Drug, bool>>>()))
+                .Returns(true);
+
+            _drugRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Drug, bool>>>()))
+                .Returns(drugModelNoStock);
+
+            var ex = Assert.ThrowsException<InvalidResourceException>(() =>
+                _reservationManager.CreateReservation(resevation));
+            Assert.AreEqual(
+                "The drug Aspirina for the reservation has insufficient stock.",
                 ex.Message
             );
         }
