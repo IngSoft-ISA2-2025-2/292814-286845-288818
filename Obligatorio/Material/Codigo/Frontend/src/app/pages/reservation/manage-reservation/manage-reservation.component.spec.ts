@@ -75,4 +75,21 @@ describe('ManageReservationComponent', () => {
     const verDetallesBtns = fixture.debugElement.queryAll(By.css('[data-cy="ver-detalles-btn"]'));
     expect(verDetallesBtns.length).toBe(2);
   });
+
+  it('debería mostrar error si email y secret están vacíos al consultar reservas', () => {
+    // Arrange
+    component.email = '';
+    component.secret = '';
+    fixture.detectChanges();
+
+    // Act: simula click en el botón de consultar reservas
+    const consultarBtn = fixture.debugElement.query(By.css('[data-cy="consultar-reservas-btn"]'));
+    consultarBtn.triggerEventHandler('click');
+    fixture.detectChanges();
+
+    // Assert: verifica que se muestre el mensaje de error
+    const errorMsg = fixture.debugElement.query(By.css('[data-cy="error-message"]'));
+    expect(errorMsg).toBeTruthy();
+    expect(errorMsg.nativeElement.textContent).toContain('Debe ingresar un email y secret para consultar reservas.');
+  });
 });
