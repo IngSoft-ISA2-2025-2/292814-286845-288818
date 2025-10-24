@@ -138,7 +138,7 @@ namespace PharmaGo.Test.WebApi.Test
         }
 
         [TestMethod]
-        public void GetReservationsByUser_EmptyEmailAndSecret_ReturnsBadRequestWithErrorMessage()
+        public void GetReservationsByUser_EmptyEmailAndSecret_ThrowsArgumentException()
         {
             // Arrange
             var emptyRequest = new ConsultReservationRequest
@@ -147,17 +147,15 @@ namespace PharmaGo.Test.WebApi.Test
                 Secret = ""
             };
 
-            // Act
-            var result = _reservationController.GetReservations(emptyRequest);
+            _reservationManagerMock
+                .Setup(m => m.GetReservationsByUser("", ""))
+                .Throws(new ArgumentException("Debe ingresar un email y secret para consultar reservas."));
 
-            // Assert
-            var badRequestResult = result as BadRequestObjectResult;
-            Assert.IsNotNull(badRequestResult);
-            Assert.AreEqual(400, badRequestResult.StatusCode);
-
-            var value = badRequestResult.Value as string;
-            Assert.IsNotNull(value);
-            Assert.AreEqual("Debe ingresar un email y secret para consultar reservas.", value);
+            // Act & Assert
+            var ex = Assert.ThrowsException<ArgumentException>(() =>
+                _reservationController.GetReservations(emptyRequest)
+            );
+            Assert.AreEqual("Debe ingresar un email y secret para consultar reservas.", ex.Message);
         }
     }
 }
