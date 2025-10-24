@@ -1,11 +1,12 @@
 
+using System.Linq.Expressions;
 using Moq;
 using PharmaGo.BusinessLogic;
 using PharmaGo.Domain.Entities;
+using PharmaGo.Domain.SearchCriterias;
 using PharmaGo.Exceptions;
+using PharmaGo.IBusinessLogic;
 using PharmaGo.IDataAccess;
-using PharmaGo.WebApi.Controllers;
-using PharmaGo.WebApi.Models.In;
 
 namespace PharmaGo.Test.BusinessLogic.Test
 {
@@ -14,9 +15,11 @@ namespace PharmaGo.Test.BusinessLogic.Test
     {
         private Mock<IRepository<Reservation>> _reservationRepository;
         private Mock<IRepository<Pharmacy>> _pharmacyRepository;
+        private Mock<IRepository<Drug>> _drugRepository;
+        private Mock<IDrugManager> _drugManager = new Mock<IDrugManager>();
         private ReservationManager _reservationManager;
         private Reservation _reservation;
-        private Pharmacy pharmacyModel;
+        private Pharmacy _pharmacy;
         private Drug drugModel;
 
         [TestInitialize]
@@ -24,11 +27,13 @@ namespace PharmaGo.Test.BusinessLogic.Test
         {
             _reservationRepository = new Mock<IRepository<Reservation>>();
             _pharmacyRepository = new Mock<IRepository<Pharmacy>>();
+            _drugRepository = new Mock<IRepository<Drug>>();
             _reservationManager = new ReservationManager(
                 _reservationRepository.Object,
-                _pharmacyRepository.Object);
+                _pharmacyRepository.Object,
+                _drugRepository.Object);
 
-            pharmacyModel = new Pharmacy
+            _pharmacy = new Pharmacy
             {
                 Id = 1,
                 Name = "Farmashop",
@@ -48,7 +53,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 Deleted = false,
                 UnitMeasure = new UnitMeasure { Id = 1, Name = "mg", Deleted = false },
                 Presentation = new Presentation { Id = 1, Name = "Tableta", Deleted = false },
-                Pharmacy = pharmacyModel
+                Pharmacy = _pharmacy
             };
 
             _reservation = new Reservation
@@ -88,6 +93,15 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 .Setup(x => x.Exists(p => p.Name == resevation.PharmacyName))
                 .Returns(true);
 
+
+            _pharmacyRepository
+                .Setup(x => x.GetOneByExpression(p => p.Name == resevation.PharmacyName))
+                .Returns(_pharmacy);
+
+            _drugRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Drug, bool>>>()))
+                .Returns(true);
+
             _reservationRepository.Setup(x => x.InsertOne(It.IsAny<Reservation>()));
             _reservationRepository.Setup(x => x.Save());
 
@@ -122,7 +136,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 .Returns(false);
 
             _pharmacyRepository
-                .Setup(x=> x.Exists(p=> p.Name == resevation.PharmacyName))
+                .Setup(x => x.Exists(p => p.Name == resevation.PharmacyName))
                 .Returns(false);
 
             var ex = Assert.ThrowsException<ResourceNotFoundException>(() =>
@@ -130,5 +144,34 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual("The pharmacy for the reservation does not exist.", ex.Message);
         }
 
+        [TestMethod]
+        public void CreateReservation_WhenInvalidDrug_ThrowsNotFoundException()
+        {
+            var resevation = _reservation;
+            _reservationRepository
+                .Setup(x => x.Exists((r =>
+                    r.Email == resevation.Email
+                    && r.Secret != resevation.Secret)))
+                .Returns(false);
+
+            _pharmacyRepository
+                .Setup(x => x.Exists(p => p.Name == resevation.PharmacyName))
+                .Returns(true);
+
+            _pharmacyRepository
+                .Setup(x => x.GetOneByExpression(p => p.Name == resevation.PharmacyName))
+                .Returns(_pharmacy);
+
+            _drugRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Drug, bool>>>()))
+                .Returns(false);
+
+            var ex = Assert.ThrowsException<ResourceNotFoundException>(() =>
+                _reservationManager.CreateReservation(resevation));
+            Assert.AreEqual(
+                "The drug Aspirina for the reservation does not exist in the pharmacy Farmashop.",
+                ex.Message
+            );
+        }
     }
 }
