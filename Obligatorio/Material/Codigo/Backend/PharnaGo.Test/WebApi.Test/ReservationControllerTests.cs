@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using PharmaGo.Domain.Entities;
+using PharmaGo.Domain.Enums;
 using PharmaGo.WebApi.Models.In;
 using PharmaGo.WebApi.Models.Out;
+using PharmaGo.IBusinessLogic;
+using PharmaGo.WebApi.Controllers;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -69,7 +72,7 @@ namespace PharmaGo.Test.WebApi.Test
                             Quantity = 2
                         }
                     },
-                    Status = "Pending"
+                    Status = ReservationStatus.Pendiente
                 },
                 new Reservation
                 {
@@ -85,7 +88,7 @@ namespace PharmaGo.Test.WebApi.Test
                             Quantity = 1
                         }
                     },
-                    Status = "Confirmed"
+                    Status = ReservationStatus.Confirmada
                 }
             };
         }
@@ -122,7 +125,7 @@ namespace PharmaGo.Test.WebApi.Test
             {
                 Assert.AreEqual(_reservations[i].PharmacyName, value[i].PharmacyName);
                 Assert.AreEqual(_reservations[i].Drugs.Count, value[i].ReservedDrugs.Count);
-                Assert.AreEqual(_reservations[i].Status, value[i].Status);
+                Assert.AreEqual(_reservations[i].Status.ToString(), value[i].Status); 
                 
                 var reservationDrugs = _reservations[i].Drugs.ToList();
 
@@ -132,77 +135,6 @@ namespace PharmaGo.Test.WebApi.Test
                     Assert.AreEqual(reservationDrugs[j].Quantity, value[i].ReservedDrugs[j].Quantity);
                 }
             }
-        }
-    }
-
-    public class ConsultReservationRequest
-    {
-        public string Email { get; set; }
-        public string Secret { get; set; }
-    }
-
-    public class ReservationResponse
-    {
-        public string PharmacyName { get; set; }
-        public string Status { get; set; }
-        public List<ReservationDrugResponse> ReservedDrugs { get; set; }
-    }
-
-    public class ReservationDrugResponse
-    {
-        public string DrugName { get; set; }
-        public int Quantity { get; set; }
-    }
-
-    public class Reservation
-    {
-        public int Id { get; set; }
-        public string PharmacyName { get; set; }
-        public Pharmacy Pharmacy { get; set; }
-        public string Status { get; set; }
-        public ICollection<ReservationDrug> Drugs { get; set; }
-    }
-
-    public class ReservationDrug
-    {
-        public int DrugId { get; set; }
-        public Drug Drug { get; set; }
-        public int Quantity { get; set; }
-    }
-
-    public interface IReservationManager
-    {
-        List<Reservation> GetReservationsByUser(string email, string secret);
-    }
-
-    public class ReservationController : ControllerBase
-    {
-        private readonly IReservationManager _reservationManager;
-
-        public ReservationController(IReservationManager reservationManager)
-        {
-            _reservationManager = reservationManager;
-        }
-
-        [HttpPost]
-        public IActionResult GetReservations(ConsultReservationRequest consultReservationRequest)
-        {
-            var reservations = _reservationManager.GetReservationsByUser(
-                consultReservationRequest.Email, 
-                consultReservationRequest.Secret);
-            
-            var response = reservations.Select(r => new ReservationResponse
-            {
-                PharmacyName = r.PharmacyName,
-                Status = r.Status,
-                ReservedDrugs = r.Drugs.Select(d => new ReservationDrugResponse
-                {
-                    DrugName = d.Drug.Name,
-                    Quantity = d.Quantity
-                }).ToList()
-            }).ToList();
-
-            return Ok(response);
         }
     }
 }
