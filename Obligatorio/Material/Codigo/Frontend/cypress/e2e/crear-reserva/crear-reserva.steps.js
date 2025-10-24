@@ -8,12 +8,20 @@ Given('estoy en la página de reservas de medicamentos', () => {
 });
 
 // ============================================================================
-// ESCENARIO 1: Usuario no autenticado intenta reservar medicamentos
+// ESCENARIO 1: Usuario sin email intenta reservar medicamentos
 // ============================================================================
-Given('un usuario no autenticado', () => {
-  cy.window().then((win) => {
-    win.localStorage.removeItem('login');
-  });
+Given('un email {string}', (email) => {
+  cy.get('[data-cy="email-input"]').clear();
+  if (email) {
+    cy.get('[data-cy="email-input"]').type(email);
+  }
+});
+
+Given('un secret {string}', (secret) => {
+  cy.get('[data-cy="secret-input"]').clear();
+  if (secret) {
+    cy.get('[data-cy="secret-input"]').type(secret);
+  }
 });
 
 // Step reutilizado: medicamento genérico
@@ -28,24 +36,24 @@ Given('una farmacia {string}', (farmacia) => {
   cy.get('[data-cy="farmacia-input"]').clear().type(farmacia);
 });
 
-// Step único: click en reservar con intercept para 401
+// Step único: click en reservar con intercept para validación de email/secret
 When('hace click en el botón de reservar (no autenticado)', () => {
-  cy.window().then((win) => {
-    const login = win.localStorage.getItem('login');
-    if (!login) {
-      cy.intercept('POST', '/api/reservas', {
-        statusCode: 401,
-        body: { error: 'Debe iniciar sesión para reservar medicamentos.' },
-      }).as('unauthorizedReserva');
-    }
-  }).then(() => {
-    cy.get('[data-cy="reservar-btn"]').click();
+  cy.get('[data-cy="email-input"]').invoke('val').then((email) => {
+    cy.get('[data-cy="secret-input"]').invoke('val').then((secret) => {
+      if (!email || !secret) {
+        cy.intercept('POST', '/api/reservas', {
+          statusCode: 400,
+          body: { error: 'Debe ingresar un email y secret para reservar medicamentos.' },
+        }).as('sinEmailOSecret');
+      }
+      cy.get('[data-cy="reservar-btn"]').click();
+    });
   });
 });
 
 Then('el sistema responde con un error unauthorized (401)', () => {
   cy.get('[data-cy="error-mensaje"]').should('be.visible');
-  cy.get('[data-cy="error-mensaje"]').should('contain', 'Debe iniciar sesión para reservar medicamentos.');
+  cy.get('[data-cy="error-mensaje"]').should('contain', 'Debe ingresar un email y secret para reservar medicamentos.');
 });
 
 Then('muestra un mensaje que dice {string}', (mensaje) => {
@@ -53,21 +61,10 @@ Then('muestra un mensaje que dice {string}', (mensaje) => {
 });
 
 // ============================================================================
-// ESCENARIO 2: Usuario intenta reservar un medicamento en una farmacia inválida
+// ESCENARIO 2: Usuario con email y secret válidos reserva en farmacia inválida
 // ============================================================================
 
-Given('un usuario autenticado', () => {
-  cy.window().then((win) => {
-    const login = {
-      userName: 'usuarioTest',
-      role: 'Client',
-      token: 'tokenDeEjemplo123',
-    };
-    win.localStorage.setItem('login', JSON.stringify(login));
-  });
-});
-
-// Steps reutilizados: medicamento genérico, ingresar farmacia
+// Steps reutilizados: email, secret, medicamento genérico, ingresar farmacia
 
 // Step único: click en reservar con intercept para 404 farmacia inválida
 When('hace click en el botón de reservar (farmacia inválida)', () => {
@@ -90,10 +87,14 @@ Then('el sistema responde con un error Not Found (404)', () => {
 // Step reutilizado: muestra un mensaje que dice {string}
 
 // ============================================================================
-// ESCENARIO 3: Usuario intenta reservar un medicamento inexistente en una farmacia válida
+// ESCENARIO 3: Usuario con email y secret válidos intenta reservar medicamento inexistente
 // ============================================================================
 
-// Steps reutilizados: usuario autenticado, medicamento genérico, ingresar farmacia
+// Steps reutilizados: email, secret, medicamento genérico, ingresar farmacia
+
+Given('el medicamento no existe en la farmacia {string}', (farmacia) => {
+  // Este step es solo descriptivo, la lógica se maneja en el intercept del When
+});
 
 // Step único: click en reservar con intercept para 404 medicamento inexistente
 When('hace click en el botón de reservar (medicamento inexistente)', () => {
@@ -113,10 +114,10 @@ When('hace click en el botón de reservar (medicamento inexistente)', () => {
 // Steps reutilizados: el sistema responde con un error Not Found (404), muestra un mensaje que dice {string}
 
 // ============================================================================
-// ESCENARIO 4: Usuario autenticado intenta reservar un medicamento sin stock
+// ESCENARIO 4: Usuario con email y secret válidos intenta reservar medicamento sin stock
 // ============================================================================
 
-// Steps reutilizados: usuario autenticado, medicamento genérico, ingresar farmacia
+// Steps reutilizados: email, secret, medicamento genérico, ingresar farmacia
 
 Given('no hay stock disponible para el medicamento {string} en la farmacia {string}', (medicamento, farmacia) => {
   cy.intercept('POST', '/api/reservas', {
@@ -136,7 +137,7 @@ Then('el sistema muestra responde con un mensaje de error conflict (409)', () =>
 // ESCENARIO 5: Usuario reserva un medicamento que requiere prescripción con exito
 // ============================================================================
 
-// Steps reutilizados: usuario autenticado, ingresar farmacia
+// Steps reutilizados: email, secret, ingresar farmacia
 
 Given('un medicamento {string} con cantidad de {int} unidad que requiere prescripción médica', (nombre, cantidad) => {
   cy.get('[data-cy="medicamento-nombre-input"]').clear().type(nombre);
@@ -173,7 +174,7 @@ Then('descuenta la unidad del stock de los medicamentos', () => {
 // ESCENARIO 6: Usuario reserva un medicamento que no requiere prescripción con éxito
 // ============================================================================
 
-// Steps reutilizados: usuario autenticado, ingresar farmacia
+// Steps reutilizados: email, secret, ingresar farmacia
 
 Given('un medicamento {string} con cantidad de {int} unidad que no requiere prescripción médica', (nombre, cantidad) => {
   cy.get('[data-cy="medicamento-nombre-input"]').clear().type(nombre);
@@ -200,7 +201,7 @@ Given('hay stock mayor o igual a una unidad para el medicamento {string} en la f
 // ESCENARIO 7: Usuario reserva dos medicamentos uno que requiere prescripción y otro que no requiere con éxito
 // ============================================================================
 
-// Steps reutilizados: usuario autenticado, ingresar farmacia
+// Steps reutilizados: email, secret, ingresar farmacia
 
 Given('hay stock mayor o igual a una unidad para ambos medicamentos en la farmacia {string}', (farmacia) => {
   cy.intercept('POST', '/api/reservas', {
@@ -225,6 +226,21 @@ Then('el sistema crea la reserva con un estado {string}', (estado) => {
 });
 
 // Steps reutilizados: descuenta la unidad del stock, muestra un mensaje que dice {string}
+
+// ============================================================================
+// ESCENARIO 8: Usuario con email existente pero secret incorrecto intenta reservar
+// ============================================================================
+
+Given('el email {string} ya tiene reservas con secret {string}', (email, secretCorrecto) => {
+  cy.intercept('POST', '/api/reservas', (req) => {
+    if (req.body.email === email && req.body.secret !== secretCorrecto) {
+      req.reply({
+        statusCode: 403,
+        body: { error: 'El secret no coincide con el registrado para este email' },
+      });
+    }
+  }).as('secretIncorrecto');
+});
 
 // ============================================================================
 // ESCENARIO: Cliente intenta validar la reserva en una farmacia incorrecta

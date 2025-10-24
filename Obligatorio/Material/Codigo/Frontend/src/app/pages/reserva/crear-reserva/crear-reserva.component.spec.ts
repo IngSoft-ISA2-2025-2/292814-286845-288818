@@ -26,6 +26,8 @@ describe('CrearReservaComponent', () => {
   });
 
   it('should have medicamento nombre, cantidad, farmacia inputs and reservar button', () => {
+    expect(fixture.debugElement.query(By.css('[data-cy="email-input"]'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('[data-cy="secret-input"]'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('[data-cy="medicamento-nombre-input"]'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('[data-cy="medicamento-cantidad-input"]'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('[data-cy="farmacia-input"]'))).not.toBeNull();
@@ -33,9 +35,9 @@ describe('CrearReservaComponent', () => {
   });
 
   it('should show error message when errorMessage is set', () => {
-    component.errorMessage = 'Debe iniciar sesión para reservar medicamentos.';
+    component.errorMessage = 'Debe ingresar un email y secret para reservar medicamentos.';
     fixture.detectChanges();
     const errorMsg = fixture.debugElement.query(By.css('[data-cy="error-mensaje"]'));
-    expect(errorMsg.nativeElement.textContent).toContain('Debe iniciar sesión para reservar medicamentos.');
+    expect(errorMsg.nativeElement.textContent).toContain('Debe ingresar un email y secret para reservar medicamentos.');
   });
 });
