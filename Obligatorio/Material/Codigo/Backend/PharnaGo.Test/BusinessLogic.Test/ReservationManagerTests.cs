@@ -124,5 +124,19 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(_reservations[1].Status, result[1].Status);
             Assert.AreEqual(_reservations[1].Email, result[1].Email);
         }
+
+        [TestMethod]
+        public void GetReservationsByUser_EmptyEmailOrSecret_ThrowsArgumentException()
+        {
+            // Arrange
+            string email = "";
+            string secret = "";
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<ArgumentException>(() =>
+                _reservationManager.GetReservationsByUser(email, secret)
+            );
+            Assert.AreEqual("Debe ingresar un email y secret para consultar reservas.", ex.Message);
+        }
     }
 }
