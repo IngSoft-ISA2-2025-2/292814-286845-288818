@@ -4,6 +4,7 @@ using PharmaGo.Domain.Entities;
 using PharmaGo.WebApi.Models.In;
 using PharmaGo.WebApi.Models.Out;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PharmaGo.Test.WebApi.Test
 {
@@ -12,6 +13,7 @@ namespace PharmaGo.Test.WebApi.Test
     {
         private ReservationController _reservationController;
         private Mock<IReservationManager> _reservationManagerMock;
+        private ConsultReservationRequest _consultReservationRequest;
         private List<Reservation> _reservations;
         private Pharmacy _pharmacy;
         private Drug _drug;
@@ -43,6 +45,12 @@ namespace PharmaGo.Test.WebApi.Test
                 UnitMeasure = new UnitMeasure { Id = 1, Name = "mg", Deleted = false },
                 Presentation = new Presentation { Id = 1, Name = "Tableta", Deleted = false },
                 Pharmacy = _pharmacy
+            };
+
+            _consultReservationRequest = new ConsultReservationRequest()
+            {
+                Email = "usuario@test.com",
+                Secret = "miSecret123"
             };
 
             _reservations = new List<Reservation>
@@ -92,18 +100,14 @@ namespace PharmaGo.Test.WebApi.Test
         public void GetReservationsByUser_Ok()
         {
             // Arrange
-            var consultReservationRequest = new ConsultReservationRequest 
-            { 
-                Email = "usuario@test.com",
-                Secret = "miSecret123"
-            };
-            
             _reservationManagerMock
-                .Setup(service => service.GetReservationsByUser(consultReservationRequest.Email, consultReservationRequest.Secret))
+                .Setup(service => service.GetReservationsByUser(
+                    _consultReservationRequest.Email,
+                    _consultReservationRequest.Secret))
                 .Returns(_reservations);
 
             // Act
-            var result = _reservationController.GetReservations(consultReservationRequest);
+            var result = _reservationController.GetReservations(_consultReservationRequest);
 
             // Assert
             var objectResult = result as OkObjectResult;
@@ -120,12 +124,85 @@ namespace PharmaGo.Test.WebApi.Test
                 Assert.AreEqual(_reservations[i].Drugs.Count, value[i].ReservedDrugs.Count);
                 Assert.AreEqual(_reservations[i].Status, value[i].Status);
                 
-                for (int j = 0; j < _reservations[i].Drugs.Count; j++)
+                var reservationDrugs = _reservations[i].Drugs.ToList();
+
+                for (int j = 0; j < reservationDrugs.Count; j++)
                 {
-                    Assert.AreEqual(_reservations[i].Drugs[j].Drug.Name, value[i].ReservedDrugs[j].DrugName);
-                    Assert.AreEqual(_reservations[i].Drugs[j].Quantity, value[i].ReservedDrugs[j].Quantity);
+                    Assert.AreEqual(reservationDrugs[j].Drug.Name, value[i].ReservedDrugs[j].DrugName);
+                    Assert.AreEqual(reservationDrugs[j].Quantity, value[i].ReservedDrugs[j].Quantity);
                 }
             }
+        }
+    }
+
+    public class ConsultReservationRequest
+    {
+        public string Email { get; set; }
+        public string Secret { get; set; }
+    }
+
+    public class ReservationResponse
+    {
+        public string PharmacyName { get; set; }
+        public string Status { get; set; }
+        public List<ReservationDrugResponse> ReservedDrugs { get; set; }
+    }
+
+    public class ReservationDrugResponse
+    {
+        public string DrugName { get; set; }
+        public int Quantity { get; set; }
+    }
+
+    public class Reservation
+    {
+        public int Id { get; set; }
+        public string PharmacyName { get; set; }
+        public Pharmacy Pharmacy { get; set; }
+        public string Status { get; set; }
+        public ICollection<ReservationDrug> Drugs { get; set; }
+    }
+
+    public class ReservationDrug
+    {
+        public int DrugId { get; set; }
+        public Drug Drug { get; set; }
+        public int Quantity { get; set; }
+    }
+
+    public interface IReservationManager
+    {
+        List<Reservation> GetReservationsByUser(string email, string secret);
+    }
+
+    public class ReservationController : ControllerBase
+    {
+        private readonly IReservationManager _reservationManager;
+
+        public ReservationController(IReservationManager reservationManager)
+        {
+            _reservationManager = reservationManager;
+        }
+
+        [HttpPost]
+        public IActionResult GetReservations(ConsultReservationRequest consultReservationRequest)
+        {
+            var reservations = _reservationManager.GetReservationsByUser(
+                consultReservationRequest.Email, 
+                consultReservationRequest.Secret);
+            
+            var response = reservations.Select(r => new ReservationResponse
+            {
+                PharmacyName = r.PharmacyName,
+                Status = r.Status,
+                ReservedDrugs = r.Drugs.Select(d => new ReservationDrugResponse
+                {
+                    DrugName = d.Drug.Name,
+                    Quantity = d.Quantity
+                }).ToList()
+            }).ToList();
+
+            return Ok(response);
         }
     }
 }
