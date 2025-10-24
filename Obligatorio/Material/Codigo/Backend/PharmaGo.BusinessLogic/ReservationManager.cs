@@ -17,6 +17,10 @@ namespace PharmaGo.BusinessLogic
 
         public List<Reservation> GetReservationsByUser(string email, string secret)
         {
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(secret))
+            {
+                throw new ArgumentException("Debe ingresar un email y secret para consultar reservas.");
+            }
             var reservations = _reservationRepository.GetAllByExpression(r => r.Email == email && r.Secret == secret);
             return reservations.ToList();
         }
