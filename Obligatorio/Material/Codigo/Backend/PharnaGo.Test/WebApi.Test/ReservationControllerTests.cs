@@ -157,5 +157,32 @@ namespace PharmaGo.Test.WebApi.Test
             );
             Assert.AreEqual("Debe ingresar un email y secret para consultar reservas.", ex.Message);
         }
+
+        [TestMethod]
+        public void GetReservationsByUser_NoReservations_ReturnsEmptyListAndOk()
+        {
+            // Arrange
+            var request = new ConsultReservationRequest
+            {
+                Email = "usuario@test.com",
+                Secret = "miSecret123"
+            };
+
+            _reservationManagerMock
+                .Setup(service => service.GetReservationsByUser(request.Email, request.Secret))
+                .Returns(new List<Reservation>());
+
+            // Act
+            var result = _reservationController.GetReservations(request);
+
+            // Assert
+            var objectResult = result as OkObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(200, objectResult.StatusCode);
+
+            var value = objectResult.Value as List<ReservationResponse>;
+            Assert.IsNotNull(value);
+            Assert.AreEqual(0, value.Count);
+        }
     }
 }
