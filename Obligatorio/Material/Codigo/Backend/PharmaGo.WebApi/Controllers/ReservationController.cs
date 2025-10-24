@@ -26,20 +26,12 @@ namespace PharmaGo.WebApi.Controllers
             {
                 return BadRequest("Debe ingresar un email y secret para consultar reservas.");
             }
+
             var reservations = _reservationManager.GetReservationsByUser(
-                consultReservationRequest.Email, 
+                consultReservationRequest.Email,
                 consultReservationRequest.Secret);
-            
-            var response = reservations.Select(r => new ReservationResponse
-            {
-                PharmacyName = r.PharmacyName,
-                Status = r.Status.ToString(),
-                ReservedDrugs = r.Drugs.Select(d => new ReservationDrugResponse
-                {
-                    DrugName = d.Drug.Name,
-                    Quantity = d.Quantity
-                }).ToList()
-            }).ToList();
+
+            var response = reservations.Select(ReservationResponse.FromEntity).ToList();
 
             return Ok(response);
         }
