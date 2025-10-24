@@ -103,10 +103,101 @@ namespace PharmaGo.Test.BusinessLogic.Test
             // Arrange
             string email = "usuario@test.com";
             string secret = "miSecret123";
+            var reservations = new List<Reservation>
+            {
+                new Reservation
+                {
+                    Id = 1,
+                    PharmacyName = "Farmashop",
+                    Email = email,
+                    Secret = secret,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = new Drug { Name = "Aspirina" },
+                            Quantity = 2
+                        }
+                    },
+                    Status = ReservationStatus.Pendiente
+                },
+                new Reservation
+                {
+                    Id = 2,
+                    PharmacyName = "Farmacia Central",
+                    Email = email,
+                    Secret = secret,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 2,
+                            Drug = new Drug { Name = "Paracetamol" },
+                            Quantity = 1
+                        }
+                    },
+                    Status = ReservationStatus.Confirmada
+                },
+                new Reservation
+                {
+                    Id = 3,
+                    PharmacyName = "Farmacia Sur",
+                    Email = email,
+                    Secret = secret,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 3,
+                            Drug = new Drug { Name = "Ibuprofeno" },
+                            Quantity = 3
+                        }
+                    },
+                    Status = ReservationStatus.Expirada
+                },
+                new Reservation
+                {
+                    Id = 4,
+                    PharmacyName = "Farmacia Norte",
+                    Email = email,
+                    Secret = secret,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 4,
+                            Drug = new Drug { Name = "Amoxicilina" },
+                            Quantity = 1
+                        }
+                    },
+                    Status = ReservationStatus.Cancelada
+                },
+                new Reservation
+                {
+                    Id = 5,
+                    PharmacyName = "Farmacia Este",
+                    Email = email,
+                    Secret = secret,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 5,
+                            Drug = new Drug { Name = "Diclofenac" },
+                            Quantity = 2
+                        }
+                    },
+                    Status = ReservationStatus.Retirada
+                }
+            };
 
-            _reservationRepository
-                .Setup(r => r.GetAllByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
-                .Returns(_reservations);
+             _reservationRepository
+                .Setup(r => r.GetAllByExpression(
+                    It.Is<Expression<Func<Reservation, bool>>>(expr =>
+                        expr.Compile().Invoke(reservations[0]) // Verifica que el predicado funcione para al menos una reserva válida
+                    )))
+                .Returns(reservations);
 
             // Act
             var result = _reservationManager.GetReservationsByUser(email, secret);
@@ -114,15 +205,17 @@ namespace PharmaGo.Test.BusinessLogic.Test
             // Assert
             _reservationRepository.VerifyAll();
             Assert.IsNotNull(result);
-            Assert.AreEqual(_reservations.Count, result.Count);
-            Assert.AreEqual(_reservations[0].Id, result[0].Id);
-            Assert.AreEqual(_reservations[0].PharmacyName, result[0].PharmacyName);
-            Assert.AreEqual(_reservations[0].Status, result[0].Status);
-            Assert.AreEqual(_reservations[0].Email, result[0].Email);
-            Assert.AreEqual(_reservations[1].Id, result[1].Id);
-            Assert.AreEqual(_reservations[1].PharmacyName, result[1].PharmacyName);
-            Assert.AreEqual(_reservations[1].Status, result[1].Status);
-            Assert.AreEqual(_reservations[1].Email, result[1].Email);
+            Assert.AreEqual(reservations.Count, result.Count);
+
+            for (int i = 0; i < reservations.Count; i++)
+            {
+                Assert.AreEqual(reservations[i].PharmacyName, result[i].PharmacyName);
+                Assert.AreEqual(reservations[i].Status, result[i].Status);
+                Assert.AreEqual(reservations[i].Email, result[i].Email);
+                Assert.AreEqual(reservations[i].Drugs.Count, result[i].Drugs.Count);
+                Assert.AreEqual(reservations[i].Drugs.First().Drug.Name, result[i].Drugs.First().Drug.Name);
+                Assert.AreEqual(reservations[i].Drugs.First().Quantity, result[i].Drugs.First().Quantity);
+            }
         }
 
         [TestMethod]
@@ -157,5 +250,6 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count);
         }
+
     }
 }
