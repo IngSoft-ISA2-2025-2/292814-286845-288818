@@ -1,8 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using Moq;
+using NuGet.Common;
+using PharmaGo.BusinessLogic;
+using PharmaGo.DataAccess.Repositories;
+using PharmaGo.Domain.Entities;
+using PharmaGo.Domain.SearchCriterias;
+using PharmaGo.IBusinessLogic;
+using PharmaGo.IDataAccess;
+using PharmaGo.WebApi.Models.In;
+using PharmaGo.WebApi.Models.Out;
 
 namespace PharmaGo.Test.BusinessLogic.Test
 {
@@ -10,5 +16,88 @@ namespace PharmaGo.Test.BusinessLogic.Test
     public class ReservationManagerTests
     {
 
+        private Mock<IRepository<Reservation>> _reservationRepository;
+        private ReservationManager _reservationManager;
+        private ReservationModel reservationModel;
+        private Pharmacy pharmacyModel;
+        private Drug drugModel;
+
+        [TestInitialize]
+        public void InitTest()
+        {
+            _reservationRepository = new Mock<IRepository<Reservation>>();
+            _reservationManager = new ReservationManager(_reservationRepository.Object);
+
+            pharmacyModel = new Pharmacy
+            {
+                Id = 1,
+                Name = "Farmashop",
+                Address = "Av. Principal 123"
+            };
+
+            drugModel = new Drug
+            {
+                Id = 1,
+                Code = "ASP-001",
+                Name = "Aspirina",
+                Symptom = "Dolor de cabeza",
+                Quantity = 100,
+                Price = 50,
+                Stock = 200,
+                Prescription = false,
+                Deleted = false,
+                UnitMeasure = new UnitMeasure { Id = 1, Name = "mg", Deleted = false },
+                Presentation = new Presentation { Id = 1, Name = "Tableta", Deleted = false },
+                Pharmacy = pharmacyModel
+            };
+
+            reservationModel = new ReservationModel()
+            {
+                DrugsReserved = new List<ReservationDrugModel>
+                {
+                    new ReservationDrugModel
+                    {
+                        DrugName = "Aspirina",
+                        DrugQuantity = 1
+                    }
+                },
+                PharmacyName = "Farmashop"
+            };
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            _reservationRepository.VerifyAll();
+        }
+
+        [TestMethod]
+        public void CreateReservationOk()
+        {
+            _reservationRepository.Setup(x => x.InsertOne(It.IsAny<Reservation>()));
+            _reservationRepository.Setup(x => x.Save());
+
+            var reservationReturned = _reservationManager.CreateReservation(reservationModel.ToEntity());
+            Assert.AreNotEqual(reservationReturned.Id, 1);
+
+        }
+
+
+        public class ReservationManager : IReservationManager
+        {
+            private IRepository<Reservation> reservationRepository;
+
+            public ReservationManager(IRepository<Reservation> reservationRepository)
+            {
+                this.reservationRepository = reservationRepository;
+            }
+
+            public Reservation CreateReservation(Reservation reservation)
+            {
+                reservationRepository.InsertOne(reservation);
+                reservationRepository.Save();
+                return reservation;
+            }
+        }
     }
 }

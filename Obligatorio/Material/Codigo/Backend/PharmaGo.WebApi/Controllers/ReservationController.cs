@@ -16,7 +16,7 @@ namespace PharmaGo.WebApi.Controllers
         [HttpPost]
         public IActionResult CreateReserva(ReservationModel reservationModel)
         {
-            var reserva = _reservationManager.CreateReserva(reservationModel.ToEntity());
+            var reserva = _reservationManager.CreateReservation(reservationModel.ToEntity());
             var response = new ReservationModelResponse
             {
                 PharmacyName = reserva.PharmacyName,

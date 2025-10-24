@@ -10,6 +10,6 @@ namespace PharmaGo.IBusinessLogic
 
     public interface IReservationManager
     {
-        Reservation CreateReserva(Reservation reservation);
+        Reservation CreateReservation(Reservation reservation);
     }
 }

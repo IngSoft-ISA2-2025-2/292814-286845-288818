@@ -89,7 +89,7 @@ namespace PharmaGo.Test.WebApi.Test
         {
             //Arrange
             _reservationManagerMock
-                .Setup(service => service.CreateReserva(It.IsAny<Reservation>()))
+                .Setup(service => service.CreateReservation(It.IsAny<Reservation>()))
                 .Returns(reservation);
 
             //Act
