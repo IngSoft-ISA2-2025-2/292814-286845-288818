@@ -65,7 +65,6 @@ namespace PharmaGo.Test.DataAccess.Test
                 .Options;
             context = new PharmacyGoDbContext(options);
 
-            // Agregar farmacias y drogas relacionadas primero (si no existen)
             foreach (var reservation in reservationsSaved)
             {
                 if (reservation.Pharmacy != null)
