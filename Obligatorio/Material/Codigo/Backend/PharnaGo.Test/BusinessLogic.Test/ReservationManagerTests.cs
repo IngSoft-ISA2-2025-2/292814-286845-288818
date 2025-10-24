@@ -76,10 +76,22 @@ namespace PharmaGo.Test.BusinessLogic.Test
         [TestMethod]
         public void CreateReservationOk()
         {
+            var resevation = _reservation;
+
+            _reservationRepository
+                .Setup(x => x.Exists((r =>
+                    r.Email == resevation.Email
+                    && r.Secret != resevation.Secret)))
+                .Returns(false);
+
+            _pharmacyRepository
+                .Setup(x => x.Exists(p => p.Name == resevation.PharmacyName))
+                .Returns(true);
+
             _reservationRepository.Setup(x => x.InsertOne(It.IsAny<Reservation>()));
             _reservationRepository.Setup(x => x.Save());
 
-            var reservationReturned = _reservationManager.CreateReservation(_reservation);
+            var reservationReturned = _reservationManager.CreateReservation(resevation);
             Assert.AreNotEqual(reservationReturned.Id, 1);
 
         }
@@ -115,7 +127,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
 
             var ex = Assert.ThrowsException<ResourceNotFoundException>(() =>
                 _reservationManager.CreateReservation(resevation));
-            Assert.AreEqual("Pharmacy not found", ex.Message);
+            Assert.AreEqual("The pharmacy for the reservation does not exist.", ex.Message);
         }
 
     }
