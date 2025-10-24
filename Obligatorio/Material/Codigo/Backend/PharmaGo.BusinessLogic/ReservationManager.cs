@@ -51,6 +51,8 @@ namespace PharmaGo.BusinessLogic
                     throw new InvalidResourceException(
                         $"The drug {reservationDrug.Drug.Name} for the reservation has insufficient stock.");
                 }
+                drug.Stock -= reservationDrug.Quantity;
+                drugRepository.UpdateOne(drug);
             }
 
             reservation.Status = "Pending";

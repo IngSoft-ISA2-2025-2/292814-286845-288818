@@ -107,7 +107,10 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Drug, bool>>>()))
                 .Returns(drugModel);
 
-            _reservationRepository.Setup(x => x.InsertOne(It.IsAny<Reservation>()));
+            _reservationRepository
+                .Setup(x => x.InsertOne(It.IsAny<Reservation>()))
+                .Callback<Reservation>(r => r.Id = 2);
+
             _reservationRepository.Setup(x => x.Save());
 
             var reservationReturned = _reservationManager.CreateReservation(resevation);
@@ -117,9 +120,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(reservationReturned.PharmacyName, resevation.PharmacyName);
             Assert.AreEqual(reservationReturned.ReservationDrugs.Count, resevation.ReservationDrugs.Count);
             Assert.AreEqual(reservationReturned.Status, "Pending");
-            Assert.AreEqual(reservationReturned.ReservationDrugs.First().Drug.Stock + resevation.ReservationDrugs.First().Quantity
-                , resevation.ReservationDrugs.First().Drug.Stock);
-
+            Assert.AreEqual(198, drugModel.Stock);
         }
 
         [TestMethod]
