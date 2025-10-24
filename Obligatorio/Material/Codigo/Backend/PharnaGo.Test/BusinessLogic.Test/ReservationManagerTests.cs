@@ -1,14 +1,10 @@
 
 using Moq;
-using NuGet.Common;
 using PharmaGo.BusinessLogic;
-using PharmaGo.DataAccess.Repositories;
 using PharmaGo.Domain.Entities;
-using PharmaGo.Domain.SearchCriterias;
-using PharmaGo.IBusinessLogic;
 using PharmaGo.IDataAccess;
+using PharmaGo.WebApi.Controllers;
 using PharmaGo.WebApi.Models.In;
-using PharmaGo.WebApi.Models.Out;
 
 namespace PharmaGo.Test.BusinessLogic.Test
 {
@@ -79,6 +75,18 @@ namespace PharmaGo.Test.BusinessLogic.Test
 
             var reservationReturned = _reservationManager.CreateReservation(reservationModel.ToEntity());
             Assert.AreNotEqual(reservationReturned.Id, 1);
+
+        }
+
+        [TestMethod]
+        public void CreateReservation_WhenEmailExistsButSecretIsDifferent_ThrowsUnautharizedException()
+        {
+            _reservationRepository.Setup(x => x.Exists((r => r.Email == reservationModel.Email && r.Secret != reservationModel.Secret)))
+                .Returns(true);
+
+            var ex = Assert.ThrowsException<UnauthorizedAccessException>(() =>
+            _reservationManager.CreateReservation(reservationModel.ToEntity()));
+            Assert.AreEqual("User is not authorized to create a reservation.", ex.Message);
 
         }
     }
