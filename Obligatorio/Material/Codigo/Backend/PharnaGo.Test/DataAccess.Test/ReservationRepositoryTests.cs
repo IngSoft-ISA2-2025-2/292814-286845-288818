@@ -143,19 +143,4 @@ namespace PharmaGo.Test.DataAccess.Test
             return reservations;
         }
     }
-
-    public class ReservationRepository : BaseRepository<Reservation>
-    {
-        private readonly PharmacyGoDbContext _context;
-
-        public ReservationRepository(PharmacyGoDbContext context) : base(context)
-        {
-            _context = context;
-        }
-        public override void InsertOne(Reservation reservation)
-        {
-            _context.Entry(reservation).State = EntityState.Added;
-            _context.Set<Reservation>().Add(reservation);
-        }
-    }
 }
