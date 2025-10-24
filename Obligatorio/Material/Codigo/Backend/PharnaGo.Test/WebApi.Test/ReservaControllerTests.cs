@@ -9,7 +9,7 @@ namespace PharmaGo.Test.WebApi.Test
     {
         private ReservaController _reservaController;
         private Mock<IReservaManager> _reservaManagerMock;
-        private ReservaModelRequest reservaModel;
+        private ReservaModel reservaModel;
         private Reserva reserva;
         private Pharmacy pharmacyModel;
         private Drug drugModel;
@@ -43,11 +43,11 @@ namespace PharmaGo.Test.WebApi.Test
                 Pharmacy = pharmacyModel
             };
 
-            reservaModel = new ReservaModelRequest()
+            reservaModel = new ReservaModel()
             {
-                DrugsReserved = new List<ReservaDrugModelRequest>
+                DrugsReserved = new List<ReservaDrugModel>
                 {
-                    new ReservaDrugModelRequest
+                    new ReservaDrugModel
                     {
                         DrugName = "Aspirina",
                         DrugQuantity = 1
@@ -85,12 +85,13 @@ namespace PharmaGo.Test.WebApi.Test
             //Arrange
             _reservaManagerMock
                 .Setup(service => service.CreateReserva(
-                    resevaModel.DrugsReserved,
-                    resevaModel.PharmacyName))
+                    reservaModel.DrugsReserved,
+                    reservaModel.PharmacyName))
                 .Returns(reserva);
 
             //Act
-            var result = _reservaController.CreateReserva(resevaModel);
+            var result = _reservaController.CreateReserva(
+                    reservaModel); 
 
             //Assert
             var objectResult = result as OkObjectResult;
@@ -105,6 +106,74 @@ namespace PharmaGo.Test.WebApi.Test
             {
                 Assert.AreEqual(reservaModel.DrugsReserved[i].DrugName, value.DrugsReserved[i].DrugName);
                 Assert.AreEqual(reservaModel.DrugsReserved[i].DrugQuantity, value.DrugsReserved[i].DrugQuantity);
+            }
+        }
+
+        public class ReservaModel
+        {
+            public string PharmacyName { get; set; }
+            public List<ReservaDrugModel> DrugsReserved { get; set; }
+        }
+        public class ReservaDrugModel
+        {
+            public string DrugName { get; set; }
+            public int DrugQuantity { get; set; }
+        }
+
+        public class Reserva
+        {
+            public int Id { get; set; }
+            public string PharmacyName { get; set; }
+            public Pharmacy Pharmacy { get; set; }
+            public ICollection<ReservaDrug> Drugs { get; set; }
+        }
+
+        public class ReservaDrug
+        {
+            public int DrugId { get; set; }
+            public Drug Drug { get; set; }
+            public int Quantity { get; set; }
+        }
+
+        public class ReservaModelResponse
+        {
+            public string PharmacyName { get; set; }
+            public List<ReservaDrugModelResponse> DrugsReserved { get; set; }
+        }
+
+        public class ReservaDrugModelResponse
+        {
+            public string DrugName { get; set; }
+            public int DrugQuantity { get; set; }
+        }
+
+        public interface IReservaManager
+        {
+            Reserva CreateReserva(List<ReservaDrugModel> drugsReserved, string pharmacyName);
+        }
+
+        public class ReservaController : ControllerBase
+        {
+            private readonly IReservaManager _reservaManager;
+            public ReservaController(IReservaManager reservaManager)
+            {
+                _reservaManager = reservaManager;
+            }
+
+            [HttpPost]
+            public IActionResult CreateReserva(ReservaModel reservaModel)
+            {
+                var reserva = _reservaManager.CreateReserva(reservaModel.DrugsReserved, reservaModel.PharmacyName);
+                var response = new ReservaModelResponse
+                {
+                    PharmacyName = reserva.PharmacyName,
+                    DrugsReserved = reserva.Drugs.Select(d => new ReservaDrugModelResponse
+                    {
+                        DrugName = d.Drug.Name,
+                        DrugQuantity = d.Quantity
+                    }).ToList()
+                };
+                return Ok(response);
             }
         }
     }
