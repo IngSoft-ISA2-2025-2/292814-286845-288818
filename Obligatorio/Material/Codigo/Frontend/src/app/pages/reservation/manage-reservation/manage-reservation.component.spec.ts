@@ -92,4 +92,28 @@ describe('ManageReservationComponent', () => {
     expect(errorMsg).toBeTruthy();
     expect(errorMsg.nativeElement.textContent).toContain('Debe ingresar un email y secret para consultar reservas.');
   });
+
+  it('debería mostrar mensaje y listado vacío si el usuario no tiene reservas', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'miSecret123';
+    component.reservas = []; // Simula que no hay reservas
+    fixture.detectChanges();
+
+    // Act: simula click en el botón de consultar reservas
+    const consultarBtn = fixture.debugElement.query(By.css('[data-cy="consultar-reservas-btn"]'));
+    consultarBtn.triggerEventHandler('click');
+    fixture.detectChanges();
+
+    // Assert: verifica que el listado está vacío y se muestra el mensaje
+    const listadoReservas = fixture.debugElement.query(By.css('[data-cy="listado-reservas"]'));
+    expect(listadoReservas).toBeTruthy();
+
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItems.length).toBe(0);
+
+    const mensajeVacio = fixture.debugElement.query(By.css('[data-cy="mensaje-sin-reservas"]'));
+    expect(mensajeVacio).toBeTruthy();
+    expect(mensajeVacio.nativeElement.textContent).toContain('No tienes reservas creadas');
+  });
 });
