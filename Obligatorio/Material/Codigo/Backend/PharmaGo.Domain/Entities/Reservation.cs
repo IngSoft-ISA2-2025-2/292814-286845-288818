@@ -14,6 +14,7 @@ namespace PharmaGo.Domain.Entities
         public string Email { get; set; }
         public string Secret { get; set; }
         public ICollection<ReservationDrug> ReservationDrugs { get; set; }
+        public string Status { get; set; }
     }
 
     public class ReservationDrug

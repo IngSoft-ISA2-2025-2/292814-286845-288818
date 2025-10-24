@@ -112,6 +112,11 @@ namespace PharmaGo.Test.BusinessLogic.Test
 
             var reservationReturned = _reservationManager.CreateReservation(resevation);
             Assert.AreNotEqual(reservationReturned.Id, 1);
+            Assert.AreEqual(reservationReturned.Email, resevation.Email);
+            Assert.AreEqual(reservationReturned.Secret, resevation.Secret);
+            Assert.AreEqual(reservationReturned.PharmacyName, resevation.PharmacyName);
+            Assert.AreEqual(reservationReturned.ReservationDrugs.Count, resevation.ReservationDrugs.Count);
+            Assert.AreEqual(reservationReturned.Status, "Pending");
 
         }
 

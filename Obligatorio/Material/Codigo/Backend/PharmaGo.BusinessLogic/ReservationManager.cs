@@ -53,6 +53,8 @@ namespace PharmaGo.BusinessLogic
                 }
             }
 
+            reservation.Status = "Pending";
+
             reservationRepository.InsertOne(reservation);
             reservationRepository.Save();
             return reservation;
