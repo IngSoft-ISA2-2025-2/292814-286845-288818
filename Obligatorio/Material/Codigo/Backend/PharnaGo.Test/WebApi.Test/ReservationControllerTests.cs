@@ -228,5 +228,50 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.IsNotNull(objectResult);
             Assert.AreEqual(200, objectResult.StatusCode);
         }
+
+        [TestMethod]
+        public void CancelReservation_WithValidEmailAndSecret_ReturnsOkAndCancelsReservation()
+        {
+            // Arrange
+            string email = "cliente@example.com";
+            string secret = "abc123";
+
+            var cancelledReservation = new Reservation
+            {
+                Id = 1,
+                Email = email,
+                Secret = secret,
+                PharmacyName = "Farmashop",
+                Status = "Cancelled",
+                ReservationDrugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug
+                    {
+                        DrugId = 1,
+                        Drug = drugModel,
+                        Quantity = 2
+                    }
+                }
+            };
+
+            _reservationManagerMock
+                .Setup(service => service.CancelReservation(email, secret))
+                .Returns(cancelledReservation);
+
+            // Act
+            var result = _reservationController.CancelReservation(email, secret);
+
+            // Assert
+            var objectResult = result as OkObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(200, objectResult.StatusCode);
+
+            var value = objectResult.Value as ReservationModelResponse;
+            Assert.IsNotNull(value);
+            Assert.AreEqual("Farmashop", value.PharmacyName);
+            Assert.AreEqual(1, value.DrugsReserved.Count);
+            Assert.AreEqual("Aspirina", value.DrugsReserved[0].DrugName);
+            Assert.AreEqual(2, value.DrugsReserved[0].DrugQuantity);
+        }
     }
 }
