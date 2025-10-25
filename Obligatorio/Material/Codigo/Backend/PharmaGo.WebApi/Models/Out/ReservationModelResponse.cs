@@ -12,6 +12,7 @@ namespace PharmaGo.WebApi.Models.Out
             return new ReservationModelResponse
             {
                 PharmacyName = reserva.PharmacyName,
+                PublicKey = reserva.PublicKey,
                 DrugsReserved = reserva.Drugs.Select(d => new ReservationDrugModelResponse
                 {
                     DrugName = d.Drug.Name,
