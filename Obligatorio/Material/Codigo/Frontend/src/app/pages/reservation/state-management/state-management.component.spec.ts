@@ -57,4 +57,38 @@ describe('StateManagementComponent', () => {
     const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
     expect(estadoElement.nativeElement.textContent).toContain('Pendiente');
   });
+
+  it('debería mostrar una reserva en estado "Confirmada" con ID de referencia y fecha de confirmación', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'secret123';
+
+    const reservaConfirmada = {
+      id: 42,
+      reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
+      pharmacyName: 'Farmashop',
+      status: 'Confirmada',
+      referencia: 'ABC123',
+      fechaConfirmacion: '2023-10-10T12:00:00Z'
+    };
+    mockReservationService.getReservations.and.returnValue(of([reservaConfirmada]));
+
+    // Act
+    component.consultarReservas();
+    fixture.detectChanges();
+
+    // Assert
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItem).toBeTruthy();
+
+    const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
+    expect(estadoElement.nativeElement.textContent).toContain('Confirmada');
+
+    const referenciaElement = reservaItem.query(By.css('[data-cy="id-referencia"]'));
+    expect(referenciaElement.nativeElement.textContent).toContain('ABC123');
+
+    const fechaElement = reservaItem.query(By.css('[data-cy="fecha-confirmacion"]'));
+    expect(fechaElement.nativeElement.textContent).toContain('2023-10-10');
+  });
+  
 });
