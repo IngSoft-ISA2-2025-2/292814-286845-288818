@@ -311,5 +311,43 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(fechaLimite, reserva.FechaLimiteConfirmacion);
             Assert.IsNull(reserva.IdReferencia);
         }
+
+        [TestMethod]
+        public void GetReservationsByUser_Confirmada_ReturnsReservationWithIdReferencia()
+        {
+            // Arrange
+            string email = "usuario@test.com";
+            string secret = "miSecret123";
+            var idReferencia = "ABC12345";
+
+            var reservas = new List<Reservation>
+            {
+                new Reservation
+                {
+                    Id = 2,
+                    Email = email,
+                    Secret = secret,
+                    Status = ReservationStatus.Confirmada,
+                    IdReferencia = idReferencia
+                }
+            };
+
+            _reservationRepository
+                .Setup(r => r.GetAllByExpression(
+                    It.Is<Expression<Func<Reservation, bool>>>(expr =>
+                        expr.Compile().Invoke(reservas[0])
+                    )))
+                .Returns(reservas);
+
+            // Act
+            var result = _reservationManager.GetReservationsByUser(email, secret);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Count);
+            var reserva = result[0];
+            Assert.AreEqual(ReservationStatus.Confirmada, reserva.Status);
+            Assert.AreEqual(idReferencia, reserva.IdReferencia);
+        }
     }
 }
