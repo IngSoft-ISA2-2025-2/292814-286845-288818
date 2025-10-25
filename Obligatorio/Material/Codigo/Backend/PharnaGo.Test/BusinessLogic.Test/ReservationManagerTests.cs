@@ -16,17 +16,17 @@ namespace PharmaGo.Test.BusinessLogic.Test
     [TestClass]
     public class ReservationManagerTests
     {
-    private Mock<IRepository<Reservation>> _reservationRepository;
-    private Mock<IRepository<Pharmacy>> _pharmacyRepository;
-    private Mock<IRepository<Drug>> _drugRepository;
-    private Mock<IDrugManager> _drugManager = new Mock<IDrugManager>();
-    private ReservationManager _reservationManager;
-    private List<Reservation> _reservations;
-    private Reservation _reservation;
-    private Pharmacy _pharmacy;
-    private Drug drugModel;
-    private Drug _drug;
-    private const Reservation nullReservation = null;
+        private Mock<IRepository<Reservation>> _reservationRepository;
+        private Mock<IRepository<Pharmacy>> _pharmacyRepository;
+        private Mock<IRepository<Drug>> _drugRepository;
+        private Mock<IDrugManager> _drugManager = new Mock<IDrugManager>();
+        private ReservationManager _reservationManager;
+        private List<Reservation> _reservations;
+        private Reservation _reservation;
+        private Pharmacy _pharmacy;
+        private Drug drugModel;
+        private Drug _drug;
+        private const Reservation nullReservation = null;
 
         [TestInitialize]
         public void InitTest()
@@ -395,12 +395,12 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 }
             };
 
-             _reservationRepository
-                .Setup(r => r.GetAllByExpression(
-                    It.Is<Expression<Func<Reservation, bool>>>(expr =>
-                        expr.Compile().Invoke(reservations[0]) // Verifica que el predicado funcione para al menos una reserva válida
-                    )))
-                .Returns(reservations);
+            _reservationRepository
+               .Setup(r => r.GetAllByExpression(
+                   It.Is<Expression<Func<Reservation, bool>>>(expr =>
+                       expr.Compile().Invoke(reservations[0]) // Verifica que el predicado funcione para al menos una reserva válida
+                   )))
+               .Returns(reservations);
 
             // Act
             var result = _reservationManager.GetReservationsByUser(email, secret);
@@ -467,7 +467,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                         expr.Compile().Invoke(_reservations[0])
                 )))
                 .Returns(_reservations);
-                
+
             // Act & Assert
             var ex = Assert.ThrowsException<ArgumentException>(() =>
                 _reservationManager.GetReservationsByUser(email, secretIncorrecto)
@@ -552,7 +552,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(ReservationStatus.Confirmada, reserva.Status);
             Assert.AreEqual(idReferencia, reserva.IdReferencia);
         }
-        
+
         [TestMethod]
         public void GetReservationsByUser_Expirada_ReturnsReservationExpiradaWithIndicaciones()
         {
@@ -666,6 +666,36 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(ReservationStatus.Retirada, reserva.Status);
             Assert.AreEqual(fechaRetiro, reserva.FechaRetiro);
         }
+
+        #region Validate Reservation Tests
+        [TestMethod]
+        public void ValidateReservation_Ok()
+        {
+            // Arrange
+            string publicKey = "validPublicKey";
+            var reservation = _reservation;
+
+            _reservationRepository
+                .Setup(r => r.Exists(r => r.PublicKey == r.PublicKey))
+                .Returns(true);
+
+            _reservationRepository
+                .Setup(r => r.GetOneByExpression(r => r.PublicKey == r.PublicKey))
+                .Returns(reservation);
+
+            // Act
+            var result = _reservationManager.ValidateReservation(publicKey);
+
+            // Assert
+            _reservationRepository.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(reservation.Email, result.Email);
+            Assert.AreEqual(reservation.Secret, result.Secret);
+            Assert.AreEqual(reservation.PharmacyName, result.PharmacyName);
+            Assert.AreEqual(reservation.Drugs.Count, result.Drugs.Count);
+        }
+
+        #endregion Validate Reservation Tests
     }
 }
         
