@@ -91,4 +91,35 @@ describe('StateManagementComponent', () => {
     expect(fechaElement.nativeElement.textContent).toContain('2023-10-10');
   });
   
+  it('debería mostrar una reserva en estado "Expirada" con mensaje y fecha de expiración', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'secret123';
+
+    const reservaExpirada = {
+      id: 99,
+      reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
+      pharmacyName: 'Farmashop',
+      status: 'Expirada',
+      fechaExpiracion: '2023-10-15T18:00:00Z'
+    };
+    mockReservationService.getReservations.and.returnValue(of([reservaExpirada]));
+
+    // Act
+    component.consultarReservas();
+    fixture.detectChanges();
+
+    // Assert
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItem).toBeTruthy();
+
+    const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
+    expect(estadoElement.nativeElement.textContent).toContain('Expirada');
+
+    const mensajeElement = reservaItem.query(By.css('[data-cy="mensaje-expirada"]'));
+    expect(mensajeElement.nativeElement.textContent).toContain('Esta reserva ha expirado');
+
+    const fechaElement = reservaItem.query(By.css('[data-cy="fecha-expiracion"]'));
+    expect(fechaElement.nativeElement.textContent).toContain('2023-10-15');
+  });
 });
