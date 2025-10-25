@@ -21,8 +21,17 @@ namespace PharmaGo.BusinessLogic
             {
                 throw new ArgumentException("Debe ingresar un email y secret para consultar reservas.");
             }
-            var reservations = _reservationRepository.GetAllByExpression(r => r.Email == email && r.Secret == secret);
-            return reservations.ToList();
+
+            var reservations = _reservationRepository.GetAllByExpression(r => r.Email == email);
+
+            // Si hay reservas para el email pero ninguna coincide con el secret, lanzar excepción
+            if (reservations.Any() && !reservations.Any(r => r.Secret == secret))
+            {
+                throw new ArgumentException("El secret no coincide con el registrado para este email");
+            }
+
+            // Solo devolver reservas que coincidan con email y secret
+            return reservations.Where(r => r.Secret == secret).ToList();
         }
     }
 }
