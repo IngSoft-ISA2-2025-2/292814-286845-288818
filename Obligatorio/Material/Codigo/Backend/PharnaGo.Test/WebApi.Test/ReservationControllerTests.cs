@@ -90,6 +90,7 @@ namespace PharmaGo.Test.WebApi.Test
                     Id = 1,
                     PharmacyName = "Farmashop",
                     Pharmacy = _pharmacy,
+                    PublicKey = "publicKeySample",
                     Drugs = new List<ReservationDrug>
                     {
                         new ReservationDrug
@@ -137,6 +138,7 @@ namespace PharmaGo.Test.WebApi.Test
                 Id = 1,
                 PharmacyName = "Farmashop",
                 Pharmacy = pharmacyModel,
+                PublicKey = "publicKeySample",
                 Drugs = new List<ReservationDrug>
                 {
                     new ReservationDrug
@@ -178,6 +180,7 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual(200, statusCode);
             Assert.AreEqual(reservationModel.PharmacyName, value.PharmacyName);
             Assert.AreEqual(reservationModel.DrugsReserved.Count, value.DrugsReserved.Count);
+            Assert.IsNotNull(value.PublicKey);
             for (int i = 0; i < reservationModel.DrugsReserved.Count; i++)
             {
                 Assert.AreEqual(reservationModel.DrugsReserved[i].DrugName, value.DrugsReserved[i].DrugName);

@@ -57,12 +57,28 @@ namespace PharmaGo.BusinessLogic
                 drug.Stock -= reservationDrug.Quantity;
                 drugRepository.UpdateOne(drug);
             }
+            var (publicKey, privateKey) = KeyPairGenerator.GenerateKeyPair();
+            reservation.PublicKey = publicKey;
+            reservation.PrivateKey = privateKey;
 
             reservation.Status = ReservationStatus.Pendiente;
 
             reservationRepository.InsertOne(reservation);
             reservationRepository.Save();
             return reservation;
+        }
+
+        private static class KeyPairGenerator
+        {
+            public static (string publicKey, string privateKey) GenerateKeyPair()
+            {
+                using (var rsa = new System.Security.Cryptography.RSACryptoServiceProvider(2048))
+                {
+                    string publicKey = Convert.ToBase64String(rsa.ExportRSAPublicKey());
+                    string privateKey = Convert.ToBase64String(rsa.ExportRSAPrivateKey());
+                    return (publicKey, privateKey);
+                }
+            }
         }
 
         public List<Reservation> GetReservationsByUser(string email, string secret)
