@@ -195,4 +195,24 @@ describe('ManageReservationComponent', () => {
     const estadoElement = fixture.debugElement.query(By.css('[data-cy="reserva-estado"]'));
     expect(estadoElement.nativeElement.textContent).toContain(estadoFiltro);
   });
+
+  it('debería mostrar un error si el secret es incorrecto para el email ingresado', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'secretIncorrecto';
+    // Simula que el backend responde con error de secret incorrecto
+    component.error = 'El secret no coincide con el registrado para este email';
+    fixture.detectChanges();
+
+    // Act: simula click en el botón de consultar reservas
+    const consultarBtn = fixture.debugElement.query(By.css('[data-cy="consultar-reservas-btn"]'));
+    consultarBtn.triggerEventHandler('click');
+    fixture.detectChanges();
+
+    // Assert: verifica que se muestre el mensaje de error
+    const errorMsg = fixture.debugElement.query(By.css('[data-cy="error-message"]'));
+    expect(errorMsg).toBeTruthy();
+    expect(errorMsg.nativeElement.textContent).toContain('El secret no coincide con el registrado para este email');
+  });
+  
 });
