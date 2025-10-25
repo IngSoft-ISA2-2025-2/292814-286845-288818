@@ -34,8 +34,17 @@ namespace PharmaGo.WebApi.Controllers
         [HttpDelete]
         public IActionResult CancelReservation(string email, string secret)
         {
-            _reservationManager.CancelReservation(email, secret);
-            return Ok();
+            var cancelledReservation = _reservationManager.CancelReservation(email, secret);
+            var response = new ReservationModelResponse
+            {
+                PharmacyName = cancelledReservation.PharmacyName,
+                DrugsReserved = cancelledReservation.ReservationDrugs.Select(d => new ReservationDrugModelResponse
+                {
+                    DrugName = d.Drug.Name,
+                    DrugQuantity = d.Quantity
+                }).ToList()
+            };
+            return Ok(response);
         }
     }
 }
