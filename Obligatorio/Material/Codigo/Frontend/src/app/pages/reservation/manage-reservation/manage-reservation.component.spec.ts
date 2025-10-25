@@ -407,4 +407,44 @@ describe('ManageReservationComponent', () => {
     expect(fechaRetiro.nativeElement.textContent).toContain('2023-10-12');
   });
 
+  it('debería ordenar las reservas por fecha de creación descendente', () => {
+    component.reservas = [
+      { id: 1, fechaCreacion: '2023-10-01T10:00:00Z' },
+      { id: 2, fechaCreacion: '2023-10-03T10:00:00Z' },
+      { id: 3, fechaCreacion: '2023-10-02T10:00:00Z' }
+    ];
+    // Act
+    component.ordenarPorFechaDesc();
+    // Assert
+    expect(component.reservas[0].id).toBe(2);
+    expect(component.reservas[1].id).toBe(3);
+    expect(component.reservas[2].id).toBe(1);
+  });
+
+  it('debería filtrar las reservas por nombre de medicamento', () => {
+    component.reservas = [
+      { id: 1, medicamentos: [{ nombre: 'Paracetamol' }] },
+      { id: 2, medicamentos: [{ nombre: 'Ibuprofeno' }] }
+    ];
+    component.filtroMedicamento = 'Paracetamol';
+    // Act
+    const filtradas = component.reservasFiltradasPorMedicamento();
+    // Assert
+    expect(filtradas.length).toBe(1);
+    expect(filtradas[0].id).toBe(1);
+  });
+
+  it('debería filtrar las reservas por nombre de farmacia', () => {
+    component.reservas = [
+      { id: 1, farmacia: 'Farmacia Central' },
+      { id: 2, farmacia: 'Farmashop' }
+    ];
+    component.filtroFarmacia = 'Farmacia Central';
+    // Act
+    const filtradas = component.reservasFiltradasPorFarmacia();
+    // Assert
+    expect(filtradas.length).toBe(1);
+    expect(filtradas[0].id).toBe(1);
+  });
+
 });
