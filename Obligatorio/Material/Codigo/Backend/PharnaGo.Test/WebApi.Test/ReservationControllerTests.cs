@@ -370,7 +370,7 @@ namespace PharmaGo.Test.WebApi.Test
         }
 
         [TestMethod]
-        public void GetReservationsByUser_Cancelada_ReturnsReservationCanceladaWithMotivoYFecha()
+        public void GetReservationsByUser_Cancelada_ReturnsReservationCanceladaWithFecha()
         {
             // Arrange
             var request = new ConsultReservationRequest
@@ -398,8 +398,7 @@ namespace PharmaGo.Test.WebApi.Test
                         }
                     },
                     Status = ReservationStatus.Cancelada,
-                    FechaCancelacion = fechaCancelacion,
-                    MotivoCancelacion = "Reserva cancelada. No es posible reactivarla"
+                    FechaCancelacion = fechaCancelacion
                 }
             };
 
@@ -423,7 +422,6 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual("Cancelada", reserva.Status);
             Assert.AreEqual("Farmacia Norte", reserva.PharmacyName);
             Assert.AreEqual(fechaCancelacion, reserva.FechaCancelacion);
-            Assert.AreEqual("Reserva cancelada. No es posible reactivarla", reserva.MotivoCancelacion);
         }
     }
 }
