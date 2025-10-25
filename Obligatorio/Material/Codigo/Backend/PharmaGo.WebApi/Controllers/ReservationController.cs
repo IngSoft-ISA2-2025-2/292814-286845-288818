@@ -30,7 +30,8 @@ namespace PharmaGo.WebApi.Controllers
                 {
                     DrugName = d.Drug.Name,
                     DrugQuantity = d.Quantity
-                }).ToList()
+                }).ToList(),
+                Status = reserva.Status.ToString()
             };
             return Ok(response);
         }
