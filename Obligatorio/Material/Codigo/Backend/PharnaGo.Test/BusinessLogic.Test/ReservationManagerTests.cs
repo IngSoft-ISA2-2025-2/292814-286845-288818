@@ -733,7 +733,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                _reservationManager.ValidateReservation(publicKey));
 
             Assert.AreEqual(
-                "The reservation with the provided public key has expired.",
+                "The reservation has expired and cannot be validated.",
                 ex.Message
             );
         }

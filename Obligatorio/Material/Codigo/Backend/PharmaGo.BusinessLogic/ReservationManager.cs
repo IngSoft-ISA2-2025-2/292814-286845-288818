@@ -85,7 +85,13 @@ namespace PharmaGo.BusinessLogic
         {
             if(!reservationRepository.Exists(r=> r.PublicKey == publicKey))
                 throw new ResourceNotFoundException("No reservation found with the provided public key.");
-            return reservationRepository.GetOneByExpression(r => r.PublicKey == publicKey);
+
+            var reservation = reservationRepository.GetOneByExpression(r => r.PublicKey == publicKey);
+
+            if(reservation.FechaExpiracion.HasValue && reservation.FechaExpiracion.Value < DateTime.Now)
+                throw new InvalidResourceException("The reservation has expired and cannot be validated.");
+
+            return reservation;
         }
 
         public List<Reservation> GetReservationsByUser(string email, string secret)
