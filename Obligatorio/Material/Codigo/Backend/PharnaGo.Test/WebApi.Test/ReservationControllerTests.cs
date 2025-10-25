@@ -415,9 +415,10 @@ namespace PharmaGo.Test.WebApi.Test
         }
 
         [TestMethod]
-        public void GetReservationsByUser_Expirada_ReturnsReservationExpiradaWithIndicaciones()
+        public void GetReservationsByUser_Expirada_ReturnsReservationWithMensajeYFechaExpiracion()
         {
             // Arrange
+            // Abarca tambien para gestion de estados
             var request = new ConsultReservationRequest
             {
                 Email = "usuario@test.com",
