@@ -295,5 +295,37 @@ namespace PharmaGo.Test.BusinessLogic.Test
             );
             Assert.AreEqual("Se requiere un correo válido", ex.Message);
         }
+
+        [TestMethod]
+        public void CancelReservation_WithExpiredReservation_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            string email = "vencida@example.com";
+            string secret = "oldSecret";
+
+            var expiredReservation = new Reservation
+            {
+                Id = 1,
+                Email = email,
+                Secret = secret,
+                PharmacyName = "Farmashop",
+                Status = "Expired",
+                ReservationDrugs = new List<ReservationDrug>()
+            };
+
+            _reservationRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(false);
+
+            _reservationRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(expiredReservation);
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<InvalidOperationException>(() =>
+                _reservationManager.CancelReservation(email, secret)
+            );
+            Assert.AreEqual("No se puede cancelar una reserva expirada", ex.Message);
+        }
     }
 }
