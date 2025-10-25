@@ -236,5 +236,27 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 ex.Message
             );
         }
+
+        // ============================
+        // TDD RED: Cancel Reservation - Escenario 1: No existe reserva
+        // ============================
+
+        [TestMethod]
+        public void CancelReservation_WithNonExistentReservation_ThrowsKeyNotFoundException()
+        {
+            // Arrange
+            string email = "sinreserva@example.com";
+            string secret = "cualquiera";
+
+            _reservationRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns((Reservation)null);
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<KeyNotFoundException>(() =>
+                _reservationManager.CancelReservation(email, secret)
+            );
+            Assert.AreEqual("No existe una reserva asociada a ese correo", ex.Message);
+        }
     }
 }
