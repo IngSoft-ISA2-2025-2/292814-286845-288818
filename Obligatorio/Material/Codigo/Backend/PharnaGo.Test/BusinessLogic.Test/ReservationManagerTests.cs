@@ -695,6 +695,25 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(reservation.Drugs.Count, result.Drugs.Count);
         }
 
+        [TestMethod]
+        public void ValidateReservation_ConClaveIncorrecta_ThrowsException()
+        {
+            string publicKey = "validPublicKey";
+            var reservation = _reservation;
+
+            _reservationRepository
+                .Setup(r => r.Exists(r => r.PublicKey == publicKey))
+                .Returns(false);
+
+            var ex = Assert.ThrowsException<ResourceNotFoundException>(() =>
+               _reservationManager.ValidateReservation(publicKey));
+
+            Assert.AreEqual(
+                "Clave incorrecta.",
+                ex.Message
+            );
+        }
+
         #endregion Validate Reservation Tests
     }
 }
