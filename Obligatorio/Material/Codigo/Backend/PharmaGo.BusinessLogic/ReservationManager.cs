@@ -76,6 +76,9 @@ namespace PharmaGo.BusinessLogic
             if (reservation == null)
                 throw new KeyNotFoundException("No existe una reserva asociada a ese correo");
 
+            if (reservation.Status == "Expired")
+                throw new InvalidOperationException("No se puede cancelar una reserva expirada");
+
             reservation.Status = "Cancelled";
             reservationRepository.UpdateOne(reservation);
             reservationRepository.Save();
