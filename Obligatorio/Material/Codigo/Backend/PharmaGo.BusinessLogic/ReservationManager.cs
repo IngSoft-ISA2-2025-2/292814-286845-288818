@@ -57,11 +57,45 @@ namespace PharmaGo.BusinessLogic
                 drug.Stock -= reservationDrug.Quantity;
                 drugRepository.UpdateOne(drug);
             }
+            var (publicKey, privateKey) = KeyPairGenerator.GenerateKeyPair();
+            reservation.PublicKey = publicKey;
+            reservation.PrivateKey = privateKey;
 
             reservation.Status = ReservationStatus.Pendiente;
 
             reservationRepository.InsertOne(reservation);
             reservationRepository.Save();
+            return reservation;
+        }
+
+        private static class KeyPairGenerator
+        {
+            public static (string publicKey, string privateKey) GenerateKeyPair()
+            {
+                using (var rsa = new System.Security.Cryptography.RSACryptoServiceProvider(2048))
+                {
+                    string publicKey = Convert.ToBase64String(rsa.ExportRSAPublicKey());
+                    string privateKey = Convert.ToBase64String(rsa.ExportRSAPrivateKey());
+                    return (publicKey, privateKey);
+                }
+            }
+        }
+
+        public Reservation ValidateReservation(string publicKey)
+        {
+            if(!reservationRepository.Exists(r=> r.PublicKey == publicKey))
+                throw new ResourceNotFoundException("No reservation found with the provided public key.");
+
+            var reservation = reservationRepository.GetOneByExpression(r => r.PublicKey == publicKey);
+
+            if(reservation.FechaExpiracion.HasValue && reservation.FechaExpiracion.Value < DateTime.Now)
+                throw new InvalidResourceException("The reservation has expired and cannot be validated.");
+
+            if(reservation.Status != ReservationStatus.Confirmada)
+                throw new InvalidResourceException("The reservation is not confirmed.");
+
+            reservation.Status = ReservationStatus.Retirada;
+            reservationRepository.UpdateOne(reservation);
             return reservation;
         }
 

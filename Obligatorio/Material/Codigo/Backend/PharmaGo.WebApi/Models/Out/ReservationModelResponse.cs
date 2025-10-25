@@ -3,6 +3,7 @@ namespace PharmaGo.WebApi.Models.Out
     public class ReservationModelResponse
     {
         public string PharmacyName { get; set; }
+        public string PublicKey { get; set; }
         public List<ReservationDrugModelResponse> DrugsReserved { get; set; }
         public string Status { get; set; }
 

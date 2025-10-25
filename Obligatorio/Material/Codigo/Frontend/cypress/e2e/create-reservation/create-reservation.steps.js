@@ -18,6 +18,8 @@ Given('un email para reserva {string}', (email) => {
 });
 
 Given('un secret para reserva {string}', (secret) => {
+  // Esperar a que el campo esté habilitado antes de intentar escribir
+  cy.get('[data-cy="secret-input"]').should('not.be.disabled');
   cy.get('[data-cy="secret-input"]').clear();
   if (secret) {
     cy.get('[data-cy="secret-input"]').type(secret);

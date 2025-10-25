@@ -21,7 +21,7 @@ namespace PharmaGo.Test.WebApi.Test
         private Pharmacy _pharmacy;
         private Drug _drug;
         private ReservationModel reservationModel;
-        private Reservation reservation;
+        private Reservation _reservation;
         private Pharmacy pharmacyModel;
         private Drug drugModel;
 
@@ -90,6 +90,7 @@ namespace PharmaGo.Test.WebApi.Test
                     Id = 1,
                     PharmacyName = "Farmashop",
                     Pharmacy = _pharmacy,
+                    PublicKey = "publicKeySample",
                     Drugs = new List<ReservationDrug>
                     {
                         new ReservationDrug
@@ -132,11 +133,12 @@ namespace PharmaGo.Test.WebApi.Test
                 PharmacyName = "Farmashop"
             };
 
-            reservation = new Reservation()
+            _reservation = new Reservation()
             {
                 Id = 1,
                 PharmacyName = "Farmashop",
                 Pharmacy = pharmacyModel,
+                PublicKey = "publicKeySample",
                 Drugs = new List<ReservationDrug>
                 {
                     new ReservationDrug
@@ -155,13 +157,15 @@ namespace PharmaGo.Test.WebApi.Test
             _reservationManagerMock.VerifyAll();
         }
 
+        #region Create Reservation Tests
+
         [TestMethod]
         public void Create_Reservation_Ok()
         {
             //Arrange
             _reservationManagerMock
                 .Setup(service => service.CreateReservation(It.IsAny<Reservation>()))
-                .Returns(reservation);
+                .Returns(_reservation);
 
             //Act
             var result = _reservationController.CreateReservation(
@@ -176,6 +180,7 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual(200, statusCode);
             Assert.AreEqual(reservationModel.PharmacyName, value.PharmacyName);
             Assert.AreEqual(reservationModel.DrugsReserved.Count, value.DrugsReserved.Count);
+            Assert.IsNotNull(value.PublicKey);
             for (int i = 0; i < reservationModel.DrugsReserved.Count; i++)
             {
                 Assert.AreEqual(reservationModel.DrugsReserved[i].DrugName, value.DrugsReserved[i].DrugName);
@@ -198,6 +203,10 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual("User is not authorized to create a reservation.", ex.Message);
         }
 
+        #endregion Create Reservation Tests
+
+
+        #region Get Reservations Tests
         [TestMethod]
         public void GetReservationsByUser_Ok()
         {
@@ -224,8 +233,8 @@ namespace PharmaGo.Test.WebApi.Test
             {
                 Assert.AreEqual(_reservations[i].PharmacyName, value[i].PharmacyName);
                 Assert.AreEqual(_reservations[i].Drugs.Count, value[i].ReservedDrugs.Count);
-                Assert.AreEqual(_reservations[i].Status.ToString(), value[i].Status); 
-                
+                Assert.AreEqual(_reservations[i].Status.ToString(), value[i].Status);
+
                 var reservationDrugs = _reservations[i].Drugs.ToList();
 
                 for (int j = 0; j < reservationDrugs.Count; j++)
@@ -756,5 +765,33 @@ namespace PharmaGo.Test.WebApi.Test
                     Assert.IsNull(value[i].IdReferencia, "La reserva pendiente no debe tener IdReferencia");
             }
         }
+        #endregion Get Reservations Tests
+
+        #region Validate Reservation Tests
+        [TestMethod]
+        public void ValidateReservation_Ok()
+        {
+            var publicKey = "publicKeySample";
+            var reservation = _reservation;
+            _reservationManagerMock
+                .Setup(service => service.ValidateReservation(publicKey))
+                .Returns(reservation);
+
+            var result = _reservationController.ValidateReservation(publicKey);
+
+            var objectResult = result as OkObjectResult;
+            var statusCode = objectResult.StatusCode;
+            var value = objectResult.Value as ReservationModelResponse;
+            Assert.AreEqual(200, statusCode);
+            Assert.AreEqual(reservationModel.PharmacyName, value.PharmacyName);
+            Assert.AreEqual(reservationModel.DrugsReserved.Count, value.DrugsReserved.Count);
+            Assert.IsNotNull(value.PublicKey);
+            for (int i = 0; i < reservationModel.DrugsReserved.Count; i++)
+            {
+                Assert.AreEqual(reservationModel.DrugsReserved[i].DrugName, value.DrugsReserved[i].DrugName);
+                Assert.AreEqual(reservationModel.DrugsReserved[i].DrugQuantity, value.DrugsReserved[i].DrugQuantity);
+            }
+        }
+        #endregion Validate Reservation Tests
     }
 }
