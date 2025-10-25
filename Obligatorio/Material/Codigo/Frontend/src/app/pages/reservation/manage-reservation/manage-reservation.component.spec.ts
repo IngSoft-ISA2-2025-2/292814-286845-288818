@@ -370,4 +370,41 @@ describe('ManageReservationComponent', () => {
     expect(fechaCancelacion.nativeElement.textContent).toContain('2023-10-08');
   });
 
+  it('debería mostrar correctamente una reserva retirada con mensaje y fecha de retiro', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'miSecret123';
+    component.reservas = [
+      {
+        id: 5,
+        medicamentos: [{ nombre: 'Diclofenac' }],
+        farmacia: 'Farmacia Este',
+        estado: 'Retirada',
+        fechaCreacion: '2023-10-05T14:00:00Z',
+        fechaRetiro: '2023-10-12T09:30:00Z'
+      }
+    ];
+    fixture.detectChanges();
+
+    // Act: simula click en el botón de consultar reservas
+    const consultarBtn = fixture.debugElement.query(By.css('[data-cy="consultar-reservas-btn"]'));
+    consultarBtn.triggerEventHandler('click');
+    fixture.detectChanges();
+
+    // Assert: verifica que la reserva retirada se muestra correctamente
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItem).toBeTruthy();
+
+    const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
+    expect(estadoElement.nativeElement.textContent).toContain('Retirada');
+
+    const mensajeRetirada = reservaItem.query(By.css('[data-cy="mensaje-retirada"]'));
+    expect(mensajeRetirada).toBeTruthy();
+    expect(mensajeRetirada.nativeElement.textContent).toContain('Reserva retirada exitosamente');
+
+    const fechaRetiro = reservaItem.query(By.css('[data-cy="fecha-retiro"]'));
+    expect(fechaRetiro).toBeTruthy();
+    expect(fechaRetiro.nativeElement.textContent).toContain('2023-10-12');
+  });
+
 });
