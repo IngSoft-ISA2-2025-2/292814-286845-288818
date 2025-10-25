@@ -94,6 +94,8 @@ namespace PharmaGo.BusinessLogic
             if(reservation.Status == ReservationStatus.Cancelada)
                 throw new InvalidResourceException("The reservation has been canceled and cannot be validated.");
 
+            reservation.Status = ReservationStatus.Confirmada;
+            reservationRepository.UpdateOne(reservation);
             return reservation;
         }
 

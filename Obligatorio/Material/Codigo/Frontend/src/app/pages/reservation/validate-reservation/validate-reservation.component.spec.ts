@@ -84,22 +84,6 @@ describe('ValidateReservationComponent', () => {
     expect(errorCodigoDiv.nativeElement.textContent).toContain('404');
   });
 
-  it('should show bloqueo temporal message when bloqueado is true', () => {
-    component.bloqueado = true;
-    component.errorMessage = 'Demasiados intentos fallidos. Por favor, intente nuevamente en 15 minutos.';
-    fixture.detectChanges();
-    
-    expect(fixture.debugElement.query(By.css('[data-cy="bloqueo-temporal"]'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('[data-cy="error-mensaje"]'))).not.toBeNull();
-  });
-
-  it('should disable validar button when bloqueado is true', () => {
-    component.bloqueado = true;
-    fixture.detectChanges();
-    const validarBtn = fixture.debugElement.query(By.css('[data-cy="validar-btn"]'));
-    expect(validarBtn.nativeElement.disabled).toBeTruthy();
-  });
-
   it('should show clave invalidada message when claveInvalidada is true', () => {
     component.claveInvalidada = true;
     fixture.detectChanges();

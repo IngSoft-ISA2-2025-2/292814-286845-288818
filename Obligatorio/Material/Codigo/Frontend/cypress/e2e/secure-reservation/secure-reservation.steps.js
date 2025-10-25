@@ -62,10 +62,6 @@ Given('existe una reserva confirmada con clave pública {string}', (clavePublica
   cy.wrap({ clavePublica, estado: 'Confirmada' }).as('reservaConfirmada');
 });
 
-Given('tengo habilitada la protección contra intentos de fuerza bruta', () => {
-  cy.wrap({ proteccionActiva: true, intentos: 0 }).as('proteccionBruto');
-});
-
 Given('un usuario con email {string} y secret {string}', (email, secret) => {
   cy.get('[data-cy="email-input"]').clear().type(email);
   cy.get('[data-cy="secret-input"]').clear().type(secret);
@@ -161,52 +157,6 @@ When('confirmo la entrega del medicamento', () => {
   cy.get('[data-cy="confirmar-entrega-btn"]').click();
 });
 
-When('ingreso una clave pública incorrecta {string} y hago click en validar', (claveIncorrecta) => {
-  cy.get('[data-cy="clave-publica-input"]').clear().type(claveIncorrecta);
-  
-  cy.get('@proteccionBruto').then((proteccion) => {
-    const nuevoIntentos = (proteccion.intentos || 0) + 1;
-    cy.wrap({ proteccionActiva: true, intentos: nuevoIntentos }).as('proteccionBruto');
-    
-    if (nuevoIntentos >= 5) {
-      cy.intercept('POST', '**/api/Reservation/validate', {
-        statusCode: 429,
-        body: { message: 'Demasiados intentos fallidos. Por favor, intente nuevamente en 15 minutos.' }
-      }).as('bloqueoPorIntentos');
-    } else {
-      cy.intercept('POST', '**/api/Reservation/validate', {
-        statusCode: 404,
-        body: { message: 'La clave pública proporcionada no es válida o no existe' }
-      }).as(`intentoFallido${nuevoIntentos}`);
-    }
-  });
-  
-  cy.get('[data-cy="validar-btn"]').click();
-});
-
-When('ingreso otra clave pública incorrecta {string} y hago click en validar', (claveIncorrecta) => {
-  cy.get('[data-cy="clave-publica-input"]').clear().type(claveIncorrecta);
-  
-  cy.get('@proteccionBruto').then((proteccion) => {
-    const nuevoIntentos = (proteccion.intentos || 0) + 1;
-    cy.wrap({ proteccionActiva: true, intentos: nuevoIntentos }).as('proteccionBruto');
-    
-    if (nuevoIntentos >= 5) {
-      cy.intercept('POST', '**/api/Reservation/validate', {
-        statusCode: 429,
-        body: { message: 'Demasiados intentos fallidos. Por favor, intente nuevamente en 15 minutos.' }
-      }).as('bloqueoPorIntentos');
-    } else {
-      cy.intercept('POST', '**/api/Reservation/validate', {
-        statusCode: 404,
-        body: { message: 'La clave pública proporcionada no es válida o no existe' }
-      }).as(`intentoFallido${nuevoIntentos}`);
-    }
-  });
-  
-  cy.get('[data-cy="validar-btn"]').click();
-});
-
 When('la reserva se crea exitosamente', () => {
   cy.get('[data-cy="reservar-btn"]').click();
   cy.wait('@reservaConClave');
@@ -259,10 +209,6 @@ Then('el sistema marca la reserva como {string}', (estado) => {
 
 Then('invalida la clave pública para evitar reutilización', () => {
   cy.get('[data-cy="clave-invalidada"]').should('exist');
-});
-
-Then('el sistema bloquea temporalmente la validación por seguridad', () => {
-  cy.get('[data-cy="bloqueo-temporal"]').should('be.visible');
 });
 
 Then('el sistema muestra la clave pública {string}', (clavePublica) => {

@@ -693,6 +693,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(reservation.Secret, result.Secret);
             Assert.AreEqual(reservation.PharmacyName, result.PharmacyName);
             Assert.AreEqual(reservation.Drugs.Count, result.Drugs.Count);
+            Assert.AreEqual(ReservationStatus.Confirmada, result.Status);
         }
 
         [TestMethod]

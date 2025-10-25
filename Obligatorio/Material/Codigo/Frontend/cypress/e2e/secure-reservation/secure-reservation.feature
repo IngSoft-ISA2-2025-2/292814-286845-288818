@@ -66,17 +66,6 @@ Feature: Validación Segura de Reservas
         And invalida la clave pública para evitar reutilización
         And muestra un mensaje que dice "Entrega completada exitosamente. La reserva ha sido cerrada."
 
-    Scenario: Sistema invalida clave pública después de múltiples intentos fallidos de validación
-        Given estoy en la página de validación de reservas en farmacia
-        And tengo habilitada la protección contra intentos de fuerza bruta
-        When ingreso una clave pública incorrecta "PUBKEY-WRONG001" y hago click en validar
-        And ingreso otra clave pública incorrecta "PUBKEY-WRONG002" y hago click en validar
-        And ingreso otra clave pública incorrecta "PUBKEY-WRONG003" y hago click en validar
-        And ingreso otra clave pública incorrecta "PUBKEY-WRONG004" y hago click en validar
-        And ingreso otra clave pública incorrecta "PUBKEY-WRONG005" y hago click en validar
-        Then el sistema bloquea temporalmente la validación por seguridad
-        And muestra un mensaje que dice "Demasiados intentos fallidos. Por favor, intente nuevamente en 15 minutos."
-
     Scenario: Usuario visualiza su clave pública en la pantalla de confirmación
         Given estoy en la página de crear-reserva
         And un usuario con email "usuario@test.com" y secret "secret123"
