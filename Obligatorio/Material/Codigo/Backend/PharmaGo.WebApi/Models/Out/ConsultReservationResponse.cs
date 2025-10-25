@@ -22,11 +22,11 @@ namespace PharmaGo.WebApi.Models.Out
                 PharmacyName = reservation.PharmacyName,
                 Status = reservation.Status.ToString(),
                 ReservedDrugs = reservation.Drugs?.Select(ReservationDrugResponse.FromEntity).ToList() ?? new List<ReservationDrugResponse>(),
-                FechaLimiteConfirmacion = reservation.FechaLimiteConfirmacion,
-                IdReferencia = reservation.IdReferencia,
-                FechaExpiracion = reservation.FechaExpiracion,
-                FechaCancelacion = reservation.FechaCancelacion,
-                FechaRetiro = reservation.FechaRetiro,
+                FechaLimiteConfirmacion = reservation.LimitConfirmationDate,
+                IdReferencia = reservation.ReferenceId,
+                FechaExpiracion = reservation.ExpirationDate,
+                FechaCancelacion = reservation.CancellationDate,
+                FechaRetiro = reservation.RetirementDate,
             };
         }
     }

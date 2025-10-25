@@ -66,7 +66,7 @@ namespace PharmaGo.Test.DataAccess.Test
                     Pharmacy = _pharmacy,
                     Email = "usuario@test.com",
                     Secret = "miSecret123",
-                    Status = ReservationStatus.Pendiente,
+                    Status = ReservationStatus.Pending,
                     Drugs = new List<ReservationDrug>
                     {
                         new ReservationDrug
@@ -84,7 +84,7 @@ namespace PharmaGo.Test.DataAccess.Test
                     Pharmacy = _pharmacy,
                     Email = "usuario@test.com",
                     Secret = "miSecret123",
-                    Status = ReservationStatus.Confirmada,
+                    Status = ReservationStatus.Confirmed,
                     Drugs = new List<ReservationDrug>
                     {
                         new ReservationDrug
