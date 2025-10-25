@@ -126,5 +126,23 @@ namespace PharmaGo.Test.WebApi.Test
             );
             Assert.AreEqual("User is not authorized to create a reservation.", ex.Message);
         }
+
+        [TestMethod]
+        public void CancelReservation_WithNonExistentReservation_ThrowsNotFoundException()
+        {
+            // Arrange
+            string email = "sinreserva@example.com";
+            string secret = "cualquiera";
+
+            _reservationManagerMock
+                .Setup(service => service.CancelReservation(email, secret))
+                .Throws(new KeyNotFoundException("No existe una reserva asociada a ese correo"));
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<KeyNotFoundException>(() =>
+                _reservationController.CancelReservation(email, secret)
+            );
+            Assert.AreEqual("No existe una reserva asociada a ese correo", ex.Message);
+        }
     }
 }
