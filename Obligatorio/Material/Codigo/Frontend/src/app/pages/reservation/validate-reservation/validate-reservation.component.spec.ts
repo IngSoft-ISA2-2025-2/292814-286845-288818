@@ -62,12 +62,6 @@ describe('ValidateReservationComponent', () => {
     expect(fixture.debugElement.query(By.css('[data-cy="reserva-cliente"]'))).not.toBeNull();
   });
 
-  it('should show confirmar entrega button when validation is successful', () => {
-    component.validacionExitosa = true;
-    fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('[data-cy="confirmar-entrega-btn"]'))).not.toBeNull();
-  });
-
   it('should show estado reserva when estadoReserva is set', () => {
     component.estadoReserva = 'Confirmada';
     fixture.detectChanges();

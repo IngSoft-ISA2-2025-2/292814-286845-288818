@@ -128,33 +128,20 @@ When('hago click en el botón de validar', () => {
         statusCode: 200,
         body: {
           id: 1,
-          estado: 'Confirmada',
+          estado: 'Retirada',
+          claveInvalidada: true,
           medicamento: 'Aspirina',
           cantidad: 2,
           cliente: 'usuario@test.com',
           farmacia: 'Farmashop',
           clavePublica: clave,
-          mensaje: 'Reserva validada exitosamente. Puede proceder con la entrega del medicamento.'
+          mensaje: 'Entrega completada exitosamente. La reserva ha sido cerrada.'
         }
       }).as('validacionExitosa');
     }
   });
   
   cy.get('[data-cy="validar-btn"]').click();
-});
-
-When('confirmo la entrega del medicamento', () => {
-  cy.intercept('POST', '**/api/Reservation/complete', {
-    statusCode: 200,
-    body: {
-      id: 1,
-      estado: 'Retirada',
-      clavePublicaInvalida: true,
-      mensaje: 'Entrega completada exitosamente. La reserva ha sido cerrada.'
-    }
-  }).as('entregaCompleta');
-  
-  cy.get('[data-cy="confirmar-entrega-btn"]').click();
 });
 
 When('la reserva se crea exitosamente', () => {
@@ -179,9 +166,17 @@ Then('la clave privada se almacena de forma segura en el sistema', () => {
   cy.get('[data-cy="clave-privada-secured"]').should('exist');
 });
 
-Then('muestra un mensaje que dice {string}', (mensaje) => {
-  cy.get('[data-cy="success-mensaje"]', { timeout: 5000 }).should('be.visible');
-  cy.get('[data-cy="success-mensaje"]').should('contain', mensaje);
+Then('muestra un mensaje de validación que dice {string}', (mensaje) => {
+  // Para mensajes de éxito
+  if (mensaje.includes('exitosamente') || mensaje.includes('completada')) {
+    cy.get('[data-cy="success-mensaje"]', { timeout: 5000 }).should('be.visible');
+    cy.get('[data-cy="success-mensaje"]').should('contain', mensaje);
+  } 
+  // Para mensajes de error
+  else {
+    cy.get('[data-cy="error-mensaje"]', { timeout: 5000 }).should('be.visible');
+    cy.get('[data-cy="error-mensaje"]').should('contain', mensaje);
+  }
 });
 
 Then('el sistema valida correctamente la clave pública', () => {

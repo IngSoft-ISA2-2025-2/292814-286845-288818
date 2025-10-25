@@ -69,7 +69,7 @@ import { StockRequestOwnerComponent } from './pages/owner/stock-request-owner/st
 // Reservation
 import { ManageReservationComponent } from './pages/reservation/manage-reservation/manage-reservation.component';
 import { CreateReservationComponent } from './pages/reservation/create-reservation/create-reservation.component';
-
+import { ValidateReservationComponent } from './pages/reservation/validate-reservation/validate-reservation.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -110,7 +110,8 @@ import { CreateReservationComponent } from './pages/reservation/create-reservati
     StockRequestOwnerComponent,
     // Reservation
     ManageReservationComponent,
-    CreateReservationComponent
+    CreateReservationComponent,
+    ValidateReservationComponent
 
   ],
   imports: [
