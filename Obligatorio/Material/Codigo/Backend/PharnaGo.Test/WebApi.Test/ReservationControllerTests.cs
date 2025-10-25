@@ -529,6 +529,7 @@ namespace PharmaGo.Test.WebApi.Test
         [TestMethod]
         public void GetReservationsByUser_Retirada_ReturnsReservationRetiradaWithFechaRetiro()
         {
+            // Abarca tambien para gestion de estados
             // Arrange
             var request = new ConsultReservationRequest
             {
