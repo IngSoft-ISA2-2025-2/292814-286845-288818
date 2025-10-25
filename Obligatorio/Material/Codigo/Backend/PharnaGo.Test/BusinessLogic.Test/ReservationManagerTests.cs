@@ -416,5 +416,55 @@ namespace PharmaGo.Test.BusinessLogic.Test
             _reservationRepository.Verify(x => x.UpdateOne(It.IsAny<Reservation>()), Times.Once);
             _reservationRepository.Verify(x => x.Save(), Times.Once);
         }
+
+        [TestMethod]
+        public void CancelReservation_WithMultipleReservationsSameEmail_CancelsOnlyMatchingSecret()
+        {
+            // Arrange
+            string email = "multi@example.com";
+            string secret1 = "s1";
+            string secret2 = "s2";
+
+            // Reserva que queremos cancelar (con secret "s1")
+            var reservation1 = new Reservation
+            {
+                Id = 1,
+                Email = email,
+                Secret = secret1,
+                PharmacyName = "Farmashop",
+                Status = "Pending",
+                ReservationDrugs = new List<ReservationDrug>()
+            };
+
+            // Simular que NO existe otra reserva con email igual pero secret diferente
+            _reservationRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(false);
+
+            // Retornar solo la reserva con el secret correcto
+            _reservationRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(reservation1);
+
+            _reservationRepository
+                .Setup(x => x.UpdateOne(It.IsAny<Reservation>()));
+
+            _reservationRepository
+                .Setup(x => x.Save());
+
+            // Act
+            var result = _reservationManager.CancelReservation(email, secret1);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Cancelled", result.Status);
+            Assert.AreEqual(email, result.Email);
+            Assert.AreEqual(secret1, result.Secret);
+            Assert.AreEqual(1, result.Id);
+
+            // Verificar que se actualizó solo una reserva
+            _reservationRepository.Verify(x => x.UpdateOne(It.IsAny<Reservation>()), Times.Once);
+            _reservationRepository.Verify(x => x.Save(), Times.Once);
+        }
     }
 }
