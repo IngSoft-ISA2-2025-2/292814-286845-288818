@@ -144,5 +144,23 @@ namespace PharmaGo.Test.WebApi.Test
             );
             Assert.AreEqual("No existe una reserva asociada a ese correo", ex.Message);
         }
+
+        [TestMethod]
+        public void CancelReservation_WithInvalidSecret_ThrowsUnauthorizedException()
+        {
+            // Arrange
+            string email = "cliente@example.com";
+            string wrongSecret = "equivocado";
+
+            _reservationManagerMock
+                .Setup(service => service.CancelReservation(email, wrongSecret))
+                .Throws(new UnauthorizedAccessException("Secret inválido para ese correo"));
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<UnauthorizedAccessException>(() =>
+                _reservationController.CancelReservation(email, wrongSecret)
+            );
+            Assert.AreEqual("Secret inválido para ese correo", ex.Message);
+        }
     }
 }
