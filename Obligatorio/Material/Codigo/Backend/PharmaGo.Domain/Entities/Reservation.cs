@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using PharmaGo.Domain.Enums;
 
@@ -5,6 +6,14 @@ namespace PharmaGo.Domain.Entities
 {
     public class Reservation
     {
+        public Reservation()
+        {
+            if (string.IsNullOrEmpty(IdReferencia))
+            {
+                IdReferencia = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper();
+            }
+        }
+
         public int Id { get; set; }
         public string PharmacyName { get; set; }
         public Pharmacy Pharmacy { get; set; }
