@@ -588,5 +588,31 @@ namespace PharmaGo.Test.WebApi.Test
         }
         #endregion Get Reservations Tests
 
+        #region Validate Reservation Tests
+        [TestMethod]
+        public void ValidateReservation_Ok()
+        {
+            var publicKey = "publicKeySample";
+
+            _reservationManagerMock
+                .Setup(service => service.ValidateReservation(publicKey))
+                .Returns(reservation);
+
+            var result = _reservationController.ValidateReservation(publicKey);
+
+            var objectResult = result as OkObjectResult;
+            var statusCode = objectResult.StatusCode;
+            var value = objectResult.Value as ReservationModelResponse;
+            Assert.AreEqual(200, statusCode);
+            Assert.AreEqual(reservationModel.PharmacyName, value.PharmacyName);
+            Assert.AreEqual(reservationModel.DrugsReserved.Count, value.DrugsReserved.Count);
+            Assert.IsNotNull(value.PublicKey);
+            for (int i = 0; i < reservationModel.DrugsReserved.Count; i++)
+            {
+                Assert.AreEqual(reservationModel.DrugsReserved[i].DrugName, value.DrugsReserved[i].DrugName);
+                Assert.AreEqual(reservationModel.DrugsReserved[i].DrugQuantity, value.DrugsReserved[i].DrugQuantity);
+            }
+        }
+        #endregion Validate Reservation Tests
     }
 }
