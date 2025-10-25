@@ -44,6 +44,24 @@ export class ReservationService {
       );
   }
 
+  /** POST: validar una reserva con clave pública */
+  validateReserva(clavePublica: string): Observable<any> {
+    return this.http.post<any>(`${this.url}/validate`, { clavePublica }, { headers: this.getHttpHeaders() })
+      .pipe(
+        tap()
+        // NO capturamos el error aquí - dejamos que llegue al componente
+      );
+  }
+
+  /** POST: completar la entrega de una reserva */
+  completarEntrega(clavePublica: string): Observable<any> {
+    return this.http.post<any>(`${this.url}/complete`, { clavePublica }, { headers: this.getHttpHeaders() })
+      .pipe(
+        tap()
+        // NO capturamos el error aquí - dejamos que llegue al componente
+      );
+  }
+
   /**
    * Handle Http operation that failed.
    * Let the app continue.
