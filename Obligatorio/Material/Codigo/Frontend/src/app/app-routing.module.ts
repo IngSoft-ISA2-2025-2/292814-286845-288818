@@ -28,6 +28,7 @@ import { PurchaseByDateComponent } from './pages/owner/purchase-by-date/purchase
 import { InvitationComponent } from './pages/owner/invitation/invitation.component';
 import { CreatePharmacyComponent } from './pages/admin/create-pharmacy/create-pharmacy.component';
 import { StockRequestOwnerComponent } from './pages/owner/stock-request-owner/stock-request-owner.component';
+import { CreateReservationComponent } from './pages/reservation/create-reservation/create-reservation.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -55,7 +56,8 @@ const routes: Routes = [
   { path: 'owner/invitation', component: InvitationComponent, canActivate: [AuthenticationGuard], data: {roles: ['Owner']}},
   { path: 'owner/stock-request', component: StockRequestOwnerComponent, canActivate: [AuthenticationGuard], data: {roles: ['Owner'] } },
   { path: 'unauthorized', component: Page401Component },
-  { path: '**', component: Page404Component }
+  { path: 'create-reservation', component: CreateReservationComponent },
+  { path: '**', component: Page404Component },
 ];
 
 @NgModule({

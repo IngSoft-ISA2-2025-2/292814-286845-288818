@@ -3,13 +3,11 @@ using ExportationModel.ExportDomain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using PharmaGo.DataAccess.Repositories;
 using PharmaGo.Domain.Entities;
 using PharmaGo.IBusinessLogic;
 using PharmaGo.IDataAccess;
 using PharmaGo.WebApi.Controllers;
 using PharmaGo.WebApi.Models.In.Exports;
-using PharmaGo.WebApi.Models.Out;
 
 namespace PharmaGo.Test.WebApi.Test
 {
