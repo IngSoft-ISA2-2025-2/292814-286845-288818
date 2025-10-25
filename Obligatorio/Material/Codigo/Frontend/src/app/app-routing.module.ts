@@ -29,6 +29,7 @@ import { InvitationComponent } from './pages/owner/invitation/invitation.compone
 import { CreatePharmacyComponent } from './pages/admin/create-pharmacy/create-pharmacy.component';
 import { StockRequestOwnerComponent } from './pages/owner/stock-request-owner/stock-request-owner.component';
 import { CreateReservationComponent } from './pages/reservation/create-reservation/create-reservation.component';
+import { CancelReservationComponent } from './pages/reservation/cancel-reservation/cancel-reservation.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -57,6 +58,7 @@ const routes: Routes = [
   { path: 'owner/stock-request', component: StockRequestOwnerComponent, canActivate: [AuthenticationGuard], data: {roles: ['Owner'] } },
   { path: 'unauthorized', component: Page401Component },
   { path: 'create-reservation', component: CreateReservationComponent },
+  { path: 'cancel-reservation', component: CancelReservationComponent },
   { path: '**', component: Page404Component },
 ];
 
