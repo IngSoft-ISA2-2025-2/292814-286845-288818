@@ -258,5 +258,42 @@ describe('ManageReservationComponent', () => {
     const idReferencia = reservaItem.query(By.css('[data-cy="id-referencia"]'));
     expect(idReferencia).toBeNull(); // No debe mostrarse hasta que sea confirmada
   });
-  
+
+  it('debería mostrar el ID de referencia y mensaje para una reserva confirmada', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'miSecret123';
+    component.reservas = [
+      {
+        id: 2,
+        medicamentos: [{ nombre: 'Paracetamol' }],
+        farmacia: 'Farmacia Central',
+        estado: 'Confirmada',
+        fechaCreacion: '2023-10-02T11:00:00Z',
+        idReferencia: 'ABC12345'
+      }
+    ];
+    fixture.detectChanges();
+
+    // Act: simula click en el botón de consultar reservas
+    const consultarBtn = fixture.debugElement.query(By.css('[data-cy="consultar-reservas-btn"]'));
+    consultarBtn.triggerEventHandler('click');
+    fixture.detectChanges();
+
+    // Assert: verifica que la reserva confirmada muestra el ID de referencia y el mensaje
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItem).toBeTruthy();
+
+    const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
+    expect(estadoElement.nativeElement.textContent).toContain('Confirmada');
+
+    const idReferencia = reservaItem.query(By.css('[data-cy="id-referencia"]'));
+    expect(idReferencia).toBeTruthy();
+    expect(idReferencia.nativeElement.textContent).toContain('ABC12345');
+
+    const mensajeConfirmada = reservaItem.query(By.css('[data-cy="mensaje-confirmada"]'));
+    expect(mensajeConfirmada).toBeTruthy();
+    expect(mensajeConfirmada.nativeElement.textContent).toContain('Presenta este ID en la farmacia para retirar tu medicamento');
+  });
+
 });
