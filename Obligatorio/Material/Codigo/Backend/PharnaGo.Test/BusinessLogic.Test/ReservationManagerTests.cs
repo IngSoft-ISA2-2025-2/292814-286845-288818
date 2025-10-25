@@ -16,17 +16,17 @@ namespace PharmaGo.Test.BusinessLogic.Test
     [TestClass]
     public class ReservationManagerTests
     {
-    private Mock<IRepository<Reservation>> _reservationRepository;
-    private Mock<IRepository<Pharmacy>> _pharmacyRepository;
-    private Mock<IRepository<Drug>> _drugRepository;
-    private Mock<IDrugManager> _drugManager = new Mock<IDrugManager>();
-    private ReservationManager _reservationManager;
-    private List<Reservation> _reservations;
-    private Reservation _reservation;
-    private Pharmacy _pharmacy;
-    private Drug drugModel;
-    private Drug _drug;
-    private const Reservation nullReservation = null;
+        private Mock<IRepository<Reservation>> _reservationRepository;
+        private Mock<IRepository<Pharmacy>> _pharmacyRepository;
+        private Mock<IRepository<Drug>> _drugRepository;
+        private Mock<IDrugManager> _drugManager = new Mock<IDrugManager>();
+        private ReservationManager _reservationManager;
+        private List<Reservation> _reservations;
+        private Reservation _reservation;
+        private Pharmacy _pharmacy;
+        private Drug drugModel;
+        private Drug _drug;
+        private const Reservation nullReservation = null;
 
         [TestInitialize]
         public void InitTest()
@@ -181,6 +181,8 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(reservationReturned.PharmacyName, resevation.PharmacyName);
             Assert.AreEqual(reservationReturned.Drugs.Count, resevation.Drugs.Count);
             Assert.AreEqual(reservationReturned.Status, ReservationStatus.Pendiente);
+            Assert.IsNotNull(reservationReturned.PrivateKey);
+            Assert.IsNotNull(reservationReturned.PublicKey);
             Assert.AreEqual(198, drugModel.Stock);
         }
 
@@ -393,12 +395,12 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 }
             };
 
-             _reservationRepository
-                .Setup(r => r.GetAllByExpression(
-                    It.Is<Expression<Func<Reservation, bool>>>(expr =>
-                        expr.Compile().Invoke(reservations[0]) // Verifica que el predicado funcione para al menos una reserva válida
-                    )))
-                .Returns(reservations);
+            _reservationRepository
+               .Setup(r => r.GetAllByExpression(
+                   It.Is<Expression<Func<Reservation, bool>>>(expr =>
+                       expr.Compile().Invoke(reservations[0]) // Verifica que el predicado funcione para al menos una reserva válida
+                   )))
+               .Returns(reservations);
 
             // Act
             var result = _reservationManager.GetReservationsByUser(email, secret);
@@ -465,7 +467,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                         expr.Compile().Invoke(_reservations[0])
                 )))
                 .Returns(_reservations);
-                
+
             // Act & Assert
             var ex = Assert.ThrowsException<ArgumentException>(() =>
                 _reservationManager.GetReservationsByUser(email, secretIncorrecto)
@@ -550,7 +552,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(ReservationStatus.Confirmada, reserva.Status);
             Assert.AreEqual(idReferencia, reserva.IdReferencia);
         }
-        
+
         [TestMethod]
         public void GetReservationsByUser_Expirada_ReturnsReservationExpiradaWithIndicaciones()
         {
@@ -664,6 +666,105 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(ReservationStatus.Retirada, reserva.Status);
             Assert.AreEqual(fechaRetiro, reserva.FechaRetiro);
         }
+
+        #region Validate Reservation Tests
+        [TestMethod]
+        public void ValidateReservation_Ok()
+        {
+            // Arrange
+            string publicKey = "validPublicKey";
+            var reservation = _reservation;
+            reservation.Status = ReservationStatus.Confirmada;
+
+            _reservationRepository
+                .Setup(r => r.Exists(r => r.PublicKey == publicKey))
+                .Returns(true);
+
+            _reservationRepository
+                .Setup(r => r.GetOneByExpression(r => r.PublicKey == publicKey))
+                .Returns(reservation);
+
+            // Act
+            var result = _reservationManager.ValidateReservation(publicKey);
+
+            // Assert
+            _reservationRepository.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(reservation.Email, result.Email);
+            Assert.AreEqual(reservation.Secret, result.Secret);
+            Assert.AreEqual(reservation.PharmacyName, result.PharmacyName);
+            Assert.AreEqual(reservation.Drugs.Count, result.Drugs.Count);
+            Assert.AreEqual(ReservationStatus.Retirada, result.Status);
+        }
+
+        [TestMethod]
+        public void ValidateReservation_ConClaveIncorrecta_ThrowsException()
+        {
+            string publicKey = "validPublicKey";
+            var reservation = _reservation;
+
+            _reservationRepository
+                .Setup(r => r.Exists(r => r.PublicKey == publicKey))
+                .Returns(false);
+
+            var ex = Assert.ThrowsException<ResourceNotFoundException>(() =>
+               _reservationManager.ValidateReservation(publicKey));
+
+            Assert.AreEqual(
+                "No reservation found with the provided public key.",
+                ex.Message
+            );
+        }
+
+        [TestMethod]
+        public void ValidateReservation_WithExpiredReservation_ThrowsException()
+        {
+            string publicKey = "expired-publicKey";
+            var reservation = _reservation;
+            reservation.FechaExpiracion = System.DateTime.Now.AddHours(-1);
+
+            _reservationRepository
+                .Setup(r => r.Exists(r => r.PublicKey == publicKey))
+                .Returns(true);
+
+            _reservationRepository
+                .Setup(r => r.GetOneByExpression(r => r.PublicKey == publicKey))
+                .Returns(reservation);
+
+            var ex = Assert.ThrowsException<InvalidResourceException>(() =>
+               _reservationManager.ValidateReservation(publicKey));
+
+            Assert.AreEqual(
+                "The reservation has expired and cannot be validated.",
+                ex.Message
+            );
+        }
+
+
+        [TestMethod]
+        public void ValidateReservation_WithCancelledReservation_ThrowsException()
+        {
+            string publicKey = "expired-publicKey";
+            var reservation = _reservation;
+            reservation.Status = ReservationStatus.Cancelada;
+
+            _reservationRepository
+                .Setup(r => r.Exists(r => r.PublicKey == publicKey))
+                .Returns(true);
+
+            _reservationRepository
+                .Setup(r => r.GetOneByExpression(r => r.PublicKey == publicKey))
+                .Returns(reservation);
+
+            var ex = Assert.ThrowsException<InvalidResourceException>(() =>
+               _reservationManager.ValidateReservation(publicKey));
+
+            Assert.AreEqual(
+                "The reservation is not confirmed.",
+                ex.Message
+            );
+        }
+        #endregion Validate Reservation Tests
     }
 }
         

@@ -44,6 +44,15 @@ export class ReservationService {
       );
   }
 
+  /** POST: validar una reserva con clave pública */
+  validateReservation(clavePublica: string): Observable<any> {
+    return this.http.post<any>(`${this.url}/validate`, { clavePublica }, { headers: this.getHttpHeaders() })
+      .pipe(
+        tap()
+        // NO capturamos el error aquí - dejamos que llegue al componente
+      );
+  }
+
   /**
    * Handle Http operation that failed.
    * Let the app continue.

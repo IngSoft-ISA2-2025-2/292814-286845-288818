@@ -26,6 +26,7 @@ namespace PharmaGo.WebApi.Controllers
             var response = new ReservationModelResponse
             {
                 PharmacyName = reserva.PharmacyName,
+                PublicKey = reserva.PublicKey,
                 DrugsReserved = reserva.Drugs.Select(d => new ReservationDrugModelResponse
                 {
                     DrugName = d.Drug.Name,
@@ -44,6 +45,23 @@ namespace PharmaGo.WebApi.Controllers
 
             var response = reservations.Select(ReservationResponse.FromEntity).ToList();
 
+            return Ok(response);
+        }
+
+        [HttpGet("validate/{publicKey}")]
+        public IActionResult ValidateReservation(string publicKey)
+        {
+            var reserva = _reservationManager.ValidateReservation(publicKey);
+            var response = new ReservationModelResponse
+            {
+                PharmacyName = reserva.PharmacyName,
+                PublicKey = reserva.PublicKey,
+                DrugsReserved = reserva.Drugs?.Select(d => new ReservationDrugModelResponse
+                {
+                    DrugName = d.Drug.Name,
+                    DrugQuantity = d.Quantity
+                }).ToList() ?? new List<ReservationDrugModelResponse>()
+            };
             return Ok(response);
         }
     }
