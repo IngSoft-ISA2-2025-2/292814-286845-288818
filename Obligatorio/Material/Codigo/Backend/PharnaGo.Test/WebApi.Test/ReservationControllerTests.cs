@@ -205,5 +205,60 @@ namespace PharmaGo.Test.WebApi.Test
             );
             Assert.AreEqual("El secret no coincide con el registrado para este email", ex.Message);
         }
+
+        [TestMethod]
+        public void GetReservationsByUser_Pendiente_ReturnsReservaPendienteConOpciones()
+        {
+            // Arrange
+            var request = new ConsultReservationRequest
+            {
+                Email = "usuario@test.com",
+                Secret = "miSecret123"
+            };
+
+            var reservasPendiente = new List<Reservation>
+            {
+                new Reservation
+                {
+                    Id = 1,
+                    PharmacyName = "Farmashop",
+                    Pharmacy = _pharmacy,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = _drug,
+                            Quantity = 2
+                        }
+                    },
+                    Status = ReservationStatus.Pendiente,
+                    FechaLimiteConfirmacion = new DateTime(2023, 10, 5, 23, 59, 59),
+                    IdReferencia = null // No debe mostrarse
+                }
+            };
+
+            _reservationManagerMock
+                .Setup(service => service.GetReservationsByUser(request.Email, request.Secret))
+                .Returns(reservasPendiente);
+
+            // Act
+            var result = _reservationController.GetReservations(request);
+
+            // Assert
+            var objectResult = result as OkObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(200, objectResult.StatusCode);
+
+            var value = objectResult.Value as List<ReservationResponse>;
+            Assert.IsNotNull(value);
+            Assert.AreEqual(1, value.Count);
+
+            var reserva = value[0];
+            Assert.AreEqual("Pendiente", reserva.Status);
+            Assert.AreEqual("Farmashop", reserva.PharmacyName);
+            Assert.IsNull(reserva.IdReferencia); // No debe mostrarse
+            Assert.AreEqual(new DateTime(2023, 10, 5, 23, 59, 59), reserva.FechaLimiteConfirmacion);
+        }
     }
 }
