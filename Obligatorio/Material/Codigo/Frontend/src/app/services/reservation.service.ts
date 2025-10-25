@@ -24,8 +24,8 @@ export class ReservationService {
   createReserva(reserva: ReservationRequest): Observable<ReservationResponse> {
     return this.http.post<ReservationResponse>(this.url, reserva, { headers: this.getHttpHeaders() })
       .pipe(
-        tap(),
-        catchError(this.handleError<ReservationResponse>('Create Reserva'))
+        tap()
+        // NO capturamos el error aquí - dejamos que llegue al componente
       );
   }
 
