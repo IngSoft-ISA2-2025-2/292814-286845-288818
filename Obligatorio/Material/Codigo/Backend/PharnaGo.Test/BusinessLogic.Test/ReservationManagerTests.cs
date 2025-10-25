@@ -301,6 +301,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
         [TestMethod]
         public void GetReservationsByUser_Ok()
         {
+            // Abarca tambien para gestion de estados
             // Arrange
             string email = "usuario@test.com";
             string secret = "miSecret123";
@@ -416,6 +417,11 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 Assert.AreEqual(reservations[i].Drugs.Count, result[i].Drugs.Count);
                 Assert.AreEqual(reservations[i].Drugs.First().Drug.Name, result[i].Drugs.First().Drug.Name);
                 Assert.AreEqual(reservations[i].Drugs.First().Quantity, result[i].Drugs.First().Quantity);
+
+                if (reservations[i].Status == ReservationStatus.Confirmada)
+                Assert.IsNotNull(result[i].IdReferencia, "La reserva confirmada debe tener IdReferencia");
+                if (reservations[i].Status == ReservationStatus.Pendiente)
+                Assert.IsNull(result[i].IdReferencia, "La reserva pendiente no debe tener IdReferencia");
             }
         }
 
