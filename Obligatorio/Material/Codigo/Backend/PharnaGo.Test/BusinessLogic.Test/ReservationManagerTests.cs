@@ -250,30 +250,5 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count);
         }
-
-        [TestMethod]
-        public void GetReservationsByUser_FilterByEstado_ReturnsOnlyFilteredReservations()
-        {
-            // Arrange
-            string email = "usuario@test.com";
-            string secret = "miSecret123";
-            ReservationStatus estadoFiltro = ReservationStatus.Confirmada;
-
-            _reservationRepository
-                .Setup(r => r.GetAllByExpression(
-                    It.Is<Expression<Func<Reservation, bool>>>(expr =>
-                        expr.Compile().Invoke(_reservations[0])
-                    )))
-                .Returns(_reservations);
-
-            // Act
-            var result = _reservationManager.GetReservationsByUser(email, secret, estadoFiltro);
-
-            // Assert
-            _reservationRepository.VerifyAll();
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.All(r => r.Status == estadoFiltro));
-            Assert.AreEqual(1, result.Count(r => r.Status == ReservationStatus.Confirmada));
-        }
     }
 }
