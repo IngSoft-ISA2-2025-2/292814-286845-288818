@@ -68,6 +68,7 @@ import { StockRequestOwnerComponent } from './pages/owner/stock-request-owner/st
 
 // Reservation
 import { ManageReservationComponent } from './pages/reservation/manage-reservation/manage-reservation.component';
+import { CreateReservationComponent } from './pages/reservation/create-reservation/create-reservation.component';
 
 @NgModule({
   declarations: [
@@ -109,6 +110,8 @@ import { ManageReservationComponent } from './pages/reservation/manage-reservati
     StockRequestOwnerComponent,
     // Reservation
     ManageReservationComponent,
+    CreateReservationComponent
+
   ],
   imports: [
     BrowserModule,

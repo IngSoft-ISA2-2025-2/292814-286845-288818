@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using PharmaGo.Domain.Enums;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PharmaGo.Domain.Entities
 {
@@ -30,6 +33,7 @@ namespace PharmaGo.Domain.Entities
 
     public class ReservationDrug
     {
+        public int Id { get; set; }
         public int ReservationId { get; set; }
         public Reservation Reservation { get; set; }
         public int DrugId { get; set; }

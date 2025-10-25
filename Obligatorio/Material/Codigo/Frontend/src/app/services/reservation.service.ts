@@ -5,6 +5,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { CommonService } from './CommonService';
 import { StorageManager } from '../utils/storage-manager';
+import { ReservationRequest, ReservationResponse } from '../interfaces/reservation';
 
 @Injectable({ providedIn: 'root' })
 export class ReservationService {
@@ -25,9 +26,18 @@ export class ReservationService {
       .set('Authorization', token);
   }
 
-  /** POST: Consult reservations by user */
+  /** GET: Consult reservations by user */
   getReservations(email: string, secret: string): Observable<any[]> {
     return this.http.post<any[]>(`${this.url}/consult`, { email, secret }, { headers: this.getHttpHeaders() })
+      .pipe(
+        tap()
+        // NO capturamos el error aquí - dejamos que llegue al componente
+      );
+  }
+
+  /** POST: crear una nueva reserva */
+  createReserva(reserva: ReservationRequest): Observable<ReservationResponse> {
+    return this.http.post<ReservationResponse>(this.url, reserva, { headers: this.getHttpHeaders() })
       .pipe(
         tap()
         // NO capturamos el error aquí - dejamos que llegue al componente

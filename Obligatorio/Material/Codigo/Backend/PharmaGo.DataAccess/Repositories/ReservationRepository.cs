@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PharmaGo.Domain.Entities;
 
@@ -23,6 +25,11 @@ namespace PharmaGo.DataAccess.Repositories
                 .Include(r => r.Drugs)
                     .ThenInclude(rd => rd.Drug)
                 .Where(expression);
+        }
+        public override void InsertOne(Reservation reservation)
+        {
+            _context.Entry(reservation).State = EntityState.Added;
+            _context.Set<Reservation>().Add(reservation);
         }
     }
 }

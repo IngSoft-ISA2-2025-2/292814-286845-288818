@@ -20,6 +20,10 @@ namespace PharmaGo.Test.WebApi.Test
         private List<Reservation> _reservations;
         private Pharmacy _pharmacy;
         private Drug _drug;
+        private ReservationModel reservationModel;
+        private Reservation reservation;
+        private Pharmacy pharmacyModel;
+        private Drug drugModel;
 
         [TestInitialize]
         public void SetUp()
@@ -28,6 +32,13 @@ namespace PharmaGo.Test.WebApi.Test
             _reservationController = new ReservationController(_reservationManagerMock.Object);
 
             _pharmacy = new Pharmacy
+            {
+                Id = 1,
+                Name = "Farmashop",
+                Address = "Av. Principal 123"
+            };
+
+            pharmacyModel = new Pharmacy
             {
                 Id = 1,
                 Name = "Farmashop",
@@ -48,6 +59,22 @@ namespace PharmaGo.Test.WebApi.Test
                 UnitMeasure = new UnitMeasure { Id = 1, Name = "mg", Deleted = false },
                 Presentation = new Presentation { Id = 1, Name = "Tableta", Deleted = false },
                 Pharmacy = _pharmacy
+            };
+
+            drugModel = new Drug
+            {
+                Id = 1,
+                Code = "ASP-001",
+                Name = "Aspirina",
+                Symptom = "Dolor de cabeza",
+                Quantity = 100,
+                Price = 50,
+                Stock = 200,
+                Prescription = false,
+                Deleted = false,
+                UnitMeasure = new UnitMeasure { Id = 1, Name = "mg", Deleted = false },
+                Presentation = new Presentation { Id = 1, Name = "Tableta", Deleted = false },
+                Pharmacy = pharmacyModel
             };
 
             _consultReservationRequest = new ConsultReservationRequest()
@@ -91,12 +118,84 @@ namespace PharmaGo.Test.WebApi.Test
                     Status = ReservationStatus.Confirmada
                 }
             };
+
+            reservationModel = new ReservationModel()
+            {
+                DrugsReserved = new List<ReservationDrugModel>
+                {
+                    new ReservationDrugModel
+                    {
+                        DrugName = "Aspirina",
+                        DrugQuantity = 1
+                    }
+                },
+                PharmacyName = "Farmashop"
+            };
+
+            reservation = new Reservation()
+            {
+                Id = 1,
+                PharmacyName = "Farmashop",
+                Pharmacy = pharmacyModel,
+                ReservationDrugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug
+                    {
+                        DrugId = 1,
+                        Drug = drugModel,
+                        Quantity = 1
+                    }
+                }
+            };
         }
 
         [TestCleanup]
         public void Cleanup()
         {
             _reservationManagerMock.VerifyAll();
+        }
+
+        [TestMethod]
+        public void Create_Reservation_Ok()
+        {
+            //Arrange
+            _reservationManagerMock
+                .Setup(service => service.CreateReservation(It.IsAny<Reservation>()))
+                .Returns(reservation);
+
+            //Act
+            var result = _reservationController.CreateReserva(
+                    reservationModel); 
+
+            //Assert
+            var objectResult = result as OkObjectResult;
+            var statusCode = objectResult.StatusCode;
+            var value = objectResult.Value as ReservationModelResponse;
+
+            //Assert
+            Assert.AreEqual(200, statusCode);
+            Assert.AreEqual(reservationModel.PharmacyName, value.PharmacyName);
+            Assert.AreEqual(reservationModel.DrugsReserved.Count, value.DrugsReserved.Count);
+            for (int i = 0; i < reservationModel.DrugsReserved.Count; i++)
+            {
+                Assert.AreEqual(reservationModel.DrugsReserved[i].DrugName, value.DrugsReserved[i].DrugName);
+                Assert.AreEqual(reservationModel.DrugsReserved[i].DrugQuantity, value.DrugsReserved[i].DrugQuantity);
+            }
+        }
+
+        [TestMethod]
+        public void Create_Reservation_UnAuthorizedUser()
+        {
+            // Arrange
+            _reservationManagerMock
+                .Setup(service => service.CreateReservation(It.IsAny<Reservation>()))
+                .Throws(new UnauthorizedAccessException("User is not authorized to create a reservation."));
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<UnauthorizedAccessException>(() =>
+                _reservationController.CreateReserva(reservationModel)
+            );
+            Assert.AreEqual("User is not authorized to create a reservation.", ex.Message);
         }
 
         [TestMethod]

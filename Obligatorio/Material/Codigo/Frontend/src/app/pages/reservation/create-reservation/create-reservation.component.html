@@ -1,0 +1,128 @@
+
+<div class="reservation-container">
+  <h2>Crear Reserva de Medicamentos</h2>
+  
+  <form (ngSubmit)="reserve()">
+    <!-- Sección de credenciales -->
+    <div class="form-section">
+      <h3>Datos de Usuario</h3>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          data-cy="email-input"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Ingrese su email"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="secret">Secret</label>
+        <input
+          id="secret"
+          data-cy="secret-input"
+          type="password"
+          [(ngModel)]="secret"
+          name="secret"
+          placeholder="Ingrese su secret"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Sección de medicamentos -->
+    <div class="form-section">
+      <h3>Medicamentos</h3>
+      <div class="form-group">
+        <label for="medicamentoNombre">Nombre del Medicamento</label>
+        <input
+          id="medicamentoNombre"
+          data-cy="medicamento-nombre-input"
+          type="text"
+          [(ngModel)]="medicamentoNombre"
+          name="medicamentoNombre"
+          placeholder="Ej: Aspirina"
+        />
+      </div>
+      <div class="form-group">
+        <label for="medicamentoCantidad">Cantidad</label>
+        <input
+          id="medicamentoCantidad"
+          data-cy="medicamento-cantidad-input"
+          type="number"
+          [(ngModel)]="medicamentoCantidad"
+          name="medicamentoCantidad"
+          placeholder="Cantidad de unidades"
+          min="1"
+        />
+      </div>
+      <button 
+        data-cy="agregar-medicamento-btn" 
+        type="button" 
+        class="btn btn-secondary"
+        (click)="agregarMedicamento()">
+        Agregar medicamento
+      </button>
+    </div>
+
+    <!-- Lista de medicamentos agregados -->
+    <div class="form-section" *ngIf="medicamentos.length > 0">
+      <h3>Medicamentos a Reservar</h3>
+      <ul class="medicamentos-list" data-cy="medicamentos-list">
+        <li *ngFor="let med of medicamentos; let i = index" class="medicamento-item">
+          <div class="medicamento-info">
+            <strong>{{ med.nombre }}</strong> - Cantidad: {{ med.cantidad }}
+          </div>
+          <button 
+            type="button" 
+            class="btn-remove" 
+            (click)="eliminarMedicamento(i)"
+            [attr.data-cy]="'eliminar-medicamento-' + i">
+            ✕
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Sección de farmacia -->
+    <div class="form-section">
+      <h3>Farmacia</h3>
+      <div class="form-group">
+        <label for="farmacia">Nombre de la Farmacia</label>
+        <input
+          id="farmacia"
+          data-cy="farmacia-input"
+          type="text"
+          [(ngModel)]="farmacia"
+          name="farmacia"
+          placeholder="Ej: Farmashop"
+          required
+        />
+      </div>
+    </div>
+
+    <button 
+      data-cy="reservar-btn" 
+      type="submit" 
+      class="btn btn-primary"
+      [disabled]="medicamentos.length === 0">
+      Reservar
+    </button>
+  </form>
+
+  <!-- Mensajes de error y éxito -->
+  <div *ngIf="errorMessage" class="alert alert-error" data-cy="error-mensaje">
+    <strong>Error:</strong> {{ errorMessage }}
+  </div>
+  <div *ngIf="successMessage" class="alert alert-success" data-cy="success-mensaje">
+    <strong>Éxito:</strong> {{ successMessage }}
+  </div>
+  <div *ngIf="estadoReserva" class="estado-info" data-cy="estado-reserva">
+    Estado: {{ estadoReserva }}
+  </div>
+  <div *ngIf="stockActualizado" class="stock-info" data-cy="stock-actualizado">
+    ✓ Stock actualizado
+  </div>
+</div>
