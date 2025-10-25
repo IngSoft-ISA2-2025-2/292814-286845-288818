@@ -64,6 +64,9 @@ namespace PharmaGo.BusinessLogic
 
         public Reservation CancelReservation(string email, string secret)
         {
+            if (reservationRepository.Exists(r => r.Email == email && r.Secret != secret))
+                throw new UnauthorizedAccessException("Secret inválido para ese correo");
+
             var reservation = reservationRepository.GetOneByExpression(
                 r => r.Email == email && r.Secret == secret);
 
@@ -73,7 +76,7 @@ namespace PharmaGo.BusinessLogic
             reservation.Status = "Cancelled";
             reservationRepository.UpdateOne(reservation);
             reservationRepository.Save();
-            
+
             return reservation;
         }
     }

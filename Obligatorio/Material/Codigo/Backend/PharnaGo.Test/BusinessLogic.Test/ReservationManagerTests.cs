@@ -258,5 +258,28 @@ namespace PharmaGo.Test.BusinessLogic.Test
             );
             Assert.AreEqual("No existe una reserva asociada a ese correo", ex.Message);
         }
+
+        // ============================
+        // TDD RED: Cancel Reservation - Escenario 2: Secret incorrecto
+        // ============================
+
+        [TestMethod]
+        public void CancelReservation_WithInvalidSecret_ThrowsUnauthorizedException()
+        {
+            // Arrange
+            string email = "cliente@example.com";
+            string wrongSecret = "equivocado";
+
+            // Simular que existe una reserva con ese email pero con secret diferente
+            _reservationRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(true);
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<UnauthorizedAccessException>(() =>
+                _reservationManager.CancelReservation(email, wrongSecret)
+            );
+            Assert.AreEqual("Secret inválido para ese correo", ex.Message);
+        }
     }
 }
