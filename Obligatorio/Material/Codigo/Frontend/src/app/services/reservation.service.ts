@@ -10,7 +10,7 @@ import { ReservationRequest, ReservationResponse } from '../interfaces/reservati
 @Injectable({ providedIn: 'root' })
 export class ReservationService {
 
-  private url = environment.apiUrl + '/api/reservation';
+  private url = environment.apiUrl + '/api/Reservation';
 
   constructor(
     private http: HttpClient,

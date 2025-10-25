@@ -1,4 +1,5 @@
 using PharmaGo.Domain.Entities;
+using PharmaGo.Domain.Enums;
 using PharmaGo.IBusinessLogic;
 using PharmaGo.IDataAccess;
 using PharmaGo.Domain.SearchCriterias;
@@ -36,7 +37,7 @@ namespace PharmaGo.BusinessLogic
             var pharmacy = pharmacyRepository.GetOneByExpression(p => p.Name == reservation.PharmacyName);
 
 
-            foreach (var reservationDrug in reservation.ReservationDrugs)
+            foreach (var reservationDrug in reservation.Drugs)
             {
                 if (!drugRepository.Exists(d => d.Name == reservationDrug.Drug.Name
                     && d.Pharmacy.Name == reservation.PharmacyName))
@@ -57,7 +58,7 @@ namespace PharmaGo.BusinessLogic
                 drugRepository.UpdateOne(drug);
             }
 
-            reservation.Status = "Pending";
+            reservation.Status = ReservationStatus.Pendiente;
 
             reservationRepository.InsertOne(reservation);
             reservationRepository.Save();
@@ -68,7 +69,7 @@ namespace PharmaGo.BusinessLogic
         {
             ValidarEmailYSecret(email, secret);
 
-            var reservations = _reservationRepository.GetAllByExpression(r => r.Email == email);
+            var reservations = reservationRepository.GetAllByExpression(r => r.Email == email);
 
             ValidarSecretParaEmail(reservations, secret);
 

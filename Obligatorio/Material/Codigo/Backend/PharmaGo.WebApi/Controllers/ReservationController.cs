@@ -26,7 +26,7 @@ namespace PharmaGo.WebApi.Controllers
             var response = new ReservationModelResponse
             {
                 PharmacyName = reserva.PharmacyName,
-                DrugsReserved = reserva.ReservationDrugs.Select(d => new ReservationDrugModelResponse
+                DrugsReserved = reserva.Drugs.Select(d => new ReservationDrugModelResponse
                 {
                     DrugName = d.Drug.Name,
                     DrugQuantity = d.Quantity

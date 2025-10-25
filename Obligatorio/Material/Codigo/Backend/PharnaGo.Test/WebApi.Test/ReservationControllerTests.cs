@@ -137,7 +137,7 @@ namespace PharmaGo.Test.WebApi.Test
                 Id = 1,
                 PharmacyName = "Farmashop",
                 Pharmacy = pharmacyModel,
-                ReservationDrugs = new List<ReservationDrug>
+                Drugs = new List<ReservationDrug>
                 {
                     new ReservationDrug
                     {

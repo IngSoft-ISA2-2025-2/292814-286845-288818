@@ -109,7 +109,7 @@ namespace PharmaGo.Test.DataAccess.Test
             {
                 PharmacyName = pharmacy.Name,
                 Pharmacy = pharmacy,
-                ReservationDrugs = new List<ReservationDrug>
+                Drugs = new List<ReservationDrug>
                 {
                     new ReservationDrug
                     {
@@ -146,7 +146,7 @@ namespace PharmaGo.Test.DataAccess.Test
                 if (reservation.Pharmacy != null)
                     context.Set<Pharmacy>().Add(reservation.Pharmacy);
 
-                foreach (var reservationDrug in reservation.ReservationDrugs ?? reservation.Drugs)
+                foreach (var reservationDrug in reservation.Drugs)
                 {
                     if (reservationDrug.Drug != null)
                         context.Set<Drug>().Add(reservationDrug.Drug);
@@ -210,7 +210,7 @@ namespace PharmaGo.Test.DataAccess.Test
                     Id = i,
                     PharmacyName = pharmacy.Name,
                     Pharmacy = pharmacy,
-                    ReservationDrugs = new List<ReservationDrug> { reservationDrug }
+                    Drugs = new List<ReservationDrug> { reservationDrug }
                 };
 
                 reservations.Add(reservation);

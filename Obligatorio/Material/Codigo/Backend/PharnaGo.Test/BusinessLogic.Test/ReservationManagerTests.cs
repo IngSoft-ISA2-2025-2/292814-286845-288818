@@ -122,7 +122,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 Email = "test@email.com",
                 Secret = "1234",
                 PharmacyName = "Farmashop",
-                ReservationDrugs = new List<ReservationDrug>
+                Drugs = new List<ReservationDrug>
                 {
                     new ReservationDrug
                     {
@@ -179,8 +179,8 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(reservationReturned.Email, resevation.Email);
             Assert.AreEqual(reservationReturned.Secret, resevation.Secret);
             Assert.AreEqual(reservationReturned.PharmacyName, resevation.PharmacyName);
-            Assert.AreEqual(reservationReturned.ReservationDrugs.Count, resevation.ReservationDrugs.Count);
-            Assert.AreEqual(reservationReturned.Status, "Pending");
+            Assert.AreEqual(reservationReturned.Drugs.Count, resevation.Drugs.Count);
+            Assert.AreEqual(reservationReturned.Status, ReservationStatus.Pendiente);
             Assert.AreEqual(198, drugModel.Stock);
         }
 
