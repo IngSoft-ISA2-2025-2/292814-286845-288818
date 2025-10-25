@@ -61,5 +61,10 @@ namespace PharmaGo.BusinessLogic
             reservationRepository.Save();
             return reservation;
         }
+
+        public Reservation CancelReservation(string email, string secret)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

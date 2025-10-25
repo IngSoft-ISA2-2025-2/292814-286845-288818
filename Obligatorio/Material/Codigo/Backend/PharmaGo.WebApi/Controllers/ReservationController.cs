@@ -30,5 +30,12 @@ namespace PharmaGo.WebApi.Controllers
             };
             return Ok(response);
         }
+
+        [HttpDelete]
+        public IActionResult CancelReservation(string email, string secret)
+        {
+            _reservationManager.CancelReservation(email, secret);
+            return Ok();
+        }
     }
 }
