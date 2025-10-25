@@ -83,7 +83,9 @@ namespace PharmaGo.BusinessLogic
 
         public Reservation ValidateReservation(string publicKey)
         {
-            throw new NotImplementedException();
+            if(reservationRepository.Exists(r=> r.PublicKey == publicKey))
+                return reservationRepository.GetOneByExpression(r => r.PublicKey == publicKey);
+            return null;
         }
 
         public List<Reservation> GetReservationsByUser(string email, string secret)

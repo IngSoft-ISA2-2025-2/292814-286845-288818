@@ -676,11 +676,11 @@ namespace PharmaGo.Test.BusinessLogic.Test
             var reservation = _reservation;
 
             _reservationRepository
-                .Setup(r => r.Exists(r => r.PublicKey == r.PublicKey))
+                .Setup(r => r.Exists(r => r.PublicKey == publicKey))
                 .Returns(true);
 
             _reservationRepository
-                .Setup(r => r.GetOneByExpression(r => r.PublicKey == r.PublicKey))
+                .Setup(r => r.GetOneByExpression(r => r.PublicKey == publicKey))
                 .Returns(reservation);
 
             // Act
