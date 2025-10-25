@@ -64,6 +64,7 @@
               [(ngModel)]="estadoFiltro" 
               name="estadoFiltro"
               (change)="aplicarFiltroPorEstado()"
+              data-cy="filtro-estado"
               class="form-control">
               <option value="">Todos los estados</option>
               <option value="Pendiente">Pendiente</option>
@@ -82,6 +83,7 @@
               type="text" 
               [(ngModel)]="filtroMedicamento" 
               name="filtroMedicamento"
+              data-cy="buscar-medicamento-input"
               placeholder="Nombre del medicamento"
               class="form-control">
           </div>
@@ -94,6 +96,7 @@
               type="text" 
               [(ngModel)]="filtroFarmacia" 
               name="filtroFarmacia"
+              data-cy="buscar-farmacia-input"
               placeholder="Nombre de la farmacia"
               class="form-control">
           </div>
@@ -103,6 +106,7 @@
             <button 
               type="button" 
               (click)="ordenarPorFechaDesc()"
+              data-cy="ordenar-fecha-btn"
               class="btn btn-secondary">
               Ordenar por fecha más reciente
             </button>

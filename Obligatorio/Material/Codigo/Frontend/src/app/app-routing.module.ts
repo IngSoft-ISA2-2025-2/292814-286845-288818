@@ -55,7 +55,7 @@ const routes: Routes = [
   { path: 'owner/purchase-by-date', component: PurchaseByDateComponent, canActivate: [AuthenticationGuard], data: {roles: ['Owner'] }},
   { path: 'owner/invitation', component: InvitationComponent, canActivate: [AuthenticationGuard], data: {roles: ['Owner']}},
   { path: 'owner/stock-request', component: StockRequestOwnerComponent, canActivate: [AuthenticationGuard], data: {roles: ['Owner'] } },
-  { path: 'reservations/manage', component: ManageReservationComponent },
+  { path: 'manage-reservations', component: ManageReservationComponent },
   { path: 'unauthorized', component: Page401Component },
   { path: '**', component: Page404Component }
 ];

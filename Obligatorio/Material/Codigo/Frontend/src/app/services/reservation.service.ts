@@ -29,8 +29,8 @@ export class ReservationService {
   getReservations(email: string, secret: string): Observable<any[]> {
     return this.http.post<any[]>(`${this.url}/consult`, { email, secret }, { headers: this.getHttpHeaders() })
       .pipe(
-        tap(),
-        catchError(this.handleError<any[]>('Get Reservations', []))
+        tap()
+        // NO capturamos el error aquí - dejamos que llegue al componente
       );
   }
 

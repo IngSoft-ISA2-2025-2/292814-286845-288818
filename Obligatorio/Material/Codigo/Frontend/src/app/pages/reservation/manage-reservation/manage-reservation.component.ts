@@ -51,12 +51,32 @@ export class ManageReservationComponent implements OnInit {
     // Este método se ejecuta cuando se cambia el filtro de estado
   }
 
-  // Getter para obtener las reservas filtradas por estado
+  // Getter para obtener las reservas filtradas aplicando TODOS los filtros
   get reservasFiltradas(): any[] {
-    if (!this.estadoFiltro || this.estadoFiltro === 'Todos') {
-      return this.reservas;
+    let filtered = [...this.reservas];
+
+    // Filtro por estado
+    if (this.estadoFiltro && this.estadoFiltro !== 'Todos' && this.estadoFiltro !== '') {
+      filtered = filtered.filter(r => r.status === this.estadoFiltro);
     }
-    return this.reservas.filter(r => r.status === this.estadoFiltro);
+
+    // Filtro por medicamento
+    if (this.filtroMedicamento) {
+      filtered = filtered.filter(r =>
+        r.reservedDrugs?.some((drug: any) =>
+          drug.drugName?.toLowerCase().includes(this.filtroMedicamento.toLowerCase())
+        )
+      );
+    }
+
+    // Filtro por farmacia
+    if (this.filtroFarmacia) {
+      filtered = filtered.filter(r =>
+        r.pharmacyName?.toLowerCase().includes(this.filtroFarmacia.toLowerCase())
+      );
+    }
+
+    return filtered;
   }
 
   // Método para ordenar reservas por fecha de creación descendente
