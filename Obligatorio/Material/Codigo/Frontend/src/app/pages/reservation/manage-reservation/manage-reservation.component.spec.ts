@@ -168,4 +168,32 @@ describe('ManageReservationComponent', () => {
     const verDetallesBtns = fixture.debugElement.queryAll(By.css('[data-cy="ver-detalles-btn"]'));
     expect(verDetallesBtns.length).toBe(5);
   });
+
+  it('debería filtrar y mostrar solo las reservas en el estado seleccionado', () => {
+    // Arrange
+    const estadoFiltro = 'Confirmada';
+    component.email = 'usuario@test.com';
+    component.secret = 'miSecret123';
+    component.reservas = [
+      { id: 1, medicamentos: [{ nombre: 'Aspirina' }], farmacia: 'Farmashop', estado: 'Pendiente', fechaCreacion: '2023-10-01T10:00:00Z' },
+      { id: 2, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmacia Central', estado: 'Confirmada', fechaCreacion: '2023-10-02T11:00:00Z' },
+      { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], farmacia: 'Farmacia Sur', estado: 'Expirada', fechaCreacion: '2023-10-03T12:00:00Z' },
+      { id: 4, medicamentos: [{ nombre: 'Amoxicilina' }], farmacia: 'Farmacia Norte', estado: 'Cancelada', fechaCreacion: '2023-10-04T13:00:00Z' },
+      { id: 5, medicamentos: [{ nombre: 'Diclofenac' }], farmacia: 'Farmacia Este', estado: 'Retirada', fechaCreacion: '2023-10-05T14:00:00Z' }
+    ];
+    fixture.detectChanges();
+
+    // Act: simula seleccionar el filtro por estado
+    component.estadoFiltro = estadoFiltro;
+    component.aplicarFiltroPorEstado();
+    fixture.detectChanges();
+
+    // Assert: solo se muestran las reservas en el estado filtrado
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItems.length).toBe(1);
+
+    const estadoElement = fixture.debugElement.query(By.css('[data-cy="reserva-estado"]'));
+    expect(estadoElement.nativeElement.textContent).toContain(estadoFiltro);
+  });
+  
 });
