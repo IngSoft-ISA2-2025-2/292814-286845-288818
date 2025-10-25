@@ -258,11 +258,10 @@ namespace PharmaGo.Test.BusinessLogic.Test
             string email = "usuario@test.com";
             string secretIncorrecto = "secretIncorrecto";
 
-            // El repositorio devuelve reservas para ese email, pero con otro secret
             _reservationRepository
                 .Setup(r => r.GetAllByExpression(
                     It.Is<Expression<Func<Reservation, bool>>>(expr =>
-                        expr.Compile().Invoke(_reservations[0]) // Verifica que el predicado filtra por email y secret
+                        expr.Compile().Invoke(_reservations[0])
                 )))
                 .Returns(_reservations);
                 
@@ -271,6 +270,46 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 _reservationManager.GetReservationsByUser(email, secretIncorrecto)
             );
             Assert.AreEqual("El secret no coincide con el registrado para este email", ex.Message);
+        }
+
+        [TestMethod]
+        public void GetReservationsByUser_Pendiente_ReturnsReservationPendienteWithOptions()
+        {
+            // Arrange
+            string email = "usuario@test.com";
+            string secret = "miSecret123";
+            var fechaLimite = new DateTime(2023, 10, 5, 23, 59, 59);
+
+            var reservas = new List<Reservation>
+            {
+                new Reservation
+                {
+                    Id = 1,
+                    Email = email,
+                    Secret = secret,
+                    Status = ReservationStatus.Pendiente,
+                    FechaLimiteConfirmacion = fechaLimite,
+                    IdReferencia = null
+                }
+            };
+
+            _reservationRepository
+                .Setup(r => r.GetAllByExpression(
+                    It.Is<Expression<Func<Reservation, bool>>>(expr =>
+                        expr.Compile().Invoke(reservas[0])
+                    )))
+                .Returns(reservas);
+
+            // Act
+            var result = _reservationManager.GetReservationsByUser(email, secret);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Count);
+            var reserva = result[0];
+            Assert.AreEqual(ReservationStatus.Pendiente, reserva.Status);
+            Assert.AreEqual(fechaLimite, reserva.FechaLimiteConfirmacion);
+            Assert.IsNull(reserva.IdReferencia);
         }
     }
 }

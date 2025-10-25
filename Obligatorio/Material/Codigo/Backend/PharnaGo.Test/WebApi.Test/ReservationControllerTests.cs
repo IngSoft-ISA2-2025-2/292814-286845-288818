@@ -207,7 +207,7 @@ namespace PharmaGo.Test.WebApi.Test
         }
 
         [TestMethod]
-        public void GetReservationsByUser_Pendiente_ReturnsReservaPendienteConOpciones()
+        public void GetReservationsByUser_Pendiente_ReturnsReservationPendienteWithOptions()
         {
             // Arrange
             var request = new ConsultReservationRequest
