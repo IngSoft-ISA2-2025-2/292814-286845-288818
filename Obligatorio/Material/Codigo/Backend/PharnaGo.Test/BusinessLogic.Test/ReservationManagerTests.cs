@@ -664,6 +664,59 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(ReservationStatus.Retirada, reserva.Status);
             Assert.AreEqual(fechaRetiro, reserva.FechaRetiro);
         }
+
+        [TestMethod]
+        public void CreateReservation_AssignsPendingStatus()
+        {
+            // Arrange
+            var reservation = new Reservation
+            {
+                Email = "usuario@test.com",
+                Secret = "secret123",
+                PharmacyName = "Farmashop",
+                Drugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug
+                    {
+                        Drug = new Drug { Name = "Aspirina" },
+                        Quantity = 1
+                    }
+                }
+            };
+
+            _reservationRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(false);
+
+            _pharmacyRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Pharmacy, bool>>>()))
+                .Returns(true);
+
+            _pharmacyRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Pharmacy, bool>>>()))
+                .Returns(_pharmacy);
+
+            _drugRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Drug, bool>>>()))
+                .Returns(true);
+
+            _drugRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Drug, bool>>>()))
+                .Returns(_drug);
+
+            _reservationRepository
+                .Setup(x => x.InsertOne(It.IsAny<Reservation>()))
+                .Callback<Reservation>(r => r.Id = 10);
+
+            _reservationRepository.Setup(x => x.Save());
+
+            // Act
+            var result = _reservationManager.CreateReservation(reservation);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(ReservationStatus.Pendiente, result.Status); // <--- Validación clave
+        }
     }
 }
         
