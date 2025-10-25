@@ -64,6 +64,9 @@ namespace PharmaGo.BusinessLogic
 
         public Reservation CancelReservation(string email, string secret)
         {
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentException("Se requiere un correo válido");
+
             if (reservationRepository.Exists(r => r.Email == email && r.Secret != secret))
                 throw new UnauthorizedAccessException("Secret inválido para ese correo");
 
