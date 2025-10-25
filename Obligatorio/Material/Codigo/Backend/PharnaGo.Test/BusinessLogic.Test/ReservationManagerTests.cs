@@ -250,5 +250,27 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count);
         }
+
+        [TestMethod]
+        public void GetReservationsByUser_SecretIncorrecto_ThrowsArgumentException()
+        {
+            // Arrange
+            string email = "usuario@test.com";
+            string secretIncorrecto = "secretIncorrecto";
+
+            // El repositorio devuelve reservas para ese email, pero con otro secret
+            _reservationRepository
+                .Setup(r => r.GetAllByExpression(
+                    It.Is<Expression<Func<Reservation, bool>>>(expr =>
+                        expr.Compile().Invoke(_reservations[0]) // Verifica que el predicado filtra por email y secret
+                )))
+                .Returns(_reservations);
+                
+            // Act & Assert
+            var ex = Assert.ThrowsException<ArgumentException>(() =>
+                _reservationManager.GetReservationsByUser(email, secretIncorrecto)
+            );
+            Assert.AreEqual("El secret no coincide con el registrado para este email", ex.Message);
+        }
     }
 }
