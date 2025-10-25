@@ -423,5 +423,60 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual("Farmacia Norte", reserva.PharmacyName);
             Assert.AreEqual(fechaCancelacion, reserva.FechaCancelacion);
         }
+
+        [TestMethod]
+        public void GetReservationsByUser_Retirada_ReturnsReservationRetiradaWithFechaRetiro()
+        {
+            // Arrange
+            var request = new ConsultReservationRequest
+            {
+                Email = "usuario@test.com",
+                Secret = "miSecret123"
+            };
+
+            var fechaRetiro = new DateTime(2023, 10, 12, 9, 30, 0);
+
+            var reservasRetirada = new List<Reservation>
+            {
+                new Reservation
+                {
+                    Id = 5,
+                    PharmacyName = "Farmacia Este",
+                    Pharmacy = _pharmacy,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = _drug,
+                            Quantity = 1
+                        }
+                    },
+                    Status = ReservationStatus.Retirada,
+                    FechaRetiro = fechaRetiro
+                }
+            };
+
+            _reservationManagerMock
+                .Setup(service => service.GetReservationsByUser(request.Email, request.Secret))
+                .Returns(reservasRetirada);
+
+            // Act
+            var result = _reservationController.GetReservations(request);
+
+            // Assert
+            var objectResult = result as OkObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(200, objectResult.StatusCode);
+
+            var value = objectResult.Value as List<ReservationResponse>;
+            Assert.IsNotNull(value);
+            Assert.AreEqual(1, value.Count);
+
+            var reserva = value[0];
+            Assert.AreEqual("Retirada", reserva.Status);
+            Assert.AreEqual("Farmacia Este", reserva.PharmacyName);
+            Assert.AreEqual(fechaRetiro, reserva.FechaRetiro);
+        }
     }
 }
