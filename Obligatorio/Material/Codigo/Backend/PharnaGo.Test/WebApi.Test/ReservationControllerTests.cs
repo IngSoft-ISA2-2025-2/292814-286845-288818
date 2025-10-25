@@ -368,5 +368,62 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual("Farmacia Sur", reserva.PharmacyName);
             Assert.AreEqual(fechaExpiracion, reserva.FechaExpiracion);
         }
+
+        [TestMethod]
+        public void GetReservationsByUser_Cancelada_ReturnsReservationCanceladaWithMotivoYFecha()
+        {
+            // Arrange
+            var request = new ConsultReservationRequest
+            {
+                Email = "usuario@test.com",
+                Secret = "miSecret123"
+            };
+
+            var fechaCancelacion = new DateTime(2023, 10, 8, 10, 0, 0);
+
+            var reservasCancelada = new List<Reservation>
+            {
+                new Reservation
+                {
+                    Id = 4,
+                    PharmacyName = "Farmacia Norte",
+                    Pharmacy = _pharmacy,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = _drug,
+                            Quantity = 1
+                        }
+                    },
+                    Status = ReservationStatus.Cancelada,
+                    FechaCancelacion = fechaCancelacion,
+                    MotivoCancelacion = "Reserva cancelada. No es posible reactivarla"
+                }
+            };
+
+            _reservationManagerMock
+                .Setup(service => service.GetReservationsByUser(request.Email, request.Secret))
+                .Returns(reservasCancelada);
+
+            // Act
+            var result = _reservationController.GetReservations(request);
+
+            // Assert
+            var objectResult = result as OkObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(200, objectResult.StatusCode);
+
+            var value = objectResult.Value as List<ReservationResponse>;
+            Assert.IsNotNull(value);
+            Assert.AreEqual(1, value.Count);
+
+            var reserva = value[0];
+            Assert.AreEqual("Cancelada", reserva.Status);
+            Assert.AreEqual("Farmacia Norte", reserva.PharmacyName);
+            Assert.AreEqual(fechaCancelacion, reserva.FechaCancelacion);
+            Assert.AreEqual("Reserva cancelada. No es posible reactivarla", reserva.MotivoCancelacion);
+        }
     }
 }
