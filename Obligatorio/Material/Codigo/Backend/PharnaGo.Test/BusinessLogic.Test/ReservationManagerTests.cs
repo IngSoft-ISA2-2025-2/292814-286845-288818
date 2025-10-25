@@ -362,5 +362,59 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(email, result.Email);
             Assert.AreEqual(secret, result.Secret);
         }
+
+        [TestMethod]
+        public void CancelReservation_WithValidEmailAndSecret_SuccessfullyCancelsReservation()
+        {
+            // Arrange
+            string email = "cliente@example.com";
+            string secret = "abc123";
+
+            var activeReservation = new Reservation
+            {
+                Id = 1,
+                Email = email,
+                Secret = secret,
+                PharmacyName = "Farmashop",
+                Status = "Pending",
+                ReservationDrugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug
+                    {
+                        DrugId = 1,
+                        Drug = drugModel,
+                        Quantity = 2
+                    }
+                }
+            };
+
+            _reservationRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(false);
+
+            _reservationRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(activeReservation);
+
+            _reservationRepository
+                .Setup(x => x.UpdateOne(It.IsAny<Reservation>()));
+
+            _reservationRepository
+                .Setup(x => x.Save());
+
+            // Act
+            var result = _reservationManager.CancelReservation(email, secret);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Cancelled", result.Status);
+            Assert.AreEqual(email, result.Email);
+            Assert.AreEqual(secret, result.Secret);
+            Assert.AreEqual("Farmashop", result.PharmacyName);
+            Assert.AreEqual(1, result.ReservationDrugs.Count);
+
+            _reservationRepository.Verify(x => x.UpdateOne(It.IsAny<Reservation>()), Times.Once);
+            _reservationRepository.Verify(x => x.Save(), Times.Once);
+        }
     }
 }
