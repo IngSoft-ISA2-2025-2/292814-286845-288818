@@ -17,7 +17,7 @@ namespace PharmaGo.WebApi.Models.In
                 Email = this.Email,
                 Secret = this.Secret,
                 Pharmacy = new Pharmacy() { Name = this.PharmacyName },
-                ReservationDrugs = this.DrugsReserved.Select(d => new ReservationDrug
+                Drugs = this.DrugsReserved.Select(d => new ReservationDrug
                 {
                     Drug = new Drug() { Name = d.DrugName },
                     Quantity = d.DrugQuantity

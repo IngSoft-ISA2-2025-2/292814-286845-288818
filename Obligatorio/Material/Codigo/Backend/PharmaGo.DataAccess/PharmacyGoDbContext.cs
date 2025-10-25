@@ -19,6 +19,7 @@ namespace PharmaGo.DataAccess
         public DbSet<Presentation> Presentations { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<ReservationDrug> ReservationDrugs { get; set; }
 
         public PharmacyGoDbContext(DbContextOptions<PharmacyGoDbContext> options) : base(options) { }
 
@@ -36,6 +37,9 @@ namespace PharmaGo.DataAccess
             modelBuilder.Entity<User>()
                 .Property(u => u.Password)
                 .HasMaxLength(100);
+
+            modelBuilder.Entity<ReservationDrug>()
+                .HasKey(rd => new { rd.ReservationId, rd.DrugId });
 
             base.OnModelCreating(modelBuilder);
 

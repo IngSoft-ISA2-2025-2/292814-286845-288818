@@ -20,6 +20,10 @@ public class ExceptionFilter : IExceptionFilter
         {
             context.Result = new JsonResult(new { Message = e.Message }) { StatusCode = 400 };
         }
+        catch (ArgumentException e)
+        {
+            context.Result = new JsonResult(new { Message = e.Message }) { StatusCode = 400 };
+        }
         catch (FormatException e)
         {
             context.Result = new JsonResult(new { Message = "Invalid token format" }) { StatusCode = 400 };

@@ -4,20 +4,35 @@ import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { CommonService } from './CommonService';
+import { StorageManager } from '../utils/storage-manager';
 import { ReservationRequest, ReservationResponse } from '../interfaces/reservation';
 
 @Injectable({ providedIn: 'root' })
 export class ReservationService {
 
-  private url = environment.apiUrl + '/api/reservas';
+  private url = environment.apiUrl + '/api/Reservation';
 
   constructor(
     private http: HttpClient,
-    private commonService: CommonService) { }
+    private commonService: CommonService,
+    private storageManager: StorageManager) { }
 
   getHttpHeaders(): HttpHeaders {
+    let login = JSON.parse(this.storageManager.getLogin());
+    let token = login ? login.token : "";
+
     return new HttpHeaders()
-      .set('Content-Type', 'application/json');
+      .set('Content-Type', 'application/json')
+      .set('Authorization', token);
+  }
+
+  /** GET: Consult reservations by user */
+  getReservations(email: string, secret: string): Observable<any[]> {
+    return this.http.post<any[]>(`${this.url}/consult`, { email, secret }, { headers: this.getHttpHeaders() })
+      .pipe(
+        tap()
+        // NO capturamos el error aquí - dejamos que llegue al componente
+      );
   }
 
   /** POST: crear una nueva reserva */
@@ -43,7 +58,7 @@ export class ReservationService {
     };
   }
 
-  /** Log a ReservaService error with the MessageService */
+  /** Log a ReservationService error with the MessageService */
   private log(message: string) {
     this.commonService.updateToastData(message, "danger", "Error");
   }

@@ -67,6 +67,7 @@ import { InvitationComponent } from './pages/owner/invitation/invitation.compone
 import { StockRequestOwnerComponent } from './pages/owner/stock-request-owner/stock-request-owner.component';
 
 // Reservation
+import { ManageReservationComponent } from './pages/reservation/manage-reservation/manage-reservation.component';
 import { CreateReservationComponent } from './pages/reservation/create-reservation/create-reservation.component';
 
 @NgModule({
@@ -108,6 +109,7 @@ import { CreateReservationComponent } from './pages/reservation/create-reservati
     InvitationComponent,
     StockRequestOwnerComponent,
     // Reservation
+    ManageReservationComponent,
     CreateReservationComponent
 
   ],

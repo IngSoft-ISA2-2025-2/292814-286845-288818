@@ -1,8 +1,11 @@
 using PharmaGo.Domain.Entities;
-using PharmaGo.Domain.SearchCriterias;
-using PharmaGo.Exceptions;
+using PharmaGo.Domain.Enums;
 using PharmaGo.IBusinessLogic;
 using PharmaGo.IDataAccess;
+using PharmaGo.Domain.SearchCriterias;
+using PharmaGo.Exceptions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PharmaGo.BusinessLogic
 {
@@ -34,7 +37,7 @@ namespace PharmaGo.BusinessLogic
             var pharmacy = pharmacyRepository.GetOneByExpression(p => p.Name == reservation.PharmacyName);
 
 
-            foreach (var reservationDrug in reservation.ReservationDrugs)
+            foreach (var reservationDrug in reservation.Drugs)
             {
                 if (!drugRepository.Exists(d => d.Name == reservationDrug.Drug.Name
                     && d.Pharmacy.Name == reservation.PharmacyName))
@@ -55,11 +58,39 @@ namespace PharmaGo.BusinessLogic
                 drugRepository.UpdateOne(drug);
             }
 
-            reservation.Status = "Pending";
+            reservation.Status = ReservationStatus.Pendiente;
 
             reservationRepository.InsertOne(reservation);
             reservationRepository.Save();
             return reservation;
+        }
+
+        public List<Reservation> GetReservationsByUser(string email, string secret)
+        {
+            ValidarEmailYSecret(email, secret);
+
+            var reservations = reservationRepository.GetAllByExpression(r => r.Email == email);
+
+            ValidarSecretParaEmail(reservations, secret);
+
+            return FiltrarPorSecret(reservations, secret);
+        }
+
+        private void ValidarEmailYSecret(string email, string secret)
+        {
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(secret))
+                throw new ArgumentException("Debe ingresar un email y secret para consultar reservas.");
+        }
+
+        private void ValidarSecretParaEmail(IEnumerable<Reservation> reservations, string secret)
+        {
+            if (reservations.Any() && !reservations.Any(r => r.Secret == secret))
+                throw new ArgumentException("El secret no coincide con el registrado para este email");
+        }
+
+        private List<Reservation> FiltrarPorSecret(IEnumerable<Reservation> reservations, string secret)
+        {
+            return reservations.Where(r => r.Secret == secret).ToList();
         }
     }
 }

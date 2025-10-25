@@ -1,0 +1,281 @@
+<div class="manage-reservation-container">
+  <div class="card">
+    <div class="card-header">
+      <h2>Gestionar Reservas</h2>
+      <p>Consulta y administra tus reservas de medicamentos</p>
+    </div>
+
+    <div class="card-body">
+      <!-- Formulario de consulta -->
+      <form class="consultation-form" (ngSubmit)="consultarReservas()">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input 
+              id="email"
+              type="email" 
+              [(ngModel)]="email" 
+              name="email"
+              data-cy="email-input"
+              placeholder="Ingresa tu email"
+              class="form-control"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label for="secret">Secret:</label>
+            <input 
+              id="secret"
+              type="password" 
+              [(ngModel)]="secret" 
+              name="secret"
+              data-cy="secret-input"
+              placeholder="Ingresa tu secret"
+              class="form-control"
+              required>
+          </div>
+        </div>
+
+        <button 
+          type="submit" 
+          data-cy="consultar-reservas-btn"
+          class="btn btn-primary"
+          [disabled]="loading">
+          <span *ngIf="loading" class="spinner"></span>
+          {{ loading ? 'Consultando...' : 'Consultar Reservas' }}
+        </button>
+      </form>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="errorMessage" class="alert alert-danger" data-cy="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Filtros y ordenamiento -->
+      <div *ngIf="reservas.length > 0" class="filters-section">
+        <h3>Filtros y Ordenamiento</h3>
+        
+        <div class="filters-row">
+          <!-- Filtro por estado -->
+          <div class="filter-group">
+            <label for="estadoFiltro">Filtrar por estado:</label>
+            <select 
+              id="estadoFiltro"
+              [(ngModel)]="estadoFiltro" 
+              name="estadoFiltro"
+              (change)="aplicarFiltroPorEstado()"
+              data-cy="filtro-estado"
+              class="form-control">
+              <option value="">Todos los estados</option>
+              <option value="Pendiente">Pendiente</option>
+              <option value="Confirmada">Confirmada</option>
+              <option value="Expirada">Expirada</option>
+              <option value="Cancelada">Cancelada</option>
+              <option value="Retirada">Retirada</option>
+            </select>
+          </div>
+
+          <!-- Filtro por medicamento -->
+          <div class="filter-group">
+            <label for="filtroMedicamento">Buscar por medicamento:</label>
+            <input 
+              id="filtroMedicamento"
+              type="text" 
+              [(ngModel)]="filtroMedicamento" 
+              name="filtroMedicamento"
+              data-cy="buscar-medicamento-input"
+              placeholder="Nombre del medicamento"
+              class="form-control">
+          </div>
+
+          <!-- Filtro por farmacia -->
+          <div class="filter-group">
+            <label for="filtroFarmacia">Buscar por farmacia:</label>
+            <input 
+              id="filtroFarmacia"
+              type="text" 
+              [(ngModel)]="filtroFarmacia" 
+              name="filtroFarmacia"
+              data-cy="buscar-farmacia-input"
+              placeholder="Nombre de la farmacia"
+              class="form-control">
+          </div>
+
+          <!-- Botón de ordenar -->
+          <div class="filter-group">
+            <button 
+              type="button" 
+              (click)="ordenarPorFechaDesc()"
+              data-cy="ordenar-fecha-btn"
+              class="btn btn-secondary">
+              Ordenar por fecha más reciente
+            </button>
+          </div>
+
+          <!-- Botón de limpiar filtros -->
+          <div class="filter-group">
+            <button 
+              type="button" 
+              (click)="limpiarFiltros()"
+              class="btn btn-outline-secondary">
+              Limpiar filtros
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mensaje cuando no hay reservas -->
+      <div *ngIf="noTieneReservas && !loading && !errorMessage" 
+           class="alert alert-info" 
+           data-cy="mensaje-sin-reservas">
+        {{ mensajeSinReservas }}
+      </div>
+
+      <!-- Listado de reservas -->
+      <div *ngIf="reservas.length > 0" class="reservations-section" data-cy="listado-reservas">
+        <h3>Tus Reservas</h3>
+
+        <div *ngFor="let reserva of reservasFiltradas" 
+             class="reservation-card" 
+             data-cy="reserva-item">
+          
+          <!-- Información básica de la reserva -->
+          <div class="reservation-header">
+            <h4>Reserva #{{ reserva.id }}</h4>
+            <span class="status-badge" 
+                  [class]="'status-' + reserva.status?.toLowerCase()" 
+                  data-cy="reserva-estado">
+              {{ reserva.status }}
+            </span>
+          </div>
+
+          <!-- Detalles de la reserva -->
+          <div class="reservation-details">
+            <!-- Farmacia -->
+            <div class="detail-item">
+              <strong>Farmacia:</strong> 
+              <span data-cy="reserva-farmacia">{{ reserva.pharmacyName }}</span>
+            </div>
+
+            <!-- Medicamentos -->
+            <div class="detail-item">
+              <strong>Medicamentos:</strong>
+              <ul class="medications-list">
+                <li *ngFor="let drug of reserva.reservedDrugs" data-cy="reserva-medicamento">
+                  {{ drug.drugName }} - Cantidad: {{ drug.quantity }}
+                </li>
+              </ul>
+            </div>
+
+            <!-- Mensaje según estado -->
+            <div class="state-message" 
+                 [ngClass]="'message-' + reserva.status?.toLowerCase()">
+              
+              <!-- Mensaje para Pendiente -->
+              <div *ngIf="reserva.status === 'Pendiente'" data-cy="mensaje-pendiente">
+                <i class="icon-clock"></i>
+                {{ getMensajePorEstado(reserva) }}
+              </div>
+
+              <!-- Mensaje para Confirmada -->
+              <div *ngIf="reserva.status === 'Confirmada'" data-cy="mensaje-confirmada">
+                <i class="icon-check"></i>
+                {{ getMensajePorEstado(reserva) }}
+              </div>
+
+              <!-- Mensaje para Expirada -->
+              <div *ngIf="reserva.status === 'Expirada'" data-cy="mensaje-expirada">
+                <i class="icon-warning"></i>
+                {{ getMensajePorEstado(reserva) }}
+              </div>
+
+              <!-- Mensaje para Cancelada -->
+              <div *ngIf="reserva.status === 'Cancelada'" data-cy="mensaje-cancelada">
+                <i class="icon-x"></i>
+                {{ getMensajePorEstado(reserva) }}
+              </div>
+
+              <!-- Mensaje para Retirada -->
+              <div *ngIf="reserva.status === 'Retirada'" data-cy="mensaje-retirada">
+                <i class="icon-check-circle"></i>
+                {{ getMensajePorEstado(reserva) }}
+              </div>
+            </div>
+
+            <!-- Información adicional según estado -->
+            <div class="additional-info">
+              
+              <!-- Para Pendiente: Fecha límite y botón cancelar -->
+              <div *ngIf="reserva.status === 'Pendiente'">
+                <div *ngIf="reserva.fechaLimiteConfirmacion" 
+                     class="fecha-limite" 
+                     data-cy="fecha-limite-confirmacion">
+                  <strong>Fecha límite de confirmación:</strong> 
+                  {{ formatearFecha(reserva.fechaLimiteConfirmacion) }}
+                </div>
+                <button 
+                  type="button" 
+                  (click)="cancelarReserva(reserva.id)"
+                  class="btn btn-danger btn-sm" 
+                  data-cy="cancelar-reserva-btn">
+                  Cancelar Reserva
+                </button>
+              </div>
+
+              <!-- Para Confirmada: ID de referencia -->
+              <div *ngIf="reserva.status === 'Confirmada'">
+                <div *ngIf="reserva.idReferencia" 
+                     class="id-referencia" 
+                     data-cy="id-referencia">
+                  <strong>ID de Referencia:</strong> 
+                  <code>{{ reserva.idReferencia }}</code>
+                </div>
+              </div>
+
+              <!-- Para Expirada: Fecha de expiración -->
+              <div *ngIf="reserva.status === 'Expirada'">
+                <div *ngIf="reserva.fechaExpiracion" 
+                     class="fecha-expiracion" 
+                     data-cy="fecha-expiracion">
+                  <strong>Fecha de expiración:</strong> 
+                  {{ formatearFecha(reserva.fechaExpiracion) }}
+                </div>
+              </div>
+
+              <!-- Para Cancelada: Fecha de cancelación -->
+              <div *ngIf="reserva.status === 'Cancelada'">
+                <div *ngIf="reserva.fechaCancelacion" 
+                     class="fecha-cancelacion" 
+                     data-cy="fecha-cancelacion">
+                  <strong>Fecha de cancelación:</strong> 
+                  {{ formatearFecha(reserva.fechaCancelacion) }}
+                </div>
+              </div>
+
+              <!-- Para Retirada: Fecha de retiro -->
+              <div *ngIf="reserva.status === 'Retirada'">
+                <div *ngIf="reserva.fechaRetiro" 
+                     class="fecha-retiro" 
+                     data-cy="fecha-retiro">
+                  <strong>Fecha de retiro:</strong> 
+                  {{ formatearFecha(reserva.fechaRetiro) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botón de ver detalles -->
+          <div class="reservation-actions">
+            <button 
+              type="button" 
+              (click)="verDetallesReserva(reserva.id)"
+              class="btn btn-info btn-sm" 
+              data-cy="ver-detalles-btn">
+              Ver Detalles
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
