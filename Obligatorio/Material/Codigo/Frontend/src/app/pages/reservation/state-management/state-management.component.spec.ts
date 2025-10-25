@@ -186,4 +186,69 @@ describe('StateManagementComponent', () => {
     const fechaElement = reservaItem.query(By.css('[data-cy="fecha-retiro"]'));
     expect(fechaElement.nativeElement.textContent).toContain('2023-10-25');
   });
+
+  it('debería mostrar todas las reservas con diferentes estados y los campos correspondientes', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'secret123';
+
+    const reservas = [
+      {
+        id: 1,
+        reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
+        pharmacyName: 'Farmashop',
+        status: 'Pendiente'
+      },
+      {
+        id: 2,
+        reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 2 }],
+        pharmacyName: 'Farmashop',
+        status: 'Confirmada',
+        referencia: 'CONF123'
+      },
+      {
+        id: 3,
+        reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }],
+        pharmacyName: 'Farmashop',
+        status: 'Expirada'
+      },
+      {
+        id: 4,
+        reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }],
+        pharmacyName: 'Farmashop',
+        status: 'Cancelada'
+      },
+      {
+        id: 5,
+        reservedDrugs: [{ drugName: 'Loratadina', quantity: 1 }],
+        pharmacyName: 'Farmashop',
+        status: 'Retirada'
+      }
+    ];
+    mockReservationService.getReservations.and.returnValue(of(reservas));
+
+    // Act
+    component.consultarReservas();
+    fixture.detectChanges();
+
+    // Assert
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItems.length).toBe(5);
+
+    // Verifica que cada reserva muestra su estado correctamente
+    const estados = reservaItems.map(item => item.query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent);
+    expect(estados).toContain('Pendiente');
+    expect(estados).toContain('Confirmada');
+    expect(estados).toContain('Expirada');
+    expect(estados).toContain('Cancelada');
+    expect(estados).toContain('Retirada');
+
+    // Verifica que las reservas pendientes NO muestran ID de referencia
+    const pendienteItem = reservaItems.find(item => item.query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent.includes('Pendiente'));
+    expect(pendienteItem.query(By.css('[data-cy="id-referencia"]'))).toBeNull();
+
+    // Verifica que las reservas confirmadas SÍ muestran ID de referencia
+    const confirmadaItem = reservaItems.find(item => item.query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent.includes('Confirmada'));
+    expect(confirmadaItem.query(By.css('[data-cy="id-referencia"]'))).toBeTruthy();
+  });
 });
