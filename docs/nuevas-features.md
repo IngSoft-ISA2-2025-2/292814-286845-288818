@@ -11,57 +11,82 @@ Los usuarios podrán reservar unidades de medicamentos de una farmacia específi
 **Para** asegurar la disponibilidad del medicamento antes de retirarlo
 
 ### Escenarios Gherkin
-1. Escenario: Usuario no autenticado intenta reservar medicamentos
-**Dado** un usuario no autenticado
-**Cuando** intenta reservar medicamentos de una farmacia
-**Entonces** el sistema responde con un error *unauthorized (401)*
-**Y** muestra un mensaje que dice *"Unautharized user"*
+1. Escenario: Usuario sin email intenta reservar medicamentos
+**Dado** un email para reserva ""
+**Y** un secret para reserva ""
+**Y** un medicamento "Aspirina" con cantidad de 1 unidad
+**Y** una farmacia "Farmashop"
+**Cuando** hace click en el botón de reservar
+**Entonces** el sistema responde con un error con un mensaje que dice *"Debe ingresar un email y secret para reservar medicamentos."*
 
-2. Escenario: Usuario intenta reservar un medicamento en una farmacia inválida
-**Dado** un usuario autenticado
-**Y** selecciona una farmacia que no existe o es inválida
-**Cuando** intenta reservar un medicamento
-**Entonces** el sistema responde con un error *bad request (404)* 
-**Y** muestra un mensaje que dice *"La farmacia seleccionada no existe"*
+2. Escenario: Usuario con email y secret válidos reserva en farmacia inválida
+**Dado** un email para reserva "usuario@test.com"
+**Y** un secret para reserva "secret123"
+**Y** un medicamento "Aspirina" con cantidad de 1 unidad
+**Y** una farmacia "FarmaciaInexistente"
+**Cuando** hace click en el botón de reservar
+**Entonces** el sistema responde con un error un mensaje que dice *"La farmacia FarmaciaInexistente no existe"*
 
-3. Escenario: Usuario autenticado intenta reservar un medicamento sin stock
-**Dado** un usuario autenticado
-**Y** selecciona una farmacia específica
-**Cuando** intenta reservar un medicamento
-**Y** no hay disponibilidad en el stock
-**Entonces** el sistema muestra responde con un mensaje de error *conflict 409*
-**Y** muestra un mensaje que dice *"No hay stock disponible para el medicamento {nombre_medicamento}*"
+3. Escenario: Usuario con email y secret válidos intenta reservar medicamento inexistente
+**Dado** un email para reserva "usuario@test.com"
+**Y** un secret para reserva "secret123"
+**Y** un medicamento "MedicamentoInexistente" con cantidad de 1 unidad
+**Y** el medicamento no existe en la farmacia "Farmashop"
+**Y** una farmacia "Farmashop"
+**Cuando** hace click en el botón de reservar
+**Entonces** el sistema responde con un error con un mensaje que dice *"El medicamento MedicamentoInexistente no existe en la farmacia Farmashop"*
 
-4. Escenario: Usuario reserva un medicamento que requiere prescripción con exito
-**Dado** un usuario autenticado  
-**Y** selecciona una farmacia específica  
-**Cuando** intenta reservar un medicamento  
-**Y** el medicamento requiere prescripción médica  
-**Y** hay stock disponible  
+4. Escenario: Usuario con email y secret válidos intenta reservar medicamento sin stock
+**Dado** un email para reserva "usuario@test.com"
+**Y** un secret para reserva "secret123"
+**Y** un medicamento "Aspirina" con cantidad de 1 unidad
+**Y** no hay stock disponible para el medicamento "Aspirina" en la farmacia "Farmashop"
+**Y** una farmacia "Farmashop"
+**Cuando** hace click en el botón de reservar
+**Entonces** el sistema muestra responde con un mensaje que dice *"No hay stock disponible para el medicamento Aspirina"*
+
+5. Escenario: Usuario reserva un medicamento que requiere prescripción con éxito
+**Dado** un email para reserva "usuario@test.com"
+**Y** un secret para reserva "secret123"
+**Y** un medicamento "Aspirina" con cantidad de 1 unidad que requiere prescripción médica
+**Y** hay stock mayor o igual a una unidad para el medicamento "Aspirina" en la farmacia "Farmashop"
+**Y** una farmacia "Farmashop"
+**Cuando** hace click en el botón de reservar
 **Entonces** el sistema crea la reserva con un estado *Pendiente*
 **Y** descuenta la unidad del stock de los medicamentos
-**Y** muestra un mensaje que dice *"Reserva creada exitosamente, el medicamento {nombre_medicamento} requiere receta médica. Por favor, preséntela en la farmacia para validar la reserva."*
+**Y** muestra un mensaje de reserva que dice *"Reserva creada exitosamente, el medicamento Aspirina requiere receta médica. Por favor, preséntela en la farmacia para validar la reserva."*
 
-5. Escenario: Usuario reserva un medicamento que no requiere prescripción con éxito
-**Dado** un usuario autenticado
-**Y** selecciona una farmacia específica
-**Cuando** intenta reservar un medicamento  
-**Y** el medicamento no requiere prescripción médica  
-**Y** el medicamento no requiere prescripción
-**Y** hay stock disponible  
+6. Escenario: Usuario reserva un medicamento que no requiere prescripción con éxito
+**Dado** un email para reserva "usuario@test.com"
+**Y** un secret para reserva "secret123"
+**Y** un medicamento "Paracetamol" con cantidad de 1 unidad que no requiere prescripción médica
+**Y** hay stock mayor o igual a una unidad para el medicamento "Paracetamol" en la farmacia "Farmashop"
+**Y** una farmacia "Farmashop"
+**Cuando** hace click en el botón de reservar
 **Entonces** el sistema crea la reserva con un estado *Pendiente*
 **Y** descuenta la unidad del stock de los medicamentos
-**Y** muestra un mensaje que dice *"Reserva creada exitosamente"*
+**Y** muestra un mensaje de reserva que dice *"Reserva creada exitosamente"*
 
-6. Escenario: Usuario reserva dos medicamentos uno que requiere prescripción y otro que no requiere con exito
-**Dado** un usuario autenticado  
-**Y** selecciona una farmacia específica  
-**Cuando** intenta reservar un medicamento  
-**Y** el medicamento requiere prescripción médica  
-**Y** hay stock disponible  
-**Entonces** el sistema crea la reserva con un estado *Pendiente*
+7. Escenario: Usuario reserva dos medicamentos uno que requiere prescripción y otro que no requiere con éxito
+**Dado** un email para reserva "usuario@test.com"
+**Y** un secret para reserva "secret123"
+**Y** un medicamento "Aspirina" con cantidad de 1 unidad que requiere prescripción médica
+**Y** un medicamento "Paracetamol" con cantidad de 1 unidad que no requiere prescripción médica
+**Y** hay stock mayor o igual a una unidad para ambos medicamentos en la farmacia "Farmashop"
+**Y** una farmacia "Farmashop"
+**Cuando** hace click en el botón de reservar
+**Entonces** el sistema crea la reserva con un estado *"Pendiente"*
 **Y** descuenta la unidad del stock de los medicamentos
-**Y** muestra un mensaje que dice *"Reserva creada exitosamente, el medicamento {nombre_medicamento} requiere receta médica. Por favor, preséntela en la farmacia para validar la reserva."*
+**Y** muestra un mensaje de reserva que dice *"Reserva creada exitosamente, el medicamento Aspirina requiere receta médica. Por favor, preséntela en la farmacia para validar la reserva."*
+
+8. Escenario: Usuario con email existente pero secret incorrecto intenta reservar
+**Dado** un email para reserva "usuario@test.com"
+**Y** un secret para reserva "secretIncorrecto"
+**Y** el email para reserva "usuario@test.com" ya tiene reservas con secret "secret123"
+**Y** un medicamento "Aspirina" con cantidad de 1 unidad
+**Y** una farmacia "Farmashop"
+**Cuando** hace click en el botón de reservar
+**Entonces** el sistema responde con un error con un mensaje que dice *"El secret no coincide con el registrado para este email"*
 
 2. ## Gestionar reservas
 Los clientes podrán visualizar un listado de sus reservas.
@@ -414,8 +439,88 @@ Internamente, el sistema gestionará las reservas a través de diferentes estado
 Para robustecer la seguridad del proceso, cuando se genere una reserva, el sistema creará un par de claves público-privada. Para hacer uso de la reserva en la farmacia, el cliente deberá proveer la clave pública para que el sistema la valide, asegurando así la autenticidad y correcta entrega del medicamento.
 
 **Como** sistema
-**Quiero** generar un par de claves publico-privada
+**Quiero** generar un par de claves público-privada para cada reserva
 **Para** asegurar la autenticidad del cliente y la correcta entrega del medicamento
+
+### Escenarios Gherkin
+1. Escenario: Sistema genera claves público-privada al crear una reserva exitosamente
+**Dado** un usuario autenticado con email "usuario@test.com"
+**Y** una reserva creada para el medicamento "Aspirina" en la farmacia "Farmashop"
+**Cuando** el sistema procesa la reserva
+**Entonces** el sistema genera automáticamente un par de claves público-privada
+**Y** la clave pública se muestra al usuario
+**Y** la clave privada se almacena de forma segura en el sistema
+**Y** muestra un mensaje que dice *"Reserva creada exitosamente. Guarde su clave pública para retirar el medicamento en la farmacia."*
+
+2. Escenario: Cliente presenta clave pública válida en la farmacia para validar reserva
+**Dado** una reserva confirmada con código "RES-12345"
+**Y** la reserva tiene una clave pública "PUBKEY-ABC123XYZ"
+**Y** estoy en la página de validación de reservas en farmacia
+**Cuando** ingreso la clave pública "PUBKEY-ABC123XYZ"
+**Y** hago click en el botón de validar
+**Entonces** el sistema valida correctamente la clave pública
+**Y** muestra la información de la reserva: medicamento, cantidad, cliente
+**Y** muestra un mensaje que dice *"Reserva validada exitosamente. Puede proceder con la entrega del medicamento."*
+
+3. Escenario: Cliente presenta clave pública inválida o inexistente en la farmacia
+**Dado** estoy en la página de validación de reservas en farmacia
+**Y** no existe ninguna reserva con la clave pública "PUBKEY-INVALID999"
+**Cuando** ingreso la clave pública "PUBKEY-INVALID999"
+**Y** hago click en el botón de validar
+**Entonces** el sistema responde con un error de tipo *"not found (404)"*
+**Y** muestra un mensaje que dice *"La clave pública proporcionada no es válida o no existe"*
+
+4. Escenario: Cliente presenta clave pública de una reserva ya expirada
+**Dado** una reserva expirada con código "RES-67890"
+**Y** la reserva tiene una clave pública "PUBKEY-EXPIRED456"
+**Y** la reserva está en estado "Expirada"
+**Y** estoy en la página de validación de reservas en farmacia
+**Cuando** ingreso la clave pública "PUBKEY-EXPIRED456"
+**Y** hago click en el botón de validar
+**Entonces** el sistema responde con un error de tipo *"forbidden (403)"*
+**Y** muestra un mensaje que dice *"La reserva ha expirado y no puede ser utilizada"*
+
+5. Escenario: Cliente presenta clave pública de una reserva cancelada
+**Dado** una reserva cancelada con código "RES-54321"
+**Y** la reserva tiene una clave pública "PUBKEY-CANCELLED789"
+**Y** la reserva está en estado "Cancelada"
+**Y** estoy en la página de validación de reservas en farmacia
+**Cuando** ingreso la clave pública "PUBKEY-CANCELLED789"
+**Y** hago click en el botón de validar
+**Entonces** el sistema responde con un error de tipo *"forbidden (403)"*
+**Y** muestra un mensaje que dice *"La reserva fue cancelada y la clave pública ya no es válida"*
+
+6. Escenario: Empleado de farmacia valida reserva con clave pública y completa la entrega
+**Dado** soy un empleado autenticado de la farmacia "Farmashop"
+**Y** existe una reserva confirmada con clave pública "PUBKEY-DELIVERY999"
+**Y** la reserva está en estado "Confirmada"
+**Y** estoy en la página de validación de reservas en farmacia
+**Cuando** ingreso la clave pública "PUBKEY-DELIVERY999"
+**Y** hago click en el botón de validar
+**Y** confirmo la entrega del medicamento
+**Entonces** el sistema marca la reserva como *"Retirada"*
+**Y** invalida la clave pública para evitar reutilización
+**Y** muestra un mensaje que dice *"Entrega completada exitosamente. La reserva ha sido cerrada."*
+
+7. Escenario: Sistema invalida clave pública después de múltiples intentos fallidos de validación
+**Dado** estoy en la página de validación de reservas en farmacia
+**Y** tengo habilitada la protección contra intentos de fuerza bruta
+**Cuando** ingreso una clave pública incorrecta "PUBKEY-WRONG001" y hago click en validar
+**Y** ingreso otra clave pública incorrecta "PUBKEY-WRONG002" y hago click en validar
+**Y** ingreso otra clave pública incorrecta "PUBKEY-WRONG003" y hago click en validar
+**Y** ingreso otra clave pública incorrecta "PUBKEY-WRONG004" y hago click en validar
+**Y** ingreso otra clave pública incorrecta "PUBKEY-WRONG005" y hago click en validar
+**Entonces** el sistema bloquea temporalmente la validación por seguridad
+**Y** muestra un mensaje que dice *"Demasiados intentos fallidos. Por favor, intente nuevamente en 15 minutos."*
+
+8. Escenario: Usuario visualiza su clave pública en la pantalla de confirmación
+**Dado** estoy en la página de crear-reserva
+**Y** un usuario con email "usuario@test.com" y secret "secret123"
+**Y** ha creado una reserva para "Paracetamol" en farmacia "Farmashop"
+**Cuando** la reserva se crea exitosamente
+**Entonces** el sistema muestra la clave pública "PUBKEY-VIEW456"
+**Y** muestra instrucciones que dicen *"Guarde esta clave pública. La necesitará para retirar su medicamento en la farmacia."*
+**Y** puedo ver el estado de la reserva como *"Confirmada"*
 
 
 
