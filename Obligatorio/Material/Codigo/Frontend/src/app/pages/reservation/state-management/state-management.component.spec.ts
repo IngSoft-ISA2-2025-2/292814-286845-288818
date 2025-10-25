@@ -251,4 +251,149 @@ describe('StateManagementComponent', () => {
     const confirmadaItem = reservaItems.find(item => item.query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent.includes('Confirmada'));
     expect(confirmadaItem.query(By.css('[data-cy="id-referencia"]'))).toBeTruthy();
   });
+
+  it('debería filtrar y mostrar solo reservas en estado "Pendiente"', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'secret123';
+
+    const reservas = [
+      { id: 1, status: 'Pendiente' },
+      { id: 2, status: 'Confirmada' },
+      { id: 3, status: 'Expirada' },
+      { id: 4, status: 'Cancelada' },
+      { id: 5, status: 'Retirada' }
+    ];
+    mockReservationService.getReservations.and.returnValue(of(reservas));
+
+    // Act
+    component.consultarReservas();
+    fixture.detectChanges();
+
+    component.estadoFiltro = 'Pendiente';
+    component.aplicarFiltroEstado();
+    fixture.detectChanges();
+
+    // Assert
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItems.length).toBe(1);
+    const estado = reservaItems[0].query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent;
+    expect(estado).toContain('Pendiente');
+  });
+
+  it('debería filtrar y mostrar solo reservas en estado "Confirmada"', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'secret123';
+
+    const reservas = [
+      { id: 1, status: 'Pendiente' },
+      { id: 2, status: 'Confirmada' },
+      { id: 3, status: 'Expirada' },
+      { id: 4, status: 'Cancelada' },
+      { id: 5, status: 'Retirada' }
+    ];
+    mockReservationService.getReservations.and.returnValue(of(reservas));
+
+    // Act
+    component.consultarReservas();
+    fixture.detectChanges();
+
+    component.estadoFiltro = 'Confirmada';
+    component.aplicarFiltroEstado();
+    fixture.detectChanges();
+
+    // Assert
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItems.length).toBe(1);
+    const estado = reservaItems[0].query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent;
+    expect(estado).toContain('Confirmada');
+  });
+
+  it('debería filtrar y mostrar solo reservas en estado "Expirada"', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'secret123';
+
+    const reservas = [
+      { id: 1, status: 'Pendiente' },
+      { id: 2, status: 'Confirmada' },
+      { id: 3, status: 'Expirada' },
+      { id: 4, status: 'Cancelada' },
+      { id: 5, status: 'Retirada' }
+    ];
+    mockReservationService.getReservations.and.returnValue(of(reservas));
+
+    // Act
+    component.consultarReservas();
+    fixture.detectChanges();
+
+    component.estadoFiltro = 'Expirada';
+    component.aplicarFiltroEstado();
+    fixture.detectChanges();
+
+    // Assert
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItems.length).toBe(1);
+    const estado = reservaItems[0].query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent;
+    expect(estado).toContain('Expirada');
+  });
+
+  it('debería filtrar y mostrar solo reservas en estado "Cancelada"', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'secret123';
+
+    const reservas = [
+      { id: 1, status: 'Pendiente' },
+      { id: 2, status: 'Confirmada' },
+      { id: 3, status: 'Expirada' },
+      { id: 4, status: 'Cancelada' },
+      { id: 5, status: 'Retirada' }
+    ];
+    mockReservationService.getReservations.and.returnValue(of(reservas));
+
+    // Act
+    component.consultarReservas();
+    fixture.detectChanges();
+
+    component.estadoFiltro = 'Cancelada';
+    component.aplicarFiltroEstado();
+    fixture.detectChanges();
+
+    // Assert
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItems.length).toBe(1);
+    const estado = reservaItems[0].query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent;
+    expect(estado).toContain('Cancelada');
+  });
+
+  it('debería filtrar y mostrar solo reservas en estado "Retirada"', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'secret123';
+
+    const reservas = [
+      { id: 1, status: 'Pendiente' },
+      { id: 2, status: 'Confirmada' },
+      { id: 3, status: 'Expirada' },
+      { id: 4, status: 'Cancelada' },
+      { id: 5, status: 'Retirada' }
+    ];
+    mockReservationService.getReservations.and.returnValue(of(reservas));
+
+    // Act
+    component.consultarReservas();
+    fixture.detectChanges();
+
+    component.estadoFiltro = 'Retirada';
+    component.aplicarFiltroEstado();
+    fixture.detectChanges();
+
+    // Assert
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItems.length).toBe(1);
+    const estado = reservaItems[0].query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent;
+    expect(estado).toContain('Retirada');
+  });
 });
