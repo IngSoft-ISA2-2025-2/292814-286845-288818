@@ -715,7 +715,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(ReservationStatus.Pendiente, result.Status); // <--- Validación clave
+            Assert.AreEqual(ReservationStatus.Pendiente, result.Status);
         }
     }
 }
