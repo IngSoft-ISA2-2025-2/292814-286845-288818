@@ -64,7 +64,17 @@ namespace PharmaGo.BusinessLogic
 
         public Reservation CancelReservation(string email, string secret)
         {
-            throw new NotImplementedException();
+            var reservation = reservationRepository.GetOneByExpression(
+                r => r.Email == email && r.Secret == secret);
+
+            if (reservation == null)
+                throw new KeyNotFoundException("No existe una reserva asociada a ese correo");
+
+            reservation.Status = "Cancelled";
+            reservationRepository.UpdateOne(reservation);
+            reservationRepository.Save();
+            
+            return reservation;
         }
     }
 }
