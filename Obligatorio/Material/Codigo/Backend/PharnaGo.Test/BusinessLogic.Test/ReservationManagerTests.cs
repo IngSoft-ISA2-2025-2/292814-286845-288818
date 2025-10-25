@@ -709,7 +709,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                _reservationManager.ValidateReservation(publicKey));
 
             Assert.AreEqual(
-                "Clave incorrecta.",
+                "No reservation found with the provided public key.",
                 ex.Message
             );
         }

@@ -83,9 +83,9 @@ namespace PharmaGo.BusinessLogic
 
         public Reservation ValidateReservation(string publicKey)
         {
-            if(reservationRepository.Exists(r=> r.PublicKey == publicKey))
-                return reservationRepository.GetOneByExpression(r => r.PublicKey == publicKey);
-            return null;
+            if(!reservationRepository.Exists(r=> r.PublicKey == publicKey))
+                throw new ResourceNotFoundException("No reservation found with the provided public key.");
+            return reservationRepository.GetOneByExpression(r => r.PublicKey == publicKey);
         }
 
         public List<Reservation> GetReservationsByUser(string email, string secret)
