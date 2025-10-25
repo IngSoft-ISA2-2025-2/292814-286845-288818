@@ -758,7 +758,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                _reservationManager.ValidateReservation(publicKey));
 
             Assert.AreEqual(
-                "The reservation is cancelled and cannot be validated.",
+                "The reservation has been canceled and cannot be validated.",
                 ex.Message
             );
         }
