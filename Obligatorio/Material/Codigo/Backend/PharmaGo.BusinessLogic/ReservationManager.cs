@@ -81,6 +81,11 @@ namespace PharmaGo.BusinessLogic
             }
         }
 
+        public Reservation ValidateReservation(string publicKey)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Reservation> GetReservationsByUser(string email, string secret)
         {
             ValidarEmailYSecret(email, secret);

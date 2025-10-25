@@ -21,7 +21,7 @@ namespace PharmaGo.Test.WebApi.Test
         private Pharmacy _pharmacy;
         private Drug _drug;
         private ReservationModel reservationModel;
-        private Reservation reservation;
+        private Reservation _reservation;
         private Pharmacy pharmacyModel;
         private Drug drugModel;
 
@@ -133,7 +133,7 @@ namespace PharmaGo.Test.WebApi.Test
                 PharmacyName = "Farmashop"
             };
 
-            reservation = new Reservation()
+            _reservation = new Reservation()
             {
                 Id = 1,
                 PharmacyName = "Farmashop",
@@ -165,7 +165,7 @@ namespace PharmaGo.Test.WebApi.Test
             //Arrange
             _reservationManagerMock
                 .Setup(service => service.CreateReservation(It.IsAny<Reservation>()))
-                .Returns(reservation);
+                .Returns(_reservation);
 
             //Act
             var result = _reservationController.CreateReserva(
@@ -593,7 +593,7 @@ namespace PharmaGo.Test.WebApi.Test
         public void ValidateReservation_Ok()
         {
             var publicKey = "publicKeySample";
-
+            var reservation = _reservation;
             _reservationManagerMock
                 .Setup(service => service.ValidateReservation(publicKey))
                 .Returns(reservation);
