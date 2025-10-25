@@ -260,5 +260,58 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.IsNull(reserva.IdReferencia);
             Assert.AreEqual(new DateTime(2023, 10, 5, 23, 59, 59), reserva.FechaLimiteConfirmacion);
         }
+
+        [TestMethod]
+        public void GetReservationsByUser_Confirmada_ReturnsReservationWithIdReferencia()
+        {
+            // Arrange
+            var request = new ConsultReservationRequest
+            {
+                Email = "usuario@test.com",
+                Secret = "miSecret123"
+            };
+
+            var reservasConfirmada = new List<Reservation>
+            {
+                new Reservation
+                {
+                    Id = 2,
+                    PharmacyName = "Farmacia Central",
+                    Pharmacy = _pharmacy,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = _drug,
+                            Quantity = 1
+                        }
+                    },
+                    Status = ReservationStatus.Confirmada,
+                    IdReferencia = "ABC12345"
+                }
+            };
+
+            _reservationManagerMock
+                .Setup(service => service.GetReservationsByUser(request.Email, request.Secret))
+                .Returns(reservasConfirmada);
+
+            // Act
+            var result = _reservationController.GetReservations(request);
+
+            // Assert
+            var objectResult = result as OkObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(200, objectResult.StatusCode);
+
+            var value = objectResult.Value as List<ReservationResponse>;
+            Assert.IsNotNull(value);
+            Assert.AreEqual(1, value.Count);
+
+            var reserva = value[0];
+            Assert.AreEqual("Confirmada", reserva.Status);
+            Assert.AreEqual("Farmacia Central", reserva.PharmacyName);
+            Assert.AreEqual("ABC12345", reserva.IdReferencia);
+        }
     }
 }
