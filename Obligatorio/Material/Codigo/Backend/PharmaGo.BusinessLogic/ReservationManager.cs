@@ -73,7 +73,17 @@ namespace PharmaGo.BusinessLogic
 
             ValidarSecretParaEmail(reservations, secret);
 
-            return FiltrarPorSecret(reservations, secret);
+            var result = FiltrarPorSecret(reservations, secret);
+
+            foreach (var reservation in result)
+            {
+                if (reservation.Status == ReservationStatus.Pendiente)
+                {
+                    reservation.IdReferencia = null;
+                }
+            }
+
+            return result;
         }
 
         private void ValidarEmailYSecret(string email, string secret)
