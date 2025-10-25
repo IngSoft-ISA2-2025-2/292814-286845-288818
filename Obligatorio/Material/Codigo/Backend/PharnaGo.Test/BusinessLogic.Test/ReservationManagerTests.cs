@@ -674,6 +674,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
             // Arrange
             string publicKey = "validPublicKey";
             var reservation = _reservation;
+            reservation.Status = ReservationStatus.Confirmada;
 
             _reservationRepository
                 .Setup(r => r.Exists(r => r.PublicKey == publicKey))
@@ -693,7 +694,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(reservation.Secret, result.Secret);
             Assert.AreEqual(reservation.PharmacyName, result.PharmacyName);
             Assert.AreEqual(reservation.Drugs.Count, result.Drugs.Count);
-            Assert.AreEqual(ReservationStatus.Confirmada, result.Status);
+            Assert.AreEqual(ReservationStatus.Retirada, result.Status);
         }
 
         [TestMethod]
@@ -759,7 +760,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                _reservationManager.ValidateReservation(publicKey));
 
             Assert.AreEqual(
-                "The reservation has been canceled and cannot be validated.",
+                "The reservation is not confirmed.",
                 ex.Message
             );
         }

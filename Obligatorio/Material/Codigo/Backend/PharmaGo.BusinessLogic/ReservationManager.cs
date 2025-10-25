@@ -91,10 +91,10 @@ namespace PharmaGo.BusinessLogic
             if(reservation.FechaExpiracion.HasValue && reservation.FechaExpiracion.Value < DateTime.Now)
                 throw new InvalidResourceException("The reservation has expired and cannot be validated.");
 
-            if(reservation.Status == ReservationStatus.Cancelada)
-                throw new InvalidResourceException("The reservation has been canceled and cannot be validated.");
+            if(reservation.Status != ReservationStatus.Confirmada)
+                throw new InvalidResourceException("The reservation is not confirmed.");
 
-            reservation.Status = ReservationStatus.Confirmada;
+            reservation.Status = ReservationStatus.Retirada;
             reservationRepository.UpdateOne(reservation);
             return reservation;
         }
