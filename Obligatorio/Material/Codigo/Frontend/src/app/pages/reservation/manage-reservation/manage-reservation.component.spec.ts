@@ -214,5 +214,49 @@ describe('ManageReservationComponent', () => {
     expect(errorMsg).toBeTruthy();
     expect(errorMsg.nativeElement.textContent).toContain('El secret no coincide con el registrado para este email');
   });
+
+  it('debería mostrar correctamente una reserva pendiente con opciones y mensajes', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'miSecret123';
+    component.reservas = [
+      {
+        id: 1,
+        medicamentos: [{ nombre: 'Aspirina' }],
+        farmacia: 'Farmashop',
+        estado: 'Pendiente',
+        fechaCreacion: '2023-10-01T10:00:00Z',
+        fechaLimiteConfirmacion: '2023-10-05T23:59:59Z',
+        idReferencia: null // No debe mostrarse
+      }
+    ];
+    fixture.detectChanges();
+
+    // Act: simula click en el botón de consultar reservas
+    const consultarBtn = fixture.debugElement.query(By.css('[data-cy="consultar-reservas-btn"]'));
+    consultarBtn.triggerEventHandler('click');
+    fixture.detectChanges();
+
+    // Assert: verifica que la reserva pendiente se muestra correctamente
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItem).toBeTruthy();
+
+    const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
+    expect(estadoElement.nativeElement.textContent).toContain('Pendiente');
+
+    const mensajePendiente = reservaItem.query(By.css('[data-cy="mensaje-pendiente"]'));
+    expect(mensajePendiente).toBeTruthy();
+    expect(mensajePendiente.nativeElement.textContent).toContain('Reserva pendiente de confirmación por la farmacia');
+
+    const cancelarBtn = reservaItem.query(By.css('[data-cy="cancelar-reserva-btn"]'));
+    expect(cancelarBtn).toBeTruthy();
+
+    const fechaLimite = reservaItem.query(By.css('[data-cy="fecha-limite-confirmacion"]'));
+    expect(fechaLimite).toBeTruthy();
+    expect(fechaLimite.nativeElement.textContent).toContain('2023-10-05');
+
+    const idReferencia = reservaItem.query(By.css('[data-cy="id-referencia"]'));
+    expect(idReferencia).toBeNull(); // No debe mostrarse hasta que sea confirmada
+  });
   
 });
