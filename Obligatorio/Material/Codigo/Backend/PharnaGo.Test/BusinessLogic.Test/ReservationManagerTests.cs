@@ -181,6 +181,8 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(reservationReturned.PharmacyName, resevation.PharmacyName);
             Assert.AreEqual(reservationReturned.Drugs.Count, resevation.Drugs.Count);
             Assert.AreEqual(reservationReturned.Status, ReservationStatus.Pendiente);
+            Assert.IsNotNull(reservationReturned.PrivateKey);
+            Assert.IsNotNull(reservationReturned.PublicKey);
             Assert.AreEqual(198, drugModel.Stock);
         }
 

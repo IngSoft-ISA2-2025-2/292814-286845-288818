@@ -155,6 +155,8 @@ namespace PharmaGo.Test.WebApi.Test
             _reservationManagerMock.VerifyAll();
         }
 
+        #region Create Reservation Tests
+
         [TestMethod]
         public void Create_Reservation_Ok()
         {
@@ -165,7 +167,7 @@ namespace PharmaGo.Test.WebApi.Test
 
             //Act
             var result = _reservationController.CreateReserva(
-                    reservationModel); 
+                    reservationModel);
 
             //Assert
             var objectResult = result as OkObjectResult;
@@ -198,6 +200,10 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual("User is not authorized to create a reservation.", ex.Message);
         }
 
+        #endregion Create Reservation Tests
+
+
+        #region Get Reservations Tests
         [TestMethod]
         public void GetReservationsByUser_Ok()
         {
@@ -224,8 +230,8 @@ namespace PharmaGo.Test.WebApi.Test
             {
                 Assert.AreEqual(_reservations[i].PharmacyName, value[i].PharmacyName);
                 Assert.AreEqual(_reservations[i].Drugs.Count, value[i].ReservedDrugs.Count);
-                Assert.AreEqual(_reservations[i].Status.ToString(), value[i].Status); 
-                
+                Assert.AreEqual(_reservations[i].Status.ToString(), value[i].Status);
+
                 var reservationDrugs = _reservations[i].Drugs.ToList();
 
                 for (int j = 0; j < reservationDrugs.Count; j++)
@@ -577,5 +583,7 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual("Farmacia Este", reserva.PharmacyName);
             Assert.AreEqual(fechaRetiro, reserva.FechaRetiro);
         }
+        #endregion Get Reservations Tests
+
     }
 }
