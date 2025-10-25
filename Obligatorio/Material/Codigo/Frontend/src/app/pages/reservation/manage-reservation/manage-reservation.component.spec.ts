@@ -195,5 +195,24 @@ describe('ManageReservationComponent', () => {
     const estadoElement = fixture.debugElement.query(By.css('[data-cy="reserva-estado"]'));
     expect(estadoElement.nativeElement.textContent).toContain(estadoFiltro);
   });
-  
+
+  it('debería mostrar un mensaje de error si intenta acceder a detalles de una reserva inexistente', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'miSecret123';
+    component.reservas = [
+      { id: 1, medicamentos: [{ nombre: 'Aspirina' }], farmacia: 'Farmashop', estado: 'Pendiente' }
+    ];
+    fixture.detectChanges();
+
+    // Act: intenta acceder a una reserva con id inexistente
+    component.verDetallesReserva(999); // 999 no existe en reservas
+    fixture.detectChanges();
+
+    // Assert: se muestra el mensaje de error
+    const errorMsg = fixture.debugElement.query(By.css('[data-cy="error-message"]'));
+    expect(errorMsg).toBeTruthy();
+    expect(errorMsg.nativeElement.textContent).toContain('Reserva no encontrada');
+  });
+
 });
