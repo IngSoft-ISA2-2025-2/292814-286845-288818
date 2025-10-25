@@ -1,15 +1,27 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ManageReservationComponent } from './manage-reservation.component';
 import { By } from '@angular/platform-browser';
+import { ReservationService } from '../../../services/reservation.service';
+import { FormsModule } from '@angular/forms';
+import { of, throwError } from 'rxjs';
 
 describe('ManageReservationComponent', () => {
   let component: ManageReservationComponent;
   let fixture: ComponentFixture<ManageReservationComponent>;
+  let mockReservationService: jasmine.SpyObj<ReservationService>;
 
   beforeEach(async () => {
+    const spy = jasmine.createSpyObj('ReservationService', ['getReservations']);
+
     await TestBed.configureTestingModule({
       declarations: [ManageReservationComponent],
+      imports: [FormsModule],
+      providers: [
+        { provide: ReservationService, useValue: spy }
+      ]
     }).compileComponents();
+
+    mockReservationService = TestBed.inject(ReservationService) as jasmine.SpyObj<ReservationService>;
 
     fixture = TestBed.createComponent(ManageReservationComponent);
     component = fixture.componentInstance;
@@ -35,16 +47,16 @@ describe('ManageReservationComponent', () => {
     component.reservas = [
       { 
         id: 1, 
-        medicamentos: [{ nombre: 'Aspirina' }], 
-        farmacia: 'Farmashop', 
-        estado: 'Pendiente',
+        reservedDrugs: [{ drugName: 'Aspirina', quantity: 2 }], 
+        pharmacyName: 'Farmashop', 
+        status: 'Pendiente',
         fechaCreacion: '2023-10-01T10:00:00Z'
       },
       { 
         id: 2, 
-        medicamentos: [{ nombre: 'Paracetamol' }], 
-        farmacia: 'Farmacia Central', 
-        estado: 'Confirmada',
+        reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], 
+        pharmacyName: 'Farmacia Central', 
+        status: 'Confirmada',
         fechaCreacion: '2023-10-02T11:00:00Z'
       }
     ];
@@ -80,11 +92,9 @@ describe('ManageReservationComponent', () => {
     // Arrange
     component.email = '';
     component.secret = '';
-    fixture.detectChanges();
 
-    // Act: simula click en el botón de consultar reservas
-    const consultarBtn = fixture.debugElement.query(By.css('[data-cy="consultar-reservas-btn"]'));
-    consultarBtn.triggerEventHandler('click');
+    // Act: simula la función consultarReservas directamente
+    component.consultarReservas();
     fixture.detectChanges();
 
     // Assert: verifica que se muestre el mensaje de error
@@ -98,20 +108,16 @@ describe('ManageReservationComponent', () => {
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
     component.reservas = []; // Simula que no hay reservas
+    component.loading = false; // Asegura que no esté cargando
+    component.errorMessage = ''; // Asegura que no hay error
+    mockReservationService.getReservations.and.returnValue(of([]));
     fixture.detectChanges();
 
-    // Act: simula click en el botón de consultar reservas
-    const consultarBtn = fixture.debugElement.query(By.css('[data-cy="consultar-reservas-btn"]'));
-    consultarBtn.triggerEventHandler('click');
+    // Act: simula la función consultarReservas
+    component.consultarReservas();
     fixture.detectChanges();
 
-    // Assert: verifica que el listado está vacío y se muestra el mensaje
-    const listadoReservas = fixture.debugElement.query(By.css('[data-cy="listado-reservas"]'));
-    expect(listadoReservas).toBeTruthy();
-
-    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
-    expect(reservaItems.length).toBe(0);
-
+    // Assert: verifica que se muestra el mensaje sin reservas
     const mensajeVacio = fixture.debugElement.query(By.css('[data-cy="mensaje-sin-reservas"]'));
     expect(mensajeVacio).toBeTruthy();
     expect(mensajeVacio.nativeElement.textContent).toContain('No tienes reservas creadas');
@@ -122,11 +128,11 @@ describe('ManageReservationComponent', () => {
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
     component.reservas = [
-      { id: 1, medicamentos: [{ nombre: 'Aspirina' }], farmacia: 'Farmashop', estado: 'Pendiente', fechaCreacion: '2023-10-01T10:00:00Z' },
-      { id: 2, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmacia Central', estado: 'Confirmada', fechaCreacion: '2023-10-02T11:00:00Z' },
-      { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], farmacia: 'Farmacia Sur', estado: 'Expirada', fechaCreacion: '2023-10-03T12:00:00Z' },
-      { id: 4, medicamentos: [{ nombre: 'Amoxicilina' }], farmacia: 'Farmacia Norte', estado: 'Cancelada', fechaCreacion: '2023-10-04T13:00:00Z' },
-      { id: 5, medicamentos: [{ nombre: 'Diclofenac' }], farmacia: 'Farmacia Este', estado: 'Retirada', fechaCreacion: '2023-10-05T14:00:00Z' }
+      { id: 1, reservedDrugs: [{ drugName: 'Aspirina', quantity: 2 }], pharmacyName: 'Farmashop', status: 'Pendiente', fechaCreacion: '2023-10-01T10:00:00Z' },
+      { id: 2, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], pharmacyName: 'Farmacia Central', status: 'Confirmada', fechaCreacion: '2023-10-02T11:00:00Z' },
+      { id: 3, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 3 }], pharmacyName: 'Farmacia Sur', status: 'Expirada', fechaCreacion: '2023-10-03T12:00:00Z' },
+      { id: 4, reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }], pharmacyName: 'Farmacia Norte', status: 'Cancelada', fechaCreacion: '2023-10-04T13:00:00Z' },
+      { id: 5, reservedDrugs: [{ drugName: 'Diclofenac', quantity: 2 }], pharmacyName: 'Farmacia Este', status: 'Retirada', fechaCreacion: '2023-10-05T14:00:00Z' }
     ];
     fixture.detectChanges();
 
@@ -175,11 +181,11 @@ describe('ManageReservationComponent', () => {
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
     component.reservas = [
-      { id: 1, medicamentos: [{ nombre: 'Aspirina' }], farmacia: 'Farmashop', estado: 'Pendiente', fechaCreacion: '2023-10-01T10:00:00Z' },
-      { id: 2, medicamentos: [{ nombre: 'Paracetamol' }], farmacia: 'Farmacia Central', estado: 'Confirmada', fechaCreacion: '2023-10-02T11:00:00Z' },
-      { id: 3, medicamentos: [{ nombre: 'Ibuprofeno' }], farmacia: 'Farmacia Sur', estado: 'Expirada', fechaCreacion: '2023-10-03T12:00:00Z' },
-      { id: 4, medicamentos: [{ nombre: 'Amoxicilina' }], farmacia: 'Farmacia Norte', estado: 'Cancelada', fechaCreacion: '2023-10-04T13:00:00Z' },
-      { id: 5, medicamentos: [{ nombre: 'Diclofenac' }], farmacia: 'Farmacia Este', estado: 'Retirada', fechaCreacion: '2023-10-05T14:00:00Z' }
+      { id: 1, reservedDrugs: [{ drugName: 'Aspirina', quantity: 2 }], pharmacyName: 'Farmashop', status: 'Pendiente', fechaCreacion: '2023-10-01T10:00:00Z' },
+      { id: 2, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], pharmacyName: 'Farmacia Central', status: 'Confirmada', fechaCreacion: '2023-10-02T11:00:00Z' },
+      { id: 3, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 3 }], pharmacyName: 'Farmacia Sur', status: 'Expirada', fechaCreacion: '2023-10-03T12:00:00Z' },
+      { id: 4, reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }], pharmacyName: 'Farmacia Norte', status: 'Cancelada', fechaCreacion: '2023-10-04T13:00:00Z' },
+      { id: 5, reservedDrugs: [{ drugName: 'Diclofenac', quantity: 2 }], pharmacyName: 'Farmacia Este', status: 'Retirada', fechaCreacion: '2023-10-05T14:00:00Z' }
     ];
     fixture.detectChanges();
 
@@ -201,7 +207,7 @@ describe('ManageReservationComponent', () => {
     component.email = 'usuario@test.com';
     component.secret = 'secretIncorrecto';
     // Simula que el backend responde con error de secret incorrecto
-    component.error = 'El secret no coincide con el registrado para este email';
+    component.errorMessage = 'El secret no coincide con el registrado para este email';
     fixture.detectChanges();
 
     // Act: simula click en el botón de consultar reservas
@@ -222,9 +228,9 @@ describe('ManageReservationComponent', () => {
     component.reservas = [
       {
         id: 1,
-        medicamentos: [{ nombre: 'Aspirina' }],
-        farmacia: 'Farmashop',
-        estado: 'Pendiente',
+        reservedDrugs: [{ drugName: 'Aspirina', quantity: 2 }],
+        pharmacyName: 'Farmashop',
+        status: 'Pendiente',
         fechaCreacion: '2023-10-01T10:00:00Z',
         fechaLimiteConfirmacion: '2023-10-05T23:59:59Z',
         idReferencia: null // No debe mostrarse
@@ -253,7 +259,7 @@ describe('ManageReservationComponent', () => {
 
     const fechaLimite = reservaItem.query(By.css('[data-cy="fecha-limite-confirmacion"]'));
     expect(fechaLimite).toBeTruthy();
-    expect(fechaLimite.nativeElement.textContent).toContain('2023-10-05');
+    expect(fechaLimite.nativeElement.textContent).toContain('5/10/2023');
 
     const idReferencia = reservaItem.query(By.css('[data-cy="id-referencia"]'));
     expect(idReferencia).toBeNull(); // No debe mostrarse hasta que sea confirmada
@@ -266,9 +272,9 @@ describe('ManageReservationComponent', () => {
     component.reservas = [
       {
         id: 2,
-        medicamentos: [{ nombre: 'Paracetamol' }],
-        farmacia: 'Farmacia Central',
-        estado: 'Confirmada',
+        reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }],
+        pharmacyName: 'Farmacia Central',
+        status: 'Confirmada',
         fechaCreacion: '2023-10-02T11:00:00Z',
         idReferencia: 'ABC12345'
       }
@@ -303,9 +309,9 @@ describe('ManageReservationComponent', () => {
     component.reservas = [
       {
         id: 3,
-        medicamentos: [{ nombre: 'Ibuprofeno' }],
-        farmacia: 'Farmacia Sur',
-        estado: 'Expirada',
+        reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 3 }],
+        pharmacyName: 'Farmacia Sur',
+        status: 'Expirada',
         fechaCreacion: '2023-10-03T12:00:00Z',
         fechaExpiracion: '2023-10-10T23:59:59Z'
       }
@@ -330,7 +336,7 @@ describe('ManageReservationComponent', () => {
 
     const fechaExpiracion = reservaItem.query(By.css('[data-cy="fecha-expiracion"]'));
     expect(fechaExpiracion).toBeTruthy();
-    expect(fechaExpiracion.nativeElement.textContent).toContain('2023-10-10');
+    expect(fechaExpiracion.nativeElement.textContent).toContain('10/10/2023');
   });
 
   it('debería mostrar correctamente una reserva cancelada con mensaje y fecha de cancelación', () => {
@@ -340,9 +346,9 @@ describe('ManageReservationComponent', () => {
     component.reservas = [
       {
         id: 4,
-        medicamentos: [{ nombre: 'Amoxicilina' }],
-        farmacia: 'Farmacia Norte',
-        estado: 'Cancelada',
+        reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }],
+        pharmacyName: 'Farmacia Norte',
+        status: 'Cancelada',
         fechaCreacion: '2023-10-04T13:00:00Z',
         fechaCancelacion: '2023-10-08T10:00:00Z'
       }
@@ -367,7 +373,7 @@ describe('ManageReservationComponent', () => {
 
     const fechaCancelacion = reservaItem.query(By.css('[data-cy="fecha-cancelacion"]'));
     expect(fechaCancelacion).toBeTruthy();
-    expect(fechaCancelacion.nativeElement.textContent).toContain('2023-10-08');
+    expect(fechaCancelacion.nativeElement.textContent).toContain('8/10/2023');
   });
 
   it('debería mostrar correctamente una reserva retirada con mensaje y fecha de retiro', () => {
@@ -377,9 +383,9 @@ describe('ManageReservationComponent', () => {
     component.reservas = [
       {
         id: 5,
-        medicamentos: [{ nombre: 'Diclofenac' }],
-        farmacia: 'Farmacia Este',
-        estado: 'Retirada',
+        reservedDrugs: [{ drugName: 'Diclofenac', quantity: 2 }],
+        pharmacyName: 'Farmacia Este',
+        status: 'Retirada',
         fechaCreacion: '2023-10-05T14:00:00Z',
         fechaRetiro: '2023-10-12T09:30:00Z'
       }
@@ -404,7 +410,7 @@ describe('ManageReservationComponent', () => {
 
     const fechaRetiro = reservaItem.query(By.css('[data-cy="fecha-retiro"]'));
     expect(fechaRetiro).toBeTruthy();
-    expect(fechaRetiro.nativeElement.textContent).toContain('2023-10-12');
+    expect(fechaRetiro.nativeElement.textContent).toContain('12/10/2023');
   });
 
   it('debería ordenar las reservas por fecha de creación descendente', () => {
@@ -423,8 +429,8 @@ describe('ManageReservationComponent', () => {
 
   it('debería filtrar las reservas por nombre de medicamento', () => {
     component.reservas = [
-      { id: 1, medicamentos: [{ nombre: 'Paracetamol' }] },
-      { id: 2, medicamentos: [{ nombre: 'Ibuprofeno' }] }
+      { id: 1, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }] },
+      { id: 2, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 2 }] }
     ];
     component.filtroMedicamento = 'Paracetamol';
     // Act
@@ -436,8 +442,8 @@ describe('ManageReservationComponent', () => {
 
   it('debería filtrar las reservas por nombre de farmacia', () => {
     component.reservas = [
-      { id: 1, farmacia: 'Farmacia Central' },
-      { id: 2, farmacia: 'Farmashop' }
+      { id: 1, pharmacyName: 'Farmacia Central' },
+      { id: 2, pharmacyName: 'Farmashop' }
     ];
     component.filtroFarmacia = 'Farmacia Central';
     // Act

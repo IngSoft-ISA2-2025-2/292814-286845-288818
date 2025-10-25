@@ -66,6 +66,9 @@ import { PurchaseByDateComponent } from './pages/owner/purchase-by-date/purchase
 import { InvitationComponent } from './pages/owner/invitation/invitation.component';
 import { StockRequestOwnerComponent } from './pages/owner/stock-request-owner/stock-request-owner.component';
 
+// Reservation
+import { ManageReservationComponent } from './pages/reservation/manage-reservation/manage-reservation.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -104,6 +107,8 @@ import { StockRequestOwnerComponent } from './pages/owner/stock-request-owner/st
     PurchaseByDateComponent,
     InvitationComponent,
     StockRequestOwnerComponent,
+    // Reservation
+    ManageReservationComponent,
   ],
   imports: [
     BrowserModule,
