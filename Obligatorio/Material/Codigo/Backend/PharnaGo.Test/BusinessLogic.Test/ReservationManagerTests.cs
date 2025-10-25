@@ -737,6 +737,31 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 ex.Message
             );
         }
+
+
+        [TestMethod]
+        public void ValidateReservation_WithCancelledReservation_ThrowsException()
+        {
+            string publicKey = "expired-publicKey";
+            var reservation = _reservation;
+            reservation.Status = ReservationStatus.Cancelada;
+
+            _reservationRepository
+                .Setup(r => r.Exists(r => r.PublicKey == publicKey))
+                .Returns(true);
+
+            _reservationRepository
+                .Setup(r => r.GetOneByExpression(r => r.PublicKey == publicKey))
+                .Returns(reservation);
+
+            var ex = Assert.ThrowsException<InvalidResourceException>(() =>
+               _reservationManager.ValidateReservation(publicKey));
+
+            Assert.AreEqual(
+                "The reservation is cancelled and cannot be validated.",
+                ex.Message
+            );
+        }
         #endregion Validate Reservation Tests
     }
 }
