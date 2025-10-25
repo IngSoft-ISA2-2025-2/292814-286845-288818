@@ -234,7 +234,7 @@ namespace PharmaGo.Test.WebApi.Test
                     },
                     Status = ReservationStatus.Pendiente,
                     FechaLimiteConfirmacion = new DateTime(2023, 10, 5, 23, 59, 59),
-                    IdReferencia = null // No debe mostrarse
+                    IdReferencia = null
                 }
             };
 
@@ -257,7 +257,7 @@ namespace PharmaGo.Test.WebApi.Test
             var reserva = value[0];
             Assert.AreEqual("Pendiente", reserva.Status);
             Assert.AreEqual("Farmashop", reserva.PharmacyName);
-            Assert.IsNull(reserva.IdReferencia); // No debe mostrarse
+            Assert.IsNull(reserva.IdReferencia);
             Assert.AreEqual(new DateTime(2023, 10, 5, 23, 59, 59), reserva.FechaLimiteConfirmacion);
         }
     }
