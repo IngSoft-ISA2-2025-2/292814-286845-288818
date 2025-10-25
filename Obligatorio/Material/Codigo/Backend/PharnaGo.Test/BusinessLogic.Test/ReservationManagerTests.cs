@@ -553,8 +553,9 @@ namespace PharmaGo.Test.BusinessLogic.Test
         }
         
         [TestMethod]
-        public void GetReservationsByUser_Expirada_ReturnsReservationExpiradaWithIndicaciones()
+        public void GetReservationsByUser_Expirada_ReturnsReservationWithMensajeYFechaExpiracion()
         {
+            // Abarca tambien para gestion de estados
             // Arrange
             string email = "usuario@test.com";
             string secret = "miSecret123";
