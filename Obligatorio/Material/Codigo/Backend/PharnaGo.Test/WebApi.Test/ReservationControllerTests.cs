@@ -186,33 +186,24 @@ namespace PharmaGo.Test.WebApi.Test
         }
 
         [TestMethod]
-        public void GetReservationDetails_ReservaInexistente_ReturnsNotFoundWithErrorMessage()
+        public void GetReservationsByUser_SecretIncorrecto_ThrowsArgumentException()
         {
             // Arrange
-            var reservaIdInexistente = 999;
-            var email = "usuario@test.com";
-            var secret = "miSecret123";
+            var request = new ConsultReservationRequest
+            {
+                Email = "usuario@test.com",
+                Secret = "secretIncorrecto"
+            };
 
             _reservationManagerMock
-                .Setup(m => m.GetReservationDetails(reservaIdInexistente, email, secret))
-                .Throws(new ResourceNotFoundException("Reserva no encontrada"));
+                .Setup(m => m.GetReservationsByUser(request.Email, request.Secret))
+                .Throws(new ArgumentException("El secret no coincide con el registrado para este email"));
 
-            // Act
-            var result = _reservationController.GetReservationDetails(reservaIdInexistente, email, secret);
-
-            // Assert
-            var notFoundResult = result as NotFoundObjectResult;
-            Assert.IsNotNull(notFoundResult);
-            Assert.AreEqual(404, notFoundResult.StatusCode);
-
-            var value = notFoundResult.Value;
-            Assert.IsNotNull(value);
-
-            // Si usas un objeto con propiedad Message
-            var messageProperty = value.GetType().GetProperty("Message");
-            Assert.IsNotNull(messageProperty);
-            var message = messageProperty.GetValue(value) as string;
-            Assert.AreEqual("Reserva no encontrada", message);
+            // Act & Assert
+            var ex = Assert.ThrowsException<ArgumentException>(() =>
+                _reservationController.GetReservations(request)
+            );
+            Assert.AreEqual("El secret no coincide con el registrado para este email", ex.Message);
         }
     }
 }
