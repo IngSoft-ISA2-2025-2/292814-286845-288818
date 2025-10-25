@@ -164,7 +164,7 @@ namespace PharmaGo.Test.WebApi.Test
                 .Returns(reservation);
 
             //Act
-            var result = _reservationController.CreateReserva(
+            var result = _reservationController.CreateReservation(
                     reservationModel); 
 
             //Assert
@@ -193,7 +193,7 @@ namespace PharmaGo.Test.WebApi.Test
 
             // Act & Assert
             var ex = Assert.ThrowsException<UnauthorizedAccessException>(() =>
-                _reservationController.CreateReserva(reservationModel)
+                _reservationController.CreateReservation(reservationModel)
             );
             Assert.AreEqual("User is not authorized to create a reservation.", ex.Message);
         }
@@ -617,7 +617,7 @@ namespace PharmaGo.Test.WebApi.Test
                 .Returns(reservation);
 
             // Act
-            var result = _reservationController.CreateReserva(reservationModel);
+            var result = _reservationController.CreateReservation(reservationModel);
 
             // Assert
             var objectResult = result as OkObjectResult;
