@@ -516,6 +516,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
         [TestMethod]
         public void GetReservationsByUser_Confirmada_ReturnsReservationWithIdReferencia()
         {
+            // Abarca tambien para gestion de estados
             // Arrange
             string email = "usuario@test.com";
             string secret = "miSecret123";
