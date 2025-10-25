@@ -296,4 +296,41 @@ describe('ManageReservationComponent', () => {
     expect(mensajeConfirmada.nativeElement.textContent).toContain('Presenta este ID en la farmacia para retirar tu medicamento');
   });
 
+  it('debería mostrar correctamente una reserva expirada con mensaje e indicaciones', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'miSecret123';
+    component.reservas = [
+      {
+        id: 3,
+        medicamentos: [{ nombre: 'Ibuprofeno' }],
+        farmacia: 'Farmacia Sur',
+        estado: 'Expirada',
+        fechaCreacion: '2023-10-03T12:00:00Z',
+        fechaExpiracion: '2023-10-10T23:59:59Z'
+      }
+    ];
+    fixture.detectChanges();
+
+    // Act: simula click en el botón de consultar reservas
+    const consultarBtn = fixture.debugElement.query(By.css('[data-cy="consultar-reservas-btn"]'));
+    consultarBtn.triggerEventHandler('click');
+    fixture.detectChanges();
+
+    // Assert: verifica que la reserva expirada se muestra correctamente
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItem).toBeTruthy();
+
+    const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
+    expect(estadoElement.nativeElement.textContent).toContain('Expirada');
+
+    const mensajeExpirada = reservaItem.query(By.css('[data-cy="mensaje-expirada"]'));
+    expect(mensajeExpirada).toBeTruthy();
+    expect(mensajeExpirada.nativeElement.textContent).toContain('Esta reserva ha expirado. Puedes crear una nueva reserva si aún necesitas el medicamento');
+
+    const fechaExpiracion = reservaItem.query(By.css('[data-cy="fecha-expiracion"]'));
+    expect(fechaExpiracion).toBeTruthy();
+    expect(fechaExpiracion.nativeElement.textContent).toContain('2023-10-10');
+  });
+
 });
