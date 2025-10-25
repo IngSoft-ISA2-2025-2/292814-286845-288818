@@ -154,4 +154,36 @@ describe('StateManagementComponent', () => {
     const fechaElement = reservaItem.query(By.css('[data-cy="fecha-cancelacion"]'));
     expect(fechaElement.nativeElement.textContent).toContain('2023-10-20');
   });
+
+  it('debería mostrar una reserva en estado "Retirada" con mensaje y fecha de retiro', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'secret123';
+
+    const reservaRetirada = {
+      id: 88,
+      reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
+      pharmacyName: 'Farmashop',
+      status: 'Retirada',
+      fechaRetiro: '2023-10-25T14:00:00Z'
+    };
+    mockReservationService.getReservations.and.returnValue(of([reservaRetirada]));
+
+    // Act
+    component.consultarReservas();
+    fixture.detectChanges();
+
+    // Assert
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItem).toBeTruthy();
+
+    const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
+    expect(estadoElement.nativeElement.textContent).toContain('Retirada');
+
+    const mensajeElement = reservaItem.query(By.css('[data-cy="mensaje-retirada"]'));
+    expect(mensajeElement.nativeElement.textContent).toContain('Reserva retirada exitosamente');
+
+    const fechaElement = reservaItem.query(By.css('[data-cy="fecha-retiro"]'));
+    expect(fechaElement.nativeElement.textContent).toContain('2023-10-25');
+  });
 });
