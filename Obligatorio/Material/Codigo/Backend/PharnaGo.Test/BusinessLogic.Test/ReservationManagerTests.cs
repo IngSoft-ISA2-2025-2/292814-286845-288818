@@ -714,6 +714,29 @@ namespace PharmaGo.Test.BusinessLogic.Test
             );
         }
 
+        [TestMethod]
+        public void ValidateReservation_WithExpiredReservation_ThrowsException()
+        {
+            string publicKey = "expired-publicKey";
+            var reservation = _reservation;
+            reservation.FechaExpiracion = System.DateTime.Now.AddHours(-1);
+
+            _reservationRepository
+                .Setup(r => r.Exists(r => r.PublicKey == publicKey))
+                .Returns(true);
+
+            _reservationRepository
+                .Setup(r => r.GetOneByExpression(r => r.PublicKey == publicKey))
+                .Returns(reservation);
+
+            var ex = Assert.ThrowsException<InvalidResourceException>(() =>
+               _reservationManager.ValidateReservation(publicKey));
+
+            Assert.AreEqual(
+                "The reservation with the provided public key has expired.",
+                ex.Message
+            );
+        }
         #endregion Validate Reservation Tests
     }
 }
