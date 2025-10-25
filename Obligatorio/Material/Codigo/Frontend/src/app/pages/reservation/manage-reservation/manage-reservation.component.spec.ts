@@ -333,4 +333,41 @@ describe('ManageReservationComponent', () => {
     expect(fechaExpiracion.nativeElement.textContent).toContain('2023-10-10');
   });
 
+  it('debería mostrar correctamente una reserva cancelada con mensaje y fecha de cancelación', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'miSecret123';
+    component.reservas = [
+      {
+        id: 4,
+        medicamentos: [{ nombre: 'Amoxicilina' }],
+        farmacia: 'Farmacia Norte',
+        estado: 'Cancelada',
+        fechaCreacion: '2023-10-04T13:00:00Z',
+        fechaCancelacion: '2023-10-08T10:00:00Z'
+      }
+    ];
+    fixture.detectChanges();
+
+    // Act: simula click en el botón de consultar reservas
+    const consultarBtn = fixture.debugElement.query(By.css('[data-cy="consultar-reservas-btn"]'));
+    consultarBtn.triggerEventHandler('click');
+    fixture.detectChanges();
+
+    // Assert: verifica que la reserva cancelada se muestra correctamente
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItem).toBeTruthy();
+
+    const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
+    expect(estadoElement.nativeElement.textContent).toContain('Cancelada');
+
+    const mensajeCancelada = reservaItem.query(By.css('[data-cy="mensaje-cancelada"]'));
+    expect(mensajeCancelada).toBeTruthy();
+    expect(mensajeCancelada.nativeElement.textContent).toContain('Reserva cancelada. No es posible reactivarla');
+
+    const fechaCancelacion = reservaItem.query(By.css('[data-cy="fecha-cancelacion"]'));
+    expect(fechaCancelacion).toBeTruthy();
+    expect(fechaCancelacion.nativeElement.textContent).toContain('2023-10-08');
+  });
+
 });
