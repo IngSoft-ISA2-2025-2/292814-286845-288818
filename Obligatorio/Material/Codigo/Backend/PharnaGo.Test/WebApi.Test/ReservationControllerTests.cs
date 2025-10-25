@@ -632,5 +632,129 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.IsNotNull(value);
             Assert.AreEqual("Pendiente", value.Status);
         }
+
+        [TestMethod]
+        public void GetReservationsByUser_MultipleStates_ReturnsAllWithCorrectStatusAndIdReferencia()
+        {
+            // Arrange
+            var request = new ConsultReservationRequest
+            {
+                Email = "usuario@test.com",
+                Secret = "miSecret123"
+            };
+
+            var reservas = new List<Reservation>
+            {
+                new Reservation
+                {
+                    Id = 1,
+                    PharmacyName = "Farmashop",
+                    Pharmacy = _pharmacy,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = _drug,
+                            Quantity = 2
+                        }
+                    },
+                    Status = ReservationStatus.Pendiente,
+                    IdReferencia = null
+                },
+                new Reservation
+                {
+                    Id = 2,
+                    PharmacyName = "Farmacia Central",
+                    Pharmacy = _pharmacy,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = _drug,
+                            Quantity = 1
+                        }
+                    },
+                    Status = ReservationStatus.Confirmada,
+                    IdReferencia = "CONF123"
+                },
+                new Reservation
+                {
+                    Id = 3,
+                    PharmacyName = "Farmacia Sur",
+                    Pharmacy = _pharmacy,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = _drug,
+                            Quantity = 1
+                        }
+                    },
+                    Status = ReservationStatus.Expirada
+                },
+                new Reservation
+                {
+                    Id = 4,
+                    PharmacyName = "Farmacia Norte",
+                    Pharmacy = _pharmacy,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = _drug,
+                            Quantity = 1
+                        }
+                    },
+                    Status = ReservationStatus.Cancelada
+                },
+                new Reservation
+                {
+                    Id = 5,
+                    PharmacyName = "Farmacia Este",
+                    Pharmacy = _pharmacy,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = _drug,
+                            Quantity = 1
+                        }
+                    },
+                    Status = ReservationStatus.Retirada
+                }
+            };
+
+            _reservationManagerMock
+                .Setup(service => service.GetReservationsByUser(request.Email, request.Secret))
+                .Returns(reservas);
+
+            // Act
+            var result = _reservationController.GetReservations(request);
+
+            // Assert
+            var objectResult = result as OkObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(200, objectResult.StatusCode);
+
+            var value = objectResult.Value as List<ReservationResponse>;
+            Assert.IsNotNull(value);
+            Assert.AreEqual(reservas.Count, value.Count);
+
+            for (int i = 0; i < reservas.Count; i++)
+            {
+                Assert.AreEqual(reservas[i].PharmacyName, value[i].PharmacyName);
+                Assert.AreEqual(reservas[i].Status.ToString(), value[i].Status);
+
+                if (reservas[i].Status == ReservationStatus.Confirmada)
+                    Assert.IsNotNull(value[i].IdReferencia, "La reserva confirmada debe tener IdReferencia");
+                if (reservas[i].Status == ReservationStatus.Pendiente)
+                    Assert.IsNull(value[i].IdReferencia, "La reserva pendiente no debe tener IdReferencia");
+            }
+        }
     }
 }
