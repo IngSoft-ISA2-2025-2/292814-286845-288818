@@ -180,5 +180,23 @@ namespace PharmaGo.Test.WebApi.Test
             );
             Assert.AreEqual("Se requiere un correo válido", ex.Message);
         }
+
+        [TestMethod]
+        public void CancelReservation_WithExpiredReservation_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            string email = "vencida@example.com";
+            string secret = "oldSecret";
+
+            _reservationManagerMock
+                .Setup(service => service.CancelReservation(email, secret))
+                .Throws(new InvalidOperationException("No se puede cancelar una reserva expirada"));
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<InvalidOperationException>(() =>
+                _reservationController.CancelReservation(email, secret)
+            );
+            Assert.AreEqual("No se puede cancelar una reserva expirada", ex.Message);
+        }
     }
 }
