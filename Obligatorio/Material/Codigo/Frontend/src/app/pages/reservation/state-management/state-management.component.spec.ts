@@ -122,4 +122,36 @@ describe('StateManagementComponent', () => {
     const fechaElement = reservaItem.query(By.css('[data-cy="fecha-expiracion"]'));
     expect(fechaElement.nativeElement.textContent).toContain('2023-10-15');
   });
+
+  it('debería mostrar una reserva en estado "Cancelada" con mensaje y fecha de cancelación', () => {
+    // Arrange
+    component.email = 'usuario@test.com';
+    component.secret = 'secret123';
+
+    const reservaCancelada = {
+      id: 77,
+      reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
+      pharmacyName: 'Farmashop',
+      status: 'Cancelada',
+      fechaCancelacion: '2023-10-20T09:30:00Z'
+    };
+    mockReservationService.getReservations.and.returnValue(of([reservaCancelada]));
+
+    // Act
+    component.consultarReservas();
+    fixture.detectChanges();
+
+    // Assert
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    expect(reservaItem).toBeTruthy();
+
+    const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
+    expect(estadoElement.nativeElement.textContent).toContain('Cancelada');
+
+    const mensajeElement = reservaItem.query(By.css('[data-cy="mensaje-cancelada"]'));
+    expect(mensajeElement.nativeElement.textContent).toContain('Reserva cancelada');
+
+    const fechaElement = reservaItem.query(By.css('[data-cy="fecha-cancelacion"]'));
+    expect(fechaElement.nativeElement.textContent).toContain('2023-10-20');
+  });
 });
