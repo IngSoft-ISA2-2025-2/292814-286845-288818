@@ -577,5 +577,56 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual("Farmacia Este", reserva.PharmacyName);
             Assert.AreEqual(fechaRetiro, reserva.FechaRetiro);
         }
+
+        [TestMethod]
+        public void Create_Reservation_AssignsPendingStatus()
+        {
+            // Arrange
+            var reservationModel = new ReservationModel()
+            {
+                DrugsReserved = new List<ReservationDrugModel>
+                {
+                    new ReservationDrugModel
+                    {
+                        DrugName = "Aspirina",
+                        DrugQuantity = 1
+                    }
+                },
+                PharmacyName = "Farmashop"
+            };
+
+            var reservation = new Reservation()
+            {
+                Id = 1,
+                PharmacyName = "Farmashop",
+                Pharmacy = _pharmacy,
+                Drugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug
+                    {
+                        DrugId = 1,
+                        Drug = _drug,
+                        Quantity = 1
+                    }
+                },
+                Status = ReservationStatus.Pendiente
+            };
+
+            _reservationManagerMock
+                .Setup(service => service.CreateReservation(It.IsAny<Reservation>()))
+                .Returns(reservation);
+
+            // Act
+            var result = _reservationController.CreateReserva(reservationModel);
+
+            // Assert
+            var objectResult = result as OkObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(200, objectResult.StatusCode);
+
+            var value = objectResult.Value as ReservationModelResponse;
+            Assert.IsNotNull(value);
+            Assert.AreEqual("Pendiente", value.Status);
+        }
     }
 }
