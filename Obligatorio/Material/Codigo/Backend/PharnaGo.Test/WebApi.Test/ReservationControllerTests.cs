@@ -363,6 +363,7 @@ namespace PharmaGo.Test.WebApi.Test
         [TestMethod]
         public void GetReservationsByUser_Confirmada_ReturnsReservationWithIdReferencia()
         {
+            // Abarca tambien para gestion de estados
             // Arrange
             var request = new ConsultReservationRequest
             {
