@@ -184,5 +184,35 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.IsNotNull(value);
             Assert.AreEqual(0, value.Count);
         }
+
+        [TestMethod]
+        public void GetReservationDetails_ReservaInexistente_ReturnsNotFoundWithErrorMessage()
+        {
+            // Arrange
+            var reservaIdInexistente = 999;
+            var email = "usuario@test.com";
+            var secret = "miSecret123";
+
+            _reservationManagerMock
+                .Setup(m => m.GetReservationDetails(reservaIdInexistente, email, secret))
+                .Throws(new ResourceNotFoundException("Reserva no encontrada"));
+
+            // Act
+            var result = _reservationController.GetReservationDetails(reservaIdInexistente, email, secret);
+
+            // Assert
+            var notFoundResult = result as NotFoundObjectResult;
+            Assert.IsNotNull(notFoundResult);
+            Assert.AreEqual(404, notFoundResult.StatusCode);
+
+            var value = notFoundResult.Value;
+            Assert.IsNotNull(value);
+
+            // Si usas un objeto con propiedad Message
+            var messageProperty = value.GetType().GetProperty("Message");
+            Assert.IsNotNull(messageProperty);
+            var message = messageProperty.GetValue(value) as string;
+            Assert.AreEqual("Reserva no encontrada", message);
+        }
     }
 }

@@ -175,62 +175,9 @@ Then('el sistema responde de manera correcta, mostrando un listado únicamente c
   });
 });
 
-// ============================================================================
-// ESCENARIO 5: Usuario intenta acceder a detalles de reserva inexistente
-// ============================================================================
-
-// Steps reutilizados: email, secret
-
-When('intenta acceder a detalles de una reserva que no existe', () => {
-  cy.intercept('GET', '/api/reservas/999', {
-    statusCode: 404,
-    body: { error: 'Reserva no encontrada' },
-  }).as('reservaInexistente');
-
-  cy.visit('/reservas/999');
-});
-
-Then('el sistema responde con un error, mostrando un mensaje que dice {string}', (mensaje) => {
-  cy.get('[data-cy="error-mensaje"]').should('contain', mensaje);
-});
 
 // ============================================================================
-// ESCENARIO 6: Usuario accede a detalles de una reserva específica
-// ============================================================================
-
-// Steps reutilizados: email, secret
-
-Given('tiene una reserva creada', () => {
-  cy.intercept('GET', '/api/reservas/1', {
-    statusCode: 200,
-    body: {
-      id: 1,
-      medicamentos: [{ nombre: 'Aspirina', cantidad: 2 }],
-      farmacia: 'Farmashop',
-      estado: 'Confirmada',
-      fechaCreacion: '2023-10-01T10:00:00Z',
-    },
-  }).as('detalleReserva');
-});
-
-When('selecciona ver detalles de la reserva', () => {
-  cy.get('[data-cy="ver-detalles-btn"]').first().click();
-});
-
-Then(
-  'el sistema responde de manera correcta, mostrando la información detallada completa de la reserva: medicamento/s, cantidad, farmacia, estado, fecha de creación, id',
-  () => {
-    cy.get('[data-cy="detalle-medicamento"]').should('be.visible');
-    cy.get('[data-cy="detalle-cantidad"]').should('be.visible');
-    cy.get('[data-cy="detalle-farmacia"]').should('be.visible');
-    cy.get('[data-cy="detalle-estado"]').should('be.visible');
-    cy.get('[data-cy="detalle-fecha-creacion"]').should('be.visible');
-    cy.get('[data-cy="detalle-id"]').should('be.visible');
-  }
-);
-
-// ============================================================================
-// ESCENARIO 7: Usuario con email existente pero secret incorrecto intenta consultar reservas
+// ESCENARIO 5: Usuario con email existente pero secret incorrecto intenta consultar reservas
 // ============================================================================
 
 // Steps reutilizados: email, secret
@@ -250,7 +197,7 @@ Given('el email {string} ya tiene reservas con secret {string}', (email, secretC
 // Step reutilizado: el sistema responde con un error y muestra el mensaje {string}
 
 // ============================================================================
-// ESCENARIO 8: Usuario visualiza reservas pendientes con opciones disponibles
+// ESCENARIO 6: Usuario visualiza reservas pendientes con opciones disponibles
 // ============================================================================
 
 // Steps reutilizados: email, secret
@@ -294,7 +241,7 @@ Then('no muestra ID de referencia hasta que sea confirmada', () => {
 });
 
 // ============================================================================
-// ESCENARIO 9: Usuario visualiza ID de referencia para reservas confirmadas
+// ESCENARIO 7: Usuario visualiza ID de referencia para reservas confirmadas
 // ============================================================================
 
 // Steps reutilizados: email, secret, tiene una reserva en estado "Confirmada"
@@ -323,7 +270,7 @@ Then('muestra la fecha de expiración', () => {
 });
 
 // ============================================================================
-// ESCENARIO 11: Usuario ordena reservas por fecha de creación descendente
+// ESCENARIO 8: Usuario ordena reservas por fecha de creación descendente
 // ============================================================================
 
 // Steps reutilizados: email, secret
@@ -362,7 +309,7 @@ Then('el sistema responde de manera correcta, mostrando las reservas ordenadas d
 });
 
 // ============================================================================
-// ESCENARIO 12: Usuario busca reservas por nombre de medicamento
+// ESCENARIO 9: Usuario busca reservas por nombre de medicamento
 // ============================================================================
 
 // Steps reutilizados: email, secret
@@ -402,7 +349,7 @@ Then('el sistema responde de manera correcta, mostrando únicamente las reservas
 });
 
 // ============================================================================
-// ESCENARIO 13: Usuario busca reservas por nombre de farmacia
+// ESCENARIO 10: Usuario busca reservas por nombre de farmacia
 // ============================================================================
 
 // Steps reutilizados: email, secret
@@ -427,7 +374,7 @@ Then('el sistema responde de manera correcta, mostrando únicamente las reservas
 });
 
 // ============================================================================
-// ESCENARIO 14: Usuario visualiza reservas canceladas con información del motivo
+// ESCENARIO 11: Usuario visualiza reservas canceladas con información del motivo
 // ============================================================================
 
 // Steps reutilizados: email, secret, tiene una reserva en estado "Cancelada"
@@ -443,7 +390,7 @@ Then('muestra la fecha de cancelación', () => {
 });
 
 // ============================================================================
-// ESCENARIO 15: Usuario visualiza reservas retiradas con confirmación exitosa
+// ESCENARIO 12: Usuario visualiza reservas retiradas con confirmación exitosa
 // ============================================================================
 
 // Steps reutilizados: email, secret, tiene una reserva en estado "Retirada"

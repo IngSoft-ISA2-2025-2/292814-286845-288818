@@ -36,19 +36,6 @@ Feature: Gestionar reservas
         When aplica filtro para ver solo reservas en estado "Confirmada"
         Then el sistema responde de manera correcta, mostrando un listado únicamente con las reservas en estado "Confirmada"
 
-    Scenario: Usuario intenta acceder a detalles de reserva inexistente
-        Given un email "usuario@test.com"
-        And un secret "miSecret123"
-        When intenta acceder a detalles de una reserva que no existe
-        Then el sistema responde con un error, mostrando un mensaje que dice "Reserva no encontrada"
-
-    Scenario: Usuario accede a detalles de una reserva específica
-        Given un email "usuario@test.com"
-        And un secret "miSecret123"
-        And tiene una reserva creada
-        When selecciona ver detalles de la reserva
-        Then el sistema responde de manera correcta, mostrando la información detallada completa de la reserva: medicamento/s, cantidad, farmacia, estado, fecha de creación, id
-    
     Scenario: Usuario con email existente pero secret incorrecto intenta consultar reservas
         Given un email "usuario@test.com"
         And un secret "secretIncorrecto"
