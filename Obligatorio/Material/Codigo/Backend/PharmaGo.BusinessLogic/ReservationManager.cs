@@ -79,6 +79,10 @@ namespace PharmaGo.BusinessLogic
             if (reservation.Status == "Expired")
                 throw new InvalidOperationException("No se puede cancelar una reserva expirada");
 
+            // Idempotencia: Si ya está cancelada, retornar sin actualizar
+            if (reservation.Status == "Cancelled")
+                return reservation;
+
             reservation.Status = "Cancelled";
             reservationRepository.UpdateOne(reservation);
             reservationRepository.Save();

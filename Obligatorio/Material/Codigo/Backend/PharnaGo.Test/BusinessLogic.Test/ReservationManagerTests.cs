@@ -327,5 +327,40 @@ namespace PharmaGo.Test.BusinessLogic.Test
             );
             Assert.AreEqual("No se puede cancelar una reserva expirada", ex.Message);
         }
+
+        [TestMethod]
+        public void CancelReservation_WhenAlreadyCancelled_ReturnsReservationIdempotent()
+        {
+            // Arrange
+            string email = "cliente@example.com";
+            string secret = "abc123";
+
+            var alreadyCancelledReservation = new Reservation
+            {
+                Id = 1,
+                Email = email,
+                Secret = secret,
+                PharmacyName = "Farmashop",
+                Status = "Cancelled",
+                ReservationDrugs = new List<ReservationDrug>()
+            };
+
+            _reservationRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(false);
+
+            _reservationRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(alreadyCancelledReservation);
+
+            // Act
+            var result = _reservationManager.CancelReservation(email, secret);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Cancelled", result.Status);
+            Assert.AreEqual(email, result.Email);
+            Assert.AreEqual(secret, result.Secret);
+        }
     }
 }
