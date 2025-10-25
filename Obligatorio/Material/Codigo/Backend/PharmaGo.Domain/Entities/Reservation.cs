@@ -25,6 +25,7 @@ namespace PharmaGo.Domain.Entities
         public string IdReferencia { get; set; }
         public DateTime? FechaExpiracion { get; set; }
         public DateTime? FechaCancelacion { get; set; }
+        public DateTime? FechaRetiro { get; set; }
     }
 
     public class ReservationDrug

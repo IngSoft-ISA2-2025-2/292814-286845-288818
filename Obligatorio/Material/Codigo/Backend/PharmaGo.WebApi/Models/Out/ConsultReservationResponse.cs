@@ -13,6 +13,7 @@ namespace PharmaGo.WebApi.Models.Out
         public string IdReferencia { get; set; }
         public DateTime? FechaExpiracion { get; set; }
         public DateTime? FechaCancelacion { get; set; }
+        public DateTime? FechaRetiro { get; set; }
 
         public static ReservationResponse FromEntity(Reservation reservation)
         {
@@ -25,6 +26,7 @@ namespace PharmaGo.WebApi.Models.Out
                 IdReferencia = reservation.IdReferencia,
                 FechaExpiracion = reservation.FechaExpiracion,
                 FechaCancelacion = reservation.FechaCancelacion,
+                FechaRetiro = reservation.FechaRetiro,
             };
         }
     }
