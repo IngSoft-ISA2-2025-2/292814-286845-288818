@@ -1,28 +1,31 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { StateManagementComponent } from './state-management.component';
+import { ManageReservationComponent } from '../manage-reservation/manage-reservation.component';
 import { ReservationService } from '../../../services/reservation.service';
+import { CommonService } from '../../../services/CommonService';
 import { FormsModule } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
 
-describe('StateManagementComponent', () => {
-  let component: StateManagementComponent;
-  let fixture: ComponentFixture<StateManagementComponent>;
+describe('ManageReservationComponent - State Management', () => {
+  let component: ManageReservationComponent;
+  let fixture: ComponentFixture<ManageReservationComponent>;
   let mockReservationService: jasmine.SpyObj<ReservationService>;
 
   beforeEach(async () => {
-    const spy = jasmine.createSpyObj('ReservationService', ['createReserva', 'getReservations']);
+    const spy = jasmine.createSpyObj('ReservationService', ['createReservation', 'getReservations']);
 
     await TestBed.configureTestingModule({
-      declarations: [StateManagementComponent],
-      imports: [FormsModule],
+      declarations: [ManageReservationComponent],
+      imports: [FormsModule, HttpClientTestingModule],
       providers: [
-        { provide: ReservationService, useValue: spy }
+        { provide: ReservationService, useValue: spy },
+        CommonService
       ]
     }).compileComponents();
 
     mockReservationService = TestBed.inject(ReservationService) as jasmine.SpyObj<ReservationService>;
-    fixture = TestBed.createComponent(StateManagementComponent);
+    fixture = TestBed.createComponent(ManageReservationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -31,10 +34,8 @@ describe('StateManagementComponent', () => {
     // Arrange
     component.email = 'usuario@test.com';
     component.secret = 'secret123';
-    component.medicamentos = [{ drugName: 'Aspirina', quantity: 1 }];
-    component.farmacia = 'Farmashop';
 
-    // Simula la respuesta del backend al crear la reserva
+    // Simula la respuesta del backend al consultar reservas con una reserva Pendiente
     const reservaCreada = {
       id: 1,
       reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
@@ -42,16 +43,15 @@ describe('StateManagementComponent', () => {
       status: 'Pendiente',
       fechaCreacion: '2023-10-01T10:00:00Z'
     };
-    mockReservationService.createReserva.and.returnValue(of(reservaCreada));
     mockReservationService.getReservations.and.returnValue(of([reservaCreada]));
 
     // Act
-    component.crearReserva();
+    component.consultarReservas();
     fixture.detectChanges();
 
     // Assert
     // Verifica que la reserva se muestra con estado "Pendiente"
-    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-card"]'));
     expect(reservaItem).toBeTruthy();
 
     const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
@@ -68,7 +68,7 @@ describe('StateManagementComponent', () => {
       reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
       pharmacyName: 'Farmashop',
       status: 'Confirmada',
-      referencia: 'ABC123',
+      idReferencia: 'ABC123',
       fechaConfirmacion: '2023-10-10T12:00:00Z'
     };
     mockReservationService.getReservations.and.returnValue(of([reservaConfirmada]));
@@ -78,17 +78,19 @@ describe('StateManagementComponent', () => {
     fixture.detectChanges();
 
     // Assert
-    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-card"]'));
     expect(reservaItem).toBeTruthy();
 
     const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
     expect(estadoElement.nativeElement.textContent).toContain('Confirmada');
 
     const referenciaElement = reservaItem.query(By.css('[data-cy="id-referencia"]'));
+    expect(referenciaElement).toBeTruthy();
     expect(referenciaElement.nativeElement.textContent).toContain('ABC123');
 
     const fechaElement = reservaItem.query(By.css('[data-cy="fecha-confirmacion"]'));
-    expect(fechaElement.nativeElement.textContent).toContain('2023-10-10');
+    expect(fechaElement).toBeTruthy();
+    expect(fechaElement.nativeElement.textContent).toContain('10/10/2023');
   });
   
   it('debería mostrar una reserva en estado "Expirada" con mensaje y fecha de expiración', () => {
@@ -110,17 +112,19 @@ describe('StateManagementComponent', () => {
     fixture.detectChanges();
 
     // Assert
-    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-card"]'));
     expect(reservaItem).toBeTruthy();
 
     const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
     expect(estadoElement.nativeElement.textContent).toContain('Expirada');
 
-    const mensajeElement = reservaItem.query(By.css('[data-cy="mensaje-expirada"]'));
+    const mensajeElement = reservaItem.query(By.css('[data-cy="mensaje-estado"]'));
+    expect(mensajeElement).toBeTruthy();
     expect(mensajeElement.nativeElement.textContent).toContain('Esta reserva ha expirado');
 
     const fechaElement = reservaItem.query(By.css('[data-cy="fecha-expiracion"]'));
-    expect(fechaElement.nativeElement.textContent).toContain('2023-10-15');
+    expect(fechaElement).toBeTruthy();
+    expect(fechaElement.nativeElement.textContent).toContain('15/10/2023');
   });
 
   it('debería mostrar una reserva en estado "Cancelada" con mensaje y fecha de cancelación', () => {
@@ -142,17 +146,19 @@ describe('StateManagementComponent', () => {
     fixture.detectChanges();
 
     // Assert
-    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-card"]'));
     expect(reservaItem).toBeTruthy();
 
     const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
     expect(estadoElement.nativeElement.textContent).toContain('Cancelada');
 
-    const mensajeElement = reservaItem.query(By.css('[data-cy="mensaje-cancelada"]'));
+    const mensajeElement = reservaItem.query(By.css('[data-cy="mensaje-estado"]'));
+    expect(mensajeElement).toBeTruthy();
     expect(mensajeElement.nativeElement.textContent).toContain('Reserva cancelada');
 
     const fechaElement = reservaItem.query(By.css('[data-cy="fecha-cancelacion"]'));
-    expect(fechaElement.nativeElement.textContent).toContain('2023-10-20');
+    expect(fechaElement).toBeTruthy();
+    expect(fechaElement.nativeElement.textContent).toContain('20/10/2023');
   });
 
   it('debería mostrar una reserva en estado "Retirada" con mensaje y fecha de retiro', () => {
@@ -174,17 +180,19 @@ describe('StateManagementComponent', () => {
     fixture.detectChanges();
 
     // Assert
-    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-card"]'));
     expect(reservaItem).toBeTruthy();
 
     const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
     expect(estadoElement.nativeElement.textContent).toContain('Retirada');
 
-    const mensajeElement = reservaItem.query(By.css('[data-cy="mensaje-retirada"]'));
+    const mensajeElement = reservaItem.query(By.css('[data-cy="mensaje-estado"]'));
+    expect(mensajeElement).toBeTruthy();
     expect(mensajeElement.nativeElement.textContent).toContain('Reserva retirada exitosamente');
 
     const fechaElement = reservaItem.query(By.css('[data-cy="fecha-retiro"]'));
-    expect(fechaElement.nativeElement.textContent).toContain('2023-10-25');
+    expect(fechaElement).toBeTruthy();
+    expect(fechaElement.nativeElement.textContent).toContain('25/10/2023');
   });
 
   it('debería mostrar todas las reservas con diferentes estados y los campos correspondientes', () => {
@@ -204,7 +212,7 @@ describe('StateManagementComponent', () => {
         reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 2 }],
         pharmacyName: 'Farmashop',
         status: 'Confirmada',
-        referencia: 'CONF123'
+        idReferencia: 'CONF123'
       },
       {
         id: 3,
@@ -232,11 +240,11 @@ describe('StateManagementComponent', () => {
     fixture.detectChanges();
 
     // Assert
-    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-card"]'));
     expect(reservaItems.length).toBe(5);
 
     // Verifica que cada reserva muestra su estado correctamente
-    const estados = reservaItems.map(item => item.query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent);
+    const estados = reservaItems.map(item => item.query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent.trim());
     expect(estados).toContain('Pendiente');
     expect(estados).toContain('Confirmada');
     expect(estados).toContain('Expirada');
@@ -244,12 +252,14 @@ describe('StateManagementComponent', () => {
     expect(estados).toContain('Retirada');
 
     // Verifica que las reservas pendientes NO muestran ID de referencia
-    const pendienteItem = reservaItems.find(item => item.query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent.includes('Pendiente'));
-    expect(pendienteItem.query(By.css('[data-cy="id-referencia"]'))).toBeNull();
+    const pendienteItem = reservaItems.find(item => item.query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent.trim().includes('Pendiente'));
+    expect(pendienteItem).toBeTruthy();
+    expect(pendienteItem!.query(By.css('[data-cy="id-referencia"]'))).toBeNull();
 
     // Verifica que las reservas confirmadas SÍ muestran ID de referencia
-    const confirmadaItem = reservaItems.find(item => item.query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent.includes('Confirmada'));
-    expect(confirmadaItem.query(By.css('[data-cy="id-referencia"]'))).toBeTruthy();
+    const confirmadaItem = reservaItems.find(item => item.query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent.trim().includes('Confirmada'));
+    expect(confirmadaItem).toBeTruthy();
+    expect(confirmadaItem!.query(By.css('[data-cy="id-referencia"]'))).toBeTruthy();
   });
 
   it('debería filtrar y mostrar solo reservas en estado "Pendiente"', () => {
@@ -271,11 +281,11 @@ describe('StateManagementComponent', () => {
     fixture.detectChanges();
 
     component.estadoFiltro = 'Pendiente';
-    component.aplicarFiltroEstado();
+    component.aplicarFiltroPorEstado();
     fixture.detectChanges();
 
     // Assert
-    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-card"]'));
     expect(reservaItems.length).toBe(1);
     const estado = reservaItems[0].query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent;
     expect(estado).toContain('Pendiente');
@@ -300,11 +310,11 @@ describe('StateManagementComponent', () => {
     fixture.detectChanges();
 
     component.estadoFiltro = 'Confirmada';
-    component.aplicarFiltroEstado();
+    component.aplicarFiltroPorEstado();
     fixture.detectChanges();
 
     // Assert
-    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-card"]'));
     expect(reservaItems.length).toBe(1);
     const estado = reservaItems[0].query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent;
     expect(estado).toContain('Confirmada');
@@ -329,11 +339,11 @@ describe('StateManagementComponent', () => {
     fixture.detectChanges();
 
     component.estadoFiltro = 'Expirada';
-    component.aplicarFiltroEstado();
+    component.aplicarFiltroPorEstado();
     fixture.detectChanges();
 
     // Assert
-    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-card"]'));
     expect(reservaItems.length).toBe(1);
     const estado = reservaItems[0].query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent;
     expect(estado).toContain('Expirada');
@@ -358,11 +368,11 @@ describe('StateManagementComponent', () => {
     fixture.detectChanges();
 
     component.estadoFiltro = 'Cancelada';
-    component.aplicarFiltroEstado();
+    component.aplicarFiltroPorEstado();
     fixture.detectChanges();
 
     // Assert
-    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-card"]'));
     expect(reservaItems.length).toBe(1);
     const estado = reservaItems[0].query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent;
     expect(estado).toContain('Cancelada');
@@ -387,11 +397,11 @@ describe('StateManagementComponent', () => {
     fixture.detectChanges();
 
     component.estadoFiltro = 'Retirada';
-    component.aplicarFiltroEstado();
+    component.aplicarFiltroPorEstado();
     fixture.detectChanges();
 
     // Assert
-    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-card"]'));
     expect(reservaItems.length).toBe(1);
     const estado = reservaItems[0].query(By.css('[data-cy="reserva-estado"]')).nativeElement.textContent;
     expect(estado).toContain('Retirada');

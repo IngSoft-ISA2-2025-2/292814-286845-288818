@@ -3,6 +3,8 @@ import { CreateReservationComponent } from './create-reservation.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
+import { CommonService } from '../../../services/CommonService';
+import { StorageManager } from '../../../utils/storage-manager';
 
 describe('CreateReservationComponent', () => {
   let component: CreateReservationComponent;
@@ -12,6 +14,7 @@ describe('CreateReservationComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [CreateReservationComponent],
       imports: [FormsModule, ReactiveFormsModule, HttpClientTestingModule],
+      providers: [CommonService, StorageManager]
     }).compileComponents();
   });
 
