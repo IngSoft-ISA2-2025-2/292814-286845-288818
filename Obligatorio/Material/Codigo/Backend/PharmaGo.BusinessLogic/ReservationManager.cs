@@ -40,14 +40,14 @@ namespace PharmaGo.BusinessLogic
             foreach (var reservationDrug in reservation.Drugs)
             {
                 if (!drugRepository.Exists(d => d.Name == reservationDrug.Drug.Name
-                    && d.Pharmacy.Name == reservation.PharmacyName))
+                    && d.Pharmacy != null && d.Pharmacy.Name == reservation.PharmacyName))
                 {
                     throw new ResourceNotFoundException(
                         $"The drug {reservationDrug.Drug.Name} for the reservation does not exist in the pharmacy {reservation.PharmacyName}.");
                 }
 
                 var drug = drugRepository.GetOneByExpression(d => d.Name == reservationDrug.Drug.Name
-                    && d.Pharmacy.Name == reservation.PharmacyName);
+                    && d.Pharmacy != null && d.Pharmacy.Name == reservation.PharmacyName);
 
                 if(drug.Stock < reservationDrug.Quantity)
                 {
@@ -135,6 +135,33 @@ namespace PharmaGo.BusinessLogic
         private List<Reservation> FiltrarPorSecret(IEnumerable<Reservation> reservations, string secret)
         {
             return reservations.Where(r => r.Secret == secret).ToList();
+        }
+        public Reservation CancelReservation(string email, string secret)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentException("Se requiere un correo válido");
+
+            if (reservationRepository.Exists(r => r.Email == email && r.Secret != secret))
+                throw new UnauthorizedAccessException("Secret inválido para ese correo");
+
+            var reservation = reservationRepository.GetOneByExpression(
+                r => r.Email == email && r.Secret == secret);
+
+            if (reservation == null)
+                throw new KeyNotFoundException("No existe una reserva asociada a ese correo");
+
+            if (reservation.Status == ReservationStatus.Expired)
+                throw new InvalidOperationException("No se puede cancelar una reserva expirada");
+
+            // Idempotencia: Si ya está cancelada, retornar sin actualizar
+            if (reservation.Status == ReservationStatus.Canceled)
+                return reservation;
+
+            reservation.Status = ReservationStatus.Canceled;
+            reservationRepository.UpdateOne(reservation);
+            reservationRepository.Save();
+
+            return reservation;
         }
     }
 }

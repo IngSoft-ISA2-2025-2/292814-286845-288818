@@ -31,6 +31,7 @@ import { StockRequestOwnerComponent } from './pages/owner/stock-request-owner/st
 import { ManageReservationComponent } from './pages/reservation/manage-reservation/manage-reservation.component';
 import { CreateReservationComponent } from './pages/reservation/create-reservation/create-reservation.component';
 import { ValidateReservationComponent } from './pages/reservation/validate-reservation/validate-reservation.component';
+import { CancelReservationComponent } from './pages/reservation/cancel-reservation/cancel-reservation.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -61,6 +62,7 @@ const routes: Routes = [
   { path: 'validate-reservation', component: ValidateReservationComponent },
   { path: 'create-reservation', component: CreateReservationComponent },
   { path: 'unauthorized', component: Page401Component },
+  { path: 'cancel-reservation', component: CancelReservationComponent },
   { path: '**', component: Page404Component },
 ];
 
