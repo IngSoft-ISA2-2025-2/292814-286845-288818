@@ -1022,5 +1022,23 @@ namespace PharmaGo.Test.WebApi.Test
             }
         }
         #endregion Validate Reservation Tests
+
+        #region Confirm Reservation Tests
+        [TestMethod]
+        [ExpectedException(typeof(KeyNotFoundException))]
+        public void ConfirmReservation_NotFound_ThrowsException()
+        {
+            // Arrange
+            var referenceId = "NOEXISTE";
+            _reservationManagerMock
+                .Setup(m => m.ConfirmReservation(referenceId))
+                .Throws(new KeyNotFoundException("No se encontró la reserva"));
+
+            // Act
+            var result = _reservationController.ConfirmReservation(referenceId);
+
+            // Assert - ExpectedException
+        }
+        #endregion Confirm Reservation Tests
     }
 }
