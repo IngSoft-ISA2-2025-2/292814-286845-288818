@@ -63,12 +63,20 @@ namespace PharmaGo.WebApi.Controllers
             var response = new ReservationModelResponse
             {
                 PharmacyName = cancelledReservation.PharmacyName,
-                DrugsReserved = cancelledReservation.ReservationDrugs.Select(d => new ReservationDrugModelResponse
+                DrugsReserved = cancelledReservation.Drugs?.Select(d => new ReservationDrugModelResponse
                 {
                     DrugName = d.Drug.Name,
                     DrugQuantity = d.Quantity
-                }).ToList()
+                }).ToList() ?? new List<ReservationDrugModelResponse>()
             };
+            return Ok(response);
+        }
+
+        [HttpPut("confirmar")]
+        public IActionResult ConfirmReservation([FromQuery] string referenceId)
+        {
+            var confirmedReservation = _reservationManager.ConfirmReservation(referenceId);
+            var response = ReservationModelResponse.FromEntity(confirmedReservation);
             return Ok(response);
         }
     }

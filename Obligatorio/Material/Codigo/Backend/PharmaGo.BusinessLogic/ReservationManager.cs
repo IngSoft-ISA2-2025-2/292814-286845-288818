@@ -163,5 +163,10 @@ namespace PharmaGo.BusinessLogic
 
             return reservation;
         }
+
+        public Reservation ConfirmReservation(string referenceId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
