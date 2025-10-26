@@ -1,3 +1,5 @@
+<app-custom-toast></app-custom-toast>
+
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
@@ -15,6 +17,7 @@
                 id="email"
                 formControlName="email"
                 placeholder="ejemplo@correo.com"
+                data-cy="cancel-email-input"
                 [class.is-invalid]="cancelForm.get('email')?.invalid && cancelForm.get('email')?.touched"
               />
               <div class="invalid-feedback" *ngIf="cancelForm.get('email')?.invalid && cancelForm.get('email')?.touched">
@@ -30,6 +33,7 @@
                 id="secret"
                 formControlName="secret"
                 placeholder="Ingrese su código secret"
+                data-cy="cancel-secret-input"
                 [class.is-invalid]="cancelForm.get('secret')?.invalid && cancelForm.get('secret')?.touched"
               />
               <div class="invalid-feedback" *ngIf="cancelForm.get('secret')?.invalid && cancelForm.get('secret')?.touched">
@@ -38,7 +42,7 @@
             </div>
 
             <div class="d-grid">
-              <button type="submit" class="btn btn-danger" [disabled]="cancelForm.invalid">
+              <button type="submit" class="btn btn-danger" [disabled]="cancelForm.invalid" data-cy="cancel-btn">
                 Cancelar Reserva
               </button>
             </div>

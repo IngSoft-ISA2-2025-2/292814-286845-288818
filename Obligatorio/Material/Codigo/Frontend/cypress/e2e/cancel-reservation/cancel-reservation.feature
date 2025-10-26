@@ -5,7 +5,7 @@ Característica: Cancelar reservas
   Para que el sistema valide identidades sin necesidad de un usuario autenticado
 
   Antecedentes:
-    Dado que el formulario de cancelación solicita "correo" y "secret"
+    Dado que el formulario de cancelación está disponible
 
   @cancelacion @reservas
   Escenario: Cancelación exitosa de una reserva existente
@@ -31,7 +31,7 @@ Característica: Cancelar reservas
   @contexto @creacion-implicita
   Escenario: Comportamiento de creación implícita (contexto)
     Dado que no existe ninguna reserva para el correo "nuevo@example.com"
-    Cuando el visitante ingresa el correo "nuevo@example.com" y el secret "nuevoSecret" en el flujo de gestión de reservas (registro/consulta)
+    Cuando el visitante ingresa el correo "nuevo@example.com" y el secret "nuevoSecret" en el flujo de gestión de reservas
     Entonces el sistema crea una reserva asociada a "nuevo@example.com" con secret "nuevoSecret"
     Y se muestra el mensaje "Reserva creada" como precondición para operaciones posteriores
 
@@ -50,7 +50,7 @@ Característica: Cancelar reservas
   Escenario: Intento de cancelar una reserva que ya fue cancelada (idempotencia)
     Dado que existe una reserva para el correo "cliente@example.com" con el secret "abc123" y su estado es "cancelada"
     Cuando el visitante solicita cancelar la reserva usando el correo "cliente@example.com" y el secret "abc123"
-    Entonces el sistema no debe cambiar el estado de la reserva (sigue "cancelada")
+    Entonces el sistema no debe cambiar el estado de la reserva
     Y el sistema muestra el mensaje "La reserva ya está cancelada" o una respuesta idempotente apropiada
 
   @validacion @entrada
