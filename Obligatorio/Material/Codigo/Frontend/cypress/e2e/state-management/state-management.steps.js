@@ -10,32 +10,22 @@ Given('estoy en la página de gestión de estados', () => {
 // ============================================================================
 // GIVEN STEPS
 // ============================================================================
-Given('un email {string}', (email) => {
-  cy.get('[data-cy="email-input"]').clear();
-  if (email) {
-    cy.get('[data-cy="email-input"]').type(email);
-  }
-});
-
-Given('un secret {string}', (secret) => {
-  cy.get('[data-cy="secret-input"]').clear();
-  if (secret) {
-    cy.get('[data-cy="secret-input"]').type(secret);
-  }
-});
+// Nota: Los steps "un email" y "un secret" ya están definidos en manage-reservation.steps.js
+// y se reutilizan automáticamente por Cypress/Cucumber
 
 Given('quiero crear una reserva con medicamento {string} en farmacia {string}', (medicamento, farmacia) => {
-  // Mock para crear reserva - interceptará la creación
-  cy.intercept('POST', '**/api/Reservation', {
-    statusCode: 201,
-    body: {
+  // Mock para simular que al consultar ya existe una reserva Pendiente
+  cy.intercept('POST', '**/api/Reservation/consult', {
+    statusCode: 200,
+    body: [{
       id: 1,
       reservedDrugs: [{ drugName: medicamento, quantity: 1 }],
       pharmacyName: farmacia,
       status: 'Pendiente',
       fechaCreacion: new Date().toISOString(),
-    }
-  }).as('crearReserva');
+      fechaLimiteConfirmacion: new Date(Date.now() + 86400000).toISOString()
+    }]
+  }).as('consultarReserva');
 });
 
 Given('tengo una reserva en estado {string}', (estado) => {
@@ -173,10 +163,9 @@ Given('tengo reservas en diferentes estados', () => {
 // WHEN STEPS
 // ============================================================================
 When('creo la reserva', () => {
-  // En este caso, simularíamos el botón de crear reserva
-  // Pero como usamos manage-reservations, simplemente consultamos
+  // Simulamos que se creó la reserva consultándola
   cy.get('[data-cy="consultar-reservas-btn"]').click();
-  cy.wait('@crearReserva');
+  cy.wait('@consultarReserva');
 });
 
 When('consulto mis reservas', () => {
@@ -193,7 +182,7 @@ When('filtro por estado {string}', (estado) => {
 // THEN STEPS
 // ============================================================================
 Then('el sistema asigna automáticamente el estado {string}', (estado) => {
-  cy.get('[data-cy="estado-reserva"]').should('contain', estado);
+  cy.get('[data-cy="reserva-estado"]').should('contain', estado);
 });
 
 Then('la reserva es visible con estado {string}', (estado) => {

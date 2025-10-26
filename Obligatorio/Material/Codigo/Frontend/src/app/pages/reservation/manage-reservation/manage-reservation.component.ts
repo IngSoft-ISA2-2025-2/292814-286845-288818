@@ -113,9 +113,9 @@ export class ManageReservationComponent implements OnInit {
       case 'Confirmada':
         return 'Presenta este ID en la farmacia para retirar tu medicamento';
       case 'Expirada':
-        return 'Esta reserva ha expirado. Puedes crear una nueva reserva si aún necesitas el medicamento';
+        return 'Esta reserva ha expirado';
       case 'Cancelada':
-        return 'Reserva cancelada. No es posible reactivarla';
+        return 'Reserva cancelada';
       case 'Retirada':
         return 'Reserva retirada exitosamente';
       default:

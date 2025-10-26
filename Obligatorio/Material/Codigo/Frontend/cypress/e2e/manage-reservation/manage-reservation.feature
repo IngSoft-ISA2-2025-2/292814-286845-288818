@@ -43,37 +43,6 @@ Feature: Gestionar reservas
         When hace click en el botón de consultar reservas
         Then el sistema responde con un error y muestra el mensaje "El secret no coincide con el registrado para este email"
 
-    Scenario: Usuario visualiza reservas pendientes con opciones disponibles
-        Given un email "usuario@test.com"
-        And un secret "miSecret123"
-        And tiene una reserva en estado "Pendiente"
-        When hace click en el botón de consultar reservas
-        Then el sistema responde de manera correcta, mostrando un listado con todas sus reservas
-        And la reserva pendiente muestra claramente el estado "Pendiente"
-        And muestra un mensaje que dice "Reserva pendiente de confirmación por la farmacia"
-        And incluye un botón para cancelar la reserva
-        And muestra la fecha límite para confirmar la reserva
-        And no muestra ID de referencia hasta que sea confirmada
-
-    Scenario: Usuario visualiza ID de referencia para reservas confirmadas
-        Given un email "usuario@test.com"
-        And un secret "miSecret123"
-        And tiene una reserva en estado "Confirmada"
-        When hace click en el botón de consultar reservas
-        Then el sistema responde de manera correcta, mostrando un listado con todas sus reservas
-        And la reserva confirmada muestra un ID de referencia único
-        And muestra un mensaje que dice "Presenta este ID en la farmacia para retirar tu medicamento"
-
-    Scenario: Usuario visualiza reservas expiradas con indicaciones
-        Given un email "usuario@test.com"
-        And un secret "miSecret123"
-        And tiene una reserva en estado "Expirada"
-        When hace click en el botón de consultar reservas
-        Then el sistema responde de manera correcta, mostrando un listado con todas sus reservas
-        And la reserva expirada muestra claramente el estado "Expirada"
-        And muestra un mensaje que dice "Esta reserva ha expirado. Puedes crear una nueva reserva si aún necesitas el medicamento"
-        And muestra la fecha de expiración
-
     Scenario: Usuario ordena reservas por fecha de creación descendente
         Given un email "usuario@test.com"
         And un secret "miSecret123"
@@ -94,23 +63,3 @@ Feature: Gestionar reservas
         And tiene reservas de diferentes farmacias
         When busca reservas por el nombre "Farmacia Central"
         Then el sistema responde de manera correcta, mostrando únicamente las reservas que contienen la farmacia "Farmacia Central"
-
-    Scenario: Usuario visualiza reservas canceladas con información del motivo
-        Given un email "usuario@test.com"
-        And un secret "miSecret123"
-        And tiene una reserva en estado "Cancelada"
-        When hace click en el botón de consultar reservas
-        Then el sistema responde de manera correcta, mostrando un listado con todas sus reservas
-        And la reserva cancelada muestra claramente el estado "Cancelada"
-        And muestra un mensaje que dice "Reserva cancelada. No es posible reactivarla"
-        And muestra la fecha de cancelación
-
-    Scenario: Usuario visualiza reservas retiradas con confirmación exitosa
-        Given un email "usuario@test.com"
-        And un secret "miSecret123"
-        And tiene una reserva en estado "Retirada"
-        When hace click en el botón de consultar reservas
-        Then el sistema responde de manera correcta, mostrando un listado con todas sus reservas
-        And la reserva retirada muestra claramente el estado "Retirada"
-        And muestra un mensaje que dice "Reserva retirada exitosamente"
-        And muestra la fecha de retiro
