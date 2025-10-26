@@ -1,4 +1,4 @@
-# Proceso de Ingeniería — Entrega 2
+# Proceso de Ingeniería — Entrega 3
 
 ## Propósito
 Definiremos de manera clara y sencilla lo que haremos desde que una tarjeta está **Ready** hasta que queda **Done** en `main`.
@@ -7,6 +7,12 @@ Definiremos de manera clara y sencilla lo que haremos desde que una tarjeta est�
 Aplicaremos el tablero Kanban: **Backlog → Ready → In-Progress → In Review → Done**, ya definido. Las ceremonias que vamos a llevar a cabo se encuentran en `docs/kanban_y_roles.md`.
 
 **NUEVO**: Todos los cambios deben pasar por el pipeline CI/CD automatizado que incluye build, tests, cobertura y formateo de código (ver carpeta .github/workflows).
+
+## Adaptación de Procesos para Behavior-Driven Development (BDD)
+
+En la Entrega 3, el equipo adoptó **Behavior-Driven Development (BDD)** como metodología central para el desarrollo del sistema de reservas de medicamentos.
+
+BDD se integró en cada fase del flujo de trabajo, modificando tanto los procesos de gestión como los de ingeniería:
 
 ## Flujo paso a paso
 
@@ -24,19 +30,56 @@ Aplicaremos el tablero Kanban: **Backlog → Ready → In-Progress → In Review
      - **`hotfix/*`**: Fixes urgentes que requieren atención inmediata
      - **`chore/*`**: Tareas de mantenimiento, refactoring, o mejoras técnicas
 
-3) **TDD**
-   - **Red:** escribir test que falla.
-   - **Green:** implementación mínima para hacerlo pasar.
-   - **Refactor:** mejorar nombres/estructura con tests verdes.
-   - **REGLA**: No debe haber actualizaciones de código sin tests que lo respalden
-   - Repetiremos este proceso hasta cubrir criterios de aceptación.
+3) **Ciclo BDD**
+   El proceso TDD tradicional se extendió para incluir BDD en las pruebas E2E:
+
+**Flujo de trabajo integrado**:
+
+1. **Especificación (BDD)**: 
+   - Crear/actualizar archivo `.feature` con escenarios Gherkin
+   - Ubicación: `Frontend/cypress/e2e/{feature-name}/{feature-name}.feature`
+   - Ejemplo: `create-reservation.feature`, `manage-reservation.feature`
+
+2. **Step Definitions (BDD - Red)**:
+   - Implementar step definitions en archivo `.steps.js`
+   - Vincular cada paso Gherkin con acciones de Cypress
+   - Ejecutar prueba E2E → **debe fallar** (no hay implementación)
+
+3. **Tests Unitarios (TDD - Red)**:
+   - Escribir tests unitarios para backend (.NET) y frontend (Angular/Jasmine)
+   - Ejecutar `dotnet test` y `npm test` → **deben fallar**
+
+4. **Implementación Backend (TDD - Green)**:
+   - Implementar lógica mínima en C# para pasar tests unitarios
+   - Estructura: `Manager → DataAccess → Domain`
+   - Validar con `dotnet test`
+
+5. **Implementación Frontend (TDD - Green)**:
+   - Implementar componentes Angular y servicios
+   - Validar con tests Jasmine/Karma
+   - Asegurar `data-cy` attributes para selectores Cypress
+
+6. **Validación E2E (BDD - Green)**:
+   - Ejecutar tests Cypress con `npx cypress open`
+   - Verificar que todos los escenarios Gherkin pasen
+   - Confirmar flujo completo usuario-sistema
+
+7. **Refactor**:
+   - Mejorar código con tests verdes (unitarios y E2E)
+   - Eliminar duplicación
+   - Optimizar selectores y step definitions compartidos
+
+**Regla fundamental**: Ningún código se integra sin que tanto los tests unitarios como los escenarios BDD estén en verde.
 
 4) **Verificación local con Pipeline**
-   - **Tests locales**: Ejecutar `dotnet test` - deben pasar al 100%
-   - **Cobertura local**: Verificar que se mantiene ≥85%
-   - **Build local**: Confirmar que `dotnet build` es exitoso
-   - **Formateo**: Aplicar estándares de código definidos
-   - **Evidencia**: Captura de pantalla de tests pasando y cobertura
+    - **Tests locales**: Ejecutar `dotnet test` - deben pasar al 100%
+    - **Frontend**:
+       - `npm test`  # Tests unitarios Jasmine
+       - `npx cypress open`  # Tests E2E BDD (ejecución manual)
+    - **Cobertura local**: Verificar que se mantiene ≥85%
+    - **Build local**: Confirmar que `dotnet build` es exitoso
+    - **Formateo**: Aplicar estándares de código definidos
+    - **Evidencia**: Captura de pantalla de tests pasando y cobertura
 
 5) **Integración con Develop (Git Flow)**
 
@@ -62,6 +105,8 @@ Aplicaremos el tablero Kanban: **Backlog → Ready → In-Progress → In Review
    **Criterios para mergear develop → main:**
    - **Todas las features completadas** están en `develop`
    - **Testing manual exitoso** en entorno develop
+   - Ejecución completa de suite Cypress por el equipo
+   - Validación del PO sobre escenarios implementados
    - **Estabilidad confirmada** - sin bugs críticos
    - **Sprint/Release completado** según planificación
 
@@ -74,3 +119,5 @@ Para esta entrega, "desplegado" = **integrado en `main`** con:
 - **Revisión y aprobación** para merge develop → main
 - **Pipeline CI/CD exitoso** con todos los gates de calidad
 - **DoD cumplida**
+
+

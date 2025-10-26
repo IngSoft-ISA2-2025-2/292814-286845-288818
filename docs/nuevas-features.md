@@ -454,7 +454,7 @@ Background: **Dado** estoy en la página de validación de reservas
 **Y** hago click en el botón de validar
 **Entonces** el sistema valida correctamente la clave pública
 **Y** muestra la información de la reserva: medicamento, cantidad, cliente
-**Y** muestra un mensaje de validación que dice *"Entrega completada exitosamente. La reserva ha sido cerrada."*
+**Y** muestra un mensaje de validación  dice *"Entrega completada exitosamente. La reserva ha sido cerrada."*
 
 2. Escenario: Cliente presenta clave pública inválida o inexistente en la farmacia
 **Dado** estoy en la página de validación de reservas en farmacia
