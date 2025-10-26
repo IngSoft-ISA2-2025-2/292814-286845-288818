@@ -282,7 +282,7 @@ Then('el sistema responde con un error y muestra el mensaje {string}', (mensaje)
 Then('el sistema responde de manera correcta, mostrando un listado vacío', () => {
   cy.wait('@reservasVacias');
   cy.get('[data-cy="mensaje-sin-reservas"]', { timeout: 5000 }).should('be.visible');
-  cy.get('[data-cy="reserva-item"]').should('not.exist');
+  cy.get('[data-cy="reserva-card"]').should('not.exist');
 });
 
 Then('muestra un mensaje que dice {string}', (mensaje) => {
@@ -293,7 +293,7 @@ Then('muestra un mensaje que dice {string}', (mensaje) => {
   // Para mensajes según el estado de la reserva (Pendiente, Confirmada, etc.)
   else {
     // Buscar el mensaje específico dentro de las reservas
-    cy.get('[data-cy="reserva-item"]', { timeout: 3000 }).should('exist');
+    cy.get('[data-cy="reserva-card"]', { timeout: 3000 }).should('exist');
     
     // Mensajes posibles según estado
     const mensajesToCheck = [
@@ -313,7 +313,7 @@ Then('muestra un mensaje que dice {string}', (mensaje) => {
 
 Then('el sistema responde de manera correcta, mostrando un listado con todas sus reservas', () => {
   cy.get('[data-cy="listado-reservas"]', { timeout: 5000 }).should('be.visible');
-  cy.get('[data-cy="reserva-item"]').should('have.length.at.least', 1);
+  cy.get('[data-cy="reserva-card"]').should('have.length.at.least', 1);
 });
 
 Then('cada reserva muestra información básica: nombre de el\\/los medicamento\\/s, farmacia y estado', () => {
@@ -363,9 +363,9 @@ Then('muestra la fecha de expiración', () => {
 
 Then('el sistema responde de manera correcta, mostrando las reservas ordenadas de más reciente a más antigua', () => {
   // Verificar que el primer elemento sea el más reciente (Paracetamol - 2023-10-03)
-  cy.get('[data-cy="reserva-item"]').first().should('contain', 'Paracetamol');
+  cy.get('[data-cy="reserva-card"]').first().should('contain', 'Paracetamol');
   // Verificar que el último elemento sea el más antiguo (Aspirina - 2023-10-01)
-  cy.get('[data-cy="reserva-item"]').last().should('contain', 'Aspirina');
+  cy.get('[data-cy="reserva-card"]').last().should('contain', 'Aspirina');
 });
 
 Then('el sistema responde de manera correcta, mostrando únicamente las reservas que contienen medicamentos con {string}', (medicamento) => {

@@ -61,7 +61,7 @@ namespace PharmaGo.BusinessLogic
             reservation.PublicKey = publicKey;
             reservation.PrivateKey = privateKey;
 
-            reservation.Status = ReservationStatus.Pendiente;
+            reservation.Status = ReservationStatus.Pending;
 
             reservationRepository.InsertOne(reservation);
             reservationRepository.Save();
@@ -88,13 +88,13 @@ namespace PharmaGo.BusinessLogic
 
             var reservation = reservationRepository.GetOneByExpression(r => r.PublicKey == publicKey);
 
-            if(reservation.FechaExpiracion.HasValue && reservation.FechaExpiracion.Value < DateTime.Now)
+            if(reservation.ExpirationDate.HasValue && reservation.ExpirationDate.Value < DateTime.Now)
                 throw new InvalidResourceException("The reservation has expired and cannot be validated.");
 
-            if(reservation.Status != ReservationStatus.Confirmada)
+            if(reservation.Status != ReservationStatus.Confirmed)
                 throw new InvalidResourceException("The reservation is not confirmed.");
 
-            reservation.Status = ReservationStatus.Retirada;
+            reservation.Status = ReservationStatus.Withdrawal;
             reservationRepository.UpdateOne(reservation);
             return reservation;
         }
@@ -107,7 +107,17 @@ namespace PharmaGo.BusinessLogic
 
             ValidarSecretParaEmail(reservations, secret);
 
-            return FiltrarPorSecret(reservations, secret);
+            var result = FiltrarPorSecret(reservations, secret);
+
+            foreach (var reservation in result)
+            {
+                if (reservation.Status == ReservationStatus.Pending)
+                {
+                    reservation.ReferenceId = null;
+                }
+            }
+
+            return result;
         }
 
         private void ValidarEmailYSecret(string email, string secret)

@@ -100,7 +100,7 @@ namespace PharmaGo.Test.WebApi.Test
                             Quantity = 2
                         }
                     },
-                    Status = ReservationStatus.Pendiente
+                    Status = ReservationStatus.Pending
                 },
                 new Reservation
                 {
@@ -116,7 +116,7 @@ namespace PharmaGo.Test.WebApi.Test
                             Quantity = 1
                         }
                     },
-                    Status = ReservationStatus.Confirmada
+                    Status = ReservationStatus.Confirmed
                 }
             };
 
@@ -168,7 +168,7 @@ namespace PharmaGo.Test.WebApi.Test
                 .Returns(_reservation);
 
             //Act
-            var result = _reservationController.CreateReserva(
+            var result = _reservationController.CreateReservation(
                     reservationModel);
 
             //Assert
@@ -198,7 +198,7 @@ namespace PharmaGo.Test.WebApi.Test
 
             // Act & Assert
             var ex = Assert.ThrowsException<UnauthorizedAccessException>(() =>
-                _reservationController.CreateReserva(reservationModel)
+                _reservationController.CreateReservation(reservationModel)
             );
             Assert.AreEqual("User is not authorized to create a reservation.", ex.Message);
         }
@@ -340,9 +340,9 @@ namespace PharmaGo.Test.WebApi.Test
                             Quantity = 2
                         }
                     },
-                    Status = ReservationStatus.Pendiente,
-                    FechaLimiteConfirmacion = new DateTime(2023, 10, 5, 23, 59, 59),
-                    IdReferencia = null
+                    Status = ReservationStatus.Pending,
+                    LimitConfirmationDate = new DateTime(2023, 10, 5, 23, 59, 59),
+                    ReferenceId = null
                 }
             };
 
@@ -363,7 +363,7 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual(1, value.Count);
 
             var reserva = value[0];
-            Assert.AreEqual("Pendiente", reserva.Status);
+            Assert.AreEqual("Pending", reserva.Status);
             Assert.AreEqual("Farmashop", reserva.PharmacyName);
             Assert.IsNull(reserva.IdReferencia);
             Assert.AreEqual(new DateTime(2023, 10, 5, 23, 59, 59), reserva.FechaLimiteConfirmacion);
@@ -372,6 +372,7 @@ namespace PharmaGo.Test.WebApi.Test
         [TestMethod]
         public void GetReservationsByUser_Confirmada_ReturnsReservationWithIdReferencia()
         {
+            // Abarca tambien para gestion de estados
             // Arrange
             var request = new ConsultReservationRequest
             {
@@ -395,8 +396,8 @@ namespace PharmaGo.Test.WebApi.Test
                             Quantity = 1
                         }
                     },
-                    Status = ReservationStatus.Confirmada,
-                    IdReferencia = "ABC12345"
+                    Status = ReservationStatus.Confirmed,
+                    ReferenceId = "ABC12345"
                 }
             };
 
@@ -417,15 +418,16 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual(1, value.Count);
 
             var reserva = value[0];
-            Assert.AreEqual("Confirmada", reserva.Status);
+            Assert.AreEqual("Confirmed", reserva.Status);
             Assert.AreEqual("Farmacia Central", reserva.PharmacyName);
             Assert.AreEqual("ABC12345", reserva.IdReferencia);
         }
 
         [TestMethod]
-        public void GetReservationsByUser_Expirada_ReturnsReservationExpiradaWithIndicaciones()
+        public void GetReservationsByUser_Expirada_ReturnsReservationWithMensajeYFechaExpiracion()
         {
             // Arrange
+            // Abarca tambien para gestion de estados
             var request = new ConsultReservationRequest
             {
                 Email = "usuario@test.com",
@@ -450,8 +452,8 @@ namespace PharmaGo.Test.WebApi.Test
                             Quantity = 1
                         }
                     },
-                    Status = ReservationStatus.Expirada,
-                    FechaExpiracion = fechaExpiracion
+                    Status = ReservationStatus.Expired,
+                    ExpirationDate = fechaExpiracion
                 }
             };
 
@@ -472,7 +474,7 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual(1, value.Count);
 
             var reserva = value[0];
-            Assert.AreEqual("Expirada", reserva.Status);
+            Assert.AreEqual("Expired", reserva.Status);
             Assert.AreEqual("Farmacia Sur", reserva.PharmacyName);
             Assert.AreEqual(fechaExpiracion, reserva.FechaExpiracion);
         }
@@ -480,6 +482,7 @@ namespace PharmaGo.Test.WebApi.Test
         [TestMethod]
         public void GetReservationsByUser_Cancelada_ReturnsReservationCanceladaWithFecha()
         {
+            // Abarca tambien para gestion de estados
             // Arrange
             var request = new ConsultReservationRequest
             {
@@ -505,8 +508,8 @@ namespace PharmaGo.Test.WebApi.Test
                             Quantity = 1
                         }
                     },
-                    Status = ReservationStatus.Cancelada,
-                    FechaCancelacion = fechaCancelacion
+                    Status = ReservationStatus.Canceled,
+                    CancellationDate = fechaCancelacion
                 }
             };
 
@@ -527,7 +530,7 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual(1, value.Count);
 
             var reserva = value[0];
-            Assert.AreEqual("Cancelada", reserva.Status);
+            Assert.AreEqual("Canceled", reserva.Status);
             Assert.AreEqual("Farmacia Norte", reserva.PharmacyName);
             Assert.AreEqual(fechaCancelacion, reserva.FechaCancelacion);
         }
@@ -535,6 +538,7 @@ namespace PharmaGo.Test.WebApi.Test
         [TestMethod]
         public void GetReservationsByUser_Retirada_ReturnsReservationRetiradaWithFechaRetiro()
         {
+            // Abarca tambien para gestion de estados
             // Arrange
             var request = new ConsultReservationRequest
             {
@@ -560,8 +564,8 @@ namespace PharmaGo.Test.WebApi.Test
                             Quantity = 1
                         }
                     },
-                    Status = ReservationStatus.Retirada,
-                    FechaRetiro = fechaRetiro
+                    Status = ReservationStatus.Withdrawal,
+                    RetirementDate = fechaRetiro
                 }
             };
 
@@ -582,9 +586,184 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual(1, value.Count);
 
             var reserva = value[0];
-            Assert.AreEqual("Retirada", reserva.Status);
+            Assert.AreEqual("Withdrawal", reserva.Status);
             Assert.AreEqual("Farmacia Este", reserva.PharmacyName);
             Assert.AreEqual(fechaRetiro, reserva.FechaRetiro);
+        }
+
+        [TestMethod]
+        public void Create_Reservation_AssignsPendingStatus()
+        {
+            // Arrange
+            var reservationModel = new ReservationModel()
+            {
+                DrugsReserved = new List<ReservationDrugModel>
+                {
+                    new ReservationDrugModel
+                    {
+                        DrugName = "Aspirina",
+                        DrugQuantity = 1
+                    }
+                },
+                PharmacyName = "Farmashop"
+            };
+
+            var reservation = new Reservation()
+            {
+                Id = 1,
+                PharmacyName = "Farmashop",
+                Pharmacy = _pharmacy,
+                Drugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug
+                    {
+                        DrugId = 1,
+                        Drug = _drug,
+                        Quantity = 1
+                    }
+                },
+                Status = ReservationStatus.Pending
+            };
+
+            _reservationManagerMock
+                .Setup(service => service.CreateReservation(It.IsAny<Reservation>()))
+                .Returns(reservation);
+
+            // Act
+            var result = _reservationController.CreateReservation(reservationModel);
+
+            // Assert
+            var objectResult = result as OkObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(200, objectResult.StatusCode);
+
+            var value = objectResult.Value as ReservationModelResponse;
+            Assert.IsNotNull(value);
+            Assert.AreEqual("Pending", value.Status);
+        }
+
+        [TestMethod]
+        public void GetReservationsByUser_MultipleStates_ReturnsAllWithCorrectStatusAndIdReferencia()
+        {
+            // Arrange
+            var request = new ConsultReservationRequest
+            {
+                Email = "usuario@test.com",
+                Secret = "miSecret123"
+            };
+
+            var reservas = new List<Reservation>
+            {
+                new Reservation
+                {
+                    Id = 1,
+                    PharmacyName = "Farmashop",
+                    Pharmacy = _pharmacy,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = _drug,
+                            Quantity = 2
+                        }
+                    },
+                    Status = ReservationStatus.Pending,
+                    ReferenceId = null
+                },
+                new Reservation
+                {
+                    Id = 2,
+                    PharmacyName = "Farmacia Central",
+                    Pharmacy = _pharmacy,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = _drug,
+                            Quantity = 1
+                        }
+                    },
+                    Status = ReservationStatus.Confirmed,
+                    ReferenceId = "CONF123"
+                },
+                new Reservation
+                {
+                    Id = 3,
+                    PharmacyName = "Farmacia Sur",
+                    Pharmacy = _pharmacy,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = _drug,
+                            Quantity = 1
+                        }
+                    },
+                    Status = ReservationStatus.Expired
+                },
+                new Reservation
+                {
+                    Id = 4,
+                    PharmacyName = "Farmacia Norte",
+                    Pharmacy = _pharmacy,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = _drug,
+                            Quantity = 1
+                        }
+                    },
+                    Status = ReservationStatus.Canceled
+                },
+                new Reservation
+                {
+                    Id = 5,
+                    PharmacyName = "Farmacia Este",
+                    Pharmacy = _pharmacy,
+                    Drugs = new List<ReservationDrug>
+                    {
+                        new ReservationDrug
+                        {
+                            DrugId = 1,
+                            Drug = _drug,
+                            Quantity = 1
+                        }
+                    },
+                    Status = ReservationStatus.Withdrawal
+                }
+            };
+
+            _reservationManagerMock
+                .Setup(service => service.GetReservationsByUser(request.Email, request.Secret))
+                .Returns(reservas);
+
+            // Act
+            var result = _reservationController.GetReservations(request);
+
+            // Assert
+            var objectResult = result as OkObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(200, objectResult.StatusCode);
+
+            var value = objectResult.Value as List<ReservationResponse>;
+            Assert.IsNotNull(value);
+            Assert.AreEqual(reservas.Count, value.Count);
+
+            for (int i = 0; i < reservas.Count; i++)
+            {
+                Assert.AreEqual(reservas[i].PharmacyName, value[i].PharmacyName);
+                Assert.AreEqual(reservas[i].Status.ToString(), value[i].Status);
+
+                if (reservas[i].Status == ReservationStatus.Confirmed)
+                    Assert.IsNotNull(value[i].IdReferencia, "La reserva confirmada debe tener ReferenceId");
+                if (reservas[i].Status == ReservationStatus.Pending)
+                    Assert.IsNull(value[i].IdReferencia, "La reserva pendiente no debe tener ReferenceId");
+            }
         }
         #endregion Get Reservations Tests
 

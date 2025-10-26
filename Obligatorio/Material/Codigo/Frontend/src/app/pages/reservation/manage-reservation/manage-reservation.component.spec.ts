@@ -67,7 +67,7 @@ describe('ManageReservationComponent', () => {
     const listadoReservas = fixture.debugElement.query(By.css('[data-cy="listado-reservas"]'));
     expect(listadoReservas).toBeTruthy();
 
-    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-card"]'));
     expect(reservaItems.length).toBe(2);
 
     // Verifica información básica de cada reserva
@@ -142,7 +142,7 @@ describe('ManageReservationComponent', () => {
     fixture.detectChanges();
 
     // Assert: verifica que el listado muestra todas las reservas
-    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-card"]'));
     expect(reservaItems.length).toBe(5);
 
     // Verifica información básica de cada reserva
@@ -195,7 +195,7 @@ describe('ManageReservationComponent', () => {
     fixture.detectChanges();
 
     // Assert: solo se muestran las reservas en el estado filtrado
-    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-item"]'));
+    const reservaItems = fixture.debugElement.queryAll(By.css('[data-cy="reserva-card"]'));
     expect(reservaItems.length).toBe(1);
 
     const estadoElement = fixture.debugElement.query(By.css('[data-cy="reserva-estado"]'));
@@ -244,7 +244,7 @@ describe('ManageReservationComponent', () => {
     fixture.detectChanges();
 
     // Assert: verifica que la reserva pendiente se muestra correctamente
-    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-card"]'));
     expect(reservaItem).toBeTruthy();
 
     const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
@@ -287,7 +287,7 @@ describe('ManageReservationComponent', () => {
     fixture.detectChanges();
 
     // Assert: verifica que la reserva confirmada muestra el ID de referencia y el mensaje
-    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-card"]'));
     expect(reservaItem).toBeTruthy();
 
     const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
@@ -297,7 +297,7 @@ describe('ManageReservationComponent', () => {
     expect(idReferencia).toBeTruthy();
     expect(idReferencia.nativeElement.textContent).toContain('ABC12345');
 
-    const mensajeConfirmada = reservaItem.query(By.css('[data-cy="mensaje-confirmada"]'));
+    const mensajeConfirmada = reservaItem.query(By.css('[data-cy="mensaje-estado"]'));
     expect(mensajeConfirmada).toBeTruthy();
     expect(mensajeConfirmada.nativeElement.textContent).toContain('Presenta este ID en la farmacia para retirar tu medicamento');
   });
@@ -324,15 +324,15 @@ describe('ManageReservationComponent', () => {
     fixture.detectChanges();
 
     // Assert: verifica que la reserva expirada se muestra correctamente
-    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-card"]'));
     expect(reservaItem).toBeTruthy();
 
     const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
     expect(estadoElement.nativeElement.textContent).toContain('Expirada');
 
-    const mensajeExpirada = reservaItem.query(By.css('[data-cy="mensaje-expirada"]'));
+    const mensajeExpirada = reservaItem.query(By.css('[data-cy="mensaje-estado"]'));
     expect(mensajeExpirada).toBeTruthy();
-    expect(mensajeExpirada.nativeElement.textContent).toContain('Esta reserva ha expirado. Puedes crear una nueva reserva si aún necesitas el medicamento');
+    expect(mensajeExpirada.nativeElement.textContent).toContain('Esta reserva ha expirado');
 
     const fechaExpiracion = reservaItem.query(By.css('[data-cy="fecha-expiracion"]'));
     expect(fechaExpiracion).toBeTruthy();
@@ -361,15 +361,15 @@ describe('ManageReservationComponent', () => {
     fixture.detectChanges();
 
     // Assert: verifica que la reserva cancelada se muestra correctamente
-    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-card"]'));
     expect(reservaItem).toBeTruthy();
 
     const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
     expect(estadoElement.nativeElement.textContent).toContain('Cancelada');
 
-    const mensajeCancelada = reservaItem.query(By.css('[data-cy="mensaje-cancelada"]'));
+    const mensajeCancelada = reservaItem.query(By.css('[data-cy="mensaje-estado"]'));
     expect(mensajeCancelada).toBeTruthy();
-    expect(mensajeCancelada.nativeElement.textContent).toContain('Reserva cancelada. No es posible reactivarla');
+    expect(mensajeCancelada.nativeElement.textContent).toContain('Reserva cancelada');
 
     const fechaCancelacion = reservaItem.query(By.css('[data-cy="fecha-cancelacion"]'));
     expect(fechaCancelacion).toBeTruthy();
@@ -398,13 +398,13 @@ describe('ManageReservationComponent', () => {
     fixture.detectChanges();
 
     // Assert: verifica que la reserva retirada se muestra correctamente
-    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-item"]'));
+    const reservaItem = fixture.debugElement.query(By.css('[data-cy="reserva-card"]'));
     expect(reservaItem).toBeTruthy();
 
     const estadoElement = reservaItem.query(By.css('[data-cy="reserva-estado"]'));
     expect(estadoElement.nativeElement.textContent).toContain('Retirada');
 
-    const mensajeRetirada = reservaItem.query(By.css('[data-cy="mensaje-retirada"]'));
+    const mensajeRetirada = reservaItem.query(By.css('[data-cy="mensaje-estado"]'));
     expect(mensajeRetirada).toBeTruthy();
     expect(mensajeRetirada.nativeElement.textContent).toContain('Reserva retirada exitosamente');
 

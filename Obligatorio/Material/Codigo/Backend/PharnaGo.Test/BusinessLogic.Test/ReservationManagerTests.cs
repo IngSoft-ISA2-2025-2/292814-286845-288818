@@ -95,7 +95,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                             Quantity = 2
                         }
                     },
-                    Status = ReservationStatus.Pendiente
+                    Status = ReservationStatus.Pending
                 },
                 new Reservation
                 {
@@ -113,7 +113,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                             Quantity = 1
                         }
                     },
-                    Status = ReservationStatus.Confirmada
+                    Status = ReservationStatus.Confirmed
                 }
             };
 
@@ -180,7 +180,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(reservationReturned.Secret, resevation.Secret);
             Assert.AreEqual(reservationReturned.PharmacyName, resevation.PharmacyName);
             Assert.AreEqual(reservationReturned.Drugs.Count, resevation.Drugs.Count);
-            Assert.AreEqual(reservationReturned.Status, ReservationStatus.Pendiente);
+            Assert.AreEqual(reservationReturned.Status, ReservationStatus.Pending);
             Assert.IsNotNull(reservationReturned.PrivateKey);
             Assert.IsNotNull(reservationReturned.PublicKey);
             Assert.AreEqual(198, drugModel.Stock);
@@ -303,6 +303,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
         [TestMethod]
         public void GetReservationsByUser_Ok()
         {
+            // Abarca tambien para gestion de estados
             // Arrange
             string email = "usuario@test.com";
             string secret = "miSecret123";
@@ -323,7 +324,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                             Quantity = 2
                         }
                     },
-                    Status = ReservationStatus.Pendiente
+                    Status = ReservationStatus.Pending
                 },
                 new Reservation
                 {
@@ -340,7 +341,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                             Quantity = 1
                         }
                     },
-                    Status = ReservationStatus.Confirmada
+                    Status = ReservationStatus.Confirmed
                 },
                 new Reservation
                 {
@@ -357,7 +358,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                             Quantity = 3
                         }
                     },
-                    Status = ReservationStatus.Expirada
+                    Status = ReservationStatus.Expired
                 },
                 new Reservation
                 {
@@ -374,7 +375,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                             Quantity = 1
                         }
                     },
-                    Status = ReservationStatus.Cancelada
+                    Status = ReservationStatus.Canceled
                 },
                 new Reservation
                 {
@@ -391,7 +392,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
                             Quantity = 2
                         }
                     },
-                    Status = ReservationStatus.Retirada
+                    Status = ReservationStatus.Withdrawal
                 }
             };
 
@@ -418,6 +419,11 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 Assert.AreEqual(reservations[i].Drugs.Count, result[i].Drugs.Count);
                 Assert.AreEqual(reservations[i].Drugs.First().Drug.Name, result[i].Drugs.First().Drug.Name);
                 Assert.AreEqual(reservations[i].Drugs.First().Quantity, result[i].Drugs.First().Quantity);
+
+                if (reservations[i].Status == ReservationStatus.Confirmed)
+                Assert.IsNotNull(result[i].ReferenceId, "La reserva confirmada debe tener ReferenceId");
+                if (reservations[i].Status == ReservationStatus.Pending)
+                Assert.IsNull(result[i].ReferenceId, "La reserva pendiente no debe tener ReferenceId");
             }
         }
 
@@ -490,9 +496,9 @@ namespace PharmaGo.Test.BusinessLogic.Test
                     Id = 1,
                     Email = email,
                     Secret = secret,
-                    Status = ReservationStatus.Pendiente,
-                    FechaLimiteConfirmacion = fechaLimite,
-                    IdReferencia = null
+                    Status = ReservationStatus.Pending,
+                    LimitConfirmationDate = fechaLimite,
+                    ReferenceId = null
                 }
             };
 
@@ -510,14 +516,15 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Count);
             var reserva = result[0];
-            Assert.AreEqual(ReservationStatus.Pendiente, reserva.Status);
-            Assert.AreEqual(fechaLimite, reserva.FechaLimiteConfirmacion);
-            Assert.IsNull(reserva.IdReferencia);
+            Assert.AreEqual(ReservationStatus.Pending, reserva.Status);
+            Assert.AreEqual(fechaLimite, reserva.LimitConfirmationDate);
+            Assert.IsNull(reserva.ReferenceId);
         }
 
         [TestMethod]
         public void GetReservationsByUser_Confirmada_ReturnsReservationWithIdReferencia()
         {
+            // Abarca tambien para gestion de estados
             // Arrange
             string email = "usuario@test.com";
             string secret = "miSecret123";
@@ -530,8 +537,8 @@ namespace PharmaGo.Test.BusinessLogic.Test
                     Id = 2,
                     Email = email,
                     Secret = secret,
-                    Status = ReservationStatus.Confirmada,
-                    IdReferencia = idReferencia
+                    Status = ReservationStatus.Confirmed,
+                    ReferenceId = idReferencia
                 }
             };
 
@@ -549,13 +556,14 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Count);
             var reserva = result[0];
-            Assert.AreEqual(ReservationStatus.Confirmada, reserva.Status);
-            Assert.AreEqual(idReferencia, reserva.IdReferencia);
+            Assert.AreEqual(ReservationStatus.Confirmed, reserva.Status);
+            Assert.AreEqual(idReferencia, reserva.ReferenceId);
         }
 
         [TestMethod]
-        public void GetReservationsByUser_Expirada_ReturnsReservationExpiradaWithIndicaciones()
+        public void GetReservationsByUser_Expirada_ReturnsReservationWithMensajeYFechaExpiracion()
         {
+            // Abarca tambien para gestion de estados
             // Arrange
             string email = "usuario@test.com";
             string secret = "miSecret123";
@@ -568,8 +576,8 @@ namespace PharmaGo.Test.BusinessLogic.Test
                     Id = 3,
                     Email = email,
                     Secret = secret,
-                    Status = ReservationStatus.Expirada,
-                    FechaExpiracion = fechaExpiracion
+                    Status = ReservationStatus.Expired,
+                    ExpirationDate = fechaExpiracion
                 }
             };
 
@@ -587,13 +595,14 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Count);
             var reserva = result[0];
-            Assert.AreEqual(ReservationStatus.Expirada, reserva.Status);
-            Assert.AreEqual(fechaExpiracion, reserva.FechaExpiracion);
+            Assert.AreEqual(ReservationStatus.Expired, reserva.Status);
+            Assert.AreEqual(fechaExpiracion, reserva.ExpirationDate);
         }
 
         [TestMethod]
         public void GetReservationsByUser_Cancelada_ReturnsReservationCanceladaWithFecha()
         {
+            // Abarca tambien para gestion de estados
             // Arrange
             string email = "usuario@test.com";
             string secret = "miSecret123";
@@ -606,8 +615,8 @@ namespace PharmaGo.Test.BusinessLogic.Test
                     Id = 4,
                     Email = email,
                     Secret = secret,
-                    Status = ReservationStatus.Cancelada,
-                    FechaCancelacion = fechaCancelacion
+                    Status = ReservationStatus.Canceled,
+                    CancellationDate = fechaCancelacion
                 }
             };
 
@@ -625,13 +634,14 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Count);
             var reserva = result[0];
-            Assert.AreEqual(ReservationStatus.Cancelada, reserva.Status);
-            Assert.AreEqual(fechaCancelacion, reserva.FechaCancelacion);
+            Assert.AreEqual(ReservationStatus.Canceled, reserva.Status);
+            Assert.AreEqual(fechaCancelacion, reserva.CancellationDate);
         }
 
         [TestMethod]
         public void GetReservationsByUser_Retirada_ReturnsReservationRetiradaWithFechaRetiro()
         {
+            // Abarca tambien para gestion de estados
             // Arrange
             string email = "usuario@test.com";
             string secret = "miSecret123";
@@ -644,8 +654,8 @@ namespace PharmaGo.Test.BusinessLogic.Test
                     Id = 5,
                     Email = email,
                     Secret = secret,
-                    Status = ReservationStatus.Retirada,
-                    FechaRetiro = fechaRetiro
+                    Status = ReservationStatus.Withdrawal,
+                    RetirementDate = fechaRetiro
                 }
             };
 
@@ -663,10 +673,62 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Count);
             var reserva = result[0];
-            Assert.AreEqual(ReservationStatus.Retirada, reserva.Status);
-            Assert.AreEqual(fechaRetiro, reserva.FechaRetiro);
+            Assert.AreEqual(ReservationStatus.Withdrawal, reserva.Status);
+            Assert.AreEqual(fechaRetiro, reserva.RetirementDate);
         }
 
+        [TestMethod]
+        public void CreateReservation_AssignsPendingStatus()
+        {
+            // Arrange
+            var reservation = new Reservation
+            {
+                Email = "usuario@test.com",
+                Secret = "secret123",
+                PharmacyName = "Farmashop",
+                Drugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug
+                    {
+                        Drug = new Drug { Name = "Aspirina" },
+                        Quantity = 1
+                    }
+                }
+            };
+
+            _reservationRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(false);
+
+            _pharmacyRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Pharmacy, bool>>>()))
+                .Returns(true);
+
+            _pharmacyRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Pharmacy, bool>>>()))
+                .Returns(_pharmacy);
+
+            _drugRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Drug, bool>>>()))
+                .Returns(true);
+
+            _drugRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Drug, bool>>>()))
+                .Returns(_drug);
+
+            _reservationRepository
+                .Setup(x => x.InsertOne(It.IsAny<Reservation>()))
+                .Callback<Reservation>(r => r.Id = 10);
+
+            _reservationRepository.Setup(x => x.Save());
+
+            // Act
+            var result = _reservationManager.CreateReservation(reservation);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(ReservationStatus.Pending, result.Status);
+        }
         #region Validate Reservation Tests
         [TestMethod]
         public void ValidateReservation_Ok()
@@ -674,7 +736,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
             // Arrange
             string publicKey = "validPublicKey";
             var reservation = _reservation;
-            reservation.Status = ReservationStatus.Confirmada;
+            reservation.Status = ReservationStatus.Confirmed;
 
             _reservationRepository
                 .Setup(r => r.Exists(r => r.PublicKey == publicKey))
@@ -694,7 +756,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(reservation.Secret, result.Secret);
             Assert.AreEqual(reservation.PharmacyName, result.PharmacyName);
             Assert.AreEqual(reservation.Drugs.Count, result.Drugs.Count);
-            Assert.AreEqual(ReservationStatus.Retirada, result.Status);
+            Assert.AreEqual(ReservationStatus.Withdrawal, result.Status);
         }
 
         [TestMethod]
@@ -721,7 +783,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
         {
             string publicKey = "expired-publicKey";
             var reservation = _reservation;
-            reservation.FechaExpiracion = System.DateTime.Now.AddHours(-1);
+            reservation.ExpirationDate = System.DateTime.Now.AddHours(-1);
 
             _reservationRepository
                 .Setup(r => r.Exists(r => r.PublicKey == publicKey))
@@ -746,7 +808,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
         {
             string publicKey = "expired-publicKey";
             var reservation = _reservation;
-            reservation.Status = ReservationStatus.Cancelada;
+            reservation.Status = ReservationStatus.Canceled;
 
             _reservationRepository
                 .Setup(r => r.Exists(r => r.PublicKey == publicKey))
@@ -767,4 +829,4 @@ namespace PharmaGo.Test.BusinessLogic.Test
         #endregion Validate Reservation Tests
     }
 }
-        
+

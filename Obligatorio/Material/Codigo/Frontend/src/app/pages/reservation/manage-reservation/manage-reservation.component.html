@@ -137,7 +137,7 @@
 
         <div *ngFor="let reserva of reservasFiltradas" 
              class="reservation-card" 
-             data-cy="reserva-item">
+             data-cy="reserva-card">
           
           <!-- Información básica de la reserva -->
           <div class="reservation-header">
@@ -178,25 +178,25 @@
               </div>
 
               <!-- Mensaje para Confirmada -->
-              <div *ngIf="reserva.status === 'Confirmada'" data-cy="mensaje-confirmada">
+              <div *ngIf="reserva.status === 'Confirmada'" data-cy="mensaje-estado" class="mensaje-confirmada">
                 <i class="icon-check"></i>
                 {{ getMensajePorEstado(reserva) }}
               </div>
 
               <!-- Mensaje para Expirada -->
-              <div *ngIf="reserva.status === 'Expirada'" data-cy="mensaje-expirada">
+              <div *ngIf="reserva.status === 'Expirada'" data-cy="mensaje-estado" class="mensaje-expirada">
                 <i class="icon-warning"></i>
                 {{ getMensajePorEstado(reserva) }}
               </div>
 
               <!-- Mensaje para Cancelada -->
-              <div *ngIf="reserva.status === 'Cancelada'" data-cy="mensaje-cancelada">
+              <div *ngIf="reserva.status === 'Cancelada'" data-cy="mensaje-estado" class="mensaje-cancelada">
                 <i class="icon-x"></i>
                 {{ getMensajePorEstado(reserva) }}
               </div>
 
               <!-- Mensaje para Retirada -->
-              <div *ngIf="reserva.status === 'Retirada'" data-cy="mensaje-retirada">
+              <div *ngIf="reserva.status === 'Retirada'" data-cy="mensaje-estado" class="mensaje-retirada">
                 <i class="icon-check-circle"></i>
                 {{ getMensajePorEstado(reserva) }}
               </div>
@@ -222,13 +222,19 @@
                 </button>
               </div>
 
-              <!-- Para Confirmada: ID de referencia -->
+              <!-- Para Confirmada: ID de referencia y fecha -->
               <div *ngIf="reserva.status === 'Confirmada'">
                 <div *ngIf="reserva.idReferencia" 
                      class="id-referencia" 
                      data-cy="id-referencia">
                   <strong>ID de Referencia:</strong> 
                   <code>{{ reserva.idReferencia }}</code>
+                </div>
+                <div *ngIf="reserva.fechaConfirmacion" 
+                     class="fecha-confirmacion" 
+                     data-cy="fecha-confirmacion">
+                  <strong>Fecha de confirmación:</strong> 
+                  {{ formatearFecha(reserva.fechaConfirmacion) }}
                 </div>
               </div>
 
@@ -252,8 +258,14 @@
                 </div>
               </div>
 
-              <!-- Para Retirada: Fecha de retiro -->
+              <!-- Para Retirada: ID de referencia y fecha de retiro -->
               <div *ngIf="reserva.status === 'Retirada'">
+                <div *ngIf="reserva.idReferencia" 
+                     class="id-referencia" 
+                     data-cy="id-referencia">
+                  <strong>ID de Referencia:</strong> 
+                  <code>{{ reserva.idReferencia }}</code>
+                </div>
                 <div *ngIf="reserva.fechaRetiro" 
                      class="fecha-retiro" 
                      data-cy="fecha-retiro">
