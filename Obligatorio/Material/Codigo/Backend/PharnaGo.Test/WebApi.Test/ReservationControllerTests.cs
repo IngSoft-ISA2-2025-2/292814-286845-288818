@@ -14,16 +14,16 @@ namespace PharmaGo.Test.WebApi.Test
     [TestClass]
     public class ReservationControllerTests
     {
-        private ReservationController _reservationController;
-        private Mock<IReservationManager> _reservationManagerMock;
-        private ConsultReservationRequest _consultReservationRequest;
-        private List<Reservation> _reservations;
-        private Pharmacy _pharmacy;
-        private Drug _drug;
-        private ReservationModel reservationModel;
-        private Reservation _reservation;
-        private Pharmacy pharmacyModel;
-        private Drug drugModel;
+        private ReservationController _reservationController = null!;
+        private Mock<IReservationManager> _reservationManagerMock = null!;
+        private ConsultReservationRequest _consultReservationRequest = null!;
+        private List<Reservation> _reservations = null!;
+        private Pharmacy _pharmacy = null!;
+        private Drug _drug = null!;
+        private ReservationModel reservationModel = null!;
+        private Reservation _reservation = null!;
+        private Pharmacy pharmacyModel = null!;
+        private Drug drugModel = null!;
 
         [TestInitialize]
         public void SetUp()
@@ -173,12 +173,12 @@ namespace PharmaGo.Test.WebApi.Test
 
             //Assert
             var objectResult = result as OkObjectResult;
-            var statusCode = objectResult.StatusCode;
+            var statusCode = objectResult!.StatusCode;
             var value = objectResult.Value as ReservationModelResponse;
 
             //Assert
             Assert.AreEqual(200, statusCode);
-            Assert.AreEqual(reservationModel.PharmacyName, value.PharmacyName);
+            Assert.AreEqual(reservationModel.PharmacyName, value!.PharmacyName);
             Assert.AreEqual(reservationModel.DrugsReserved.Count, value.DrugsReserved.Count);
             Assert.IsNotNull(value.PublicKey);
             for (int i = 0; i < reservationModel.DrugsReserved.Count; i++)
@@ -605,7 +605,9 @@ namespace PharmaGo.Test.WebApi.Test
                         DrugQuantity = 1
                     }
                 },
-                PharmacyName = "Farmashop"
+                PharmacyName = "Farmashop",
+                Email = "test@example.com",
+                Secret = "secret123"
             };
 
             var reservation = new Reservation()
@@ -613,6 +615,233 @@ namespace PharmaGo.Test.WebApi.Test
                 Id = 1,
                 PharmacyName = "Farmashop",
                 Pharmacy = _pharmacy,
+                Email = "test@example.com",
+                Secret = "secret123",
+                Status = ReservationStatus.Pending,
+                Drugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug
+                    {
+                        Drug = _drug,
+                        Quantity = 1
+                    }
+                }
+            };
+
+            _reservationManagerMock
+                .Setup(service => service.CreateReservation(It.IsAny<Reservation>()))
+                .Returns(reservation);
+
+            // Act
+            var result = _reservationController.CreateReservation(reservationModel);
+
+            // Assert
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            var value = objectResult.Value as Reservation;
+            Assert.IsNotNull(value);
+            Assert.AreEqual(ReservationStatus.Pending, value.Status);
+        }
+
+        [TestMethod]
+        public void CancelReservation_WithNonExistentReservation_ThrowsNotFoundException()
+        {
+            // Arrange
+            string email = "sinreserva@example.com";
+            string secret = "cualquiera";
+
+            _reservationManagerMock
+                .Setup(service => service.CancelReservation(email, secret))
+                .Throws(new KeyNotFoundException("No existe una reserva asociada a ese correo"));
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<KeyNotFoundException>(() =>
+                _reservationController.CancelReservation(email, secret)
+            );
+            Assert.AreEqual("No existe una reserva asociada a ese correo", ex.Message);
+        }
+
+        [TestMethod]
+        public void CancelReservation_WithInvalidSecret_ThrowsUnauthorizedException()
+        {
+            // Arrange
+            string email = "cliente@example.com";
+            string wrongSecret = "equivocado";
+
+            _reservationManagerMock
+                .Setup(service => service.CancelReservation(email, wrongSecret))
+                .Throws(new UnauthorizedAccessException("Secret inválido para ese correo"));
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<UnauthorizedAccessException>(() =>
+                _reservationController.CancelReservation(email, wrongSecret)
+            );
+            Assert.AreEqual("Secret inválido para ese correo", ex.Message);
+        }
+
+        [TestMethod]
+        public void CancelReservation_WithMissingEmail_ThrowsArgumentException()
+        {
+            // Arrange
+            string email = "";
+            string secret = "abc123";
+
+            _reservationManagerMock
+                .Setup(service => service.CancelReservation(email, secret))
+                .Throws(new ArgumentException("Se requiere un correo válido"));
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<ArgumentException>(() =>
+                _reservationController.CancelReservation(email, secret)
+            );
+            Assert.AreEqual("Se requiere un correo válido", ex.Message);
+        }
+
+        [TestMethod]
+        public void CancelReservation_WithExpiredReservation_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            string email = "vencida@example.com";
+            string secret = "oldSecret";
+
+            _reservationManagerMock
+                .Setup(service => service.CancelReservation(email, secret))
+                .Throws(new InvalidOperationException("No se puede cancelar una reserva expirada"));
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<InvalidOperationException>(() =>
+                _reservationController.CancelReservation(email, secret)
+            );
+            Assert.AreEqual("No se puede cancelar una reserva expirada", ex.Message);
+        }
+
+        [TestMethod]
+        public void CancelReservation_WhenAlreadyCancelled_ReturnsOkIdempotent()
+        {
+            // Arrange
+            string email = "cliente@example.com";
+            string secret = "abc123";
+
+            var alreadyCancelledReservation = new Reservation
+            {
+                Id = 1,
+                Email = email,
+                Secret = secret,
+                PharmacyName = "Farmashop",
+                Status = ReservationStatus.Canceled,
+                Drugs = new List<ReservationDrug>()
+            };
+
+            _reservationManagerMock
+                .Setup(service => service.CancelReservation(email, secret))
+                .Returns(alreadyCancelledReservation);
+
+            // Act
+            var result = _reservationController.CancelReservation(email, secret);
+
+            // Assert
+            var objectResult = result as OkObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(200, objectResult.StatusCode);
+        }
+
+        [TestMethod]
+        public void CancelReservation_WithValidEmailAndSecret_ReturnsOkAndCancelsReservation()
+        {
+            // Arrange
+            string email = "cliente@example.com";
+            string secret = "abc123";
+
+            var cancelledReservation = new Reservation
+            {
+                Id = 1,
+                Email = email,
+                Secret = secret,
+                PharmacyName = "Farmashop",
+                Status = ReservationStatus.Canceled,
+                Drugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug
+                    {
+                        DrugId = 1,
+                        Drug = _drug,
+                        Quantity = 1
+                    }
+                }
+            };
+
+            _reservationManagerMock
+                .Setup(service => service.CancelReservation(email, secret))
+                .Returns(cancelledReservation);
+
+            // Act
+            var result = _reservationController.CancelReservation(email, secret);
+
+            // Assert
+            var objectResult = result as OkObjectResult;
+            Assert.IsNotNull(objectResult);
+        }
+
+        [TestMethod]
+        public void CancelReservation_WithMultipleReservationsSameEmail_CancelsOnlyMatchingSecret()
+        {
+            // Arrange
+            string email = "multi@example.com";
+            string secret1 = "s1";
+
+            var reservation1 = new Reservation
+            {
+                Id = 1,
+                Email = email,
+                Secret = secret1,
+                PharmacyName = "Farmashop",
+                Status = ReservationStatus.Canceled,
+                Drugs = new List<ReservationDrug>()
+            };
+
+            _reservationManagerMock
+                .Setup(service => service.CancelReservation(email, secret1))
+                .Returns(reservation1);
+
+            // Act
+            var result = _reservationController.CancelReservation(email, secret1);
+
+            // Assert
+            var objectResult = result as OkObjectResult;
+            Assert.IsNotNull(objectResult);
+            var value = objectResult.Value as Reservation;
+            Assert.IsNotNull(value);
+            Assert.AreEqual(ReservationStatus.Canceled, value.Status);
+            Assert.AreEqual(email, value.Email);
+            Assert.AreEqual(secret1, value.Secret);
+        }
+
+        [TestMethod]
+        public void CreateReservation_AssignsCorrectStatus()
+        {
+            // Arrange
+            var reservationModel = new ReservationModel()
+            {
+                DrugsReserved = new List<ReservationDrugModel>
+                {
+                    new ReservationDrugModel
+                    {
+                        DrugName = "Aspirina",
+                        DrugQuantity = 1
+                    }
+                },
+                PharmacyName = "Farmashop",
+                Email = "usuario@test.com",
+                Secret = "secret123"
+            };
+
+            var reservation = new Reservation()
+            {
+                Id = 1,
+                PharmacyName = "Farmashop",
+                Pharmacy = _pharmacy,
+                Email = "usuario@test.com",
+                Secret = "secret123",
                 Drugs = new List<ReservationDrug>
                 {
                     new ReservationDrug
@@ -780,10 +1009,10 @@ namespace PharmaGo.Test.WebApi.Test
             var result = _reservationController.ValidateReservation(publicKey);
 
             var objectResult = result as OkObjectResult;
-            var statusCode = objectResult.StatusCode;
+            var statusCode = objectResult!.StatusCode;
             var value = objectResult.Value as ReservationModelResponse;
             Assert.AreEqual(200, statusCode);
-            Assert.AreEqual(reservationModel.PharmacyName, value.PharmacyName);
+            Assert.AreEqual(reservationModel.PharmacyName, value!.PharmacyName);
             Assert.AreEqual(reservationModel.DrugsReserved.Count, value.DrugsReserved.Count);
             Assert.IsNotNull(value.PublicKey);
             for (int i = 0; i < reservationModel.DrugsReserved.Count; i++)

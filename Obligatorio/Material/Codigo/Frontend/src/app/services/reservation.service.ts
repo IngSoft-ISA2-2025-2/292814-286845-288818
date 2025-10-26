@@ -53,6 +53,15 @@ export class ReservationService {
       );
   }
 
+  /** DELETE: cancelar una reserva existente */
+  cancelReservation(email: string, secret: string): Observable<ReservationResponse> {
+    return this.http.delete<ReservationResponse>(`${this.url}?email=${email}&secret=${secret}`, { headers: this.getHttpHeaders() })
+      .pipe(
+        tap()
+        // NO capturamos el error aquí - dejamos que llegue al componente
+      );
+  }
+
   /**
    * Handle Http operation that failed.
    * Let the app continue.

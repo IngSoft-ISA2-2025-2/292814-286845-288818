@@ -55,5 +55,21 @@ namespace PharmaGo.WebApi.Controllers
             };
             return Ok(response);
         }
+
+        [HttpDelete]
+        public IActionResult CancelReservation(string email, string secret)
+        {
+            var cancelledReservation = _reservationManager.CancelReservation(email, secret);
+            var response = new ReservationModelResponse
+            {
+                PharmacyName = cancelledReservation.PharmacyName,
+                DrugsReserved = cancelledReservation.ReservationDrugs.Select(d => new ReservationDrugModelResponse
+                {
+                    DrugName = d.Drug.Name,
+                    DrugQuantity = d.Quantity
+                }).ToList()
+            };
+            return Ok(response);
+        }
     }
 }

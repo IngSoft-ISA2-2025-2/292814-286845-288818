@@ -16,17 +16,16 @@ namespace PharmaGo.Test.BusinessLogic.Test
     [TestClass]
     public class ReservationManagerTests
     {
-        private Mock<IRepository<Reservation>> _reservationRepository;
-        private Mock<IRepository<Pharmacy>> _pharmacyRepository;
-        private Mock<IRepository<Drug>> _drugRepository;
+        private Mock<IRepository<Reservation>> _reservationRepository = null!;
+        private Mock<IRepository<Pharmacy>> _pharmacyRepository = null!;
+        private Mock<IRepository<Drug>> _drugRepository = null!;
         private Mock<IDrugManager> _drugManager = new Mock<IDrugManager>();
-        private ReservationManager _reservationManager;
-        private List<Reservation> _reservations;
-        private Reservation _reservation;
-        private Pharmacy _pharmacy;
-        private Drug drugModel;
-        private Drug _drug;
-        private const Reservation nullReservation = null;
+        private ReservationManager _reservationManager = null!;
+        private List<Reservation> _reservations = null!;
+        private Reservation _reservation = null!;
+        private Pharmacy _pharmacy = null!;
+        private Drug drugModel = null!;
+        private Drug _drug = null!;
 
         [TestInitialize]
         public void InitTest()
@@ -696,9 +695,8 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 }
             };
 
-            _reservationRepository
-                .Setup(x => x.Exists(It.IsAny<Expression<Func<Reservation, bool>>>()))
-                .Returns(false);
+            var pharmacy = new Pharmacy { Name = "Farmashop" };
+            var drug = new Drug { Name = "Aspirina", Stock = 10, Pharmacy = pharmacy };
 
             _pharmacyRepository
                 .Setup(x => x.Exists(It.IsAny<Expression<Func<Pharmacy, bool>>>()))
@@ -706,7 +704,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
 
             _pharmacyRepository
                 .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Pharmacy, bool>>>()))
-                .Returns(_pharmacy);
+                .Returns(pharmacy);
 
             _drugRepository
                 .Setup(x => x.Exists(It.IsAny<Expression<Func<Drug, bool>>>()))
@@ -714,13 +712,20 @@ namespace PharmaGo.Test.BusinessLogic.Test
 
             _drugRepository
                 .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Drug, bool>>>()))
-                .Returns(_drug);
+                .Returns(drug);
 
             _reservationRepository
-                .Setup(x => x.InsertOne(It.IsAny<Reservation>()))
-                .Callback<Reservation>(r => r.Id = 10);
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(false);
 
-            _reservationRepository.Setup(x => x.Save());
+            _reservationRepository
+                .Setup(x => x.InsertOne(It.IsAny<Reservation>()));
+
+            _reservationRepository
+                .Setup(x => x.Save());
+
+            _drugRepository
+                .Setup(x => x.UpdateOne(It.IsAny<Drug>()));
 
             // Act
             var result = _reservationManager.CreateReservation(reservation);
@@ -729,6 +734,186 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.IsNotNull(result);
             Assert.AreEqual(ReservationStatus.Pending, result.Status);
         }
+
+        // ============================
+        // TDD RED: Cancel Reservation - Escenario 1: No existe reserva
+        // ============================
+
+        [TestMethod]
+        public void CancelReservation_WithNonExistentReservation_ThrowsKeyNotFoundException()
+        {
+            // Arrange
+            string email = "sinreserva@example.com";
+            string secret = "cualquiera";
+
+            _reservationRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(() => null!);
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<KeyNotFoundException>(() =>
+                _reservationManager.CancelReservation(email, secret)
+            );
+            Assert.AreEqual("No existe una reserva asociada a ese correo", ex.Message);
+        }
+
+        // ============================
+        // TDD RED: Cancel Reservation - Escenario 2: Secret incorrecto
+        // ============================
+
+        [TestMethod]
+        public void CancelReservation_WithInvalidSecret_ThrowsUnauthorizedException()
+        {
+            // Arrange
+            string email = "cliente@example.com";
+            string wrongSecret = "equivocado";
+
+            // Simular que existe una reserva con ese email pero con secret diferente
+            _reservationRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(true);
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<UnauthorizedAccessException>(() =>
+                _reservationManager.CancelReservation(email, wrongSecret)
+            );
+            Assert.AreEqual("Secret inválido para ese correo", ex.Message);
+        }
+
+        [TestMethod]
+        public void CancelReservation_WithEmptyEmail_ThrowsArgumentException()
+        {
+            // Arrange
+            string email = "";
+            string secret = "abc123";
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<ArgumentException>(() =>
+                _reservationManager.CancelReservation(email, secret)
+            );
+            Assert.AreEqual("Se requiere un correo válido", ex.Message);
+        }
+
+        [TestMethod]
+        public void CancelReservation_WithExpiredReservation_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            string email = "vencida@example.com";
+            string secret = "oldSecret";
+
+            var expiredReservation = new Reservation
+            {
+                Id = 1,
+                Email = email,
+                Secret = secret,
+                PharmacyName = "Farmashop",
+                Status = ReservationStatus.Expired,
+                Drugs = new List<ReservationDrug>()
+            };
+
+            _reservationRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(false);
+
+            _reservationRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(expiredReservation);
+
+            // Act & Assert
+            var ex = Assert.ThrowsException<InvalidOperationException>(() =>
+                _reservationManager.CancelReservation(email, secret)
+            );
+            Assert.AreEqual("No se puede cancelar una reserva expirada", ex.Message);
+        }
+
+        [TestMethod]
+        public void CancelReservation_WhenAlreadyCancelled_ReturnsReservationIdempotent()
+        {
+            // Arrange
+            string email = "cliente@example.com";
+            string secret = "abc123";
+
+            var alreadyCancelledReservation = new Reservation
+            {
+                Id = 1,
+                Email = email,
+                Secret = secret,
+                PharmacyName = "Farmashop",
+                Status = ReservationStatus.Canceled,
+                Drugs = new List<ReservationDrug>()
+            };
+
+            _reservationRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(false);
+
+            _reservationRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(alreadyCancelledReservation);
+
+            // Act
+            var result = _reservationManager.CancelReservation(email, secret);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Cancelled", result.Status);
+            Assert.AreEqual(email, result.Email);
+            Assert.AreEqual(secret, result.Secret);
+        }
+
+        [TestMethod]
+        public void CancelReservation_WithValidEmailAndSecret_SuccessfullyCancelsReservation()
+        {
+            // Arrange
+            string email = "cliente@example.com";
+            string secret = "abc123";
+
+            var activeReservation = new Reservation
+            {
+                Id = 1,
+                Email = email,
+                Secret = secret,
+                PharmacyName = "Farmashop",
+                Status = ReservationStatus.Pending,
+                Drugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug
+                    {
+                        Drug = drugModel,
+                        Quantity = 2
+                    }
+                }
+            };
+
+            _reservationRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(false);
+
+            _reservationRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(activeReservation);
+
+            _reservationRepository
+                .Setup(x => x.UpdateOne(It.IsAny<Reservation>()));
+
+            _reservationRepository
+                .Setup(x => x.Save());
+
+            // Act
+            var result = _reservationManager.CancelReservation(email, secret);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(ReservationStatus.Canceled, result.Status);
+            Assert.AreEqual(email, result.Email);
+            Assert.AreEqual(secret, result.Secret);
+            Assert.AreEqual("Farmashop", result.PharmacyName);
+            Assert.AreEqual(1, result.Drugs.Count);
+
+            _reservationRepository.Verify(x => x.UpdateOne(It.IsAny<Reservation>()), Times.Once);
+            _reservationRepository.Verify(x => x.Save(), Times.Once);
+        }
+
         #region Validate Reservation Tests
         [TestMethod]
         public void ValidateReservation_Ok()
@@ -827,6 +1012,55 @@ namespace PharmaGo.Test.BusinessLogic.Test
             );
         }
         #endregion Validate Reservation Tests
+
+        [TestMethod]
+        public void CancelReservation_WithMultipleReservationsSameEmail_CancelsOnlyMatchingSecret()
+        {
+            // Arrange
+            string email = "multi@example.com";
+            string secret1 = "s1";
+
+            // Reserva que queremos cancelar (con secret "s1")
+            var reservation1 = new Reservation
+            {
+                Id = 1,
+                Email = email,
+                Secret = secret1,
+                PharmacyName = "Farmashop",
+                Status = ReservationStatus.Pending,
+                Drugs = new List<ReservationDrug>()
+            };
+
+            // Simular que NO existe otra reserva con email igual pero secret diferente
+            _reservationRepository
+                .Setup(x => x.Exists(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(false);
+
+            // Retornar solo la reserva con el secret correcto
+            _reservationRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(reservation1);
+
+            _reservationRepository
+                .Setup(x => x.UpdateOne(It.IsAny<Reservation>()));
+
+            _reservationRepository
+                .Setup(x => x.Save());
+
+            // Act
+            var result = _reservationManager.CancelReservation(email, secret1);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(ReservationStatus.Canceled, result.Status);
+            Assert.AreEqual(email, result.Email);
+            Assert.AreEqual(secret1, result.Secret);
+            Assert.AreEqual(1, result.Id);
+
+            // Verificar que se actualizó solo una reserva
+            _reservationRepository.Verify(x => x.UpdateOne(It.IsAny<Reservation>()), Times.Once);
+            _reservationRepository.Verify(x => x.Save(), Times.Once);
+        }
     }
 }
 
