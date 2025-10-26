@@ -1,0 +1,38 @@
+<app-custom-toast></app-custom-toast>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3>Confirmar Reserva</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="confirmForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="referenceId" class="form-label">ID de Referencia</label>
+              <input
+                type="text"
+                class="form-control"
+                id="referenceId"
+                formControlName="referenceId"
+                placeholder="Ingrese el ID de referencia"
+                data-cy="confirm-reference-input"
+                [class.is-invalid]="confirmForm.get('referenceId')?.invalid && confirmForm.get('referenceId')?.touched"
+              />
+              <div class="invalid-feedback" *ngIf="confirmForm.get('referenceId')?.invalid && confirmForm.get('referenceId')?.touched">
+                El ID de referencia es requerido.
+              </div>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary" [disabled]="confirmForm.invalid" data-cy="confirm-btn">
+                Confirmar Reserva
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

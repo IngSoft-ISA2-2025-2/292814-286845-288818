@@ -32,6 +32,7 @@ import { ManageReservationComponent } from './pages/reservation/manage-reservati
 import { CreateReservationComponent } from './pages/reservation/create-reservation/create-reservation.component';
 import { ValidateReservationComponent } from './pages/reservation/validate-reservation/validate-reservation.component';
 import { CancelReservationComponent } from './pages/reservation/cancel-reservation/cancel-reservation.component';
+import { ConfirmReservationComponent } from './pages/reservation/confirm-reservation/confirm-reservation.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -61,8 +62,9 @@ const routes: Routes = [
   { path: 'manage-reservations', component: ManageReservationComponent },
   { path: 'validate-reservation', component: ValidateReservationComponent },
   { path: 'create-reservation', component: CreateReservationComponent },
-  { path: 'unauthorized', component: Page401Component },
   { path: 'cancel-reservation', component: CancelReservationComponent },
+  { path: 'confirm-reservation', component: ConfirmReservationComponent },
+  { path: 'unauthorized', component: Page401Component },
   { path: '**', component: Page404Component },
 ];
 
