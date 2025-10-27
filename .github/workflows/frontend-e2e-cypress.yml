@@ -1,0 +1,86 @@
+name: Cypress E2E Tests
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  FRONTEND_DIRECTORY: 'Obligatorio/Material/Codigo/Frontend'
+
+jobs:
+  cypress-e2e:
+    name: Cypress E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+        cache-dependency-path: ${{ env.FRONTEND_DIRECTORY }}/package-lock.json
+
+    - name: Install dependencies for Cypress
+      working-directory: ${{ env.FRONTEND_DIRECTORY }}
+      run: |
+        npm ci
+
+    - name: Set up Docker Compose
+      run: |
+        docker-compose -f Obligatorio/Material/Codigo/docker-compose.yml up --build
+
+    - name: Wait for Backend to be ready
+      run: |
+        for i in {1..30}; do
+          if curl -s http://localhost:5000/health || curl -s http://localhost:8080/health; then
+            echo "Backend is up!"
+            break
+          fi
+          echo "Waiting for backend... ($i)"
+          sleep 5
+        done
+
+    - name: Wait for Frontend to be ready
+      run: |
+        for i in {1..30}; do
+          if curl -s http://localhost:4200 || curl -s http://localhost:80; then
+            echo "Frontend is up!"
+            break
+          fi
+          echo "Waiting for frontend... ($i)"
+          sleep 5
+        done
+
+    - name: Run Cypress E2E tests
+      working-directory: ${{ env.FRONTEND_DIRECTORY }}
+      run: |
+        npx cypress run
+
+
+    - name: Show Docker Compose logs (on failure)
+      if: failure()
+      run: |
+        docker-compose -f Obligatorio/Material/Codigo/docker-compose.yml logs
+
+    - name: Upload Cypress Screenshots (on failure)
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: cypress-screenshots
+        path: ${{ env.FRONTEND_DIRECTORY }}/cypress/screenshots
+        retention-days: 7
+
+    - name: Upload Cypress Videos
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: cypress-videos
+        path: ${{ env.FRONTEND_DIRECTORY }}/cypress/videos
+        retention-days: 7
+
+    - name: Tear down Docker Compose
+      if: always()
+      run: |
+        docker-compose -f Obligatorio/Material/Codigo/docker-compose.yml down
