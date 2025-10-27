@@ -1107,6 +1107,43 @@ namespace PharmaGo.Test.WebApi.Test
 
             // Assert - ExpectedException
         }
+
+        [TestMethod]
+        public void ConfirmReservation_PendingReservation_ReturnsOkWithConfirmedReservation()
+        {
+            // Arrange
+            var referenceId = "REF-SUCCESS";
+            var confirmedReservation = new Reservation
+            {
+                Id = 1,
+                ReferenceId = referenceId,
+                Email = "test@example.com",
+                Status = ReservationStatus.Confirmed,
+                PharmacyName = "Farmashop",
+                Pharmacy = _pharmacy,
+                PublicKey = "PUBLIC123",
+                LimitConfirmationDate = DateTime.Now.AddDays(1),
+                Drugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug { DrugId = 1, Drug = _drug, Quantity = 2 }
+                }
+            };
+
+            _reservationManagerMock
+                .Setup(m => m.ConfirmReservation(referenceId))
+                .Returns(confirmedReservation);
+
+            // Act
+            var result = _reservationController.ConfirmReservation(referenceId);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            var okResult = result as OkObjectResult;
+            var response = okResult!.Value as ReservationModelResponse;
+            Assert.IsNotNull(response);
+            Assert.AreEqual("Farmashop", response.PharmacyName);
+            Assert.AreEqual("Confirmed", response.Status);
+        }
         #endregion Confirm Reservation Tests
     }
 }
