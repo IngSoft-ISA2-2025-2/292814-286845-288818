@@ -1142,6 +1142,36 @@ namespace PharmaGo.Test.BusinessLogic.Test
 
             // Assert - ExpectedException
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ConfirmReservation_WithExpiredReservation_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var referenceId = "REF-EXPIRED";
+            var expiredReservation = new Reservation
+            {
+                Id = 1,
+                ReferenceId = referenceId,
+                Email = "test@example.com",
+                Status = ReservationStatus.Expired,
+                PharmacyName = "Farmashop",
+                PublicKey = "PUBLIC123",
+                Drugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug { DrugId = 1, Quantity = 2 }
+                }
+            };
+
+            _reservationRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(expiredReservation);
+
+            // Act
+            _reservationManager.ConfirmReservation(referenceId);
+
+            // Assert - ExpectedException
+        }
         #endregion Confirm Reservation Tests
     }
 }
