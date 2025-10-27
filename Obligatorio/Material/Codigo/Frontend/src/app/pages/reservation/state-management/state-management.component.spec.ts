@@ -7,6 +7,10 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
 
+// La logica de la gestion de estados, tanto el .component, .css y .html estan compartidas 
+// con la gestion de reservas, ya que son dos requerimientos que van muy de la mano y 
+// se implemento de esa forma
+
 describe('ManageReservationComponent - State Management', () => {
   let component: ManageReservationComponent;
   let fixture: ComponentFixture<ManageReservationComponent>;
