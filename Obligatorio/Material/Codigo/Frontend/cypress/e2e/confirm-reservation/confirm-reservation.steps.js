@@ -179,8 +179,15 @@ Then('el sistema muestra el mensaje {string}', (mensaje) => {
 
 Then('el sistema responde con un error indicando {string}', (mensaje) => {
 	// Si el mensaje es de validación de campo requerido, verificamos que el botón esté deshabilitado
-	if (mensaje.includes('ID de referencia válido') || mensaje.includes('requerido')) {
-		cy.get('[data-cy="confirm-btn"]').should('be.disabled');
+	if (mensaje.includes('ID de referencia válido') || mensaje.includes('requerido') || mensaje.includes('correo válido')) {
+		// Intentar encontrar el botón específico del formulario activo
+		cy.get('body').then(($body) => {
+			if ($body.find('[data-cy="confirm-btn"]').length > 0) {
+				cy.get('[data-cy="confirm-btn"]').should('be.disabled');
+			} else if ($body.find('[data-cy="cancel-btn"]').length > 0) {
+				cy.get('[data-cy="cancel-btn"]').should('be.disabled');
+			}
+		});
 	} else {
 		// Para otros errores, esperamos el toast de error
 		cy.get('[data-cy="custom-toast"]', { timeout: 8000 })

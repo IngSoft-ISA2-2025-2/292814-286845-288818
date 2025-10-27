@@ -30,12 +30,12 @@ Feature: Cancelar reservas
     Then el sistema crea una reserva asociada a "nuevo@example.com" con secret "nuevoSecret"
     And se muestra el mensaje "Reserva creada" como precondición para operaciones posteriores
 
-  Esquema del Scenario: Cancelaciones varias con datos de ejemplo
+  Scenario Outline: Cancelaciones varias con datos de ejemplo
     Given que existe una reserva para el correo "<email>" con el secret "<secret>"
     When el visitante solicita cancelar la reserva usando el correo "<email>" y el secret "<inputSecret>"
     Then <resultado>
 
-    Ejemplos:
+    Examples:
       | email               | secret   | inputSecret | resultado                                                     |
       | cliente@example.com | abc123   | abc123      | la reserva para "cliente@example.com" debe quedar marcada como cancelada |
       | cliente@example.com | abc123   | equivocado  | la reserva no debe ser cancelada                              |

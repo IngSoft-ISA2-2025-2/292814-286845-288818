@@ -194,7 +194,7 @@ Background: **Dado** que el formulario de cancelación está disponible
 **Entonces** el sistema crea una reserva asociada a "nuevo@example.com" con secret "nuevoSecret"
 **Y** se muestra el mensaje *"Reserva creada"* como precondición para operaciones posteriores
 
-Esquema del Escenario: Cancelaciones varias con datos de ejemplo
+Esquema del escenario: Cancelaciones varias con datos de ejemplo
 **Dado** que existe una reserva para el correo "<email>" con el secret "<secret>"
 **Cuando** el visitante solicita cancelar la reserva usando el correo "<email>" y el secret "<inputSecret>"
 **Entonces** <resultado>

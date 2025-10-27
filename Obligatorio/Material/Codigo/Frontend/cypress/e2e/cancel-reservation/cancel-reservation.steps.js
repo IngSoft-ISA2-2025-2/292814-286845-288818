@@ -194,12 +194,13 @@ Then('la reserva no debe ser cancelada', () => {
 		.and('have.class', 'bg-danger'); // Toast rojo = error
 });
 
-Then('el sistema responde con un error indicando "No existe una reserva asociada a ese correo"', () => {
-	// Verificamos que aparezca el toast DE ERROR (rojo)
-	cy.get('[data-cy="custom-toast"]', { timeout: 8000 })
-		.should('be.visible')
-		.and('have.class', 'bg-danger'); // Toast rojo = error
-});
+// REMOVED: Duplicate step definition - using parameterized version from confirm-reservation.steps.js
+// Then('el sistema responde con un error indicando "No existe una reserva asociada a ese correo"', () => {
+// 	// Verificamos que aparezca el toast DE ERROR (rojo)
+// 	cy.get('[data-cy="custom-toast"]', { timeout: 8000 })
+// 		.should('be.visible')
+// 		.and('have.class', 'bg-danger'); // Toast rojo = error
+// });
 
 Then('el sistema crea una reserva asociada a {string} con secret {string}', (email, secret) => {
 	// Este step no aplica a cancelación
@@ -227,10 +228,11 @@ Then('el sistema muestra el mensaje {string} o una respuesta idempotente apropia
 		.and('have.class', 'bg-success'); // Toast verde = éxito
 });
 
-Then('el sistema responde con un error indicando "Se requiere un correo válido"', () => {
-	// El botón estará deshabilitado
-	cy.get('[data-cy="cancel-btn"]').should('be.disabled');
-});
+// REMOVED: Duplicate step definition - using parameterized version from confirm-reservation.steps.js
+// Then('el sistema responde con un error indicando "Se requiere un correo válido"', () => {
+// 	// El botón estará deshabilitado
+// 	cy.get('[data-cy="cancel-btn"]').should('be.disabled');
+// });
 
 Then('solo la reserva con secret {string} debe quedar marcada como cancelada', (secret) => {
 	// Verificamos que aparezca el toast DE ÉXITO (verde)
@@ -251,9 +253,10 @@ Then('el sistema no debe permitir la cancelación', () => {
 		.and('have.class', 'bg-danger'); // Toast rojo = error
 });
 
-Then('devuelve el mensaje "No se puede cancelar una reserva expirada"', () => {
-	// Verificamos que aparezca el toast DE ERROR (rojo)
-	cy.get('[data-cy="custom-toast"]', { timeout: 8000 })
-		.should('be.visible')
-		.and('have.class', 'bg-danger'); // Toast rojo = error
-});
+// REMOVED: Duplicate step definition - using parameterized version from confirm-reservation.steps.js
+// Then('devuelve el mensaje "No se puede cancelar una reserva expirada"', () => {
+// 	// Verificamos que aparezca el toast DE ERROR (rojo)
+// 	cy.get('[data-cy="custom-toast"]', { timeout: 8000 })
+// 		.should('be.visible')
+// 		.and('have.class', 'bg-danger'); // Toast rojo = error
+// });
