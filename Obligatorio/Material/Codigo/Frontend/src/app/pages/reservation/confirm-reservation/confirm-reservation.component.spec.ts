@@ -46,10 +46,11 @@ describe('ConfirmReservationComponent', () => {
     // Arrange
     const referenceId = 'ABC12345';
     const mockResponse = {
-      referenceId: 'ABC12345',
-      status: 'Confirmada',
       pharmacyName: 'Farmashop',
-      confirmationDate: new Date().toISOString()
+      status: 'Confirmed',
+      publicKey: 'PUBLIC123',
+      drugsReserved: [{ drugName: 'Aspirina', drugQuantity: 2 }],
+      mensaje: 'OK'
     };
     
     reservationService.confirmReservation.and.returnValue(of(mockResponse));
@@ -62,7 +63,7 @@ describe('ConfirmReservationComponent', () => {
     // Assert
     expect(reservationService.confirmReservation).toHaveBeenCalledWith(referenceId);
     expect(commonService.updateToastData).toHaveBeenCalledWith(
-      'Reserva confirmada exitosamente',
+      'Reserva confirmada exitosamente. Farmacia: Farmashop',
       'success',
       'Éxito'
     );
@@ -120,9 +121,11 @@ describe('ConfirmReservationComponent', () => {
     // Arrange
     const referenceId = 'CONF123';
     const mockResponse = {
-      referenceId: 'CONF123',
-      status: 'Confirmada',
-      pharmacyName: 'Farmashop'
+      pharmacyName: 'Farmashop',
+      status: 'Confirmed',
+      publicKey: 'PUBLIC123',
+      drugsReserved: [{ drugName: 'Paracetamol', drugQuantity: 1 }],
+      mensaje: 'OK'
     };
     
     reservationService.confirmReservation.and.returnValue(of(mockResponse));
@@ -135,7 +138,7 @@ describe('ConfirmReservationComponent', () => {
     // Assert
     expect(reservationService.confirmReservation).toHaveBeenCalledWith(referenceId);
     expect(commonService.updateToastData).toHaveBeenCalledWith(
-      'Reserva confirmada exitosamente',
+      'Reserva confirmada exitosamente. Farmacia: Farmashop',
       'success',
       'Éxito'
     );
@@ -203,11 +206,11 @@ describe('ConfirmReservationComponent', () => {
     // Arrange
     const referenceId = 'XYZ98765';
     const mockResponse = {
-      referenceId: 'XYZ98765',
-      status: 'Confirmada',
       pharmacyName: 'Farmashop',
-      requiresPrescription: true,
-      confirmationDate: new Date().toISOString()
+      status: 'Confirmed',
+      publicKey: 'PUBLIC456',
+      drugsReserved: [{ drugName: 'Antibiótico', drugQuantity: 1 }],
+      mensaje: 'OK'
     };
     
     reservationService.confirmReservation.and.returnValue(of(mockResponse));
@@ -220,7 +223,7 @@ describe('ConfirmReservationComponent', () => {
     // Assert
     expect(reservationService.confirmReservation).toHaveBeenCalledWith(referenceId);
     expect(commonService.updateToastData).toHaveBeenCalledWith(
-      'Reserva confirmada exitosamente',
+      'Reserva confirmada exitosamente. Farmacia: Farmashop',
       'success',
       'Éxito'
     );

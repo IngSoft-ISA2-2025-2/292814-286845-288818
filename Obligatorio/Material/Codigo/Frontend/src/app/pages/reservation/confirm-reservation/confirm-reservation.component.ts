@@ -31,11 +31,24 @@ export class ConfirmReservationComponent implements OnInit {
 
     const { referenceId } = this.confirmForm.value;
 
-    // TODO: Implementar servicio de confirmación
-    this.commonService.updateToastData(
-      'Funcionalidad en desarrollo',
-      'info',
-      'Información'
-    );
+    this.reservationService.confirmReservation(referenceId).subscribe({
+      next: (response) => {
+        const pharmacyName = response.pharmacyName || response.farmacia || 'N/A';
+        this.commonService.updateToastData(
+          `Reserva confirmada exitosamente. Farmacia: ${pharmacyName}`,
+          'success',
+          'Éxito'
+        );
+        this.confirmForm.reset();
+      },
+      error: (error) => {
+        const errorMessage = error.error?.message || error.message || 'Error al confirmar la reserva';
+        this.commonService.updateToastData(
+          errorMessage,
+          'danger',
+          'Error'
+        );
+      }
+    });
   }
 }

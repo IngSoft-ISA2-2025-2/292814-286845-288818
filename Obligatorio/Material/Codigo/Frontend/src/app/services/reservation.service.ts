@@ -62,6 +62,15 @@ export class ReservationService {
       );
   }
 
+  /** PUT: confirmar una reserva por referenceId */
+  confirmReservation(referenceId: string): Observable<ReservationResponse> {
+    return this.http.put<ReservationResponse>(`${this.url}/confirmar?referenceId=${referenceId}`, {}, { headers: this.getHttpHeaders() })
+      .pipe(
+        tap()
+        // NO capturamos el error aquí - dejamos que llegue al componente
+      );
+  }
+
   /**
    * Handle Http operation that failed.
    * Let the app continue.
