@@ -1091,6 +1091,22 @@ namespace PharmaGo.Test.WebApi.Test
 
             // Assert - ExpectedException
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ConfirmReservation_ExpiredReservation_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var referenceId = "REF-EXPIRED";
+            _reservationManagerMock
+                .Setup(m => m.ConfirmReservation(referenceId))
+                .Throws(new InvalidOperationException("No se puede confirmar una reserva expirada"));
+
+            // Act
+            var result = _reservationController.ConfirmReservation(referenceId);
+
+            // Assert - ExpectedException
+        }
         #endregion Confirm Reservation Tests
     }
 }
