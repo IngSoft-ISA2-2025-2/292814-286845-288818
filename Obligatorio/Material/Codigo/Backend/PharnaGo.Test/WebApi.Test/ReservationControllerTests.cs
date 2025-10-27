@@ -1075,6 +1075,22 @@ namespace PharmaGo.Test.WebApi.Test
             Assert.AreEqual("Farmashop", response.PharmacyName);
             Assert.AreEqual("Confirmed", response.Status);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ConfirmReservation_CanceledReservation_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var referenceId = "REF-CANCELED";
+            _reservationManagerMock
+                .Setup(m => m.ConfirmReservation(referenceId))
+                .Throws(new InvalidOperationException("No se puede confirmar una reserva cancelada"));
+
+            // Act
+            var result = _reservationController.ConfirmReservation(referenceId);
+
+            // Assert - ExpectedException
+        }
         #endregion Confirm Reservation Tests
     }
 }
