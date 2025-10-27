@@ -48,7 +48,13 @@ Proyecto-DevOps/
 | **US, criterios de aceptación y escenarios BDD** | [Nuevas Features - Sistema de Reservas](docs/nuevas-features.md) | Escritura de US, criterios de aceptación y escenarios de prueba BDD para las nuevas funcionalidades. El comportamiento debe especificarse en forma colaborativa: PO, tester, desarrollador. |
 | **Implementación de nuevas funcionalidades** | Historial de commits y features en frontend/backend | Implementación de nuevas funcionalidades. Primero en el front-end con BDD, luego en el back-end con TDD. Commits rotulados: [TDD-GREEN], [TDD-REFACTOR], [BDD-GREEN], [BDD-REFACTOR]. |
 | **Vista de procesos 4+1 y diagrama de componentes** | [Documentación de Entregas](Obligatorio/Documentación/) | Vista de procesos 4+1 para las dos funcionalidades nuevas. Diagrama de componentes para toda la solución. |
-| **Testing y calidad** | - | Tests E2E (BDD): Cypress + Cucumber (4 features, 32 escenarios)<br>Estructura de tests BDD:<br>Frontend/cypress/e2e/<br>├── create-reservation/     # 8 escenarios<br>├── manage-reservation/     # 8 escenarios<br>├── state-management/       # 11 escenarios<br>└── secure-reservation/     # 5 escenarios |
+| **Testing y calidad** | - | Tests E2E (BDD): Cypress + Cucumber (6 features, 48 escenarios)<br>Estructura de tests BDD: 
+- create-reservation: 8
+- manage-reservation: 8
+- cancel-reservation: 8
+- confirm-reservation: 8
+- state-management: 11
+- secure-reservation: 5 
 
 ## Marco de Gestión
 
