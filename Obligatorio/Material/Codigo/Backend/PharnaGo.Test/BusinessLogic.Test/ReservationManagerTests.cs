@@ -1172,6 +1172,47 @@ namespace PharmaGo.Test.BusinessLogic.Test
 
             // Assert - ExpectedException
         }
+
+        [TestMethod]
+        public void ConfirmReservation_WithPendingReservation_ConfirmsAndReturnsReservation()
+        {
+            // Arrange
+            var referenceId = "REF-SUCCESS";
+            var pendingReservation = new Reservation
+            {
+                Id = 1,
+                ReferenceId = referenceId,
+                Email = "test@example.com",
+                Status = ReservationStatus.Pending,
+                PharmacyName = "Farmashop",
+                PublicKey = "PUBLIC123",
+                Drugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug { DrugId = 1, Quantity = 2 }
+                }
+            };
+
+            _reservationRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(pendingReservation);
+
+            _reservationRepository
+                .Setup(x => x.UpdateOne(It.IsAny<Reservation>()));
+
+            _reservationRepository
+                .Setup(x => x.Save());
+
+            // Act
+            var result = _reservationManager.ConfirmReservation(referenceId);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(ReservationStatus.Confirmed, result.Status);
+            Assert.AreEqual(referenceId, result.ReferenceId);
+            Assert.IsNotNull(result.LimitConfirmationDate);
+            _reservationRepository.Verify(x => x.UpdateOne(It.IsAny<Reservation>()), Times.Once);
+            _reservationRepository.Verify(x => x.Save(), Times.Once);
+        }
         #endregion Confirm Reservation Tests
     }
 }
