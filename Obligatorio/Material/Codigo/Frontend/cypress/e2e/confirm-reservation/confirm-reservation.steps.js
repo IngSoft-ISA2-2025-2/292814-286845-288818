@@ -28,7 +28,7 @@ Given('que existe una reserva con ID de referencia {string} y su estado es {stri
 
 When('el personal de farmacia confirma la reserva con ID {string}', (referenceId) => {
 	cy.get('@scenarioData').then((data) => {
-		cy.intercept('PUT', '**/api/reservas/confirmar*', (req) => {
+		cy.intercept('PUT', '**/api/Reservation/confirmar*', (req) => {
 			const url = new URL(req.url);
 			const urlReferenceId = url.searchParams.get('referenceId');
 
@@ -36,10 +36,12 @@ When('el personal de farmacia confirma la reserva con ID {string}', (referenceId
 				req.reply({
 					statusCode: 200,
 					body: {
-						referenceId: data.referenceId,
-						status: 'Confirmada',
 						pharmacyName: 'Farmashop',
-						confirmationDate: new Date().toISOString()
+						publicKey: 'PUBLIC123',
+						status: 'Confirmed',
+						drugsReserved: [
+							{ drugName: 'Aspirina', drugQuantity: 2 }
+						]
 					}
 				});
 			} else if (data.scenario === 'notFound') {
@@ -52,9 +54,12 @@ When('el personal de farmacia confirma la reserva con ID {string}', (referenceId
 					req.reply({
 						statusCode: 200,
 						body: {
-							referenceId: data.referenceId,
-							status: 'Confirmada',
-							pharmacyName: 'Farmashop'
+							pharmacyName: 'Farmashop',
+							publicKey: 'PUBLIC123',
+							status: 'Confirmed',
+							drugsReserved: [
+								{ drugName: 'Paracetamol', drugQuantity: 1 }
+							]
 						}
 					});
 				} else if (data.estado === 'Cancelada') {
@@ -84,7 +89,7 @@ When('el personal de farmacia confirma la reserva con ID {string}', (referenceId
 
 When('el personal de farmacia intenta confirmar la reserva con ID {string}', (referenceId) => {
 	cy.get('@scenarioData').then((data) => {
-		cy.intercept('PUT', '**/api/reservas/confirmar*', (req) => {
+		cy.intercept('PUT', '**/api/Reservation/confirmar*', (req) => {
 			const url = new URL(req.url);
 			const urlReferenceId = url.searchParams.get('referenceId');
 
@@ -98,9 +103,12 @@ When('el personal de farmacia intenta confirmar la reserva con ID {string}', (re
 					req.reply({
 						statusCode: 200,
 						body: {
-							referenceId: data.referenceId,
-							status: 'Confirmada',
-							pharmacyName: 'Farmashop'
+							pharmacyName: 'Farmashop',
+							publicKey: 'PUBLIC123',
+							status: 'Confirmed',
+							drugsReserved: [
+								{ drugName: 'Paracetamol', drugQuantity: 1 }
+							]
 						}
 					});
 				} else if (data.estado === 'Cancelada') {
@@ -117,9 +125,12 @@ When('el personal de farmacia intenta confirmar la reserva con ID {string}', (re
 					req.reply({
 						statusCode: 200,
 						body: {
-							referenceId: data.referenceId,
-							status: 'Confirmada',
-							pharmacyName: 'Farmashop'
+							pharmacyName: 'Farmashop',
+							publicKey: 'PUBLIC123',
+							status: 'Confirmed',
+							drugsReserved: [
+								{ drugName: 'Ibuprofeno', drugQuantity: 3 }
+							]
 						}
 					});
 				}
@@ -149,15 +160,33 @@ Then('la reserva debe cambiar a estado {string}', (estado) => {
 });
 
 Then('el sistema muestra el mensaje {string}', (mensaje) => {
-	cy.get('[data-cy="custom-toast"]', { timeout: 8000 })
-		.should('be.visible')
-		.and('have.class', 'bg-success');
+	// Step compartido con otros features - verificar tipo de mensaje
+	if (mensaje.toLowerCase().includes('exitosa') || mensaje.toLowerCase().includes('confirmada')) {
+		cy.get('[data-cy="custom-toast"]', { timeout: 8000 })
+			.should('be.visible')
+			.and('have.class', 'bg-success');
+	} else if (mensaje.toLowerCase().includes('error') || mensaje.toLowerCase().includes('no se')) {
+		cy.get('[data-cy="custom-toast"]', { timeout: 8000 })
+			.should('be.visible')
+			.and('have.class', 'bg-danger');
+	} else {
+		// Por defecto, asumimos mensaje de éxito
+		cy.get('[data-cy="custom-toast"]', { timeout: 8000 })
+			.should('be.visible')
+			.and('have.class', 'bg-success');
+	}
 });
 
 Then('el sistema responde con un error indicando {string}', (mensaje) => {
-	cy.get('[data-cy="custom-toast"]', { timeout: 8000 })
-		.should('be.visible')
-		.and('have.class', 'bg-danger');
+	// Si el mensaje es de validación de campo requerido, verificamos que el botón esté deshabilitado
+	if (mensaje.includes('ID de referencia válido') || mensaje.includes('requerido')) {
+		cy.get('[data-cy="confirm-btn"]').should('be.disabled');
+	} else {
+		// Para otros errores, esperamos el toast de error
+		cy.get('[data-cy="custom-toast"]', { timeout: 8000 })
+			.should('be.visible')
+			.and('have.class', 'bg-danger');
+	}
 });
 
 Then('no se debe modificar ninguna reserva', () => {
@@ -185,3 +214,4 @@ Then('devuelve el mensaje {string}', (mensaje) => {
 Then('se debe establecer una fecha límite de confirmación', () => {
 	cy.log('Fecha límite de confirmación establecida');
 });
+

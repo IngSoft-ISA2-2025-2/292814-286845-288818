@@ -167,12 +167,13 @@ Then('la reserva para {string} debe quedar marcada como cancelada', (email) => {
 		.and('have.class', 'bg-success'); // Toast verde = éxito
 });
 
-Then('el sistema muestra el mensaje {string}', (mensaje) => {
-	// Verificamos que aparezca el toast DE ÉXITO (verde)
-	cy.get('[data-cy="custom-toast"]', { timeout: 8000 })
-		.should('be.visible')
-		.and('have.class', 'bg-success'); // Toast verde = éxito
-});
+// COMENTADO: Step duplicado que choca con confirm-reservation.steps.js
+// Then('el sistema muestra el mensaje {string}', (mensaje) => {
+// 	// Verificamos que aparezca el toast DE ÉXITO (verde)
+// 	cy.get('[data-cy="custom-toast"]', { timeout: 8000 })
+// 		.should('be.visible')
+// 		.and('have.class', 'bg-success'); // Toast verde = éxito
+// });
 
 Then('el sistema muestra el mensaje de error {string}', (mensaje) => {
 	// Verificamos que aparezca el toast DE ERROR (rojo)
@@ -209,12 +210,15 @@ Then('se muestra el mensaje {string} como precondición para operaciones posteri
 	cy.log(`Mensaje esperado: ${mensaje}`);
 });
 
+// COMENTADO: Step duplicado que choca con confirm-reservation.steps.js
+/*
 Then('el sistema no debe cambiar el estado de la reserva', () => {
 	// Verificamos respuesta idempotente - el toast DE ÉXITO aparece
 	cy.get('[data-cy="custom-toast"]', { timeout: 8000 })
 		.should('be.visible')
 		.and('have.class', 'bg-success'); // Toast verde = operación exitosa (idempotente)
 });
+*/
 
 Then('el sistema muestra el mensaje {string} o una respuesta idempotente apropiada', (mensaje) => {
 	// Verificamos respuesta idempotente - el toast DE ÉXITO aparece
