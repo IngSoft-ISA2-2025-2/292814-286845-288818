@@ -174,6 +174,9 @@ namespace PharmaGo.BusinessLogic
             if (reservation.Status == ReservationStatus.Canceled)
                 throw new InvalidOperationException("No se puede confirmar una reserva cancelada");
 
+            if (reservation.Status == ReservationStatus.Expired)
+                throw new InvalidOperationException("No se puede confirmar una reserva expirada");
+
             return reservation;
         }
     }
