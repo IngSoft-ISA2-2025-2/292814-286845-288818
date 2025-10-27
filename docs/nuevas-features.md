@@ -94,14 +94,13 @@ Background: **Dado** estoy en la página de reservas de medicamentos
 2. ## Gestionar reservas
 Los clientes podrán visualizar un listado de sus reservas.
 
-### Escenarios Gherkin
-Background: **Dado** estoy en la página de mis reservas
-
 **Como** usuario autenticado
-**Quiero** poder visualizar mis reservas
+**Quiero** poder visualizar mis reservas ingresando mi email y secret
 **Para** poder hacer seguimiento del estado de cada una y acceder a los detalles cuando los necesite
 
 ### Escenarios Gherkin
+Background: **Dado** estoy en la página de mis reservas
+
 1. Escenario: Usuario sin email intenta consultar reservas
 **Dado** un email ""
 **Y** un secret ""
@@ -164,106 +163,72 @@ Background: **Dado** estoy en la página de mis reservas
 3. ## Cancelar reservas
 En caso de ser necesario, los usuarios tendrán la opción de cancelar sus reservas.
 
-**Como** usuario autenticado 
-**Quiero** poder cancelar una reserva
-**Para** poder liberar medicamentos que ya no necesito y evitar problemas a la farmacia
+**Como** visitante que conoce un correo y un secret
+**Quiero** poder cancelar una reserva introduciendo ese correo y secret
+**Para** que el sistema valide identidades sin necesidad de un usuario autenticado
 
-1. Escenario: Usuario no autenticado intenta cancelar una reserva
-**Dado** un usuario no autenticado
-**Cuando** intenta cancelar una reserva
-**Entonces** el sistema responde con un error *unauthorized (401)*
-**Y** muestra un mensaje que dice *"Unauthorized user"*
+### Escenarios Gherkin
+Background: **Dado** que el formulario de cancelación está disponible
 
-2. Escenario: Usuario cancela una reserva en estado "Pendiente" exitosamente
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Pendiente*
-**Cuando** selecciona cancelar la reserva
-**Entonces** el sistema responde con *ok (200)*
-**Y** cambia el estado de la reserva a *Cancelada*
-**Y** devuelve las unidades al stock del medicamento
-**Y** muestra un mensaje que dice *"Reserva cancelada exitosamente"*
+1. Escenario: Cancelación exitosa de una reserva existente
+**Dado** que existe una reserva para el correo "cliente@example.com" con el secret "abc123"
+**Cuando** el visitante solicita cancelar la reserva usando el correo "cliente@example.com" y el secret "abc123"
+**Entonces** la reserva para "cliente@example.com" debe quedar marcada como cancelada
+**Y** el sistema muestra el mensaje *"Reserva cancelada correctamente"*
 
-3. Escenario: Usuario cancela una reserva en estado "Confirmada" exitosamente
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Confirmada*
-**Cuando** selecciona cancelar la reserva
-**Entonces** el sistema responde con *ok (200)*
-**Y** cambia el estado de la reserva a *Cancelada*
-**Y** devuelve las unidades al stock del medicamento
-**Y** muestra un mensaje que dice *"Reserva cancelada exitosamente"*
+2. Escenario: Intento de cancelación con secret incorrecto
+**Dado** que existe una reserva para el correo "cliente@example.com" con el secret "abc123"
+**Cuando** el visitante solicita cancelar la reserva usando el correo "cliente@example.com" y el secret "equivocado"
+**Entonces** la reserva no debe ser cancelada
+**Y** el sistema muestra el mensaje de error *"Secret inválido para ese correo"*
 
-4. Escenario: Usuario intenta cancelar una reserva ya cancelada
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Cancelada*
-**Cuando** intenta cancelar la reserva nuevamente
-**Entonces** el sistema responde con un error *bad request (400)*
-**Y** muestra un mensaje que dice *"La reserva ya se encuentra cancelada"*
+3. Escenario: Intento de cancelación cuando no existe reserva para ese correo
+**Dado** que no existe ninguna reserva para el correo "sinreserva@example.com"
+**Cuando** el visitante solicita cancelar la reserva usando el correo "sinreserva@example.com" y el secret "cualquiera"
+**Entonces** el sistema responde con un error indicando *"No existe una reserva asociada a ese correo"*
+**Y** no se debe crear ni cancelar ninguna reserva en este flujo de cancelación
 
-5. Escenario: Usuario intenta cancelar una reserva expirada
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Expirada*
-**Cuando** intenta cancelar la reserva
-**Entonces** el sistema responde con un error *bad request (400)*
-**Y** muestra un mensaje que dice *"No se puede cancelar una reserva expirada"*
+4. Escenario: Comportamiento de creación implícita (contexto)
+**Dado** que no existe ninguna reserva para el correo "nuevo@example.com"
+**Cuando** el visitante ingresa el correo "nuevo@example.com" y el secret "nuevoSecret" en el flujo de gestión de reservas
+**Entonces** el sistema crea una reserva asociada a "nuevo@example.com" con secret "nuevoSecret"
+**Y** se muestra el mensaje *"Reserva creada"* como precondición para operaciones posteriores
 
-6. Escenario: Usuario intenta cancelar una reserva inexistente
-**Dado** un usuario autenticado
-**Cuando** intenta cancelar una reserva que no existe
-**Entonces** el sistema responde con un error *not found (404)*
-**Y** muestra un mensaje que dice *"Reserva no encontrada"*
+Esquema del Escenario: Cancelaciones varias con datos de ejemplo
+**Dado** que existe una reserva para el correo "<email>" con el secret "<secret>"
+**Cuando** el visitante solicita cancelar la reserva usando el correo "<email>" y el secret "<inputSecret>"
+**Entonces** <resultado>
 
-7. Escenario: Usuario cancela reserva y recibe confirmación con clave pública actualizada
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Pendiente* con clave pública generada
-**Cuando** selecciona cancelar la reserva
-**Entonces** el sistema responde con *ok (200)*
-**Y** cambia el estado de la reserva a *Cancelada*
-**Y** invalida la clave pública asociada a la reserva
-**Y** muestra un mensaje que dice *"Reserva cancelada. La clave pública ya no es válida"*
+Ejemplos:
+| email               | secret   | inputSecret | resultado                                                     |
+| cliente@example.com | abc123   | abc123      | la reserva para "cliente@example.com" debe quedar marcada como cancelada |
+| cliente@example.com | abc123   | equivocado  | la reserva no debe ser cancelada                              |
 
-8. Escenario: Usuario confirma cancelación mediante diálogo de confirmación
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Pendiente*
-**Cuando** selecciona cancelar la reserva
-**Y** confirma la cancelación en el diálogo
-**Entonces** el sistema responde con *ok (200)*
-**Y** procesa la cancelación exitosamente
-**Y** muestra un mensaje que dice *"Reserva cancelada exitosamente"*
+5. Escenario: Intento de cancelar una reserva que ya fue cancelada (idempotencia)
+**Dado** que existe una reserva para el correo "cliente@example.com" con el secret "abc123" y su estado es "cancelada"
+**Cuando** el visitante solicita cancelar la reserva usando el correo "cliente@example.com" y el secret "abc123"
+**Entonces** el sistema no debe cambiar el estado de la reserva
+**Y** el sistema muestra el mensaje *"La reserva ya está cancelada"* o una respuesta idempotente apropiada
 
-9. Escenario: Usuario cancela la acción de cancelar reserva
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Pendiente*
-**Cuando** selecciona cancelar la reserva
-**Y** cancela la acción en el diálogo de confirmación
-**Entonces** la reserva mantiene su estado original
-**Y** no se realizan cambios en el sistema
-**Y** regresa a la vista anterior
+6. Escenario: Validación - falta de secret o correo inválido
+**Cuando** el visitante envía el formulario de cancelación sin proporcionar correo
+**Entonces** el sistema responde con un error indicando *"Se requiere un correo válido"*
 
-10. Escenario: Usuario cancela múltiples reservas en lote
-**Dado** un usuario autenticado
-**Y** tiene múltiples reservas en estado *Pendiente*
-**Cuando** selecciona cancelar múltiples reservas
-**Y** confirma la acción de cancelación en lote
-**Entonces** el sistema responde con *ok (200)*
-**Y** cancela todas las reservas seleccionadas
-**Y** devuelve todas las unidades correspondientes al stock
-**Y** muestra un mensaje que dice *"Se cancelaron {cantidad} reservas exitosamente"*
+7. Escenario: Cancelar cuando existen múltiples reservas para el mismo correo
+**Dado** que existen dos reservas para el correo "multi@example.com":
+| secret   | estado  |
+| s1       | activa  |
+| s2       | activa  |
+**Cuando** el visitante solicita cancelar la reserva usando el correo "multi@example.com" y el secret "s1"
+**Entonces** solo la reserva con secret "s1" debe quedar marcada como cancelada
+**Y** la reserva con secret "s2" debe permanecer en estado "activa"
+Nota: asumimos que el secret identifica la reserva concreta cuando el correo tiene múltiples reservas.
 
-11. Escenario: Usuario intenta cancelar reserva después de tiempo límite
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Confirmada*
-**Y** han pasado más de 24 horas desde la confirmación
-**Cuando** intenta cancelar la reserva
-**Entonces** el sistema responde con un error *bad request (400)*
-**Y** muestra un mensaje que dice *"No se puede cancelar una reserva después de 24 horas de confirmación"*
-
-12. Escenario: Sistema muestra error al cancelar por problema de conexión
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Pendiente*
-**Cuando** intenta cancelar la reserva
-**Y** el sistema tiene un error de conexión con la base de datos
-**Entonces** el sistema responde con un error *internal server error (500)*
-**Y** muestra un mensaje que dice *"Error del sistema. No se pudo cancelar la reserva. Intente nuevamente"*
+8. Escenario: Intento de cancelación de una reserva expirada
+**Dado** que existe una reserva para el correo "vencida@example.com" con el secret "oldSecret" y su estado es "expirada"
+**Cuando** el visitante solicita cancelar la reserva usando el correo "vencida@example.com" y el secret "oldSecret"
+**Entonces** el sistema no debe permitir la cancelación
+**Y** devuelve el mensaje *"No se puede cancelar una reserva expirada"*
 
 
 Adicionalmente, el sistema gestionará las siguientes funcionalidades:
