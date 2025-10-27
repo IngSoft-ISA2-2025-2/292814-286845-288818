@@ -92,7 +92,7 @@ jobs:
       if: needs.detect-code-changes.outputs.code-changed == 'true'
       run: |
         echo "🐳 Starting Docker Compose services..."
-        docker-compose -f Obligatorio/Material/Codigo/docker-compose.yml up -d --build
+        docker compose -f Obligatorio/Material/Codigo/docker-compose.yml up -d --build
 
     - name: Wait for Backend to be ready
       if: needs.detect-code-changes.outputs.code-changed == 'true'
@@ -109,6 +109,8 @@ jobs:
         
         if ! curl -s http://localhost:5000/health && ! curl -s http://localhost:8080/health; then
           echo "❌ Backend failed to start"
+          echo "📋 Showing docker logs:"
+          docker compose -f Obligatorio/Material/Codigo/docker-compose.yml logs
           exit 1
         fi
 
@@ -127,6 +129,8 @@ jobs:
         
         if ! curl -s http://localhost:4200 && ! curl -s http://localhost:80; then
           echo "❌ Frontend failed to start"
+          echo "📋 Showing docker logs:"
+          docker compose -f Obligatorio/Material/Codigo/docker-compose.yml logs
           exit 1
         fi
 
@@ -141,7 +145,7 @@ jobs:
       if: failure() && needs.detect-code-changes.outputs.code-changed == 'true'
       run: |
         echo "📋 Docker Compose logs:"
-        docker-compose -f Obligatorio/Material/Codigo/docker-compose.yml logs
+        docker compose -f Obligatorio/Material/Codigo/docker-compose.yml logs
 
     - name: Upload Cypress Screenshots (on failure)
       if: failure() && needs.detect-code-changes.outputs.code-changed == 'true'
@@ -163,7 +167,7 @@ jobs:
       if: always() && needs.detect-code-changes.outputs.code-changed == 'true'
       run: |
         echo "🧹 Cleaning up Docker Compose..."
-        docker-compose -f Obligatorio/Material/Codigo/docker-compose.yml down -v
+        docker compose -f Obligatorio/Material/Codigo/docker-compose.yml down -v
 
     - name: E2E Tests Summary
       if: always()
