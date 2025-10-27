@@ -171,6 +171,9 @@ namespace PharmaGo.BusinessLogic
             if (reservation == null)
                 throw new KeyNotFoundException("No se encontró la reserva");
 
+            if (reservation.Status == ReservationStatus.Canceled)
+                throw new InvalidOperationException("No se puede confirmar una reserva cancelada");
+
             return reservation;
         }
     }
