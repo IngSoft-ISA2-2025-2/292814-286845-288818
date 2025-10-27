@@ -10,21 +10,21 @@ export class ManageReservationComponent implements OnInit {
 
   email: string = '';
   secret: string = '';
-  reservas: any[] = [];
+  reservations: any[] = [];
   errorMessage: string = '';
   loading: boolean = false;
 
-  // Filtros
-  estadoFiltro: string = '';
-  filtroMedicamento: string = '';
-  filtroFarmacia: string = '';
+  // Filters
+  statusFilter: string = '';
+  drugFilter: string = '';
+  pharmacyFilter: string = '';
 
   constructor(private reservationService: ReservationService) { }
 
   ngOnInit(): void {
   }
 
-  consultarReservas(): void {
+  consultReservations(): void {
     if (!this.email || !this.secret) {
       this.errorMessage = 'Debe ingresar un email y secret para consultar reservas.';
       return;
@@ -35,8 +35,8 @@ export class ManageReservationComponent implements OnInit {
 
     this.reservationService.getReservations(this.email, this.secret)
       .subscribe({
-        next: (reservas) => {
-          this.reservas = reservas;
+        next: (reservations) => {
+          this.reservations = reservations;
           this.loading = false;
         },
         error: (error) => {
@@ -46,68 +46,68 @@ export class ManageReservationComponent implements OnInit {
       });
   }
 
-  // Método para aplicar filtro por estado
-  aplicarFiltroPorEstado(): void {
-    // Este método se ejecuta cuando se cambia el filtro de estado
+  // Method to apply filter by status
+  applyStatusFilter(): void {
+    // This method is triggered when the status filter changes
   }
 
-  // Getter para obtener las reservas filtradas aplicando TODOS los filtros
-  get reservasFiltradas(): any[] {
-    let filtered = [...this.reservas];
+  // Getter to obtain filtered reservations applying ALL filters
+  get filteredReservations(): any[] {
+    let filtered = [...this.reservations];
 
-    // Filtro por estado
-    if (this.estadoFiltro && this.estadoFiltro !== 'Todos' && this.estadoFiltro !== '') {
-      filtered = filtered.filter(r => r.status === this.estadoFiltro);
+    // Filter by status
+    if (this.statusFilter && this.statusFilter !== 'Todos' && this.statusFilter !== '') {
+      filtered = filtered.filter(r => r.status === this.statusFilter);
     }
 
-    // Filtro por medicamento
-    if (this.filtroMedicamento) {
+    // Filter by drug
+    if (this.drugFilter) {
       filtered = filtered.filter(r =>
         r.reservedDrugs?.some((drug: any) =>
-          drug.drugName?.toLowerCase().includes(this.filtroMedicamento.toLowerCase())
+          drug.drugName?.toLowerCase().includes(this.drugFilter.toLowerCase())
         )
       );
     }
 
-    // Filtro por farmacia
-    if (this.filtroFarmacia) {
+    // Filter by pharmacy
+    if (this.pharmacyFilter) {
       filtered = filtered.filter(r =>
-        r.pharmacyName?.toLowerCase().includes(this.filtroFarmacia.toLowerCase())
+        r.pharmacyName?.toLowerCase().includes(this.pharmacyFilter.toLowerCase())
       );
     }
 
     return filtered;
   }
 
-  // Método para ordenar reservas por fecha de creación descendente
-  ordenarPorFechaDesc(): void {
-    this.reservas.sort((a, b) =>
+  // Method to sort reservations by creation date descending
+  sortByCreationDateDesc(): void {
+    this.reservations.sort((a, b) =>
       new Date(b.fechaCreacion || b.createdAt || 0).getTime() - 
       new Date(a.fechaCreacion || a.createdAt || 0).getTime()
     );
   }
 
-  // Método para filtrar reservas por medicamento
-  reservasFiltradasPorMedicamento(): any[] {
-    if (!this.filtroMedicamento) return this.reservas;
-    return this.reservas.filter(r =>
+  // Method to filter reservations by drug
+  filteredByDrug(): any[] {
+    if (!this.drugFilter) return this.reservations;
+    return this.reservations.filter(r =>
       r.reservedDrugs?.some((drug: any) =>
-        drug.drugName?.toLowerCase().includes(this.filtroMedicamento.toLowerCase())
+        drug.drugName?.toLowerCase().includes(this.drugFilter.toLowerCase())
       )
     );
   }
 
-  // Método para filtrar reservas por farmacia
-  reservasFiltradasPorFarmacia(): any[] {
-    if (!this.filtroFarmacia) return this.reservas;
-    return this.reservas.filter(r =>
-      r.pharmacyName?.toLowerCase().includes(this.filtroFarmacia.toLowerCase())
+  // Method to filter reservations by pharmacy
+  filteredByPharmacy(): any[] {
+    if (!this.pharmacyFilter) return this.reservations;
+    return this.reservations.filter(r =>
+      r.pharmacyName?.toLowerCase().includes(this.pharmacyFilter.toLowerCase())
     );
   }
 
-  // Método para obtener el mensaje según el estado de la reserva
-  getMensajePorEstado(reserva: any): string {
-    switch (reserva.status) {
+  // Method to get the message according to the reservation status
+  getStatusMessage(reservation: any): string {
+    switch (reservation.status) {
       case 'Pendiente':
         return 'Reserva pendiente de confirmación por la farmacia';
       case 'Confirmada':
@@ -123,43 +123,43 @@ export class ManageReservationComponent implements OnInit {
     }
   }
 
-  // Método para formatear fechas
-  formatearFecha(fecha: string): string {
-    if (!fecha) return '';
-    return new Date(fecha).toLocaleDateString('es-ES');
+  // Method to format dates
+  formatDate(date: string): string {
+    if (!date) return '';
+    return new Date(date).toLocaleDateString('es-ES');
   }
 
-  // Método para cancelar reserva (botón en reservas pendientes)
-  cancelarReserva(reservaId: number): void {
-    // Implementación futura para cancelar reservas
-    console.log('Cancelar reserva:', reservaId);
+  // Method to cancel reservation (button in pending reservations)
+  cancelReservation(reservationId: number): void {
+    // Future implementation to cancel reservations
+    console.log('Cancel reservation:', reservationId);
   }
 
-  // Método para ver detalles de reserva
-  verDetallesReserva(reservaId: number): void {
-    const reserva = this.reservas.find(r => r.id === reservaId);
-    if (!reserva) {
+  // Method to view reservation details
+  viewReservationDetails(reservationId: number): void {
+    const reservation = this.reservations.find(r => r.id === reservationId);
+    if (!reservation) {
       this.errorMessage = 'Reserva no encontrada';
       return;
     }
-    // Implementación futura para mostrar detalles
-    console.log('Ver detalles de reserva:', reserva);
+    // Future implementation to show details
+    console.log('View reservation details:', reservation);
   }
 
-  // Método para limpiar filtros
-  limpiarFiltros(): void {
-    this.estadoFiltro = '';
-    this.filtroMedicamento = '';
-    this.filtroFarmacia = '';
+  // Method to clear filters
+  clearFilters(): void {
+    this.statusFilter = '';
+    this.drugFilter = '';
+    this.pharmacyFilter = '';
   }
 
-  // Método para verificar si no hay reservas
-  get noTieneReservas(): boolean {
-    return this.reservas.length === 0;
+  // Method to check if there are no reservations
+  get hasNoReservations(): boolean {
+    return this.reservations.length === 0;
   }
 
-  // Método para obtener el mensaje cuando no hay reservas
-  get mensajeSinReservas(): string {
+  // Method to get the message when there are no reservations
+  get noReservationsMessage(): string {
     return 'No tienes reservas creadas';
   }
 }

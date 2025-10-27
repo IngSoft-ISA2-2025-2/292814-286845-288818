@@ -44,7 +44,7 @@ describe('ManageReservationComponent', () => {
     component.secret = 'miSecret123';
     
     // Simula el resultado exitoso de consultar reservas
-    component.reservas = [
+    component.reservations = [
       { 
         id: 1, 
         reservedDrugs: [{ drugName: 'Aspirina', quantity: 2 }], 
@@ -93,8 +93,8 @@ describe('ManageReservationComponent', () => {
     component.email = '';
     component.secret = '';
 
-    // Act: simula la función consultarReservas directamente
-    component.consultarReservas();
+    // Act: simula la función consultReservations directamente
+    component.consultReservations();
     fixture.detectChanges();
 
     // Assert: verifica que se muestre el mensaje de error
@@ -107,14 +107,14 @@ describe('ManageReservationComponent', () => {
     // Arrange
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
-    component.reservas = []; // Simula que no hay reservas
+    component.reservations = []; // Simula que no hay reservas
     component.loading = false; // Asegura que no esté cargando
     component.errorMessage = ''; // Asegura que no hay error
     mockReservationService.getReservations.and.returnValue(of([]));
     fixture.detectChanges();
 
-    // Act: simula la función consultarReservas
-    component.consultarReservas();
+    // Act: simula la función consultReservations
+    component.consultReservations();
     fixture.detectChanges();
 
     // Assert: verifica que se muestra el mensaje sin reservas
@@ -127,7 +127,7 @@ describe('ManageReservationComponent', () => {
     // Arrange
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
-    component.reservas = [
+    component.reservations = [
       { id: 1, reservedDrugs: [{ drugName: 'Aspirina', quantity: 2 }], pharmacyName: 'Farmashop', status: 'Pendiente', fechaCreacion: '2023-10-01T10:00:00Z' },
       { id: 2, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], pharmacyName: 'Farmacia Central', status: 'Confirmada', fechaCreacion: '2023-10-02T11:00:00Z' },
       { id: 3, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 3 }], pharmacyName: 'Farmacia Sur', status: 'Expirada', fechaCreacion: '2023-10-03T12:00:00Z' },
@@ -180,7 +180,7 @@ describe('ManageReservationComponent', () => {
     const estadoFiltro = 'Confirmada';
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
-    component.reservas = [
+    component.reservations = [
       { id: 1, reservedDrugs: [{ drugName: 'Aspirina', quantity: 2 }], pharmacyName: 'Farmashop', status: 'Pendiente', fechaCreacion: '2023-10-01T10:00:00Z' },
       { id: 2, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], pharmacyName: 'Farmacia Central', status: 'Confirmada', fechaCreacion: '2023-10-02T11:00:00Z' },
       { id: 3, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 3 }], pharmacyName: 'Farmacia Sur', status: 'Expirada', fechaCreacion: '2023-10-03T12:00:00Z' },
@@ -190,8 +190,8 @@ describe('ManageReservationComponent', () => {
     fixture.detectChanges();
 
     // Act: simula seleccionar el filtro por estado
-    component.estadoFiltro = estadoFiltro;
-    component.aplicarFiltroPorEstado();
+    component.statusFilter = estadoFiltro;
+    component.applyStatusFilter();
     fixture.detectChanges();
 
     // Assert: solo se muestran las reservas en el estado filtrado
@@ -225,7 +225,7 @@ describe('ManageReservationComponent', () => {
     // Arrange
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
-    component.reservas = [
+    component.reservations = [
       {
         id: 1,
         reservedDrugs: [{ drugName: 'Aspirina', quantity: 2 }],
@@ -269,7 +269,7 @@ describe('ManageReservationComponent', () => {
     // Arrange
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
-    component.reservas = [
+    component.reservations = [
       {
         id: 2,
         reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }],
@@ -306,7 +306,7 @@ describe('ManageReservationComponent', () => {
     // Arrange
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
-    component.reservas = [
+    component.reservations = [
       {
         id: 3,
         reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 3 }],
@@ -343,7 +343,7 @@ describe('ManageReservationComponent', () => {
     // Arrange
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
-    component.reservas = [
+    component.reservations = [
       {
         id: 4,
         reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }],
@@ -380,7 +380,7 @@ describe('ManageReservationComponent', () => {
     // Arrange
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
-    component.reservas = [
+    component.reservations = [
       {
         id: 5,
         reservedDrugs: [{ drugName: 'Diclofenac', quantity: 2 }],
@@ -414,40 +414,40 @@ describe('ManageReservationComponent', () => {
   });
 
   it('debería ordenar las reservas por fecha de creación descendente', () => {
-    component.reservas = [
+    component.reservations = [
       { id: 1, fechaCreacion: '2023-10-01T10:00:00Z' },
       { id: 2, fechaCreacion: '2023-10-03T10:00:00Z' },
       { id: 3, fechaCreacion: '2023-10-02T10:00:00Z' }
     ];
     // Act
-    component.ordenarPorFechaDesc();
+    component.sortByCreationDateDesc();
     // Assert
-    expect(component.reservas[0].id).toBe(2);
-    expect(component.reservas[1].id).toBe(3);
-    expect(component.reservas[2].id).toBe(1);
+    expect(component.reservations[0].id).toBe(2);
+    expect(component.reservations[1].id).toBe(3);
+    expect(component.reservations[2].id).toBe(1);
   });
 
   it('debería filtrar las reservas por nombre de medicamento', () => {
-    component.reservas = [
+    component.reservations = [
       { id: 1, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }] },
       { id: 2, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 2 }] }
     ];
-    component.filtroMedicamento = 'Paracetamol';
+    component.drugFilter = 'Paracetamol';
     // Act
-    const filtradas = component.reservasFiltradasPorMedicamento();
+    const filtradas = component.filteredByDrug();
     // Assert
     expect(filtradas.length).toBe(1);
     expect(filtradas[0].id).toBe(1);
   });
 
   it('debería filtrar las reservas por nombre de farmacia', () => {
-    component.reservas = [
+    component.reservations = [
       { id: 1, pharmacyName: 'Farmacia Central' },
       { id: 2, pharmacyName: 'Farmashop' }
     ];
-    component.filtroFarmacia = 'Farmacia Central';
+    component.pharmacyFilter = 'Farmacia Central';
     // Act
-    const filtradas = component.reservasFiltradasPorFarmacia();
+    const filtradas = component.filteredByPharmacy();
     // Assert
     expect(filtradas.length).toBe(1);
     expect(filtradas[0].id).toBe(1);
