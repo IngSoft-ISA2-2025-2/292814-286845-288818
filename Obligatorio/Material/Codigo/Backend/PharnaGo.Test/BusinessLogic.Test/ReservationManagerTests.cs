@@ -1112,6 +1112,36 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(referenceId, result.ReferenceId);
             _reservationRepository.Verify(x => x.UpdateOne(It.IsAny<Reservation>()), Times.Never);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ConfirmReservation_WithCanceledReservation_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var referenceId = "REF-CANCELED";
+            var canceledReservation = new Reservation
+            {
+                Id = 1,
+                ReferenceId = referenceId,
+                Email = "test@example.com",
+                Status = ReservationStatus.Canceled,
+                PharmacyName = "Farmashop",
+                PublicKey = "PUBLIC123",
+                Drugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug { DrugId = 1, Quantity = 2 }
+                }
+            };
+
+            _reservationRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(canceledReservation);
+
+            // Act
+            _reservationManager.ConfirmReservation(referenceId);
+
+            // Assert - ExpectedException
+        }
         #endregion Confirm Reservation Tests
     }
 }
