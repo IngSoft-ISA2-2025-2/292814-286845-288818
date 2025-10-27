@@ -1061,6 +1061,25 @@ namespace PharmaGo.Test.BusinessLogic.Test
             _reservationRepository.Verify(x => x.UpdateOne(It.IsAny<Reservation>()), Times.Once);
             _reservationRepository.Verify(x => x.Save(), Times.Once);
         }
+
+        #region Confirm Reservation Tests
+        [TestMethod]
+        [ExpectedException(typeof(KeyNotFoundException))]
+        public void ConfirmReservation_WithNonExistentReservation_ThrowsKeyNotFoundException()
+        {
+            // Arrange
+            var referenceId = "NOEXISTE";
+
+            _reservationRepository
+                .Setup(x => x.GetOneByExpression(It.IsAny<Expression<Func<Reservation, bool>>>()))
+                .Returns(() => null!);
+
+            // Act
+            _reservationManager.ConfirmReservation(referenceId);
+
+            // Assert - ExpectedException
+        }
+        #endregion Confirm Reservation Tests
     }
 }
 
