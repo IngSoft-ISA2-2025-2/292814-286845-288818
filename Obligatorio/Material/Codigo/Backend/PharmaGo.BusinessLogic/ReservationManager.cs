@@ -177,6 +177,17 @@ namespace PharmaGo.BusinessLogic
             if (reservation.Status == ReservationStatus.Expired)
                 throw new InvalidOperationException("No se puede confirmar una reserva expirada");
 
+            // Si ya está confirmada, retornar sin modificar (idempotente)
+            if (reservation.Status == ReservationStatus.Confirmed)
+                return reservation;
+
+            // Confirmar reserva pendiente
+            reservation.Status = ReservationStatus.Confirmed;
+            reservation.LimitConfirmationDate = DateTime.Now.AddDays(1);
+
+            reservationRepository.UpdateOne(reservation);
+            reservationRepository.Save();
+
             return reservation;
         }
     }
