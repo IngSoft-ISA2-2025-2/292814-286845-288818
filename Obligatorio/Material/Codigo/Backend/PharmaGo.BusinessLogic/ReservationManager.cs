@@ -163,5 +163,32 @@ namespace PharmaGo.BusinessLogic
 
             return reservation;
         }
+
+        public Reservation ConfirmReservation(string referenceId)
+        {
+            var reservation = reservationRepository.GetOneByExpression(r => r.ReferenceId == referenceId);
+
+            if (reservation == null)
+                throw new KeyNotFoundException("No se encontró la reserva");
+
+            if (reservation.Status == ReservationStatus.Canceled)
+                throw new InvalidOperationException("No se puede confirmar una reserva cancelada");
+
+            if (reservation.Status == ReservationStatus.Expired)
+                throw new InvalidOperationException("No se puede confirmar una reserva expirada");
+
+            // Si ya está confirmada, retornar sin modificar (idempotente)
+            if (reservation.Status == ReservationStatus.Confirmed)
+                return reservation;
+
+            // Confirmar reserva pendiente
+            reservation.Status = ReservationStatus.Confirmed;
+            reservation.LimitConfirmationDate = DateTime.Now.AddDays(1);
+
+            reservationRepository.UpdateOne(reservation);
+            reservationRepository.Save();
+
+            return reservation;
+        }
     }
 }

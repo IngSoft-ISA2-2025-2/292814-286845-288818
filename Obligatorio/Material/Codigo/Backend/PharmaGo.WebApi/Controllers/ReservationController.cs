@@ -71,5 +71,13 @@ namespace PharmaGo.WebApi.Controllers
             };
             return Ok(response);
         }
+
+        [HttpPut("confirmar")]
+        public IActionResult ConfirmReservation([FromQuery] string referenceId)
+        {
+            var confirmedReservation = _reservationManager.ConfirmReservation(referenceId);
+            var response = ReservationModelResponse.FromEntity(confirmedReservation);
+            return Ok(response);
+        }
     }
 }

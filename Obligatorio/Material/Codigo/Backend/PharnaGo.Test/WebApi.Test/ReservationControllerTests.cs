@@ -1020,5 +1020,128 @@ namespace PharmaGo.Test.WebApi.Test
             }
         }
         #endregion Validate Reservation Tests
+
+        #region Confirm Reservation Tests
+        [TestMethod]
+        [ExpectedException(typeof(KeyNotFoundException))]
+        public void ConfirmReservation_NotFound_ThrowsException()
+        {
+            // Arrange
+            var referenceId = "NOEXISTE";
+            _reservationManagerMock
+                .Setup(m => m.ConfirmReservation(referenceId))
+                .Throws(new KeyNotFoundException("No se encontró la reserva"));
+
+            // Act
+            var result = _reservationController.ConfirmReservation(referenceId);
+
+            // Assert - ExpectedException
+        }
+
+        [TestMethod]
+        public void ConfirmReservation_AlreadyConfirmed_ReturnsOk()
+        {
+            // Arrange
+            var referenceId = "REF-001";
+            var alreadyConfirmedReservation = new Reservation
+            {
+                Id = 1,
+                ReferenceId = referenceId,
+                Email = "test@example.com",
+                Status = ReservationStatus.Confirmed,
+                PharmacyName = "Farmashop",
+                Pharmacy = _pharmacy,
+                PublicKey = "PUBLIC123",
+                Drugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug { DrugId = 1, Drug = _drug, Quantity = 2 }
+                }
+            };
+
+            _reservationManagerMock
+                .Setup(m => m.ConfirmReservation(referenceId))
+                .Returns(alreadyConfirmedReservation);
+
+            // Act
+            var result = _reservationController.ConfirmReservation(referenceId);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            var okResult = result as OkObjectResult;
+            var response = okResult!.Value as ReservationModelResponse;
+            Assert.IsNotNull(response);
+            Assert.AreEqual("Farmashop", response.PharmacyName);
+            Assert.AreEqual("Confirmed", response.Status);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ConfirmReservation_CanceledReservation_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var referenceId = "REF-CANCELED";
+            _reservationManagerMock
+                .Setup(m => m.ConfirmReservation(referenceId))
+                .Throws(new InvalidOperationException("No se puede confirmar una reserva cancelada"));
+
+            // Act
+            var result = _reservationController.ConfirmReservation(referenceId);
+
+            // Assert - ExpectedException
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ConfirmReservation_ExpiredReservation_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var referenceId = "REF-EXPIRED";
+            _reservationManagerMock
+                .Setup(m => m.ConfirmReservation(referenceId))
+                .Throws(new InvalidOperationException("No se puede confirmar una reserva expirada"));
+
+            // Act
+            var result = _reservationController.ConfirmReservation(referenceId);
+
+            // Assert - ExpectedException
+        }
+
+        [TestMethod]
+        public void ConfirmReservation_PendingReservation_ReturnsOkWithConfirmedReservation()
+        {
+            // Arrange
+            var referenceId = "REF-SUCCESS";
+            var confirmedReservation = new Reservation
+            {
+                Id = 1,
+                ReferenceId = referenceId,
+                Email = "test@example.com",
+                Status = ReservationStatus.Confirmed,
+                PharmacyName = "Farmashop",
+                Pharmacy = _pharmacy,
+                PublicKey = "PUBLIC123",
+                LimitConfirmationDate = DateTime.Now.AddDays(1),
+                Drugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug { DrugId = 1, Drug = _drug, Quantity = 2 }
+                }
+            };
+
+            _reservationManagerMock
+                .Setup(m => m.ConfirmReservation(referenceId))
+                .Returns(confirmedReservation);
+
+            // Act
+            var result = _reservationController.ConfirmReservation(referenceId);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            var okResult = result as OkObjectResult;
+            var response = okResult!.Value as ReservationModelResponse;
+            Assert.IsNotNull(response);
+            Assert.AreEqual("Farmashop", response.PharmacyName);
+            Assert.AreEqual("Confirmed", response.Status);
+        }
+        #endregion Confirm Reservation Tests
     }
 }

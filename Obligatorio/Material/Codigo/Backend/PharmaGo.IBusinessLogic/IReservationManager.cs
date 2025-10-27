@@ -15,5 +15,6 @@ namespace PharmaGo.IBusinessLogic
         Reservation ValidateReservation(string publicKey);
         List<Reservation> GetReservationsByUser(string email, string secret);
         Reservation CancelReservation(string email, string secret);
+        Reservation ConfirmReservation(string referenceId);
     }
 }

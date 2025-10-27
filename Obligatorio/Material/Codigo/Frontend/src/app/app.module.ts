@@ -71,6 +71,7 @@ import { ManageReservationComponent } from './pages/reservation/manage-reservati
 import { CreateReservationComponent } from './pages/reservation/create-reservation/create-reservation.component';
 import { ValidateReservationComponent } from './pages/reservation/validate-reservation/validate-reservation.component';
 import { CancelReservationComponent } from './pages/reservation/cancel-reservation/cancel-reservation.component';
+import { ConfirmReservationComponent } from './pages/reservation/confirm-reservation/confirm-reservation.component';
 
 @NgModule({
   declarations: [
@@ -114,7 +115,8 @@ import { CancelReservationComponent } from './pages/reservation/cancel-reservati
     ManageReservationComponent,
     CreateReservationComponent,
     ValidateReservationComponent,
-    CancelReservationComponent
+    CancelReservationComponent,
+    ConfirmReservationComponent
 
   ],
   imports: [
