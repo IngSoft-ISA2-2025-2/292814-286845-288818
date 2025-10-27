@@ -166,7 +166,12 @@ namespace PharmaGo.BusinessLogic
 
         public Reservation ConfirmReservation(string referenceId)
         {
-            throw new NotImplementedException();
+            var reservation = reservationRepository.GetOneByExpression(r => r.ReferenceId == referenceId);
+
+            if (reservation == null)
+                throw new KeyNotFoundException("No se encontró la reserva");
+
+            return reservation;
         }
     }
 }
