@@ -18,7 +18,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18.x'
+        node-version: '20.x'
         cache: 'npm'
         cache-dependency-path: ${{ env.FRONTEND_DIRECTORY }}/package-lock.json
 
@@ -26,6 +26,11 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y docker-compose
+
+    - name: Update package-lock.json
+      working-directory: ${{ env.FRONTEND_DIRECTORY }}
+      run: |
+        npm install --package-lock-only
 
     - name: Install dependencies for Cypress
       working-directory: ${{ env.FRONTEND_DIRECTORY }}
