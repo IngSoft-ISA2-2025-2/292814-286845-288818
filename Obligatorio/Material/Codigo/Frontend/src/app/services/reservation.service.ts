@@ -5,7 +5,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { CommonService } from './CommonService';
 import { StorageManager } from '../utils/storage-manager';
-import { ReservationRequest, ReservationResponse } from '../interfaces/reservation';
+import { ReservationRequest, ReservationResponse, ConsultReservationResponse } from '../interfaces/reservation';
 
 @Injectable({ providedIn: 'root' })
 export class ReservationService {
@@ -27,8 +27,10 @@ export class ReservationService {
   }
 
   /** GET: Consult reservations by user */
-  getReservations(email: string, secret: string): Observable<any[]> {
-    return this.http.post<any[]>(`${this.url}/consult`, { email, secret }, { headers: this.getHttpHeaders() })
+  getReservations(email: string, secret: string): Observable<ConsultReservationResponse[]> {
+    const encodedEmail = encodeURIComponent(email);
+    const encodedSecret = encodeURIComponent(secret);
+    return this.http.get<ConsultReservationResponse[]>(`${this.url}?email=${encodedEmail}&secret=${encodedSecret}`, { headers: this.getHttpHeaders() })
       .pipe(
         tap()
         // NO capturamos el error aquí - dejamos que llegue al componente
@@ -44,9 +46,10 @@ export class ReservationService {
       );
   }
 
-  /** POST: validar una reserva con clave pública */
-  validateReservation(clavePublica: string): Observable<any> {
-    return this.http.post<any>(`${this.url}/validate`, { clavePublica }, { headers: this.getHttpHeaders() })
+  /** GET: validar una reserva con clave pública */
+  validateReservation(publicKey: string): Observable<any> {
+    const encodedPublicKey = encodeURIComponent(publicKey);
+    return this.http.get<any>(`${this.url}/validate/${encodedPublicKey}`, { headers: this.getHttpHeaders() })
       .pipe(
         tap()
         // NO capturamos el error aquí - dejamos que llegue al componente
@@ -55,7 +58,9 @@ export class ReservationService {
 
   /** DELETE: cancelar una reserva existente */
   cancelReservation(email: string, secret: string): Observable<ReservationResponse> {
-    return this.http.delete<ReservationResponse>(`${this.url}?email=${email}&secret=${secret}`, { headers: this.getHttpHeaders() })
+    const encodedEmail = encodeURIComponent(email);
+    const encodedSecret = encodeURIComponent(secret);
+    return this.http.delete<ReservationResponse>(`${this.url}?email=${encodedEmail}&secret=${encodedSecret}`, { headers: this.getHttpHeaders() })
       .pipe(
         tap()
         // NO capturamos el error aquí - dejamos que llegue al componente
@@ -64,7 +69,8 @@ export class ReservationService {
 
   /** PUT: confirmar una reserva por referenceId */
   confirmReservation(referenceId: string): Observable<ReservationResponse> {
-    return this.http.put<ReservationResponse>(`${this.url}/confirmar?referenceId=${referenceId}`, {}, { headers: this.getHttpHeaders() })
+    const encodedReferenceId = encodeURIComponent(referenceId);
+    return this.http.put<ReservationResponse>(`${this.url}/confirmar?referenceId=${encodedReferenceId}`, {}, { headers: this.getHttpHeaders() })
       .pipe(
         tap()
         // NO capturamos el error aquí - dejamos que llegue al componente

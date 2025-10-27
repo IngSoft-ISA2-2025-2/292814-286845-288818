@@ -25,7 +25,6 @@ namespace PharmaGo.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<Drug>().Property(property => property.Price).HasPrecision(14, 2);
             modelBuilder.Entity<Purchase>().Property(property => property.TotalAmount).HasPrecision(14, 2);
             modelBuilder.Entity<PurchaseDetail>().Property(property => property.Price).HasPrecision(14, 2);
@@ -33,7 +32,6 @@ namespace PharmaGo.DataAccess
             modelBuilder.Entity<UnitMeasure>().Property(u => u.Name).HasConversion<string>();
             modelBuilder.Entity<Presentation>().Property(u => u.Name).HasConversion<string>();
 
-            // Configuración explícita para el campo Password - soporta hashes BCrypt completos
             modelBuilder.Entity<User>()
                 .Property(u => u.Password)
                 .HasMaxLength(100);
@@ -41,9 +39,26 @@ namespace PharmaGo.DataAccess
             modelBuilder.Entity<ReservationDrug>()
                 .HasKey(rd => new { rd.ReservationId, rd.DrugId });
 
+            modelBuilder.Entity<ReservationDrug>()
+                .HasOne(rd => rd.Reservation)
+                .WithMany(r => r.Drugs)
+                .HasForeignKey(rd => rd.ReservationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ReservationDrug>()
+                .HasOne(rd => rd.Drug)
+                .WithMany()
+                .HasForeignKey(rd => rd.DrugId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.Pharmacy)
+                .WithMany()
+                .HasForeignKey(r => r.PharmacyName)
+                .HasPrincipalKey(p => p.Name)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(modelBuilder);
-
         }
-
     }
 }

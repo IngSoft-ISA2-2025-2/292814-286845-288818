@@ -39,6 +39,9 @@ namespace PharmaGo.BusinessLogic
 
             foreach (var reservationDrug in reservation.Drugs)
             {
+
+                reservationDrug.Reservation = reservation;
+
                 if (!drugRepository.Exists(d => d.Name == reservationDrug.Drug.Name
                     && d.Pharmacy != null && d.Pharmacy.Name == reservation.PharmacyName))
                 {
@@ -55,6 +58,8 @@ namespace PharmaGo.BusinessLogic
                         $"The drug {reservationDrug.Drug.Name} for the reservation has insufficient stock.");
                 }
                 drug.Stock -= reservationDrug.Quantity;
+                reservationDrug.Drug = drug;
+                reservationDrug.DrugId = drug.Id;
                 drugRepository.UpdateOne(drug);
             }
             var (publicKey, privateKey) = KeyPairGenerator.GenerateKeyPair();

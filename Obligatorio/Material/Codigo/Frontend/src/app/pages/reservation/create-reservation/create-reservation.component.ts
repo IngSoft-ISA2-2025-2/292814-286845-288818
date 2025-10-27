@@ -65,10 +65,10 @@ export class CreateReservationComponent {
     const reservationRequest: ReservationRequest = {
       email: this.email,
       secret: this.secret,
-      farmacia: this.farmacia,
-      medicamentos: this.medicamentos.map(m => ({
-        nombre: m.nombre,
-        cantidad: m.cantidad
+      pharmacyName: this.farmacia,
+      drugsReserved: this.medicamentos.map(m => ({
+        drugName: m.nombre,
+        drugQuantity: m.cantidad
       }))
     };
 
@@ -76,15 +76,11 @@ export class CreateReservationComponent {
     this.reservationService.createReserva(reservationRequest).subscribe({
       next: (response) => {
         if (response) {
-          this.estadoReserva = response.estado || 'Pendiente';
+          this.estadoReserva = response.status || 'Pendiente';
           this.stockActualizado = true;
           
-          // El mensaje viene del backend, que conoce qué medicamentos requieren prescripción
-          if (response.mensaje) {
-            this.successMessage = response.mensaje;
-          } else {
-            this.successMessage = 'Reserva creada exitosamente';
-          }
+          // Mensaje de éxito genérico
+          this.successMessage = `Reserva creada exitosamente en ${response.pharmacyName}. Clave pública: ${response.publicKey}`;
           
           // Limpiar lista de medicamentos
           this.medicamentos = [];

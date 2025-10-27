@@ -43,17 +43,16 @@
     <div class="form-section">
       <h3>Información de la Reserva</h3>
       <div class="reserva-details">
-        <div class="detail-item" data-cy="reserva-medicamento">
-          <strong>Medicamento:</strong> {{ reservaInfo.medicamento }}
-        </div>
-        <div class="detail-item" data-cy="reserva-cantidad">
-          <strong>Cantidad:</strong> {{ reservaInfo.cantidad }}
-        </div>
-        <div class="detail-item" data-cy="reserva-cliente">
-          <strong>Cliente:</strong> {{ reservaInfo.cliente }}
-        </div>
         <div class="detail-item" data-cy="reserva-farmacia">
-          <strong>Farmacia:</strong> {{ reservaInfo.farmacia }}
+          <strong>Farmacia:</strong> {{ reservaInfo.pharmacyName }}
+        </div>
+        <div class="detail-item" data-cy="reserva-medicamentos">
+          <strong>Medicamentos:</strong>
+          <ul *ngIf="reservaInfo.drugs && reservaInfo.drugs.length > 0">
+            <li *ngFor="let drug of reservaInfo.drugs">
+              {{ drug.drugName }} - Cantidad: {{ drug.drugQuantity }}
+            </li>
+          </ul>
         </div>
       </div>
     </div>

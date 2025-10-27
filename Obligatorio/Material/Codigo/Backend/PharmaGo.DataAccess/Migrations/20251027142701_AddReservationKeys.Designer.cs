@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PharmaGo.DataAccess;
 
@@ -11,9 +12,10 @@ using PharmaGo.DataAccess;
 namespace PharmaGo.DataAccess.Migrations
 {
     [DbContext(typeof(PharmacyGoDbContext))]
-    partial class PharmacyGoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251027142701_AddReservationKeys")]
+    partial class AddReservationKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,8 +124,7 @@ namespace PharmaGo.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -233,8 +234,11 @@ namespace PharmaGo.DataAccess.Migrations
                     b.Property<DateTime?>("LimitConfirmationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("PharmacyId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PharmacyName")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PrivateKey")
                         .HasColumnType("nvarchar(max)");
@@ -256,7 +260,7 @@ namespace PharmaGo.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PharmacyName");
+                    b.HasIndex("PharmacyId");
 
                     b.ToTable("Reservations");
                 });
@@ -484,9 +488,7 @@ namespace PharmaGo.DataAccess.Migrations
                 {
                     b.HasOne("PharmaGo.Domain.Entities.Pharmacy", "Pharmacy")
                         .WithMany()
-                        .HasForeignKey("PharmacyName")
-                        .HasPrincipalKey("Name")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("PharmacyId");
 
                     b.Navigation("Pharmacy");
                 });
@@ -496,7 +498,7 @@ namespace PharmaGo.DataAccess.Migrations
                     b.HasOne("PharmaGo.Domain.Entities.Drug", "Drug")
                         .WithMany()
                         .HasForeignKey("DrugId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PharmaGo.Domain.Entities.Reservation", "Reservation")
