@@ -856,7 +856,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("Cancelled", result.Status);
+            Assert.AreEqual(ReservationStatus.Canceled, result.Status);
             Assert.AreEqual(email, result.Email);
             Assert.AreEqual(secret, result.Secret);
         }

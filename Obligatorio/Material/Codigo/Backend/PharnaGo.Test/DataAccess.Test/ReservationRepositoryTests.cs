@@ -248,5 +248,29 @@ namespace PharmaGo.Test.DataAccess.Test
             Assert.AreEqual(_reservations[1].Status, resultList[1].Status);
             Assert.AreEqual(_reservations[1].Email, resultList[1].Email);
         }
+
+        [TestMethod]
+        public void GetOneByExpression_LoadsRelatedDrugsAndPharmacy()
+        {
+            // Arrange
+            _context.Pharmacys.Add(_pharmacy);
+            _context.Drugs.Add(_drug);
+            _context.Reservations.AddRange(_reservations);
+            _context.SaveChanges();
+
+            // Act
+            var result = _reservationRepository.GetOneByExpression(r => r.Email == "usuario@test.com" && r.Secret == "miSecret123");
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Pharmacy, "La propiedad Pharmacy debe estar cargada");
+            Assert.IsNotNull(result.Drugs, "La propiedad Drugs debe estar cargada");
+            Assert.IsTrue(result.Drugs.Count > 0, "Debe haber al menos un ReservationDrug");
+            
+            var firstReservationDrug = result.Drugs.First();
+            Assert.IsNotNull(firstReservationDrug.Drug, "La propiedad Drug dentro de ReservationDrug debe estar cargada");
+            Assert.AreEqual("Aspirina", firstReservationDrug.Drug.Name);
+            Assert.AreEqual("Farmashop", result.Pharmacy.Name);
+        }
     }
 }

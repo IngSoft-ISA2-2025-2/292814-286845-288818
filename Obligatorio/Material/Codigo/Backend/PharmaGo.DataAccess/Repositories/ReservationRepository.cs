@@ -26,6 +26,16 @@ namespace PharmaGo.DataAccess.Repositories
                     .ThenInclude(rd => rd.Drug)
                 .Where(expression);
         }
+
+        public override Reservation GetOneByExpression(Expression<Func<Reservation, bool>> expression)
+        {
+            return _context.Set<Reservation>()
+                .Include(r => r.Pharmacy)
+                .Include(r => r.Drugs)
+                    .ThenInclude(rd => rd.Drug)
+                .FirstOrDefault(expression);
+        }
+
         public override void InsertOne(Reservation reservation)
         {
             _context.Entry(reservation).State = EntityState.Added;

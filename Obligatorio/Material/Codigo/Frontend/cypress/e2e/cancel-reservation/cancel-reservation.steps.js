@@ -40,7 +40,7 @@ Given('que existen dos reservas para el correo {string}:', (email, table) => {
 When('el visitante solicita cancelar la reserva usando el correo {string} y el secret {string}', (email, secret) => {
 	// Configurar el intercept basado en el escenario actual
 	cy.get('@scenarioData').then((data) => {
-		cy.intercept('DELETE', '**/api/reservas*', (req) => {
+		cy.intercept('DELETE', '**/api/Reservation*', (req) => {
 			const url = new URL(req.url);
 			const urlEmail = url.searchParams.get('email');
 			const urlSecret = url.searchParams.get('secret');

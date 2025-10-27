@@ -63,11 +63,11 @@ namespace PharmaGo.WebApi.Controllers
             var response = new ReservationModelResponse
             {
                 PharmacyName = cancelledReservation.PharmacyName,
-                DrugsReserved = cancelledReservation.ReservationDrugs.Select(d => new ReservationDrugModelResponse
+                DrugsReserved = cancelledReservation.Drugs?.Select(d => new ReservationDrugModelResponse
                 {
                     DrugName = d.Drug.Name,
                     DrugQuantity = d.Quantity
-                }).ToList()
+                }).ToList() ?? new List<ReservationDrugModelResponse>()
             };
             return Ok(response);
         }
