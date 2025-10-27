@@ -236,67 +236,72 @@ Adicionalmente, el sistema gestionará las siguientes funcionalidades:
 4. ## Confirmar reservas (interno): 
 El personal de la farmacia podrá confirmar las reservas una vez que se verifiquen los requisitos (como la validación de prescripciones).
 
-**Como** empleado de la farmacia autenticado
-**Quiero** poder confirmar reservas
-**Para** avisar al cliente que su reserva fue procesada y que los medicamentos ya se reservaron
+**Como** personal de farmacia
+**Quiero** poder confirmar reservas pendientes
+**Para** validar que se cumplen los requisitos antes de que el cliente retire el medicamento
 
 ### Escenarios Gherkin
-1. Escenario: Empleado no autenticado intenta confirmar una reserva
-**Dado** un empleado no autenticado
-**Cuando** intenta confirmar una reserva
-**Entonces** el sistema responde con un error *unauthorized (401)*
-**Y** muestra un mensaje que dice *"Unautharized user"*
+Background: **Dado** que el sistema de confirmación de reservas está disponible
 
-2. Escenario: Empleado autenticado intenta confirmar una reserva inexistente
-**Dado** un empleado autenticado
-**Y** proporcionar un identificador de reserva inexistente
-**Cuando** intenta confirmar una reserva
-**Entonces** el sistema responde con un error *not found (404)*
-**Y** muestra un mensaje que dice *"The specified reservation does not exist"*
+1. Escenario: Confirmación exitosa de una reserva pendiente
+**Dado** que existe una reserva pendiente con ID de referencia "ABC12345"
+**Cuando** el personal de farmacia confirma la reserva con ID "ABC12345"
+**Entonces** la reserva debe cambiar a estado *"Confirmada"*
+**Y** el sistema muestra el mensaje *"Reserva confirmada exitosamente"*
 
-3. Escenario: Empleado autenticado intenta confirmar una reserva ya confirmada
-**Dado** un empleado autenticado
-**Y** una reserva que ya esta en estado Confiramda
-**Cuando** intenta confirmar nuevamente la reserva
-**Entonces** el sistema responde con un error *conflict (409)*
-**Y** muestra un mensaje que dice *"The reservation was previously confirmed"*
+2. Escenario: Confirmación de reserva que requiere validación de prescripción
+**Dado** que existe una reserva pendiente con ID de referencia "XYZ98765" que incluye medicamentos con prescripción
+**Y** el personal de farmacia ha validado la receta médica
+**Cuando** el personal de farmacia confirma la reserva con ID "XYZ98765"
+**Entonces** la reserva debe cambiar a estado *"Confirmada"*
+**Y** el sistema muestra el mensaje *"Reserva confirmada exitosamente"*
 
-4. Escenario: Empleado autenticado intenta confirmar una reserva canelada
-**Dado** un empleado autenticado
-**Y** una reserva que esta en estado Cancelada
-**Cuando** intenta confirmar la reserva
-**Entonces** el sistema responde con un error *conflict (409)*
-**Y** muestra un mensaje que dice *"A cancelled reservation cannot be confirmed"*
+3. Escenario: Intento de confirmación de una reserva inexistente
+**Dado** que no existe ninguna reserva con ID de referencia "NOEXISTE"
+**Cuando** el personal de farmacia intenta confirmar la reserva con ID "NOEXISTE"
+**Entonces** el sistema responde con un error indicando *"No se encontró la reserva"*
+**Y** no se debe modificar ninguna reserva
 
-5. Escenario: Empleado autenticado intenta confirmar una reserva expirada
-**Dado** un empleado autenticado
-**Y** una reserva que esta en estado Expirada
-**Cuando** intenta confirmar la reserva
-**Entonces** el sistema responde con un error *conflict (409)*
-**Y** muestra un mensaje que dice *"The reservation has expired and cannot be confirmed."*
+4. Escenario: Intento de confirmación de una reserva ya confirmada (idempotencia)
+**Dado** que existe una reserva con ID de referencia "CONF123" y su estado es "Confirmada"
+**Cuando** el personal de farmacia intenta confirmar la reserva con ID "CONF123"
+**Entonces** el sistema no debe cambiar el estado de la reserva
+**Y** el sistema muestra el mensaje *"La reserva ya está confirmada"*
 
-6. Escenario: Empleado autenticado confirma exitosamente una reserva pendiente
-**Dado** un empleado autenticado
-**Y** una reserva en estado Pendiente 
-**Cuando** cuando confirma la reserva
-**Entonces** el sistema actualiza el estado de la reserva a Confirmada
-**Y** muestra un mensaje que dice *"Reservation successfully confirmed. The medication can be picked up by the customer."*
-**Y** notifica al usuario que su medicamento está listo para retirar 
+5. Escenario: Intento de confirmación de una reserva cancelada
+**Dado** que existe una reserva con ID de referencia "CANC456" y su estado es "Cancelada"
+**Cuando** el personal de farmacia intenta confirmar la reserva con ID "CANC456"
+**Entonces** el sistema no debe permitir la confirmación
+**Y** devuelve el mensaje *"No se puede confirmar una reserva cancelada"*
 
-7. Escenario: Empleado autenticado intenta confirmar una reserva perteneciente a otra farmacia
-**Dado** un empleado autenticado perteneciente a la farmacia Farmacia X
-**Y** una reserva asociada a la Farmacia Y
-**Cuando** intenta confirmar la reserva
-**Entonces** el sistema responde con un error *forbidden (403)*
-**Y** muestra un mensaje que dice *"You do not have permission to confirm reservations from another pharmacy"*
+6. Escenario: Intento de confirmación de una reserva expirada
+**Dado** que existe una reserva con ID de referencia "EXP789" y su estado es "Expirada"
+**Cuando** el personal de farmacia intenta confirmar la reserva con ID "EXP789"
+**Entonces** el sistema no debe permitir la confirmación
+**Y** devuelve el mensaje *"No se puede confirmar una reserva expirada"*
 
-8. Escenario: Error inesperado durante la confirmación de una reserva
-**Dado** un empleado autenticado
-**Y** una reserva válida en estado pendiente
-**Cuando** intenta confirmar la reserva
-**Y** ocurre un error interno en el sistema
-**Entonces** el sistema responde con un error *internal server error (500)*
-**Y** muestra un mensaje que dice *"An error occurred while confirming your reservation. Please try again later."*
+7. Escenario: Validación - falta de ID de referencia
+**Cuando** el personal de farmacia envía el formulario de confirmación sin proporcionar un ID de referencia
+**Entonces** el sistema responde con un error indicando *"Se requiere un ID de referencia válido"*
+
+Esquema del escenario: Confirmaciones varias con datos de ejemplo
+**Dado** que existe una reserva con ID de referencia "<referenceId>" y su estado es "<estadoInicial>"
+**Cuando** el personal de farmacia intenta confirmar la reserva con ID "<referenceId>"
+**Entonces** <resultado>
+
+Ejemplos:
+| referenceId | estadoInicial | resultado                                                    |
+| REF001      | Pendiente     | la reserva debe cambiar a estado "Confirmada"                |
+| REF002      | Confirmada    | el sistema no debe cambiar el estado de la reserva           |
+| REF003      | Cancelada     | el sistema no debe permitir la confirmación                  |
+| REF004      | Expirada      | el sistema no debe permitir la confirmación                  |
+
+8. Escenario: Confirmación de reserva establece fecha límite de retiro
+**Dado** que existe una reserva pendiente con ID de referencia "LIM888"
+**Cuando** el personal de farmacia confirma la reserva con ID "LIM888"
+**Entonces** la reserva debe cambiar a estado *"Confirmada"*
+**Y** se debe establecer una fecha límite de confirmación
+**Y** el sistema muestra el mensaje *"Reserva confirmada exitosamente"*
 
 
 5. ## Gestión de estados
