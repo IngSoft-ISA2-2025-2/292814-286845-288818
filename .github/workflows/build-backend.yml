@@ -2,9 +2,9 @@ name: Backend Build
 
 on:
   push:
-    branches: [ main, develop, feature/* ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main ]
   workflow_dispatch:
 
 env:
