@@ -6,6 +6,7 @@ namespace PharmaGo.WebApi.Models.Out
 {
     public class ReservationResponse
     {
+        public int Id { get; set; }
         public string PharmacyName { get; set; }
         public string Status { get; set; }
         public List<ReservationDrugResponse> ReservedDrugs { get; set; }
@@ -14,11 +15,13 @@ namespace PharmaGo.WebApi.Models.Out
         public DateTime? FechaExpiracion { get; set; }
         public DateTime? FechaCancelacion { get; set; }
         public DateTime? FechaRetiro { get; set; }
+        public DateTime? FechaCreacion { get; set; }
 
         public static ReservationResponse FromEntity(Reservation reservation)
         {
             return new ReservationResponse
             {
+                Id = reservation.Id,
                 PharmacyName = reservation.PharmacyName,
                 Status = reservation.Status.ToString(),
                 ReservedDrugs = reservation.Drugs?.Select(ReservationDrugResponse.FromEntity).ToList() ?? new List<ReservationDrugResponse>(),
@@ -27,6 +30,7 @@ namespace PharmaGo.WebApi.Models.Out
                 FechaExpiracion = reservation.ExpirationDate,
                 FechaCancelacion = reservation.CancellationDate,
                 FechaRetiro = reservation.RetirementDate,
+                FechaCreacion = reservation.CreatedAt
             };
         }
     }

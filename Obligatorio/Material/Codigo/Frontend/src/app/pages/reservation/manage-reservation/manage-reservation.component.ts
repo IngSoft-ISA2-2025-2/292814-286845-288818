@@ -13,6 +13,7 @@ export class ManageReservationComponent implements OnInit {
   reservations: any[] = [];
   errorMessage: string = '';
   loading: boolean = false;
+  hasConsulted: boolean = false;  // Nueva propiedad para rastrear si se consultó
 
   // Filters
   statusFilter: string = '';
@@ -32,16 +33,19 @@ export class ManageReservationComponent implements OnInit {
 
     this.loading = true;
     this.errorMessage = '';
+    this.hasConsulted = false;
 
     this.reservationService.getReservations(this.email, this.secret)
       .subscribe({
         next: (reservations) => {
           this.reservations = reservations;
           this.loading = false;
+          this.hasConsulted = true;
         },
         error: (error) => {
           this.errorMessage = error.error?.message || 'El secret no coincide con el registrado para este email';
           this.loading = false;
+          this.hasConsulted = false;
         }
       });
   }
@@ -55,9 +59,17 @@ export class ManageReservationComponent implements OnInit {
   get filteredReservations(): any[] {
     let filtered = [...this.reservations];
 
-    // Filter by status
+    // Filter by status (convertir el estado español a inglés para comparar)
     if (this.statusFilter && this.statusFilter !== 'Todos' && this.statusFilter !== '') {
-      filtered = filtered.filter(r => r.status === this.statusFilter);
+      const statusMap: any = {
+        'Pendiente': 'Pending',
+        'Confirmada': 'Confirmed',
+        'Expirada': 'Expired',
+        'Cancelada': 'Canceled',
+        'Retirada': 'Withdrawal'
+      };
+      const englishStatus = statusMap[this.statusFilter] || this.statusFilter;
+      filtered = filtered.filter(r => r.status === englishStatus);
     }
 
     // Filter by drug
@@ -82,8 +94,8 @@ export class ManageReservationComponent implements OnInit {
   // Method to sort reservations by creation date descending
   sortByCreationDateDesc(): void {
     this.reservations.sort((a, b) =>
-      new Date(b.fechaCreacion || b.createdAt || 0).getTime() - 
-      new Date(a.fechaCreacion || a.createdAt || 0).getTime()
+      new Date(b.fechaCreacion || 0).getTime() - 
+      new Date(a.fechaCreacion || 0).getTime()
     );
   }
 
@@ -107,20 +119,14 @@ export class ManageReservationComponent implements OnInit {
 
   // Method to get the message according to the reservation status
   getStatusMessage(reservation: any): string {
-    switch (reservation.status) {
-      case 'Pendiente':
-        return 'Reserva pendiente de confirmación por la farmacia';
-      case 'Confirmada':
-        return 'Presenta este ID en la farmacia para retirar tu medicamento';
-      case 'Expirada':
-        return 'Esta reserva ha expirado';
-      case 'Cancelada':
-        return 'Reserva cancelada';
-      case 'Retirada':
-        return 'Reserva retirada exitosamente';
-      default:
-        return '';
-    }
+    const statusMap: any = {
+      'Pending': 'Reserva pendiente de confirmación por la farmacia',
+      'Confirmed': 'Presenta este ID en la farmacia para retirar tu medicamento',
+      'Expired': 'Esta reserva ha expirado',
+      'Canceled': 'Reserva cancelada',
+      'Withdrawal': 'Reserva retirada exitosamente'
+    };
+    return statusMap[reservation.status] || '';
   }
 
   // Method to format dates
@@ -142,8 +148,40 @@ export class ManageReservationComponent implements OnInit {
       this.errorMessage = 'Reserva no encontrada';
       return;
     }
-    // Future implementation to show details
-    console.log('View reservation details:', reservation);
+    
+    // Construir mensaje de detalles
+    const drugs = reservation.reservedDrugs?.map((d: any) => 
+      `${d.drugName} (Cantidad: ${d.quantity})`
+    ).join('\n') || 'Sin medicamentos';
+    
+    const details = `
+DETALLES DE LA RESERVA #${reservation.id}
+
+Estado: ${this.translateStatus(reservation.status)}
+Farmacia: ${reservation.pharmacyName}
+Medicamentos:
+${drugs}
+
+${reservation.idReferencia ? `ID de Referencia: ${reservation.idReferencia}` : ''}
+${reservation.fechaLimiteConfirmacion ? `Fecha Límite: ${this.formatDate(reservation.fechaLimiteConfirmacion)}` : ''}
+${reservation.fechaExpiracion ? `Fecha Expiración: ${this.formatDate(reservation.fechaExpiracion)}` : ''}
+${reservation.fechaCancelacion ? `Fecha Cancelación: ${this.formatDate(reservation.fechaCancelacion)}` : ''}
+${reservation.fechaRetiro ? `Fecha Retiro: ${this.formatDate(reservation.fechaRetiro)}` : ''}
+    `;
+    
+    alert(details.trim());
+  }
+  
+  // Método auxiliar para traducir estados (público para usar en el template)
+  translateStatus(status: string): string {
+    const translations: any = {
+      'Pending': 'Pendiente',
+      'Confirmed': 'Confirmada',
+      'Expired': 'Expirada',
+      'Canceled': 'Cancelada',
+      'Withdrawal': 'Retirada'
+    };
+    return translations[status] || status;
   }
 
   // Method to clear filters
@@ -151,15 +189,5 @@ export class ManageReservationComponent implements OnInit {
     this.statusFilter = '';
     this.drugFilter = '';
     this.pharmacyFilter = '';
-  }
-
-  // Method to check if there are no reservations
-  get hasNoReservations(): boolean {
-    return this.reservations.length === 0;
-  }
-
-  // Method to get the message when there are no reservations
-  get noReservationsMessage(): string {
-    return 'No tienes reservas creadas';
   }
 }

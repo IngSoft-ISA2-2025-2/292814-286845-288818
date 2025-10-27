@@ -35,13 +35,10 @@ namespace PharmaGo.BusinessLogic
                 throw new ResourceNotFoundException("The pharmacy for the reservation does not exist.");
 
             var pharmacy = pharmacyRepository.GetOneByExpression(p => p.Name == reservation.PharmacyName);
-
+            reservation.Pharmacy = pharmacy;
 
             foreach (var reservationDrug in reservation.Drugs)
             {
-
-                reservationDrug.Reservation = reservation;
-
                 if (!drugRepository.Exists(d => d.Name == reservationDrug.Drug.Name
                     && d.Pharmacy != null && d.Pharmacy.Name == reservation.PharmacyName))
                 {
@@ -62,11 +59,18 @@ namespace PharmaGo.BusinessLogic
                 reservationDrug.DrugId = drug.Id;
                 drugRepository.UpdateOne(drug);
             }
+            
             var (publicKey, privateKey) = KeyPairGenerator.GenerateKeyPair();
             reservation.PublicKey = publicKey;
             reservation.PrivateKey = privateKey;
 
             reservation.Status = ReservationStatus.Pending;
+            
+            // Asignar fecha de creación
+            reservation.CreatedAt = DateTime.Now;
+            
+            // Asignar fecha límite de confirmación (24 horas desde la creación)
+            reservation.LimitConfirmationDate = DateTime.Now.AddHours(24);
 
             reservationRepository.InsertOne(reservation);
             reservationRepository.Save();
@@ -77,12 +81,11 @@ namespace PharmaGo.BusinessLogic
         {
             public static (string publicKey, string privateKey) GenerateKeyPair()
             {
-                using (var rsa = new System.Security.Cryptography.RSACryptoServiceProvider(2048))
-                {
-                    string publicKey = Convert.ToBase64String(rsa.ExportRSAPublicKey());
-                    string privateKey = Convert.ToBase64String(rsa.ExportRSAPrivateKey());
-                    return (publicKey, privateKey);
-                }
+                // Usar Guid para generar un identificador único
+                string uniqueId = Guid.NewGuid().ToString("N");
+                string publicKey = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(uniqueId));
+                string privateKey = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(Guid.NewGuid().ToString("N")));
+                return (publicKey, privateKey);
             }
         }
 
@@ -100,7 +103,11 @@ namespace PharmaGo.BusinessLogic
                 throw new InvalidResourceException("The reservation is not confirmed.");
 
             reservation.Status = ReservationStatus.Withdrawal;
+            reservation.RetirementDate = DateTime.Now;
+            
             reservationRepository.UpdateOne(reservation);
+            reservationRepository.Save();
+            
             return reservation;
         }
 
@@ -141,16 +148,17 @@ namespace PharmaGo.BusinessLogic
         {
             return reservations.Where(r => r.Secret == secret).ToList();
         }
+
         public Reservation CancelReservation(string email, string secret)
         {
             if (string.IsNullOrWhiteSpace(email))
                 throw new ArgumentException("Se requiere un correo válido");
 
-            if (reservationRepository.Exists(r => r.Email == email && r.Secret != secret))
-                throw new UnauthorizedAccessException("Secret inválido para ese correo");
+            if (!reservationRepository.Exists(r => r.Email == email && r.Secret == secret && r.Status == ReservationStatus.Canceled))
+                throw new UnauthorizedAccessException("No se encontró una reserva para cancelar");
 
             var reservation = reservationRepository.GetOneByExpression(
-                r => r.Email == email && r.Secret == secret);
+                r => r.Email == email && r.Secret == secret && r.Status != ReservationStatus.Canceled);
 
             if (reservation == null)
                 throw new KeyNotFoundException("No existe una reserva asociada a ese correo");
@@ -163,6 +171,13 @@ namespace PharmaGo.BusinessLogic
                 return reservation;
 
             reservation.Status = ReservationStatus.Canceled;
+            reservation.CancellationDate = DateTime.Now;
+            foreach (var drug in reservation.Drugs)
+            {
+                var drugEntity = drugRepository.GetOneByExpression(d => d.Id == drug.DrugId);
+                drugEntity.Stock += drug.Quantity;
+                drugRepository.UpdateOne(drugEntity);
+            }
             reservationRepository.UpdateOne(reservation);
             reservationRepository.Save();
 
@@ -188,7 +203,9 @@ namespace PharmaGo.BusinessLogic
 
             // Confirmar reserva pendiente
             reservation.Status = ReservationStatus.Confirmed;
-            reservation.LimitConfirmationDate = DateTime.Now.AddDays(1);
+            
+            // Asignar fecha de expiración (48 horas desde la confirmación)
+            reservation.ExpirationDate = DateTime.Now.AddHours(48);
 
             reservationRepository.UpdateOne(reservation);
             reservationRepository.Save();

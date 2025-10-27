@@ -125,15 +125,20 @@
       </div>
 
       <!-- Mensaje cuando no hay reservas -->
-      <div *ngIf="hasNoReservations && !loading && !errorMessage" 
+      <div *ngIf="hasConsulted && reservations.length === 0 && !loading && !errorMessage" 
            class="alert alert-info" 
            data-cy="mensaje-sin-reservas">
-        {{ noReservationsMessage }}
+        No tienes reservas registradas.
       </div>
 
-      <!-- Listado de reservas -->
-  <div *ngIf="reservations.length > 0" class="reservations-section" data-cy="listado-reservas">
+      <!-- Listado de reservas - Se muestra siempre que se haya consultado -->
+  <div *ngIf="hasConsulted && !errorMessage" class="reservations-section" data-cy="listado-reservas">
         <h3>Tus Reservas</h3>
+
+        <!-- Mensaje cuando no hay reservas filtradas pero sí reservas -->
+        <div *ngIf="reservations.length > 0 && filteredReservations.length === 0" class="alert alert-info">
+          No se encontraron reservas con los filtros aplicados.
+        </div>
 
      <div *ngFor="let reserva of filteredReservations" 
        class="reservation-card" 
@@ -145,7 +150,7 @@
             <span class="status-badge" 
                   [class]="'status-' + reserva.status?.toLowerCase()" 
                   data-cy="reserva-estado">
-              {{ reserva.status }}
+              {{ translateStatus(reserva.status) }}
             </span>
           </div>
 
@@ -172,31 +177,31 @@
                  [ngClass]="'message-' + reserva.status?.toLowerCase()">
               
               <!-- Mensaje para Pendiente -->
-              <div *ngIf="reserva.status === 'Pendiente'" data-cy="mensaje-pendiente">
+              <div *ngIf="reserva.status === 'Pending'" data-cy="mensaje-pendiente">
                 <i class="icon-clock"></i>
                 {{ getStatusMessage(reserva) }}
               </div>
 
               <!-- Mensaje para Confirmada -->
-              <div *ngIf="reserva.status === 'Confirmada'" data-cy="mensaje-estado" class="mensaje-confirmada">
+              <div *ngIf="reserva.status === 'Confirmed'" data-cy="mensaje-estado" class="mensaje-confirmada">
                 <i class="icon-check"></i>
                 {{ getStatusMessage(reserva) }}
               </div>
 
               <!-- Mensaje para Expirada -->
-              <div *ngIf="reserva.status === 'Expirada'" data-cy="mensaje-estado" class="mensaje-expirada">
+              <div *ngIf="reserva.status === 'Expired'" data-cy="mensaje-estado" class="mensaje-expirada">
                 <i class="icon-warning"></i>
                 {{ getStatusMessage(reserva) }}
               </div>
 
               <!-- Mensaje para Cancelada -->
-              <div *ngIf="reserva.status === 'Cancelada'" data-cy="mensaje-estado" class="mensaje-cancelada">
+              <div *ngIf="reserva.status === 'Canceled'" data-cy="mensaje-estado" class="mensaje-cancelada">
                 <i class="icon-x"></i>
                 {{ getStatusMessage(reserva) }}
               </div>
 
               <!-- Mensaje para Retirada -->
-              <div *ngIf="reserva.status === 'Retirada'" data-cy="mensaje-estado" class="mensaje-retirada">
+              <div *ngIf="reserva.status === 'Withdrawal'" data-cy="mensaje-estado" class="mensaje-retirada">
                 <i class="icon-check-circle"></i>
                 {{ getStatusMessage(reserva) }}
               </div>
@@ -205,25 +210,18 @@
             <!-- Información adicional según estado -->
             <div class="additional-info">
               
-              <!-- Para Pendiente: Fecha límite y botón cancelar -->
-              <div *ngIf="reserva.status === 'Pendiente'">
+              <!-- Para Pendiente: Fecha límite -->
+              <div *ngIf="reserva.status === 'Pending'">
                 <div *ngIf="reserva.fechaLimiteConfirmacion" 
                      class="fecha-limite" 
                      data-cy="fecha-limite-confirmacion">
                   <strong>Fecha límite de confirmación:</strong> 
                   {{ formatDate(reserva.fechaLimiteConfirmacion) }}
                 </div>
-                <button 
-                  type="button" 
-                  (click)="cancelReservation(reserva.id)"
-                  class="btn btn-danger btn-sm" 
-                  data-cy="cancelar-reserva-btn">
-                  Cancelar Reserva
-                </button>
               </div>
 
               <!-- Para Confirmada: ID de referencia y fecha -->
-              <div *ngIf="reserva.status === 'Confirmada'">
+              <div *ngIf="reserva.status === 'Confirmed'">
                 <div *ngIf="reserva.idReferencia" 
                      class="id-referencia" 
                      data-cy="id-referencia">
@@ -239,7 +237,7 @@
               </div>
 
               <!-- Para Expirada: Fecha de expiración -->
-              <div *ngIf="reserva.status === 'Expirada'">
+              <div *ngIf="reserva.status === 'Expired'">
                 <div *ngIf="reserva.fechaExpiracion" 
                      class="fecha-expiracion" 
                      data-cy="fecha-expiracion">
@@ -249,7 +247,7 @@
               </div>
 
               <!-- Para Cancelada: Fecha de cancelación -->
-              <div *ngIf="reserva.status === 'Cancelada'">
+              <div *ngIf="reserva.status === 'Canceled'">
                 <div *ngIf="reserva.fechaCancelacion" 
                      class="fecha-cancelacion" 
                      data-cy="fecha-cancelacion">
@@ -259,7 +257,7 @@
               </div>
 
               <!-- Para Retirada: ID de referencia y fecha de retiro -->
-              <div *ngIf="reserva.status === 'Retirada'">
+              <div *ngIf="reserva.status === 'Withdrawal'">
                 <div *ngIf="reserva.idReferencia" 
                      class="id-referencia" 
                      data-cy="id-referencia">

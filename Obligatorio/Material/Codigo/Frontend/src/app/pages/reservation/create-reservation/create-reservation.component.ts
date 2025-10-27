@@ -79,8 +79,15 @@ export class CreateReservationComponent {
           this.estadoReserva = response.status || 'Pendiente';
           this.stockActualizado = true;
           
-          // Mensaje de éxito genérico
-          this.successMessage = `Reserva creada exitosamente en ${response.pharmacyName}. Clave pública: ${response.publicKey}`;
+          // Verificar si algún medicamento requiere prescripción
+          const medicamentosConReceta = response.drugsReserved?.filter((d: any) => d.requiresPrescription) || [];
+          
+          if (medicamentosConReceta.length > 0) {
+            const nombresReceta = medicamentosConReceta.map((d: any) => d.drugName).join(', ');
+            this.successMessage = `Reserva creada exitosamente, el medicamento ${nombresReceta} requiere receta médica. Por favor, preséntela en la farmacia para validar la reserva.`;
+          } else {
+            this.successMessage = `Reserva creada exitosamente en ${response.pharmacyName}. Clave pública: ${response.publicKey}`;
+          }
           
           // Limpiar lista de medicamentos
           this.medicamentos = [];
