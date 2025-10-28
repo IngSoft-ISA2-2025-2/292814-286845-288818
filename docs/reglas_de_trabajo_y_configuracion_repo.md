@@ -21,8 +21,9 @@ Dado [Un contexto inicial]
 Cuando [Ocurre una acción]
 Entonces [Se obtiene un resultado esperado]
 ```
-- Escenario Positivo: Un escenario que describe el resultado esperado cuando todo funciona correctamente.
-- Escenarios Negativos: Escenarios que describen cómo debe comportarse el sistema en cada caso de error o comportamiento inesperado.
+- **Escenario Positivo**: Un escenario que describe el resultado esperado cuando todo funciona correctamente.
+- **Escenarios Negativos**: Escenarios que describen cómo debe comportarse el sistema en cada caso de error o comportamiento inesperado.
+- **Requisito BDD (Entrega 3)**: Los escenarios Gherkin deben estar documentados en `docs/nuevas-features.md` y servirán como base para crear los archivos `.feature` ejecutables en Cypress.
 
 **Prioridad Asignada** 
 - La tarea tiene una prioridad clara (alta, media, baja) para que el equipo sepa qué es lo más importante a abordar.
@@ -35,18 +36,24 @@ Entonces [Se obtiene un resultado esperado]
 ## Definition of Done (DoD)
 **Pasa las pruebas**
 - Todas las pruebas (unitarias, de integración, funcionales) han sido ejecutadas y pasadas sin errores.
+- **Requisito BDD (Entrega 3)**: Todos los escenarios Gherkin definidos en el archivo `.feature` correspondiente deben pasar en Cypress.
 
 **Revisión de código** 
 - Un miembro del equipo que no haya trabajado en la tarea ha revisado y aprobado el código.
 
 **Cumple con los criterios de aceptación**
 - La funcionalidad cumple con todos los criterios de aceptación definidos en la DoR.
+- **Requisito BDD (Entrega 3)**: Los escenarios ejecutables (`.feature`) coinciden exactamente con los escenarios documentados en `docs/nuevas-features.md`.
 
 **Código documentado** 
 - El código tiene comentarios claros donde es necesario y se han actualizado los archivos de documentación.
+- **Requisito BDD (Entrega 3)**: Los step definitions (`.steps.js`) están documentados y usan selectores `data-cy` estándar.
 
 **Rama de código fusionada**
-- El código ha sido fusionado a la rama principal
+- El código ha sido fusionado a la rama principal.
+
+**Evidencia de testing E2E**
+- Se incluye evidencia visual (screenshots o videos) de la ejecución exitosa de los tests E2E de Cypress para la feature implementada.
 
 ---
 
@@ -99,5 +106,6 @@ tipo(ámbito): descripción
 ## Pull Requests
 - Linkear el PR al issue correspondiente (GitHub Projects).
 - Incluir breve descripción y evidencia (captura/pasos).
+- **Para features con BDD**: Incluir evidencia de ejecución exitosa de tests Cypress (screenshots/videos).
 - No self-merge. Se requiere 1 aprobación.
 - Si el PR queda bloqueado, avisar al equipo para swarming.

@@ -7,7 +7,7 @@
 
     <div class="card-body">
       <!-- Formulario de consulta -->
-      <form class="consultation-form" (ngSubmit)="consultarReservas()">
+  <form class="consultation-form" (ngSubmit)="consultReservations()">
         <div class="form-row">
           <div class="form-group">
             <label for="email">Email:</label>
@@ -52,7 +52,7 @@
       </div>
 
       <!-- Filtros y ordenamiento -->
-      <div *ngIf="reservas.length > 0" class="filters-section">
+  <div *ngIf="reservations.length > 0" class="filters-section">
         <h3>Filtros y Ordenamiento</h3>
         
         <div class="filters-row">
@@ -60,10 +60,10 @@
           <div class="filter-group">
             <label for="estadoFiltro">Filtrar por estado:</label>
             <select 
-              id="estadoFiltro"
-              [(ngModel)]="estadoFiltro" 
-              name="estadoFiltro"
-              (change)="aplicarFiltroPorEstado()"
+              id="statusFilter"
+              [(ngModel)]="statusFilter" 
+              name="statusFilter"
+              (change)="applyStatusFilter()"
               data-cy="filtro-estado"
               class="form-control">
               <option value="">Todos los estados</option>
@@ -79,10 +79,10 @@
           <div class="filter-group">
             <label for="filtroMedicamento">Buscar por medicamento:</label>
             <input 
-              id="filtroMedicamento"
+              id="drugFilter"
               type="text" 
-              [(ngModel)]="filtroMedicamento" 
-              name="filtroMedicamento"
+              [(ngModel)]="drugFilter" 
+              name="drugFilter"
               data-cy="buscar-medicamento-input"
               placeholder="Nombre del medicamento"
               class="form-control">
@@ -92,10 +92,10 @@
           <div class="filter-group">
             <label for="filtroFarmacia">Buscar por farmacia:</label>
             <input 
-              id="filtroFarmacia"
+              id="pharmacyFilter"
               type="text" 
-              [(ngModel)]="filtroFarmacia" 
-              name="filtroFarmacia"
+              [(ngModel)]="pharmacyFilter" 
+              name="pharmacyFilter"
               data-cy="buscar-farmacia-input"
               placeholder="Nombre de la farmacia"
               class="form-control">
@@ -105,7 +105,7 @@
           <div class="filter-group">
             <button 
               type="button" 
-              (click)="ordenarPorFechaDesc()"
+              (click)="sortByCreationDateDesc()"
               data-cy="ordenar-fecha-btn"
               class="btn btn-secondary">
               Ordenar por fecha más reciente
@@ -116,7 +116,7 @@
           <div class="filter-group">
             <button 
               type="button" 
-              (click)="limpiarFiltros()"
+              (click)="clearFilters()"
               class="btn btn-outline-secondary">
               Limpiar filtros
             </button>
@@ -125,19 +125,24 @@
       </div>
 
       <!-- Mensaje cuando no hay reservas -->
-      <div *ngIf="noTieneReservas && !loading && !errorMessage" 
+      <div *ngIf="hasConsulted && reservations.length === 0 && !loading && !errorMessage" 
            class="alert alert-info" 
            data-cy="mensaje-sin-reservas">
-        {{ mensajeSinReservas }}
+        No tienes reservas registradas.
       </div>
 
-      <!-- Listado de reservas -->
-      <div *ngIf="reservas.length > 0" class="reservations-section" data-cy="listado-reservas">
+      <!-- Listado de reservas - Se muestra siempre que se haya consultado -->
+  <div *ngIf="hasConsulted && !errorMessage" class="reservations-section" data-cy="listado-reservas">
         <h3>Tus Reservas</h3>
 
-        <div *ngFor="let reserva of reservasFiltradas" 
-             class="reservation-card" 
-             data-cy="reserva-card">
+        <!-- Mensaje cuando no hay reservas filtradas pero sí reservas -->
+        <div *ngIf="reservations.length > 0 && filteredReservations.length === 0" class="alert alert-info">
+          No se encontraron reservas con los filtros aplicados.
+        </div>
+
+     <div *ngFor="let reserva of filteredReservations" 
+       class="reservation-card" 
+       data-cy="reserva-card">
           
           <!-- Información básica de la reserva -->
           <div class="reservation-header">
@@ -145,7 +150,7 @@
             <span class="status-badge" 
                   [class]="'status-' + reserva.status?.toLowerCase()" 
                   data-cy="reserva-estado">
-              {{ reserva.status }}
+              {{ translateStatus(reserva.status) }}
             </span>
           </div>
 
@@ -172,58 +177,51 @@
                  [ngClass]="'message-' + reserva.status?.toLowerCase()">
               
               <!-- Mensaje para Pendiente -->
-              <div *ngIf="reserva.status === 'Pendiente'" data-cy="mensaje-pendiente">
+              <div *ngIf="reserva.status === 'Pending'" data-cy="mensaje-pendiente">
                 <i class="icon-clock"></i>
-                {{ getMensajePorEstado(reserva) }}
+                <span data-cy="mensaje-estado">{{ getStatusMessage(reserva) }}</span>
               </div>
 
               <!-- Mensaje para Confirmada -->
-              <div *ngIf="reserva.status === 'Confirmada'" data-cy="mensaje-estado" class="mensaje-confirmada">
+              <div *ngIf="reserva.status === 'Confirmed'" class="mensaje-confirmada">
                 <i class="icon-check"></i>
-                {{ getMensajePorEstado(reserva) }}
+                <span data-cy="mensaje-estado">{{ getStatusMessage(reserva) }}</span>
               </div>
 
               <!-- Mensaje para Expirada -->
-              <div *ngIf="reserva.status === 'Expirada'" data-cy="mensaje-estado" class="mensaje-expirada">
+              <div *ngIf="reserva.status === 'Expired'" class="mensaje-expirada">
                 <i class="icon-warning"></i>
-                {{ getMensajePorEstado(reserva) }}
+                <span data-cy="mensaje-estado">{{ getStatusMessage(reserva) }}</span>
               </div>
 
               <!-- Mensaje para Cancelada -->
-              <div *ngIf="reserva.status === 'Cancelada'" data-cy="mensaje-estado" class="mensaje-cancelada">
+              <div *ngIf="reserva.status === 'Canceled'" class="mensaje-cancelada">
                 <i class="icon-x"></i>
-                {{ getMensajePorEstado(reserva) }}
+                <span data-cy="mensaje-estado">{{ getStatusMessage(reserva) }}</span>
               </div>
 
               <!-- Mensaje para Retirada -->
-              <div *ngIf="reserva.status === 'Retirada'" data-cy="mensaje-estado" class="mensaje-retirada">
+              <div *ngIf="reserva.status === 'Withdrawal'" class="mensaje-retirada">
                 <i class="icon-check-circle"></i>
-                {{ getMensajePorEstado(reserva) }}
+                <span data-cy="mensaje-estado">{{ getStatusMessage(reserva) }}</span>
               </div>
             </div>
 
             <!-- Información adicional según estado -->
             <div class="additional-info">
               
-              <!-- Para Pendiente: Fecha límite y botón cancelar -->
-              <div *ngIf="reserva.status === 'Pendiente'">
+              <!-- Para Pendiente: Fecha límite -->
+              <div *ngIf="reserva.status === 'Pending'">
                 <div *ngIf="reserva.fechaLimiteConfirmacion" 
                      class="fecha-limite" 
                      data-cy="fecha-limite-confirmacion">
                   <strong>Fecha límite de confirmación:</strong> 
-                  {{ formatearFecha(reserva.fechaLimiteConfirmacion) }}
+                  {{ formatDate(reserva.fechaLimiteConfirmacion) }}
                 </div>
-                <button 
-                  type="button" 
-                  (click)="cancelarReserva(reserva.id)"
-                  class="btn btn-danger btn-sm" 
-                  data-cy="cancelar-reserva-btn">
-                  Cancelar Reserva
-                </button>
               </div>
 
               <!-- Para Confirmada: ID de referencia y fecha -->
-              <div *ngIf="reserva.status === 'Confirmada'">
+              <div *ngIf="reserva.status === 'Confirmed'">
                 <div *ngIf="reserva.idReferencia" 
                      class="id-referencia" 
                      data-cy="id-referencia">
@@ -234,32 +232,32 @@
                      class="fecha-confirmacion" 
                      data-cy="fecha-confirmacion">
                   <strong>Fecha de confirmación:</strong> 
-                  {{ formatearFecha(reserva.fechaConfirmacion) }}
+                  {{ formatDate(reserva.fechaConfirmacion) }}
                 </div>
               </div>
 
               <!-- Para Expirada: Fecha de expiración -->
-              <div *ngIf="reserva.status === 'Expirada'">
+              <div *ngIf="reserva.status === 'Expired'">
                 <div *ngIf="reserva.fechaExpiracion" 
                      class="fecha-expiracion" 
                      data-cy="fecha-expiracion">
                   <strong>Fecha de expiración:</strong> 
-                  {{ formatearFecha(reserva.fechaExpiracion) }}
+                  {{ formatDate(reserva.fechaExpiracion) }}
                 </div>
               </div>
 
               <!-- Para Cancelada: Fecha de cancelación -->
-              <div *ngIf="reserva.status === 'Cancelada'">
+              <div *ngIf="reserva.status === 'Canceled'">
                 <div *ngIf="reserva.fechaCancelacion" 
                      class="fecha-cancelacion" 
                      data-cy="fecha-cancelacion">
                   <strong>Fecha de cancelación:</strong> 
-                  {{ formatearFecha(reserva.fechaCancelacion) }}
+                  {{ formatDate(reserva.fechaCancelacion) }}
                 </div>
               </div>
 
               <!-- Para Retirada: ID de referencia y fecha de retiro -->
-              <div *ngIf="reserva.status === 'Retirada'">
+              <div *ngIf="reserva.status === 'Withdrawal'">
                 <div *ngIf="reserva.idReferencia" 
                      class="id-referencia" 
                      data-cy="id-referencia">
@@ -270,7 +268,7 @@
                      class="fecha-retiro" 
                      data-cy="fecha-retiro">
                   <strong>Fecha de retiro:</strong> 
-                  {{ formatearFecha(reserva.fechaRetiro) }}
+                  {{ formatDate(reserva.fechaRetiro) }}
                 </div>
               </div>
             </div>
@@ -280,7 +278,7 @@
           <div class="reservation-actions">
             <button 
               type="button" 
-              (click)="verDetallesReserva(reserva.id)"
+              (click)="viewReservationDetails(reserva.id)"
               class="btn btn-info btn-sm" 
               data-cy="ver-detalles-btn">
               Ver Detalles

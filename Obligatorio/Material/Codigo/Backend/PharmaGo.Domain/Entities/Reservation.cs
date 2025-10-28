@@ -31,11 +31,11 @@ namespace PharmaGo.Domain.Entities
         public DateTime? RetirementDate { get; set; }
         public string PublicKey { get; set; }
         public string PrivateKey { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 
     public class ReservationDrug
     {
-        public int Id { get; set; }
         public int ReservationId { get; set; }
         public Reservation Reservation { get; set; }
         public int DrugId { get; set; }

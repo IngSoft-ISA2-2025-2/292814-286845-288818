@@ -1,26 +1,33 @@
 export interface ReservationRequest {
   email: string;
   secret: string;
-  farmacia: string;
-  medicamentos: Array<{
-    nombre: string;
-    cantidad: number;
-    requierePrescripcion?: boolean;
+  pharmacyName: string;
+  drugsReserved: Array<{
+    drugName: string;
+    drugQuantity: number;
   }>;
 }
 
 export interface ReservationResponse {
-  id?: number;
-  estado?: string;
-  medicamentos?: Array<any>;
-  farmacia?: string;
-  pharmacyName?: string;  // Para confirmación
-  publicKey?: string;     // Para confirmación
-  status?: string;        // Para confirmación
-  drugsReserved?: Array<{ // Para confirmación
+  pharmacyName?: string;
+  publicKey?: string;
+  drugsReserved?: Array<{
     drugName: string;
     drugQuantity: number;
   }>;
-  mensaje: string;
-  error?: string;
+  status?: string;
+}
+
+export interface ConsultReservationResponse {
+  pharmacyName?: string;
+  status?: string;
+  reservedDrugs?: Array<{
+    drugName: string;
+    quantity: number;
+  }>;
+  fechaLimiteConfirmacion?: string;
+  idReferencia?: string;
+  fechaExpiracion?: string;
+  fechaCancelacion?: string;
+  fechaRetiro?: string;
 }

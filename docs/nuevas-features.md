@@ -11,6 +11,8 @@ Los usuarios podrán reservar unidades de medicamentos de una farmacia específi
 **Para** asegurar la disponibilidad del medicamento antes de retirarlo
 
 ### Escenarios Gherkin
+Background: **Dado** estoy en la página de reservas de medicamentos
+
 1. Escenario: Usuario sin email intenta reservar medicamentos
 **Dado** un email para reserva ""
 **Y** un secret para reserva ""
@@ -75,7 +77,7 @@ Los usuarios podrán reservar unidades de medicamentos de una farmacia específi
 **Y** hay stock mayor o igual a una unidad para ambos medicamentos en la farmacia "Farmashop"
 **Y** una farmacia "Farmashop"
 **Cuando** hace click en el botón de reservar
-**Entonces** el sistema crea la reserva con un estado *"Pendiente"*
+**Entonces** el sistema crea la reserva con un estado *Pendiente*
 **Y** descuenta la unidad del stock de los medicamentos
 **Y** muestra un mensaje de reserva que dice *"Reserva creada exitosamente, el medicamento Aspirina requiere receta médica. Por favor, preséntela en la farmacia para validar la reserva."*
 
@@ -88,206 +90,145 @@ Los usuarios podrán reservar unidades de medicamentos de una farmacia específi
 **Cuando** hace click en el botón de reservar
 **Entonces** el sistema responde con un error con un mensaje que dice *"El secret no coincide con el registrado para este email"*
 
+
 2. ## Gestionar reservas
 Los clientes podrán visualizar un listado de sus reservas.
 
 **Como** usuario autenticado
-**Quiero** poder visualizar mis reservas
+**Quiero** poder visualizar mis reservas ingresando mi email y secret
 **Para** poder hacer seguimiento del estado de cada una y acceder a los detalles cuando los necesite
 
 ### Escenarios Gherkin
-Rule: El usuario solo ve sus propias reservas y debe estar autenticado
+Background: **Dado** estoy en la página de mis reservas
 
-1. Escenario: Usuario no autenticado intenta visualizar reservas
-**Dado** un usuario no autenticado
-**Cuando** intenta acceder al listado de sus reservas
-**Entonces** el sistema responde con un error *unauthorized (401)*
-**Y** muestra un mensaje que dice *"Unauthorized user"*
+1. Escenario: Usuario sin email intenta consultar reservas
+**Dado** un email ""
+**Y** un secret ""
+**Cuando** hace click en el botón de consultar reservas
+**Entonces** el sistema responde con un error y muestra el mensaje *"Debe ingresar un email y secret para consultar reservas."*
 
-2. Escenario: Usuario autenticado sin reservas visualiza listado vacío
-**Dado** un usuario autenticado
+2. Escenario: Usuario con email y secret válidos sin reservas visualiza listado vacío
+**Dado** un email "usuario@test.com"
+**Y** un secret "miSecret123"
 **Y** no tiene reservas creadas en el sistema
-**Cuando** solicita visualizar sus reservas
-**Entonces** el sistema responde con *ok (200)*
-**Y** muestra un listado vacío
+**Cuando** hace click en el botón de consultar reservas
+**Entonces** el sistema responde de manera correcta, mostrando un listado vacío
 **Y** muestra un mensaje que dice *"No tienes reservas creadas"*
 
-3. Escenario: Usuario autenticado visualiza sus reservas exitosamente
-**Dado** un usuario autenticado
-**Y** tiene reservas creadas en el sistema
-**Cuando** solicita visualizar sus reservas
-**Entonces** el sistema responde con *ok (200)*
-**Y** muestra un listado con todas sus reservas
-**Y** cada reserva muestra: medicamento, farmacia, estado, fecha de creación
+3. Escenario: Usuario con email y secret válidos visualiza sus reservas exitosamente
+**Dado** un email "usuario@test.com"
+**Y** un secret "miSecret123"
+**Y** tiene reservas creadas en diferentes estados "Pendiente", "Confirmada", "Expirada", "Cancelada" y "Retirada"
+**Cuando** hace click en el botón de consultar reservas
+**Entonces** el sistema responde de manera correcta, mostrando un listado con todas sus reservas
+**Y** cada reserva muestra información básica: nombre de el/los medicamento/s, farmacia y estado
+**Y** cada reserva incluye un botón para ver más detalles
 
-4. Escenario: Usuario visualiza reservas con diferentes estados
-**Dado** un usuario autenticado
-**Y** tiene reservas en estado *Pendiente*, *Confirmada* y *Expirada*
-**Cuando** solicita visualizar sus reservas
-**Entonces** el sistema responde con *ok (200)*
-**Y** muestra todas las reservas con sus respectivos estados
-**Y** indica claramente el estado actual de cada reserva
-
-5. Escenario: Usuario filtra reservas por estado "Pendiente"
-**Dado** un usuario autenticado
+4. Escenario: Usuario filtra reservas por estado
+**Dado** un email "usuario@test.com"
+**Y** un secret "miSecret123"
 **Y** tiene reservas en diferentes estados
-**Cuando** aplica filtro para ver solo reservas *Pendientes*
-**Entonces** el sistema responde con *ok (200)*
-**Y** muestra únicamente las reservas en estado *Pendiente*
+**Cuando** aplica filtro para ver solo reservas en estado "Confirmada"
+**Entonces** el sistema responde de manera correcta, mostrando un listado únicamente con las reservas en estado "Confirmada"
 
-6. Escenario: Usuario filtra reservas por estado "Confirmada"
-**Dado** un usuario autenticado
-**Y** tiene reservas en diferentes estados
-**Cuando** aplica filtro para ver solo reservas *Confirmadas*
-**Entonces** el sistema responde con *ok (200)*
-**Y** muestra únicamente las reservas en estado *Confirmada*
+5. Escenario: Usuario con email existente pero secret incorrecto intenta consultar reservas
+**Dado** un email "usuario@test.com"
+**Y** un secret "secretIncorrecto"
+**Y** el email "usuario@test.com" ya tiene reservas con secret "miSecret123"
+**Cuando** hace click en el botón de consultar reservas
+**Entonces** el sistema responde con un error y muestra el mensaje *"El secret no coincide con el registrado para este email"*
 
-7. Escenario: Usuario accede a detalles de una reserva específica
-**Dado** un usuario autenticado
-**Y** tiene una reserva creada
-**Cuando** selecciona ver detalles de la reserva
-**Entonces** el sistema responde con *ok (200)*
-**Y** muestra información detallada: medicamento, cantidad, farmacia, estado, fecha, clave pública
-
-8. Escenario: Usuario intenta acceder a detalles de reserva inexistente
-**Dado** un usuario autenticado
-**Cuando** intenta acceder a detalles de una reserva que no existe
-**Entonces** el sistema responde con un error *not found (404)*
-**Y** muestra un mensaje que dice *"Reserva no encontrada"*
-
-9. Escenario: Usuario visualiza reservas con información de clave pública
-**Dado** un usuario autenticado
-**Y** tiene reservas creadas en el sistema
-**Cuando** solicita visualizar sus reservas
-**Entonces** el sistema responde con *ok (200)*
-**Y** muestra cada reserva con su clave pública generada
-**Y** cada reserva incluye un botón para copiar la clave pública
-**Y** muestra un mensaje que dice *"Presenta esta clave en la farmacia para retirar tu medicamento"*
-
-10. Escenario: Usuario ordena reservas por fecha de creación descendente
-**Dado** un usuario autenticado
+6. Escenario: Usuario ordena reservas por fecha de creación descendente
+**Dado** un email "usuario@test.com"
+**Y** un secret "miSecret123"
 **Y** tiene múltiples reservas creadas en diferentes fechas
 **Cuando** solicita ordenar por fecha de creación más reciente
-**Entonces** el sistema responde con *ok (200)*
-**Y** muestra las reservas ordenadas de más reciente a más antigua
+**Entonces** el sistema responde de manera correcta, mostrando las reservas ordenadas de más reciente a más antigua
 
-11. Escenario: Usuario busca reservas por nombre de medicamento
-**Dado** un usuario autenticado
+7. Escenario: Usuario busca reservas por nombre de medicamento
+**Dado** un email "usuario@test.com"
+**Y** un secret "miSecret123"
 **Y** tiene reservas de diferentes medicamentos
-**Cuando** busca reservas por el nombre *"Paracetamol"*
-**Entonces** el sistema responde con *ok (200)*
-**Y** muestra únicamente las reservas que contienen medicamentos con *"Paracetamol"*
+**Cuando** busca reservas por el nombre "Paracetamol"
+**Entonces** el sistema responde de manera correcta, mostrando únicamente las reservas que contienen medicamentos con "Paracetamol"
 
-12. Escenario: Sistema muestra error temporal al cargar reservas
-**Dado** un usuario autenticado
-**Cuando** solicita visualizar sus reservas
-**Y** el sistema tiene un error temporal de base de datos
-**Entonces** el sistema responde con un error *internal server error (500)*
-**Y** muestra un mensaje que dice *"Error temporal del sistema. Intente nuevamente en unos segundos"*
+8. Escenario: Usuario busca reservas por nombre de farmacia
+**Dado** un email "usuario@test.com"
+**Y** un secret "miSecret123"
+**Y** tiene reservas de diferentes farmacias
+**Cuando** busca reservas por el nombre "Farmacia Central"
+**Entonces** el sistema responde de manera correcta, mostrando únicamente las reservas que contienen la farmacia "Farmacia Central"
+
 
 3. ## Cancelar reservas
 En caso de ser necesario, los usuarios tendrán la opción de cancelar sus reservas.
 
-**Como** usuario autenticado 
-**Quiero** poder cancelar una reserva
-**Para** poder liberar medicamentos que ya no necesito y evitar problemas a la farmacia
+**Como** visitante que conoce un correo y un secret
+**Quiero** poder cancelar una reserva introduciendo ese correo y secret
+**Para** que el sistema valide identidades sin necesidad de un usuario autenticado
 
-1. Escenario: Usuario no autenticado intenta cancelar una reserva
-**Dado** un usuario no autenticado
-**Cuando** intenta cancelar una reserva
-**Entonces** el sistema responde con un error *unauthorized (401)*
-**Y** muestra un mensaje que dice *"Unauthorized user"*
+### Escenarios Gherkin
+Background: **Dado** que el formulario de cancelación está disponible
 
-2. Escenario: Usuario cancela una reserva en estado "Pendiente" exitosamente
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Pendiente*
-**Cuando** selecciona cancelar la reserva
-**Entonces** el sistema responde con *ok (200)*
-**Y** cambia el estado de la reserva a *Cancelada*
-**Y** devuelve las unidades al stock del medicamento
-**Y** muestra un mensaje que dice *"Reserva cancelada exitosamente"*
+1. Escenario: Cancelación exitosa de una reserva existente
+**Dado** que existe una reserva para el correo "cliente@example.com" con el secret "abc123"
+**Cuando** el visitante solicita cancelar la reserva usando el correo "cliente@example.com" y el secret "abc123"
+**Entonces** la reserva para "cliente@example.com" debe quedar marcada como cancelada
+**Y** el sistema muestra el mensaje *"Reserva cancelada correctamente"*
 
-3. Escenario: Usuario cancela una reserva en estado "Confirmada" exitosamente
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Confirmada*
-**Cuando** selecciona cancelar la reserva
-**Entonces** el sistema responde con *ok (200)*
-**Y** cambia el estado de la reserva a *Cancelada*
-**Y** devuelve las unidades al stock del medicamento
-**Y** muestra un mensaje que dice *"Reserva cancelada exitosamente"*
+2. Escenario: Intento de cancelación con secret incorrecto
+**Dado** que existe una reserva para el correo "cliente@example.com" con el secret "abc123"
+**Cuando** el visitante solicita cancelar la reserva usando el correo "cliente@example.com" y el secret "equivocado"
+**Entonces** la reserva no debe ser cancelada
+**Y** el sistema muestra el mensaje de error *"Secret inválido para ese correo"*
 
-4. Escenario: Usuario intenta cancelar una reserva ya cancelada
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Cancelada*
-**Cuando** intenta cancelar la reserva nuevamente
-**Entonces** el sistema responde con un error *bad request (400)*
-**Y** muestra un mensaje que dice *"La reserva ya se encuentra cancelada"*
+3. Escenario: Intento de cancelación cuando no existe reserva para ese correo
+**Dado** que no existe ninguna reserva para el correo "sinreserva@example.com"
+**Cuando** el visitante solicita cancelar la reserva usando el correo "sinreserva@example.com" y el secret "cualquiera"
+**Entonces** el sistema responde con un error indicando *"No existe una reserva asociada a ese correo"*
+**Y** no se debe crear ni cancelar ninguna reserva en este flujo de cancelación
 
-5. Escenario: Usuario intenta cancelar una reserva expirada
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Expirada*
-**Cuando** intenta cancelar la reserva
-**Entonces** el sistema responde con un error *bad request (400)*
-**Y** muestra un mensaje que dice *"No se puede cancelar una reserva expirada"*
+4. Escenario: Comportamiento de creación implícita (contexto)
+**Dado** que no existe ninguna reserva para el correo "nuevo@example.com"
+**Cuando** el visitante ingresa el correo "nuevo@example.com" y el secret "nuevoSecret" en el flujo de gestión de reservas
+**Entonces** el sistema crea una reserva asociada a "nuevo@example.com" con secret "nuevoSecret"
+**Y** se muestra el mensaje *"Reserva creada"* como precondición para operaciones posteriores
 
-6. Escenario: Usuario intenta cancelar una reserva inexistente
-**Dado** un usuario autenticado
-**Cuando** intenta cancelar una reserva que no existe
-**Entonces** el sistema responde con un error *not found (404)*
-**Y** muestra un mensaje que dice *"Reserva no encontrada"*
+Esquema del escenario: Cancelaciones varias con datos de ejemplo
+**Dado** que existe una reserva para el correo "<email>" con el secret "<secret>"
+**Cuando** el visitante solicita cancelar la reserva usando el correo "<email>" y el secret "<inputSecret>"
+**Entonces** <resultado>
 
-7. Escenario: Usuario cancela reserva y recibe confirmación con clave pública actualizada
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Pendiente* con clave pública generada
-**Cuando** selecciona cancelar la reserva
-**Entonces** el sistema responde con *ok (200)*
-**Y** cambia el estado de la reserva a *Cancelada*
-**Y** invalida la clave pública asociada a la reserva
-**Y** muestra un mensaje que dice *"Reserva cancelada. La clave pública ya no es válida"*
+Ejemplos:
+| email               | secret   | inputSecret | resultado                                                     |
+| cliente@example.com | abc123   | abc123      | la reserva para "cliente@example.com" debe quedar marcada como cancelada |
+| cliente@example.com | abc123   | equivocado  | la reserva no debe ser cancelada                              |
 
-8. Escenario: Usuario confirma cancelación mediante diálogo de confirmación
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Pendiente*
-**Cuando** selecciona cancelar la reserva
-**Y** confirma la cancelación en el diálogo
-**Entonces** el sistema responde con *ok (200)*
-**Y** procesa la cancelación exitosamente
-**Y** muestra un mensaje que dice *"Reserva cancelada exitosamente"*
+5. Escenario: Intento de cancelar una reserva que ya fue cancelada (idempotencia)
+**Dado** que existe una reserva para el correo "cliente@example.com" con el secret "abc123" y su estado es "cancelada"
+**Cuando** el visitante solicita cancelar la reserva usando el correo "cliente@example.com" y el secret "abc123"
+**Entonces** el sistema no debe cambiar el estado de la reserva
+**Y** el sistema muestra el mensaje *"La reserva ya está cancelada"* o una respuesta idempotente apropiada
 
-9. Escenario: Usuario cancela la acción de cancelar reserva
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Pendiente*
-**Cuando** selecciona cancelar la reserva
-**Y** cancela la acción en el diálogo de confirmación
-**Entonces** la reserva mantiene su estado original
-**Y** no se realizan cambios en el sistema
-**Y** regresa a la vista anterior
+6. Escenario: Validación - falta de secret o correo inválido
+**Cuando** el visitante envía el formulario de cancelación sin proporcionar correo
+**Entonces** el sistema responde con un error indicando *"Se requiere un correo válido"*
 
-10. Escenario: Usuario cancela múltiples reservas en lote
-**Dado** un usuario autenticado
-**Y** tiene múltiples reservas en estado *Pendiente*
-**Cuando** selecciona cancelar múltiples reservas
-**Y** confirma la acción de cancelación en lote
-**Entonces** el sistema responde con *ok (200)*
-**Y** cancela todas las reservas seleccionadas
-**Y** devuelve todas las unidades correspondientes al stock
-**Y** muestra un mensaje que dice *"Se cancelaron {cantidad} reservas exitosamente"*
+7. Escenario: Cancelar cuando existen múltiples reservas para el mismo correo
+**Dado** que existen dos reservas para el correo "multi@example.com":
+| secret   | estado  |
+| s1       | activa  |
+| s2       | activa  |
+**Cuando** el visitante solicita cancelar la reserva usando el correo "multi@example.com" y el secret "s1"
+**Entonces** solo la reserva con secret "s1" debe quedar marcada como cancelada
+**Y** la reserva con secret "s2" debe permanecer en estado "activa"
+Nota: asumimos que el secret identifica la reserva concreta cuando el correo tiene múltiples reservas.
 
-11. Escenario: Usuario intenta cancelar reserva después de tiempo límite
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Confirmada*
-**Y** han pasado más de 24 horas desde la confirmación
-**Cuando** intenta cancelar la reserva
-**Entonces** el sistema responde con un error *bad request (400)*
-**Y** muestra un mensaje que dice *"No se puede cancelar una reserva después de 24 horas de confirmación"*
-
-12. Escenario: Sistema muestra error al cancelar por problema de conexión
-**Dado** un usuario autenticado
-**Y** tiene una reserva en estado *Pendiente*
-**Cuando** intenta cancelar la reserva
-**Y** el sistema tiene un error de conexión con la base de datos
-**Entonces** el sistema responde con un error *internal server error (500)*
-**Y** muestra un mensaje que dice *"Error del sistema. No se pudo cancelar la reserva. Intente nuevamente"*
+8. Escenario: Intento de cancelación de una reserva expirada
+**Dado** que existe una reserva para el correo "vencida@example.com" con el secret "oldSecret" y su estado es "expirada"
+**Cuando** el visitante solicita cancelar la reserva usando el correo "vencida@example.com" y el secret "oldSecret"
+**Entonces** el sistema no debe permitir la cancelación
+**Y** devuelve el mensaje *"No se puede cancelar una reserva expirada"*
 
 
 Adicionalmente, el sistema gestionará las siguientes funcionalidades:
@@ -295,67 +236,72 @@ Adicionalmente, el sistema gestionará las siguientes funcionalidades:
 4. ## Confirmar reservas (interno): 
 El personal de la farmacia podrá confirmar las reservas una vez que se verifiquen los requisitos (como la validación de prescripciones).
 
-**Como** empleado de la farmacia autenticado
-**Quiero** poder confirmar reservas
-**Para** avisar al cliente que su reserva fue procesada y que los medicamentos ya se reservaron
+**Como** personal de farmacia
+**Quiero** poder confirmar reservas pendientes
+**Para** validar que se cumplen los requisitos antes de que el cliente retire el medicamento
 
 ### Escenarios Gherkin
-1. Escenario: Empleado no autenticado intenta confirmar una reserva
-**Dado** un empleado no autenticado
-**Cuando** intenta confirmar una reserva
-**Entonces** el sistema responde con un error *unauthorized (401)*
-**Y** muestra un mensaje que dice *"Unautharized user"*
+Background: **Dado** que el sistema de confirmación de reservas está disponible
 
-2. Escenario: Empleado autenticado intenta confirmar una reserva inexistente
-**Dado** un empleado autenticado
-**Y** proporcionar un identificador de reserva inexistente
-**Cuando** intenta confirmar una reserva
-**Entonces** el sistema responde con un error *not found (404)*
-**Y** muestra un mensaje que dice *"The specified reservation does not exist"*
+1. Escenario: Confirmación exitosa de una reserva pendiente
+**Dado** que existe una reserva pendiente con ID de referencia "ABC12345"
+**Cuando** el personal de farmacia confirma la reserva con ID "ABC12345"
+**Entonces** la reserva debe cambiar a estado *"Confirmada"*
+**Y** el sistema muestra el mensaje *"Reserva confirmada exitosamente"*
 
-3. Escenario: Empleado autenticado intenta confirmar una reserva ya confirmada
-**Dado** un empleado autenticado
-**Y** una reserva que ya esta en estado Confiramda
-**Cuando** intenta confirmar nuevamente la reserva
-**Entonces** el sistema responde con un error *conflict (409)*
-**Y** muestra un mensaje que dice *"The reservation was previously confirmed"*
+2. Escenario: Confirmación de reserva que requiere validación de prescripción
+**Dado** que existe una reserva pendiente con ID de referencia "XYZ98765" que incluye medicamentos con prescripción
+**Y** el personal de farmacia ha validado la receta médica
+**Cuando** el personal de farmacia confirma la reserva con ID "XYZ98765"
+**Entonces** la reserva debe cambiar a estado *"Confirmada"*
+**Y** el sistema muestra el mensaje *"Reserva confirmada exitosamente"*
 
-4. Escenario: Empleado autenticado intenta confirmar una reserva canelada
-**Dado** un empleado autenticado
-**Y** una reserva que esta en estado Cancelada
-**Cuando** intenta confirmar la reserva
-**Entonces** el sistema responde con un error *conflict (409)*
-**Y** muestra un mensaje que dice *"A cancelled reservation cannot be confirmed"*
+3. Escenario: Intento de confirmación de una reserva inexistente
+**Dado** que no existe ninguna reserva con ID de referencia "NOEXISTE"
+**Cuando** el personal de farmacia intenta confirmar la reserva con ID "NOEXISTE"
+**Entonces** el sistema responde con un error indicando *"No se encontró la reserva"*
+**Y** no se debe modificar ninguna reserva
 
-5. Escenario: Empleado autenticado intenta confirmar una reserva expirada
-**Dado** un empleado autenticado
-**Y** una reserva que esta en estado Expirada
-**Cuando** intenta confirmar la reserva
-**Entonces** el sistema responde con un error *conflict (409)*
-**Y** muestra un mensaje que dice *"The reservation has expired and cannot be confirmed."*
+4. Escenario: Intento de confirmación de una reserva ya confirmada (idempotencia)
+**Dado** que existe una reserva con ID de referencia "CONF123" y su estado es "Confirmada"
+**Cuando** el personal de farmacia intenta confirmar la reserva con ID "CONF123"
+**Entonces** el sistema no debe cambiar el estado de la reserva
+**Y** el sistema muestra el mensaje *"La reserva ya está confirmada"*
 
-6. Escenario: Empleado autenticado confirma exitosamente una reserva pendiente
-**Dado** un empleado autenticado
-**Y** una reserva en estado Pendiente 
-**Cuando** cuando confirma la reserva
-**Entonces** el sistema actualiza el estado de la reserva a Confirmada
-**Y** muestra un mensaje que dice *"Reservation successfully confirmed. The medication can be picked up by the customer."*
-**Y** notifica al usuario que su medicamento está listo para retirar 
+5. Escenario: Intento de confirmación de una reserva cancelada
+**Dado** que existe una reserva con ID de referencia "CANC456" y su estado es "Cancelada"
+**Cuando** el personal de farmacia intenta confirmar la reserva con ID "CANC456"
+**Entonces** el sistema no debe permitir la confirmación
+**Y** devuelve el mensaje *"No se puede confirmar una reserva cancelada"*
 
-7. Escenario: Empleado autenticado intenta confirmar una reserva perteneciente a otra farmacia
-**Dado** un empleado autenticado perteneciente a la farmacia Farmacia X
-**Y** una reserva asociada a la Farmacia Y
-**Cuando** intenta confirmar la reserva
-**Entonces** el sistema responde con un error *forbidden (403)*
-**Y** muestra un mensaje que dice *"You do not have permission to confirm reservations from another pharmacy"*
+6. Escenario: Intento de confirmación de una reserva expirada
+**Dado** que existe una reserva con ID de referencia "EXP789" y su estado es "Expirada"
+**Cuando** el personal de farmacia intenta confirmar la reserva con ID "EXP789"
+**Entonces** el sistema no debe permitir la confirmación
+**Y** devuelve el mensaje *"No se puede confirmar una reserva expirada"*
 
-8. Escenario: Error inesperado durante la confirmación de una reserva
-**Dado** un empleado autenticado
-**Y** una reserva válida en estado pendiente
-**Cuando** intenta confirmar la reserva
-**Y** ocurre un error interno en el sistema
-**Entonces** el sistema responde con un error *internal server error (500)*
-**Y** muestra un mensaje que dice *"An error occurred while confirming your reservation. Please try again later."*
+7. Escenario: Validación - falta de ID de referencia
+**Cuando** el personal de farmacia envía el formulario de confirmación sin proporcionar un ID de referencia
+**Entonces** el sistema responde con un error indicando *"Se requiere un ID de referencia válido"*
+
+Esquema del escenario: Confirmaciones varias con datos de ejemplo
+**Dado** que existe una reserva con ID de referencia "<referenceId>" y su estado es "<estadoInicial>"
+**Cuando** el personal de farmacia intenta confirmar la reserva con ID "<referenceId>"
+**Entonces** <resultado>
+
+Ejemplos:
+| referenceId | estadoInicial | resultado                                                    |
+| REF001      | Pendiente     | la reserva debe cambiar a estado "Confirmada"                |
+| REF002      | Confirmada    | el sistema no debe cambiar el estado de la reserva           |
+| REF003      | Cancelada     | el sistema no debe permitir la confirmación                  |
+| REF004      | Expirada      | el sistema no debe permitir la confirmación                  |
+
+8. Escenario: Confirmación de reserva establece fecha límite de retiro
+**Dado** que existe una reserva pendiente con ID de referencia "LIM888"
+**Cuando** el personal de farmacia confirma la reserva con ID "LIM888"
+**Entonces** la reserva debe cambiar a estado *"Confirmada"*
+**Y** se debe establecer una fecha límite de confirmación
+**Y** el sistema muestra el mensaje *"Reserva confirmada exitosamente"*
 
 
 5. ## Gestión de estados
@@ -366,74 +312,99 @@ Internamente, el sistema gestionará las reservas a través de diferentes estado
 **Para** reflejar con precisión su situación actual y facilitar el seguimiento tanto para usuarios como para farmacias
 
 ### Escenarios Gherkin
+Background: **Dado** estoy en la página de mis reservas
+
 1. Escenario: Reserva recién creada se asigna al estado Pendiente
-**Dado** una reserva creada por un usuario autenticado
-**Cuando** el sistema registra la reserva
-**Entonces** el sistema asigna automáticamente el estado *Pendiente*
-**Y** la reserva queda visible en el listado del cliente con estado Pendiente
+**Dado** un email "usuario@test.com"
+**Y** un secret "secret123"
+**Y** quiero crear una reserva con medicamento "Aspirina" en farmacia "Farmashop"
+**Cuando** creo la reserva
+**Entonces** el sistema asigna automáticamente el estado *"Pendiente"*
+**Y** la reserva es visible con estado *"Pendiente"*
 
-2. Escenario: Reserva pendiente pasa a estado Confirmada al ser aprobada
-**Dado** una reserva en estado Pendiente
-**Cuando** un empleado de la farmacia confirma la reserva
-**Entonces** el sistema asigna automáticamente el estado *Confirmada*
-**Y** registra la fecha y hora de confirmación
+2. Escenario: Sistema muestra correctamente reserva en estado Confirmada
+**Dado** un email "usuario@test.com"
+**Y** un secret "secret123"
+**Y** tengo una reserva en estado *"Confirmada"*
+**Cuando** consulto mis reservas
+**Entonces** veo la reserva con estado *"Confirmada"*
+**Y** veo el ID de referencia de la reserva
+**Y** veo la fecha de confirmación
 
-3. Escenario: Reserva pendiente se mantiene en estado Pendiente mientras no sea confirmada
-**Dado** una reserva en estado Pendiente
-**Cuando** el sistema evalúa el estado de la reserva
-**Entonces** la reserva permanece en estado *Pendiente*
-**Y** se notifica al usuario que su reserva aún no ha sido confirmada
+3. Escenario: Sistema muestra correctamente reserva en estado Expirada
+**Dado** un email "usuario@test.com"
+**Y** un secret "secret123"
+**Y** tengo una reserva en estado *"Expirada"*
+**Cuando** consulto mis reservas
+**Entonces** veo la reserva con estado *"Expirada"*
+**Y** veo un mensaje que dice *"Esta reserva ha expirado"*
+**Y** veo la fecha de expiración
 
-4. Escenario: Reserva confirmada pasa a estado Expirada después del tiempo límite
-**Dado** una reserva en estado Confirmada
-**Y** han pasado más de 48 horas sin que el usuario retire el medicamento
-**Cuando** el sistema ejecuta la tarea de control de expiración
-**Entonces** el sistema cambia el estado de la reserva a *Expirada*
-**Y** muestra un mensaje que dice *"La reserva ha expirado por falta de retiro"*
+4. Escenario: Sistema muestra correctamente reserva en estado Cancelada
+**Dado** un email "usuario@test.com"
+**Y** un secret "secret123"
+**Y** tengo una reserva en estado *"Cancelada"*
+**Cuando** consulto mis reservas
+**Entonces** veo la reserva con estado *"Cancelada"*
+**Y** veo un mensaje que dice *"Reserva cancelada"*
+**Y** veo la fecha de cancelación
 
-5. Escenario: Reserva pendiente pasa a estado Cancelada por no ser confirmada en el tiempo establecido
-**Dado** una reserva en estado Pendiente
-**Y** no fue confirmada dentro del plazo máximo de 24 horas
-**Cuando** el sistema ejecuta la verificación programada
-**Entonces** el sistema cambia el estado de la reserva a *Cancelada*
-**Y** muestra un mensaje que dice *"Reserva cancelada por falta de confirmación en el tiempo establecido"*
+5. Escenario: Sistema muestra correctamente reserva en estado Retirada
+**Dado** un email "usuario@test.com"
+**Y** un secret "secret123"
+**Y** tengo una reserva en estado *"Retirada"*
+**Cuando** consulto mis reservas
+**Entonces** veo la reserva con estado *"Retirada"*
+**Y** veo un mensaje que dice *"Reserva retirada exitosamente"*
+**Y** veo la fecha de retiro
 
-6. Escenario: Reserva confirmada pasa a estado Cancelada por decisión del usuario
-**Dado** una reserva en estado Confirmada
-**Y** el usuario solicita su cancelación desde el sistema
-**Cuando** se procesa la cancelación
-**Entonces** el sistema cambia el estado de la reserva a *Cancelada*
+6. Escenario: Usuario visualiza todas sus reservas con diferentes estados
+**Dado** un email "usuario@test.com"
+**Y** un secret "secret123"
+**Y** tengo reservas en estados *"Pendiente"*, *"Confirmada"*, *"Expirada"*, *"Cancelada"* y *"Retirada"*
+**Cuando** consulto mis reservas
+**Entonces** veo todas mis reservas
+**Y** cada reserva muestra su estado correctamente
+**Y** las reservas pendientes no muestran ID de referencia
+**Y** las reservas confirmadas muestran ID de referencia
+
+7. Escenario: Usuario filtra reservas por estado Pendiente
+**Dado** un email "usuario@test.com"
+**Y** un secret "secret123"
+**Y** tengo reservas en diferentes estados
+**Cuando** filtro por estado *"Pendiente"*
+**Entonces** solo veo reservas en estado *"Pendiente"*
+
+8. Escenario: Usuario filtra reservas por estado Confirmada
+**Dado** un email "usuario@test.com"
+**Y** un secret "secret123"
+**Y** tengo reservas en diferentes estados
+**Cuando** filtro por estado *"Confirmada"*
+**Entonces** solo veo reservas en estado *"Confirmada"*
+
+9. Escenario: Usuario filtra reservas por estado Expirada
+**Dado** un email "usuario@test.com"
+**Y** un secret "secret123"
+**Y** tengo reservas en diferentes estados
+**Cuando** filtro por estado *"Expirada"*
+**Entonces** solo veo reservas en estado *"Expirada"*
+
+10. Escenario: Usuario filtra reservas por estado Cancelada
+**Dado** un email "usuario@test.com"
+**Y** un secret "secret123"
+**Y** tengo reservas en diferentes estados
+**Cuando** filtro por estado *"Cancelada"*
+**Entonces** solo veo reservas en estado *"Cancelada"*
+
+11. Escenario: Usuario filtra reservas por estado Retirada
+**Dado** un email "usuario@test.com"
+**Y** un secret "secret123"
+**Y** tengo reservas en diferentes estados
+**Cuando** filtro por estado *"Retirada"*
+**Entonces** solo veo reservas en estado *"Retirada"*
+**Y** devuelve las unidades al stock del medicamento
 **Y** muestra un mensaje que dice *"Reserva cancelada exitosamente"*
 
-7. Escenario: Reserva cancelada no puede volver a estado anterior
-**Dado** una reserva en estado Cancelada
-**Cuando** el sistema intenta modificar su estado a Confirmada o Pendiente
-**Entonces** el sistema responde con un error *conflict (409)*
-**Y** muestra un mensaje que dice *"No se puede modificar el estado de una reserva cancelada"*
-
-8. Escenario: Reserva expirada no puede volver a ser confirmada
-**Dado** una reserva en estado Expirada
-**Cuando** un empleado intenta confirmar la reserva manualmente
-**Entonces** el sistema responde con un error *conflict (409)*
-**Y** muestra un mensaje que dice *"No se puede confirmar una reserva expirada"*
-
-9. Escenario: Sistema registra el historial de cambios de estado de una reserva
-**Dado** una reserva que ha pasado por diferentes estados
-**Cuando** el sistema actualiza el estado de la reserva
-**Entonces** se guarda en el historial el nuevo estado, la fecha y el usuario o proceso que realizó el cambio
-**Y** el historial puede consultarse para auditoría interna
-
-10. Escenario: Sistema evita estados inválidos
-**Dado** una reserva con un estado actual Confirmada
-**Cuando** el sistema recibe una instrucción externa para asignarle un estado inexistente
-**Entonces** el sistema responde con un error *bad request (400)*
-**Y** muestra un mensaje que dice *"El estado indicado no es válido"*
-
-11. Escenario: Sistema notifica al usuario cada vez que cambia el estado de su reserva
-**Dado** una reserva del usuario
-**Cuando** el sistema actualiza su estado a Confirmada, Expirada o Cancelada
-**Entonces** el sistema envía una notificación al usuario
-**Y** el mensaje indica claramente el nuevo estado y las próximas acciones posibles
 
 6. ## Validación Segura de Reservas
 Para robustecer la seguridad del proceso, cuando se genere una reserva, el sistema creará un par de claves público-privada. Para hacer uso de la reserva en la farmacia, el cliente deberá proveer la clave pública para que el sistema la valide, asegurando así la autenticidad y correcta entrega del medicamento.
@@ -443,16 +414,9 @@ Para robustecer la seguridad del proceso, cuando se genere una reserva, el siste
 **Para** asegurar la autenticidad del cliente y la correcta entrega del medicamento
 
 ### Escenarios Gherkin
-1. Escenario: Sistema genera claves público-privada al crear una reserva exitosamente
-**Dado** un usuario autenticado con email "usuario@test.com"
-**Y** una reserva creada para el medicamento "Aspirina" en la farmacia "Farmashop"
-**Cuando** el sistema procesa la reserva
-**Entonces** el sistema genera automáticamente un par de claves público-privada
-**Y** la clave pública se muestra al usuario
-**Y** la clave privada se almacena de forma segura en el sistema
-**Y** muestra un mensaje que dice *"Reserva creada exitosamente. Guarde su clave pública para retirar el medicamento en la farmacia."*
+Background: **Dado** estoy en la página de validación de reservas
 
-2. Escenario: Cliente presenta clave pública válida en la farmacia para validar reserva
+1. Escenario: Cliente presenta clave pública válida en la farmacia para validar reserva
 **Dado** una reserva confirmada con código "RES-12345"
 **Y** la reserva tiene una clave pública "PUBKEY-ABC123XYZ"
 **Y** estoy en la página de validación de reservas en farmacia
@@ -460,17 +424,17 @@ Para robustecer la seguridad del proceso, cuando se genere una reserva, el siste
 **Y** hago click en el botón de validar
 **Entonces** el sistema valida correctamente la clave pública
 **Y** muestra la información de la reserva: medicamento, cantidad, cliente
-**Y** muestra un mensaje que dice *"Reserva validada exitosamente. Puede proceder con la entrega del medicamento."*
+**Y** muestra un mensaje de validación  dice *"Entrega completada exitosamente. La reserva ha sido cerrada."*
 
-3. Escenario: Cliente presenta clave pública inválida o inexistente en la farmacia
+2. Escenario: Cliente presenta clave pública inválida o inexistente en la farmacia
 **Dado** estoy en la página de validación de reservas en farmacia
 **Y** no existe ninguna reserva con la clave pública "PUBKEY-INVALID999"
 **Cuando** ingreso la clave pública "PUBKEY-INVALID999"
 **Y** hago click en el botón de validar
 **Entonces** el sistema responde con un error de tipo *"not found (404)"*
-**Y** muestra un mensaje que dice *"La clave pública proporcionada no es válida o no existe"*
+**Y** muestra un mensaje de validación que dice *"La clave pública proporcionada no es válida o no existe"*
 
-4. Escenario: Cliente presenta clave pública de una reserva ya expirada
+3. Escenario: Cliente presenta clave pública de una reserva ya expirada
 **Dado** una reserva expirada con código "RES-67890"
 **Y** la reserva tiene una clave pública "PUBKEY-EXPIRED456"
 **Y** la reserva está en estado "Expirada"
@@ -478,9 +442,9 @@ Para robustecer la seguridad del proceso, cuando se genere una reserva, el siste
 **Cuando** ingreso la clave pública "PUBKEY-EXPIRED456"
 **Y** hago click en el botón de validar
 **Entonces** el sistema responde con un error de tipo *"forbidden (403)"*
-**Y** muestra un mensaje que dice *"La reserva ha expirado y no puede ser utilizada"*
+**Y** muestra un mensaje de validación que dice *"La reserva ha expirado y no puede ser utilizada"*
 
-5. Escenario: Cliente presenta clave pública de una reserva cancelada
+4. Escenario: Cliente presenta clave pública de una reserva cancelada
 **Dado** una reserva cancelada con código "RES-54321"
 **Y** la reserva tiene una clave pública "PUBKEY-CANCELLED789"
 **Y** la reserva está en estado "Cancelada"
@@ -488,29 +452,18 @@ Para robustecer la seguridad del proceso, cuando se genere una reserva, el siste
 **Cuando** ingreso la clave pública "PUBKEY-CANCELLED789"
 **Y** hago click en el botón de validar
 **Entonces** el sistema responde con un error de tipo *"forbidden (403)"*
-**Y** muestra un mensaje que dice *"La reserva fue cancelada y la clave pública ya no es válida"*
+**Y** muestra un mensaje de validación que dice *"La reserva fue cancelada y la clave pública ya no es válida"*
 
-6. Escenario: Empleado de farmacia valida reserva con clave pública y completa la entrega
+5. Escenario: Empleado de farmacia valida reserva con clave pública y completa la entrega
 **Dado** soy un empleado autenticado de la farmacia "Farmashop"
 **Y** existe una reserva confirmada con clave pública "PUBKEY-DELIVERY999"
 **Y** la reserva está en estado "Confirmada"
 **Y** estoy en la página de validación de reservas en farmacia
 **Cuando** ingreso la clave pública "PUBKEY-DELIVERY999"
 **Y** hago click en el botón de validar
-**Y** confirmo la entrega del medicamento
 **Entonces** el sistema marca la reserva como *"Retirada"*
 **Y** invalida la clave pública para evitar reutilización
-**Y** muestra un mensaje que dice *"Entrega completada exitosamente. La reserva ha sido cerrada."*
-
-7. Escenario: Usuario visualiza su clave pública en la pantalla de confirmación
-**Dado** estoy en la página de crear-reserva
-**Y** un usuario con email "usuario@test.com" y secret "secret123"
-**Y** ha creado una reserva para "Paracetamol" en farmacia "Farmashop"
-**Cuando** la reserva se crea exitosamente
-**Entonces** el sistema muestra la clave pública "PUBKEY-VIEW456"
-**Y** muestra instrucciones que dicen *"Guarde esta clave pública. La necesitará para retirar su medicamento en la farmacia."*
-**Y** puedo ver el estado de la reserva como *"Confirmada"*
-
+**Y** muestra un mensaje de validación que dice *"Entrega completada exitosamente. La reserva ha sido cerrada."*
 
 
 Se debe disponer de endpoints REST para interactuar con estas funcionalidades (crear, listar, confirmar y cancelar reservas). En el frontend, se desarrollarán pantallas para la búsqueda de medicamentos, la creación de reservas y la visualización y gestión de las reservas del usuario.

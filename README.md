@@ -27,6 +27,35 @@ Proyecto-DevOps/
 | **Análisis de deuda técnica** | [Deuda Técnica](docs/deuda_tecnica.md) | Análisis completo de la deuda técnica identificada en base al modelo de calidad definido |
 | **Issues y clasificación** | [Clasificación de Issues](docs/issues_clasificacion.md) | Definición y clasificación de issues siguiendo Definition of Ready (DoR) con escenarios y prioridades |
 
+---
+
+### Entrega 2 (2 semanas)
+
+| Requerimiento | Documento | Puntos |
+|---------------|-----------|--------|
+| **Configuración del pipeline CI/CD** | [Pipeline CI/CD](docs/pipeline.md) | Configuración del pipeline CI/CD en función del marco de gestión y procesos de ingeniería. Documentar pipeline con pasos automáticos y manuales. |
+| **Selección de bugs** | [Bugs Seleccionados](docs/bugs_seleccionados.md) | Elección de dos bugs registrados como issues en GitHub, fundamentando la elección. Los bugs deben ser de la mayor severidad. Al menos uno debe ser funcional. |
+| **Reparación de bugs con TDD** | Historial de commits y tests en backend | Reparación de ambos bugs utilizando TDD en el backend. Commits rotulados en etapas [Green] y [Refactor]. No debe haber actualizaciones de código en el servidor sin actualización de pruebas que lo respalden. |
+| **Testing y calidad** | - | Tests unitarios backend: (≥ 85%)<br>Tests unitarios frontend: (≥ 80%)<br>Análisis estático: (integrado en pipeline) |
+
+---
+
+### Entrega 3 (3 semanas)
+
+| Requerimiento | Documento | Puntos |
+|---------------|-----------|--------|
+| **Adaptación de procesos para BDD** | [Proceso BDD Detallado](docs/bdd_proceso.md), [Proceso de Ingeniería E2](docs/proceso_ingenieria.md) | Adaptación de los procesos de gestión e ingeniería para aplicar BDD. |
+| **US, criterios de aceptación y escenarios BDD** | [Nuevas Features - Sistema de Reservas](docs/nuevas-features.md) | Escritura de US, criterios de aceptación y escenarios de prueba BDD para las nuevas funcionalidades. El comportamiento debe especificarse en forma colaborativa: PO, tester, desarrollador. |
+| **Implementación de nuevas funcionalidades** | Historial de commits y features en frontend/backend | Implementación de nuevas funcionalidades. Primero en el front-end con BDD, luego en el back-end con TDD. Commits rotulados: [TDD-GREEN], [TDD-REFACTOR], [BDD-GREEN], [BDD-REFACTOR]. |
+| **Vista de procesos 4+1 y diagrama de componentes** | [Documentación de Entregas](Obligatorio/Documentación/) | Vista de procesos 4+1 para las dos funcionalidades nuevas. Diagrama de componentes para toda la solución. |
+| **Testing y calidad** | - | Tests E2E (BDD): Cypress + Cucumber (6 features, 48 escenarios)<br>Estructura de tests BDD: 
+- create-reservation: 8
+- manage-reservation: 8
+- cancel-reservation: 8
+- confirm-reservation: 8
+- state-management: 11
+- secure-reservation: 5 
+
 ## Marco de Gestión
 
 El proyecto se realizará en el marco de gestión **Kanban**. Se espera que cada integrante dedique un **mínimo de 5 horas semanales** a las actividades de ingeniería del proyecto (sin incluir gestión y retrospectivas).
@@ -53,8 +82,8 @@ docker-compose up -d
 ## Equipo de Desarrollo
 
 - **Christian Ingrey** - Desarrollador/Tester (rotación de roles según entrega)
-- **Juan Pedro Michelini** - Desarrollador/Tester y PO (rotación de roles según entrega)
-- **Juan Diego Fagnoni** - Desarrollador/Tester (rotación de roles según entrega)
+- **Juan Pedro Michelini** - Desarrollador/Tester (rotación de roles según entrega)
+- **Juan Diego Fagnoni** - Desarrollador/Tester y PO (rotación de roles según entrega)
 
 **Nota**: Todos los miembros del equipo deben ser desarrollador y tester en todas las entregas. Los demás roles (Product Owner) deben rotar según se define en el documento de Kanban y Roles.
 

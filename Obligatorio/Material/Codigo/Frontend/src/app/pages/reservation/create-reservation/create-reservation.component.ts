@@ -65,10 +65,10 @@ export class CreateReservationComponent {
     const reservationRequest: ReservationRequest = {
       email: this.email,
       secret: this.secret,
-      farmacia: this.farmacia,
-      medicamentos: this.medicamentos.map(m => ({
-        nombre: m.nombre,
-        cantidad: m.cantidad
+      pharmacyName: this.farmacia,
+      drugsReserved: this.medicamentos.map(m => ({
+        drugName: m.nombre,
+        drugQuantity: m.cantidad
       }))
     };
 
@@ -76,12 +76,24 @@ export class CreateReservationComponent {
     this.reservationService.createReserva(reservationRequest).subscribe({
       next: (response) => {
         if (response) {
-          this.estadoReserva = response.estado || 'Pendiente';
+          // Traducir el estado del inglés al español
+          const statusMap: any = {
+            'Pending': 'Pendiente',
+            'Confirmed': 'Confirmada',
+            'Expired': 'Expirada',
+            'Canceled': 'Cancelada',
+            'Withdrawal': 'Retirada'
+          };
+          const status = response.status || 'Pending';
+          this.estadoReserva = statusMap[status] || status;
           this.stockActualizado = true;
           
-          // El mensaje viene del backend, que conoce qué medicamentos requieren prescripción
-          if (response.mensaje) {
-            this.successMessage = response.mensaje;
+          // Verificar si algún medicamento requiere prescripción
+          const medicamentosConReceta = response.drugsReserved?.filter((d: any) => d.requiresPrescription) || [];
+          
+          if (medicamentosConReceta.length > 0) {
+            const nombresReceta = medicamentosConReceta.map((d: any) => d.drugName).join(', ');
+            this.successMessage = `Reserva creada exitosamente, el medicamento ${nombresReceta} requiere receta médica. Por favor, preséntela en la farmacia para validar la reserva.`;
           } else {
             this.successMessage = 'Reserva creada exitosamente';
           }

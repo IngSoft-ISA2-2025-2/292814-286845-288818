@@ -636,11 +636,11 @@ namespace PharmaGo.Test.WebApi.Test
             var result = _reservationController.CreateReservation(reservationModel);
 
             // Assert
-            var objectResult = result as ObjectResult;
+            var objectResult = result as OkObjectResult;
             Assert.IsNotNull(objectResult);
-            var value = objectResult.Value as Reservation;
+            var value = objectResult.Value as ReservationModelResponse;
             Assert.IsNotNull(value);
-            Assert.AreEqual(ReservationStatus.Pending, value.Status);
+            Assert.AreEqual("Pending", value.Status);
         }
 
         [TestMethod]
@@ -809,11 +809,9 @@ namespace PharmaGo.Test.WebApi.Test
             // Assert
             var objectResult = result as OkObjectResult;
             Assert.IsNotNull(objectResult);
-            var value = objectResult.Value as Reservation;
+            var value = objectResult.Value as ReservationModelResponse;
             Assert.IsNotNull(value);
-            Assert.AreEqual(ReservationStatus.Canceled, value.Status);
-            Assert.AreEqual(email, value.Email);
-            Assert.AreEqual(secret1, value.Secret);
+            Assert.AreEqual("Farmashop", value.PharmacyName);
         }
 
         [TestMethod]

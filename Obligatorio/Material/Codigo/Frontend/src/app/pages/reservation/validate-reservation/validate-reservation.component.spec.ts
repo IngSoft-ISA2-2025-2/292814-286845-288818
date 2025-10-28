@@ -3,6 +3,8 @@ import { ValidateReservationComponent } from './validate-reservation.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
+import { CommonService } from '../../../services/CommonService';
+import { StorageManager } from '../../../utils/storage-manager';
 
 describe('ValidateReservationComponent', () => {
   let component: ValidateReservationComponent;
@@ -12,6 +14,7 @@ describe('ValidateReservationComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ValidateReservationComponent],
       imports: [FormsModule, ReactiveFormsModule, HttpClientTestingModule],
+      providers: [CommonService, StorageManager]
     }).compileComponents();
   });
 
@@ -71,10 +74,11 @@ describe('ValidateReservationComponent', () => {
   });
 
   it('should show error codigo when errorCodigo is set', () => {
+    component.errorMessage = 'Error';
     component.errorCodigo = '404';
     fixture.detectChanges();
     const errorCodigoDiv = fixture.debugElement.query(By.css('[data-cy="error-codigo"]'));
-    expect(errorCodigoDiv).not.toBeNull();
+    expect(errorCodigoDiv).toBeTruthy();
     expect(errorCodigoDiv.nativeElement.textContent).toContain('404');
   });
 

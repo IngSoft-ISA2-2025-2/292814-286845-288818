@@ -139,33 +139,58 @@ namespace PharmaGo.Test.DataAccess.Test
             var options = new DbContextOptionsBuilder<PharmacyGoDbContext>()
                 .UseInMemoryDatabase(databaseName: name)
                 .Options;
-            var context = new PharmacyGoDbContext(options);
+            _context = new PharmacyGoDbContext(options);
 
             foreach (var reservation in reservationsSaved)
             {
                 if (reservation.Pharmacy != null)
-                    context.Set<Pharmacy>().Add(reservation.Pharmacy);
+                    _context.Set<Pharmacy>().Add(reservation.Pharmacy);
 
                 foreach (var reservationDrug in reservation.Drugs)
                 {
                     if (reservationDrug.Drug != null)
-                        context.Set<Drug>().Add(reservationDrug.Drug);
+                        _context.Set<Drug>().Add(reservationDrug.Drug);
                 }
-                context.Set<Reservation>().Add(reservation);
+                _context.Set<Reservation>().Add(reservation);
             }
 
-            context.SaveChanges();
-            _reservationRepository = new ReservationRepository(context);
+            _context.SaveChanges();
+            _reservationRepository = new ReservationRepository(_context);
         }
 
         [TestMethod]
         public void InsertReservationOk()
         {
             CreateDataBase("insertDrugTestDb");
-            _reservationRepository.InsertOne(newReservation);
+            
+            // Crear una nueva reserva con referencias a entidades existentes
+            var existingPharmacy = _context.Set<Pharmacy>().First();
+            var existingDrug = _context.Set<Drug>().First();
+            
+            var testReservation = new Reservation()
+            {
+                PharmacyName = existingPharmacy.Name,
+                Email = "nuevo@test.com",
+                Secret = "nuevoSecret123",
+                Status = ReservationStatus.Pending,
+                Drugs = new List<ReservationDrug>
+                {
+                    new ReservationDrug
+                    {
+                        DrugId = existingDrug.Id,
+                        Quantity = 3
+                    }
+                }
+            };
+            
+            _reservationRepository.InsertOne(testReservation);
             _reservationRepository.Save();
-            var retrievedReservation = _reservationRepository.GetOneByExpression(d => d.Id == newReservation.Id);
-            Assert.AreEqual(retrievedReservation.Id, retrievedReservation.Id);
+            
+            var retrievedReservation = _reservationRepository.GetOneByExpression(d => d.Email == "nuevo@test.com");
+            Assert.IsNotNull(retrievedReservation);
+            Assert.AreEqual("nuevo@test.com", retrievedReservation.Email);
+            Assert.AreEqual(existingPharmacy.Name, retrievedReservation.PharmacyName);
+            Assert.AreEqual(1, retrievedReservation.Drugs.Count);
         }
 
 
@@ -247,6 +272,30 @@ namespace PharmaGo.Test.DataAccess.Test
             Assert.AreEqual(_reservations[1].PharmacyName, resultList[1].PharmacyName);
             Assert.AreEqual(_reservations[1].Status, resultList[1].Status);
             Assert.AreEqual(_reservations[1].Email, resultList[1].Email);
+        }
+
+        [TestMethod]
+        public void GetOneByExpression_LoadsRelatedDrugsAndPharmacy()
+        {
+            // Arrange
+            _context.Pharmacys.Add(_pharmacy);
+            _context.Drugs.Add(_drug);
+            _context.Reservations.AddRange(_reservations);
+            _context.SaveChanges();
+
+            // Act
+            var result = _reservationRepository.GetOneByExpression(r => r.Email == "usuario@test.com" && r.Secret == "miSecret123");
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Pharmacy, "La propiedad Pharmacy debe estar cargada");
+            Assert.IsNotNull(result.Drugs, "La propiedad Drugs debe estar cargada");
+            Assert.IsTrue(result.Drugs.Count > 0, "Debe haber al menos un ReservationDrug");
+            
+            var firstReservationDrug = result.Drugs.First();
+            Assert.IsNotNull(firstReservationDrug.Drug, "La propiedad Drug dentro de ReservationDrug debe estar cargada");
+            Assert.AreEqual("Aspirina", firstReservationDrug.Drug.Name);
+            Assert.AreEqual("Farmashop", result.Pharmacy.Name);
         }
     }
 }

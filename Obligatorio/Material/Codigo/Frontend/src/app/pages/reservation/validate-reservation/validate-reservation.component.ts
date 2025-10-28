@@ -16,10 +16,8 @@ export class ValidateReservationComponent {
   claveInvalidada: boolean = false;
 
   reservaInfo: {
-    medicamento?: string;
-    cantidad?: number;
-    cliente?: string;
-    farmacia?: string;
+    pharmacyName?: string;
+    drugs?: Array<{ drugName: string; drugQuantity: number }>;
   } = {};
 
   constructor(private reservationService: ReservationService) {}
@@ -44,16 +42,12 @@ export class ValidateReservationComponent {
           this.validacionExitosa = true;
           this.estadoReserva = 'Retirada';
           this.claveInvalidada = true;
-          this.successMessage =
-            response.mensaje ||
-            'Entrega completada exitosamente. La reserva ha sido cerrada.';
+          this.successMessage = 'Entrega completada exitosamente. La reserva ha sido cerrada.';
 
           // Guardar información de la reserva
           this.reservaInfo = {
-            medicamento: response.medicamento,
-            cantidad: response.cantidad,
-            cliente: response.cliente,
-            farmacia: response.farmacia,
+            pharmacyName: response.pharmacyName,
+            drugs: response.drugsReserved
           };
         }
       },

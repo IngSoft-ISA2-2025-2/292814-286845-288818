@@ -395,13 +395,6 @@
   border-left: 4px solid #17a2b8;
 }
 
-/* Iconos de estado */
-.icon-clock::before { content: "⏰"; }
-.icon-check::before { content: "✅"; }
-.icon-warning::before { content: "⚠️"; }
-.icon-x::before { content: "❌"; }
-.icon-check-circle::before { content: "✅"; }
-
 /* Información adicional */
 .additional-info {
   background: #f8f9fa;

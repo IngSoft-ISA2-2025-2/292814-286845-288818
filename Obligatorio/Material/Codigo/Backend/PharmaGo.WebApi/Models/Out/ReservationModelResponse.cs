@@ -16,7 +16,8 @@ namespace PharmaGo.WebApi.Models.Out
                 DrugsReserved = reserva.Drugs.Select(d => new ReservationDrugModelResponse
                 {
                     DrugName = d.Drug.Name,
-                    DrugQuantity = d.Quantity
+                    DrugQuantity = d.Quantity,
+                    RequiresPrescription = d.Drug.Prescription
                 }).ToList(),
                 Status = reserva.Status.ToString()
             };
@@ -27,5 +28,6 @@ namespace PharmaGo.WebApi.Models.Out
     {
         public string DrugName { get; set; }
         public int DrugQuantity { get; set; }
+        public bool RequiresPrescription { get; set; }
     }
 }

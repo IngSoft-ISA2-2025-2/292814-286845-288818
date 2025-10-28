@@ -33,7 +33,7 @@ export class ConfirmReservationComponent implements OnInit {
 
     this.reservationService.confirmReservation(referenceId).subscribe({
       next: (response) => {
-        const pharmacyName = response.pharmacyName || response.farmacia || 'N/A';
+        const pharmacyName = response.pharmacyName || 'N/A';
         this.commonService.updateToastData(
           `Reserva confirmada exitosamente. Farmacia: ${pharmacyName}`,
           'success',
