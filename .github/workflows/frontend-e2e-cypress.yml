@@ -1,0 +1,192 @@
+name: Cypress E2E Tests
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'Obligatorio/Material/Codigo/**'
+  workflow_dispatch:
+
+env:
+  FRONTEND_DIRECTORY: 'Obligatorio/Material/Codigo/Frontend'
+  BACKEND_DIRECTORY: 'Obligatorio/Material/Codigo/Backend'
+
+jobs:
+  detect-code-changes:
+    name: Detect Code Changes
+    runs-on: ubuntu-latest
+    outputs:
+      code-changed: ${{ steps.changes.outputs.code }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Check for code changes
+      id: changes
+      run: |
+        echo "🔍 Checking for code changes in Obligatorio/Material/Codigo..."
+        
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "Manual trigger - running E2E tests"
+          echo "code=true" >> $GITHUB_OUTPUT
+          exit 0
+        fi
+        
+        BASE_SHA="${{ github.event.pull_request.base.sha }}"
+        HEAD_SHA="${{ github.sha }}"
+        
+        if git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -q "Obligatorio/Material/Codigo"; then
+          echo "✅ Code changes detected"
+          echo "code=true" >> $GITHUB_OUTPUT
+        else
+          echo "⏭️ No code changes detected"
+          echo "code=false" >> $GITHUB_OUTPUT
+        fi
+
+  cypress-e2e:
+    name: Cypress E2E Tests
+    runs-on: ubuntu-latest
+    needs: detect-code-changes
+    if: always()
+    
+    steps:
+    - name: Skip if no code changes
+      if: needs.detect-code-changes.outputs.code-changed != 'true'
+      run: |
+        echo "⏭️ Skipping Cypress E2E tests - no code changes detected"
+        echo "✅ This check passes automatically when no code changes are present"
+        exit 0
+
+    - name: Checkout code
+      if: needs.detect-code-changes.outputs.code-changed == 'true'
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      if: needs.detect-code-changes.outputs.code-changed == 'true'
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        cache-dependency-path: ${{ env.FRONTEND_DIRECTORY }}/package-lock.json
+
+    - name: Cache node modules
+      if: needs.detect-code-changes.outputs.code-changed == 'true'
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.FRONTEND_DIRECTORY }}/node_modules
+        key: ${{ runner.os }}-node-20-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-20-
+
+    - name: Install dependencies for Cypress
+      if: needs.detect-code-changes.outputs.code-changed == 'true'
+      working-directory: ${{ env.FRONTEND_DIRECTORY }}
+      run: |
+        echo "📦 Installing dependencies..."
+        npm install --package-lock-only
+        npm ci --legacy-peer-deps
+
+    - name: Set up Docker Compose
+      if: needs.detect-code-changes.outputs.code-changed == 'true'
+      run: |
+        echo "🐳 Starting Docker Compose services..."
+        docker compose -f Obligatorio/Material/Codigo/docker-compose.yml up -d --build
+
+    - name: Wait for Backend to be ready
+      if: needs.detect-code-changes.outputs.code-changed == 'true'
+      run: |
+        echo "⏳ Waiting for Backend to be ready..."
+        for i in {1..30}; do
+          if curl -s http://localhost:5000/health || curl -s http://localhost:8080/health; then
+            echo "✅ Backend is up!"
+            break
+          fi
+          echo "Waiting for backend... ($i/30)"
+          sleep 5
+        done
+        
+        if ! curl -s http://localhost:5000/health && ! curl -s http://localhost:8080/health; then
+          echo "❌ Backend failed to start"
+          echo "📋 Showing docker logs:"
+          docker compose -f Obligatorio/Material/Codigo/docker-compose.yml logs
+          exit 1
+        fi
+
+    - name: Wait for Frontend to be ready
+      if: needs.detect-code-changes.outputs.code-changed == 'true'
+      run: |
+        echo "⏳ Waiting for Frontend to be ready..."
+        for i in {1..30}; do
+          if curl -s http://localhost:4200 || curl -s http://localhost:80; then
+            echo "✅ Frontend is up!"
+            break
+          fi
+          echo "Waiting for frontend... ($i/30)"
+          sleep 5
+        done
+        
+        if ! curl -s http://localhost:4200 && ! curl -s http://localhost:80; then
+          echo "❌ Frontend failed to start"
+          echo "📋 Showing docker logs:"
+          docker compose -f Obligatorio/Material/Codigo/docker-compose.yml logs
+          exit 1
+        fi
+
+    - name: Run Cypress E2E tests
+      if: needs.detect-code-changes.outputs.code-changed == 'true'
+      working-directory: ${{ env.FRONTEND_DIRECTORY }}
+      run: |
+        echo "🧪 Running Cypress E2E tests..."
+        npx cypress run
+
+    - name: Show Docker Compose logs (on failure)
+      if: failure() && needs.detect-code-changes.outputs.code-changed == 'true'
+      run: |
+        echo "📋 Docker Compose logs:"
+        docker compose -f Obligatorio/Material/Codigo/docker-compose.yml logs
+
+    - name: Upload Cypress Screenshots (on failure)
+      if: failure() && needs.detect-code-changes.outputs.code-changed == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: cypress-screenshots
+        path: ${{ env.FRONTEND_DIRECTORY }}/cypress/screenshots
+        retention-days: 7
+
+    - name: Upload Cypress Videos
+      if: always() && needs.detect-code-changes.outputs.code-changed == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: cypress-videos
+        path: ${{ env.FRONTEND_DIRECTORY }}/cypress/videos
+        retention-days: 7
+
+    - name: Tear down Docker Compose
+      if: always() && needs.detect-code-changes.outputs.code-changed == 'true'
+      run: |
+        echo "🧹 Cleaning up Docker Compose..."
+        docker compose -f Obligatorio/Material/Codigo/docker-compose.yml down -v
+
+    - name: E2E Tests Summary
+      if: always()
+      run: |
+        echo "## 🧪 Cypress E2E Tests Results" >> $GITHUB_STEP_SUMMARY
+        if [ "${{ needs.detect-code-changes.outputs.code-changed }}" = "true" ]; then
+          echo "### Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "- Node.js Version: 20.x" >> $GITHUB_STEP_SUMMARY
+          echo "- Frontend Directory: \`${{ env.FRONTEND_DIRECTORY }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Backend Directory: \`${{ env.BACKEND_DIRECTORY }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "✅ **Status**: All E2E tests passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Status**: Some E2E tests failed" >> $GITHUB_STEP_SUMMARY
+            echo "- Check the uploaded screenshots and videos for details" >> $GITHUB_STEP_SUMMARY
+          fi
+        else
+          echo "⏭️ **Status**: Skipped (no code changes detected)" >> $GITHUB_STEP_SUMMARY
+          echo "- This check passes automatically when no code changes are present in \`Obligatorio/Material/Codigo/\`" >> $GITHUB_STEP_SUMMARY
+        fi

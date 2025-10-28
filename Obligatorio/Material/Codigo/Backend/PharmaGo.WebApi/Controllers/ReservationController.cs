@@ -1,0 +1,83 @@
+using Microsoft.AspNetCore.Mvc;
+using PharmaGo.IBusinessLogic;
+using PharmaGo.WebApi.Models.In;
+using PharmaGo.WebApi.Models.Out;
+using PharmaGo.Domain.Entities;
+using PharmaGo.Domain.Enums;
+using System.Linq;
+
+namespace PharmaGo.WebApi.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ReservationController : ControllerBase
+    {
+        private readonly IReservationManager _reservationManager;
+
+        public ReservationController(IReservationManager reservationManager)
+        {
+            _reservationManager = reservationManager;
+        }
+
+        [HttpPost]
+        public IActionResult CreateReservation(ReservationModel reservationModel)
+        {
+            var reserva = _reservationManager.CreateReservation(reservationModel.ToEntity());
+            var response = ReservationModelResponse.FromEntity(reserva);
+            return Ok(response);
+        }
+
+        [HttpGet]
+        public IActionResult GetReservations([FromQuery] ConsultReservationRequest consultReservationRequest)
+        {
+            var reservations = _reservationManager.GetReservationsByUser(
+                consultReservationRequest.Email,
+                consultReservationRequest.Secret);
+
+            var response = reservations.Select(ReservationResponse.FromEntity).ToList();
+
+            return Ok(response);
+        }
+
+        [HttpGet("validate/{publicKey}")]
+        public IActionResult ValidateReservation(string publicKey)
+        {
+            var reserva = _reservationManager.ValidateReservation(publicKey);
+            var response = new ReservationModelResponse
+            {
+                PharmacyName = reserva.PharmacyName,
+                PublicKey = reserva.PublicKey,
+                DrugsReserved = reserva.Drugs?.Select(d => new ReservationDrugModelResponse
+                {
+                    DrugName = d.Drug.Name,
+                    DrugQuantity = d.Quantity
+                }).ToList() ?? new List<ReservationDrugModelResponse>()
+            };
+            return Ok(response);
+        }
+
+        [HttpDelete]
+        public IActionResult CancelReservation(string email, string secret)
+        {
+            var cancelledReservation = _reservationManager.CancelReservation(email, secret);
+            var response = new ReservationModelResponse
+            {
+                PharmacyName = cancelledReservation.PharmacyName,
+                DrugsReserved = cancelledReservation.Drugs?.Select(d => new ReservationDrugModelResponse
+                {
+                    DrugName = d.Drug.Name,
+                    DrugQuantity = d.Quantity
+                }).ToList() ?? new List<ReservationDrugModelResponse>()
+            };
+            return Ok(response);
+        }
+
+        [HttpPut("confirmar")]
+        public IActionResult ConfirmReservation([FromQuery] string referenceId)
+        {
+            var confirmedReservation = _reservationManager.ConfirmReservation(referenceId);
+            var response = ReservationModelResponse.FromEntity(confirmedReservation);
+            return Ok(response);
+        }
+    }
+}

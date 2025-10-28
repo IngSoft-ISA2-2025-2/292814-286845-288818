@@ -6,7 +6,25 @@
 - Christian Ingrey
 
 Todos somos desarrollador y tester en todas las entregas. 
-> Rol de la etapa: **Product Owner (Etapa 2)** → Christian Ingrey. El PO rota en las siguientes etapas.
+> Rol de la etapa: **Product Owner (Etapa 3)** → Juan Diego Fagnoni. El PO rota en las siguientes etapas.
+
+#### **Roles y Responsabilidades en BDD**
+
+**Product Owner**:
+- Define escenarios de negocio en lenguaje Gherkin durante el refinamiento
+- Valida que los escenarios cubran casos de éxito y error
+- Aprueba la ejecución de escenarios en `develop` antes de merge a `main`
+
+**Desarrolladores**:
+- Traducen escenarios Gherkin a step definitions ejecutables
+- Implementan lógica backend y frontend siguiendo TDD
+- Mantienen sincronía entre archivos `.feature` y documentación
+- Ejecutan tests E2E localmente antes de cada commit
+
+**Testers** (rol compartido por todo el equipo):
+- Revisan cobertura de escenarios Gherkin
+- Identifican casos edge que falten en los escenarios
+- Ejecutan regresión manual en `develop` antes de release
 
 ## Flujo del tablero
 Backlog → Ready → In-Progress → In Review → Done
@@ -41,13 +59,27 @@ Backlog → Ready → In-Progress → In Review → Done
 
 - **Sprint Planning (inicio de cada entrega/sprint)**
   - **Objetivo:** Acordar junto al equipo el objetivo y el alcance del sprint. Seleccionar del Backlog las tarjetas que cumplan con la Definition of Ready, pudiendolas mover asi a Ready, para luego pasarlas poco a poco a In Progress, respetando el WIP. Identificar dependencias/riesgos entre las tarjetas y, si hace falta, descomponer en subtareas.
-  - **Salida:** Objetivo y alcance del sprint, lista de tarjetas seleccionadas (con su prioridad y tamaño) y dependencias y riesgos anotados.
+  - **Actividades BDD (Entrega 2)**: 
+    - Revisar y validar escenarios Gherkin de cada tarjeta con el Product Owner
+    - Confirmar que los escenarios cubren casos positivos y negativos
+    - Identificar step definitions que puedan ser compartidos entre features
+  - **Salida:** Objetivo y alcance del sprint, lista de tarjetas seleccionadas (con su prioridad y tamaño), dependencias y riesgos anotados, y escenarios Gherkin validados.
+
+- **Refinamiento del Backlog (continuo durante el sprint)**
+  - **Objetivo:** Preparar tarjetas del Backlog para que cumplan con la Definition of Ready antes del próximo Sprint Planning.
+  - **Actividades BDD (Entrega 3)**:
+    - Colaboración Product Owner + Desarrolladores para definir escenarios Gherkin
+    - Documentar escenarios en `docs/nuevas-features.md`
+    - Identificar casos edge y escenarios negativos
+    - Validar que los escenarios sean claros, completos y verificables
+  - **Salida:** Tarjetas con escenarios Gherkin completos listas para Sprint Planning.
 
 - **Sprint Review (al finalizar cada entrega/sprint - antes de la Retrospective)**
   - **Objetivo:** Presentar el trabajo completado durante el sprint al Product Owner y stakeholders. Demostrar las funcionalidades desarrolladas, validar que cumplen con los criterios de aceptación y recopilar feedback para futuras iteraciones.
   - **Participantes:** Todo el equipo + Product Owner + stakeholders (si los hay)
-  - **Actividades:** 
+  - **Actividades**: 
     - Demostración de funcionalidades completadas (tarjetas en Done)
+    - **Demostración BDD (Entrega 3)**: Ejecución en vivo de escenarios Gherkin en Cypress para mostrar cobertura E2E
     - Revisión de bugs corregidos con evidencia de funcionamiento
     - Validación de criterios de aceptación por parte del PO
     - Feedback y nuevas ideas para el Product Backlog
@@ -55,7 +87,11 @@ Backlog → Ready → In-Progress → In Review → Done
   
 - **Sprint Retrospective (al finalizar cada entrega/sprint)**
   - **Objetivo:** Mejorar el proceso y el flujo de trabajo, ver que aspectos fueron positivos y aportaron valor al sprint, como tambien ver que aspectos se pueden mejorar y añadir para mejorar el proceso del siguiente sprint.
-  - **Salida:** Lista de objetivos y acciones grupales con el objetivo de cumplirlas y respetarlas para el/los proximo/s sprint/s.
+  - **Tópicos BDD (Entrega 3)**:
+    - Evaluar efectividad de escenarios Gherkin para prevenir defectos
+    - Identificar mejoras en la sincronización documentación-código
+    - Revisar tiempo dedicado a escribir tests E2E vs. valor aportado
+  - **Salida:** Lista de objetivos y acciones grupales con el objetivo de cumplirlas y respetarlas, incluyendo mejoras específicas al proceso BDD.
 
 
 

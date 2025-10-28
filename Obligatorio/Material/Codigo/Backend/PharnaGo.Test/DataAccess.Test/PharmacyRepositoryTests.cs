@@ -110,12 +110,13 @@ namespace PharmaGo.Test.DataAccess.Test
         {
             CreateDataBase("updatePharmacyTestDb");
             var pharmacyFromDb = _pharmacyRepository.GetOneByExpression(p => p.Name == pharmaciesSaved[0].Name);
-            var dbName = pharmacyFromDb.Name;
-            pharmacyFromDb.Name = "updatedName";
+            var originalAddress = pharmacyFromDb.Address;
+            pharmacyFromDb.Address = "updatedAddress";
             _pharmacyRepository.UpdateOne(pharmacyFromDb);
             _pharmacyRepository.Save();
             var pharmacyUpdated = _pharmacyRepository.GetOneByExpression(p => p.Name == pharmaciesSaved[0].Name);
-            Assert.AreNotEqual(dbName, pharmacyUpdated.Name);
+            Assert.AreNotEqual(originalAddress, pharmacyUpdated.Address);
+            Assert.AreEqual("updatedAddress", pharmacyUpdated.Address);
         }
 
         private List<Pharmacy> CreateDummyPharmacies()

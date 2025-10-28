@@ -28,6 +28,11 @@ import { PurchaseByDateComponent } from './pages/owner/purchase-by-date/purchase
 import { InvitationComponent } from './pages/owner/invitation/invitation.component';
 import { CreatePharmacyComponent } from './pages/admin/create-pharmacy/create-pharmacy.component';
 import { StockRequestOwnerComponent } from './pages/owner/stock-request-owner/stock-request-owner.component';
+import { ManageReservationComponent } from './pages/reservation/manage-reservation/manage-reservation.component';
+import { CreateReservationComponent } from './pages/reservation/create-reservation/create-reservation.component';
+import { ValidateReservationComponent } from './pages/reservation/validate-reservation/validate-reservation.component';
+import { CancelReservationComponent } from './pages/reservation/cancel-reservation/cancel-reservation.component';
+import { ConfirmReservationComponent } from './pages/reservation/confirm-reservation/confirm-reservation.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -54,8 +59,13 @@ const routes: Routes = [
   { path: 'owner/purchase-by-date', component: PurchaseByDateComponent, canActivate: [AuthenticationGuard], data: {roles: ['Owner'] }},
   { path: 'owner/invitation', component: InvitationComponent, canActivate: [AuthenticationGuard], data: {roles: ['Owner']}},
   { path: 'owner/stock-request', component: StockRequestOwnerComponent, canActivate: [AuthenticationGuard], data: {roles: ['Owner'] } },
+  { path: 'manage-reservations', component: ManageReservationComponent },
+  { path: 'validate-reservation', component: ValidateReservationComponent },
+  { path: 'create-reservation', component: CreateReservationComponent },
+  { path: 'cancel-reservation', component: CancelReservationComponent },
+  { path: 'confirm-reservation', component: ConfirmReservationComponent },
   { path: 'unauthorized', component: Page401Component },
-  { path: '**', component: Page404Component }
+  { path: '**', component: Page404Component },
 ];
 
 @NgModule({

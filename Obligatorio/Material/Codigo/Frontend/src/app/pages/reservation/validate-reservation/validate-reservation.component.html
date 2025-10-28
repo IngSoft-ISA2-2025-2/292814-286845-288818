@@ -1,0 +1,70 @@
+<div class="reservation-container">
+  <h2>Validar Reserva de Medicamentos</h2>
+  
+  <form (ngSubmit)="validar()">
+    <!-- Sección de clave pública -->
+    <div class="form-section">
+      <h3>Clave Pública de Reserva</h3>
+      <div class="form-group">
+        <label for="clavePublica">Ingrese la Clave Pública</label>
+        <input
+          id="clavePublica"
+          data-cy="clave-publica-input"
+          type="text"
+          [(ngModel)]="clavePublica"
+          name="clavePublica"
+          placeholder="Ej: PUBKEY-ABC123XYZ"
+          required
+        />
+      </div>
+    </div>
+
+    <button 
+      data-cy="validar-btn" 
+      type="submit" 
+      class="btn btn-primary">
+      Validar Reserva
+    </button>
+  </form>
+
+  <!-- Mensajes de error -->
+  <div *ngIf="errorMessage" class="alert alert-error" data-cy="error-mensaje">
+    <strong>Error:</strong> {{ errorMessage }}
+    <span *ngIf="errorCodigo" data-cy="error-codigo" class="error-code">(Código: {{ errorCodigo }})</span>
+  </div>
+
+  <!-- Mensajes de éxito -->
+  <div *ngIf="successMessage" class="alert alert-success" data-cy="success-mensaje">
+    <strong>Éxito:</strong> {{ successMessage }}
+  </div>
+
+  <!-- Información de la reserva validada -->
+  <div *ngIf="validacionExitosa" class="validation-success" data-cy="validacion-exitosa">
+    <div class="form-section">
+      <h3>Información de la Reserva</h3>
+      <div class="reserva-details">
+        <div class="detail-item">
+          <strong>Farmacia:</strong> <span data-cy="reserva-farmacia">{{ reservaInfo.pharmacyName }}</span>
+        </div>
+        <div class="detail-item">
+          <strong>Medicamentos:</strong>
+          <ul *ngIf="reservaInfo.drugs && reservaInfo.drugs.length > 0">
+            <li *ngFor="let drug of reservaInfo.drugs">
+              <span data-cy="reserva-medicamento">{{ drug.drugName }}</span> - <span data-cy="reserva-cantidad">Cantidad: {{ drug.drugQuantity }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estado de la reserva -->
+  <div *ngIf="estadoReserva" class="estado-info" data-cy="estado-reserva">
+    Estado: {{ estadoReserva }}
+  </div>
+
+  <!-- Clave invalidada -->
+  <div *ngIf="claveInvalidada" class="stock-info" data-cy="clave-invalidada">
+    ✓ La clave pública ha sido invalidada. No puede ser reutilizada.
+  </div>
+</div>

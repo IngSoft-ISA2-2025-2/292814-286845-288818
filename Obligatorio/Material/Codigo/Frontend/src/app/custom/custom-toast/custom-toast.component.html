@@ -6,9 +6,10 @@
   color={{color}}
   placement="top-center"
   position="fixed"
+  data-cy="custom-toast"
 >
 <div class="d-flex">
-    <c-toast-body class="customToastBody">
+    <c-toast-body class="customToastBody" data-cy="toast-message">
       <span><b>{{title}} </b>{{message}}</span>
     </c-toast-body>
     <button

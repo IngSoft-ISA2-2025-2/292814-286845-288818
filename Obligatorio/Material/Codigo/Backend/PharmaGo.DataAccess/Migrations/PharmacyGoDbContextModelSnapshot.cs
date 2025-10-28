@@ -122,7 +122,8 @@ namespace PharmaGo.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -210,6 +211,75 @@ namespace PharmaGo.DataAccess.Migrations
                     b.HasIndex("PurchaseId");
 
                     b.ToTable("PurchaseDetails");
+                });
+
+            modelBuilder.Entity("PharmaGo.Domain.Entities.Reservation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("CancellationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LimitConfirmationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PharmacyName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PrivateKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PublicKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RetirementDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Secret")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PharmacyName");
+
+                    b.ToTable("Reservations");
+                });
+
+            modelBuilder.Entity("PharmaGo.Domain.Entities.ReservationDrug", b =>
+                {
+                    b.Property<int>("ReservationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DrugId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("ReservationId", "DrugId");
+
+                    b.HasIndex("DrugId");
+
+                    b.ToTable("ReservationDrugs");
                 });
 
             modelBuilder.Entity("PharmaGo.Domain.Entities.Role", b =>
@@ -331,7 +401,8 @@ namespace PharmaGo.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("PharmacyId")
                         .HasColumnType("int");
@@ -409,6 +480,36 @@ namespace PharmaGo.DataAccess.Migrations
                     b.Navigation("Pharmacy");
                 });
 
+            modelBuilder.Entity("PharmaGo.Domain.Entities.Reservation", b =>
+                {
+                    b.HasOne("PharmaGo.Domain.Entities.Pharmacy", "Pharmacy")
+                        .WithMany()
+                        .HasForeignKey("PharmacyName")
+                        .HasPrincipalKey("Name")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Pharmacy");
+                });
+
+            modelBuilder.Entity("PharmaGo.Domain.Entities.ReservationDrug", b =>
+                {
+                    b.HasOne("PharmaGo.Domain.Entities.Drug", "Drug")
+                        .WithMany()
+                        .HasForeignKey("DrugId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PharmaGo.Domain.Entities.Reservation", "Reservation")
+                        .WithMany("Drugs")
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Drug");
+
+                    b.Navigation("Reservation");
+                });
+
             modelBuilder.Entity("PharmaGo.Domain.Entities.StockRequest", b =>
                 {
                     b.HasOne("PharmaGo.Domain.Entities.User", "Employee")
@@ -456,6 +557,11 @@ namespace PharmaGo.DataAccess.Migrations
             modelBuilder.Entity("PharmaGo.Domain.Entities.Purchase", b =>
                 {
                     b.Navigation("details");
+                });
+
+            modelBuilder.Entity("PharmaGo.Domain.Entities.Reservation", b =>
+                {
+                    b.Navigation("Drugs");
                 });
 
             modelBuilder.Entity("PharmaGo.Domain.Entities.StockRequest", b =>
