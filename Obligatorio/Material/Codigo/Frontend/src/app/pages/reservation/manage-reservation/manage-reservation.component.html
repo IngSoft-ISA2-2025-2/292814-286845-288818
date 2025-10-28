@@ -179,31 +179,31 @@
               <!-- Mensaje para Pendiente -->
               <div *ngIf="reserva.status === 'Pending'" data-cy="mensaje-pendiente">
                 <i class="icon-clock"></i>
-                {{ getStatusMessage(reserva) }}
+                <span data-cy="mensaje-estado">{{ getStatusMessage(reserva) }}</span>
               </div>
 
               <!-- Mensaje para Confirmada -->
-              <div *ngIf="reserva.status === 'Confirmed'" data-cy="mensaje-estado" class="mensaje-confirmada">
+              <div *ngIf="reserva.status === 'Confirmed'" class="mensaje-confirmada">
                 <i class="icon-check"></i>
-                {{ getStatusMessage(reserva) }}
+                <span data-cy="mensaje-estado">{{ getStatusMessage(reserva) }}</span>
               </div>
 
               <!-- Mensaje para Expirada -->
-              <div *ngIf="reserva.status === 'Expired'" data-cy="mensaje-estado" class="mensaje-expirada">
+              <div *ngIf="reserva.status === 'Expired'" class="mensaje-expirada">
                 <i class="icon-warning"></i>
-                {{ getStatusMessage(reserva) }}
+                <span data-cy="mensaje-estado">{{ getStatusMessage(reserva) }}</span>
               </div>
 
               <!-- Mensaje para Cancelada -->
-              <div *ngIf="reserva.status === 'Canceled'" data-cy="mensaje-estado" class="mensaje-cancelada">
+              <div *ngIf="reserva.status === 'Canceled'" class="mensaje-cancelada">
                 <i class="icon-x"></i>
-                {{ getStatusMessage(reserva) }}
+                <span data-cy="mensaje-estado">{{ getStatusMessage(reserva) }}</span>
               </div>
 
               <!-- Mensaje para Retirada -->
-              <div *ngIf="reserva.status === 'Withdrawal'" data-cy="mensaje-estado" class="mensaje-retirada">
+              <div *ngIf="reserva.status === 'Withdrawal'" class="mensaje-retirada">
                 <i class="icon-check-circle"></i>
-                {{ getStatusMessage(reserva) }}
+                <span data-cy="mensaje-estado">{{ getStatusMessage(reserva) }}</span>
               </div>
             </div>
 

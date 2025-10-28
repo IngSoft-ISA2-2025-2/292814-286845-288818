@@ -25,7 +25,7 @@ Given('un secret {string}', (secret) => {
 });
 
 Given('no tiene reservas creadas en el sistema', () => {
-  cy.intercept('POST', '**/api/Reservation/consult', {
+  cy.intercept('GET', '**/api/Reservation?**', {
     statusCode: 200,
     body: [],
   }).as('reservasVacias');
@@ -34,7 +34,7 @@ Given('no tiene reservas creadas en el sistema', () => {
 Given(
   'tiene reservas creadas en diferentes estados {string}, {string}, {string}, {string} y {string}',
   (estado1, estado2, estado3, estado4, estado5) => {
-    cy.intercept('POST', '**/api/Reservation/consult', {
+    cy.intercept('GET', '**/api/Reservation?**', {
       statusCode: 200,
       body: [
         {
@@ -83,7 +83,7 @@ Given(
 );
 
 Given('tiene reservas en diferentes estados', () => {
-  cy.intercept('POST', '**/api/Reservation/consult', {
+  cy.intercept('GET', '**/api/Reservation?**', {
     statusCode: 200,
     body: [
       { 
@@ -114,8 +114,12 @@ Given('tiene reservas en diferentes estados', () => {
 });
 
 Given('el email {string} ya tiene reservas con secret {string}', (email, secretCorrecto) => {
-  cy.intercept('POST', '**/api/Reservation/consult', (req) => {
-    if (req.body.email === email && req.body.secret !== secretCorrecto) {
+  cy.intercept('GET', '**/api/Reservation?**', (req) => {
+    const url = new URL(req.url);
+    const emailParam = url.searchParams.get('email');
+    const secretParam = url.searchParams.get('secret');
+    
+    if (emailParam === email && secretParam !== secretCorrecto) {
       req.reply({
         statusCode: 403,
         body: { message: 'El secret no coincide con el registrado para este email' },
@@ -146,14 +150,14 @@ Given('tiene una reserva en estado {string}', (estado) => {
     reservaBase.fechaRetiro = '2023-10-02T09:00:00Z';
   }
 
-  cy.intercept('POST', '**/api/Reservation/consult', {
+  cy.intercept('GET', '**/api/Reservation?**', {
     statusCode: 200,
     body: [reservaBase],
   }).as(`reservas${estado}`);
 });
 
 Given('tiene múltiples reservas creadas en diferentes fechas', () => {
-  cy.intercept('POST', '**/api/Reservation/consult', {
+  cy.intercept('GET', '**/api/Reservation?**', {
     statusCode: 200,
     body: [
       { 
@@ -182,7 +186,7 @@ Given('tiene múltiples reservas creadas en diferentes fechas', () => {
 });
 
 Given('tiene reservas de diferentes medicamentos', () => {
-  cy.intercept('POST', '**/api/Reservation/consult', {
+  cy.intercept('GET', '**/api/Reservation?**', {
     statusCode: 200,
     body: [
       { 
@@ -211,7 +215,7 @@ Given('tiene reservas de diferentes medicamentos', () => {
 });
 
 Given('tiene reservas de diferentes farmacias', () => {
-  cy.intercept('POST', '**/api/Reservation/consult', {
+  cy.intercept('GET', '**/api/Reservation?**', {
     statusCode: 200,
     body: [
       { 

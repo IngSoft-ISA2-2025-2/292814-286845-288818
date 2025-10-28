@@ -43,14 +43,14 @@
     <div class="form-section">
       <h3>Información de la Reserva</h3>
       <div class="reserva-details">
-        <div class="detail-item" data-cy="reserva-farmacia">
-          <strong>Farmacia:</strong> {{ reservaInfo.pharmacyName }}
+        <div class="detail-item">
+          <strong>Farmacia:</strong> <span data-cy="reserva-farmacia">{{ reservaInfo.pharmacyName }}</span>
         </div>
-        <div class="detail-item" data-cy="reserva-medicamentos">
+        <div class="detail-item">
           <strong>Medicamentos:</strong>
           <ul *ngIf="reservaInfo.drugs && reservaInfo.drugs.length > 0">
             <li *ngFor="let drug of reservaInfo.drugs">
-              {{ drug.drugName }} - Cantidad: {{ drug.drugQuantity }}
+              <span data-cy="reserva-medicamento">{{ drug.drugName }}</span> - <span data-cy="reserva-cantidad">Cantidad: {{ drug.drugQuantity }}</span>
             </li>
           </ul>
         </div>
