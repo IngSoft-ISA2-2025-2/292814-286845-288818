@@ -21,20 +21,20 @@ export const options = {
 };
 
 export default function() {
-  const authToken = login(BASE_URL, 'owner@owner.com', 'owner123');
+  const authToken = login(BASE_URL, 'owner1', 'Aqwertyu2.');
 
   if (!authToken) {
     sleep(1);
     return;
   }
 
-  const pharmacyId = 1;
+  const pharmacyName = 'Farmacia 1234';
   const drugs = [
-    { drugCode: 'ABC123', quantity: 2 },
-    { drugCode: 'XYZ789', quantity: 1 }
+    { drugName: 'Novemina', drugQuantity: 2 },
+    { drugName: 'Aspirina', drugQuantity: 1 }
   ];
 
-  const publicKey = createReservation(BASE_URL, authToken, pharmacyId, drugs);
+  const publicKey = createReservation(BASE_URL, authToken, pharmacyName, drugs);
 
   if (publicKey) {
     sleep(1);

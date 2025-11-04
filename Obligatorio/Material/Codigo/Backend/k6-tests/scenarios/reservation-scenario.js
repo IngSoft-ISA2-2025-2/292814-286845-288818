@@ -5,12 +5,13 @@ import {
   recordReservationValidationMetrics
 } from '../utils/custom-metrics.js';
 
-export function createReservation(baseUrl, authToken, pharmacyId, drugs) {
+export function createReservation(baseUrl, authToken, pharmacyName, drugs) {
+  const timestamp = Date.now();
   const payload = JSON.stringify({
-    pharmacyId: pharmacyId,
-    drugs: drugs,
-    email: `customer${Date.now()}@test.com`,
-    customerName: `Customer ${Date.now()}`
+    pharmacyName: pharmacyName,
+    drugsReserved: drugs,
+    email: `customer${timestamp}@test.com`,
+    secret: `secret${timestamp}`
   });
 
   const params = {

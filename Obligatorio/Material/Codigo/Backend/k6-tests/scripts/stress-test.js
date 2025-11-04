@@ -24,20 +24,27 @@ export const options = {
 };
 
 export default function() {
-  const authToken = login(BASE_URL, 'owner@owner.com', 'owner123');
+  const authToken = login(BASE_URL, 'owner1', 'Aqwertyu2.');
 
   if (!authToken) {
     sleep(2);
     return;
   }
 
-  const pharmacyId = 1;
+  const pharmacies = ['Farmacia 1234', 'Farmacia Av. Italia', 'El Tunel'];
+  const drugOptions = [
+    { drugName: 'Novemina', drugQuantity: Math.floor(Math.random() * 3) + 1 },
+    { drugName: 'Perifar Flex', drugQuantity: Math.floor(Math.random() * 2) + 1 },
+    { drugName: 'Aspirina', drugQuantity: Math.floor(Math.random() * 2) + 1 }
+  ];
+  
+  const pharmacyName = pharmacies[Math.floor(Math.random() * pharmacies.length)];
   const drugs = [
-    { drugCode: 'ABC123', quantity: Math.floor(Math.random() * 3) + 1 },
-    { drugCode: 'XYZ789', quantity: Math.floor(Math.random() * 2) + 1 }
+    drugOptions[Math.floor(Math.random() * drugOptions.length)],
+    drugOptions[Math.floor(Math.random() * drugOptions.length)]
   ];
 
-  const publicKey = createReservation(BASE_URL, authToken, pharmacyId, drugs);
+  const publicKey = createReservation(BASE_URL, authToken, pharmacyName, drugs);
 
   if (!publicKey) {
     sleep(2);

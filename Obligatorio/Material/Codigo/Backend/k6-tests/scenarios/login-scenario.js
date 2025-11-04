@@ -75,15 +75,15 @@ export function loginScenario(baseUrl, credentials) {
 
 export function loginAsOwner(baseUrl) {
   return loginScenario(baseUrl, {
-    userName: 'owner@owner.com',
-    password: 'owner123'
+    userName: 'owner1',
+    password: 'Aqwertyu2.'
   });
 }
 
 export function loginAsEmployee(baseUrl) {
   return loginScenario(baseUrl, {
-    userName: 'empleado@empleado.com',
-    password: 'empleado123'
+    userName: 'employee1',
+    password: 'Aqwertyu2.'
   });
 }
 
@@ -92,4 +92,9 @@ export function loginWithInvalidCredentials(baseUrl) {
     userName: 'invalid@invalid.com',
     password: 'wrongpassword'
   });
+}
+
+export function login(baseUrl, userName, password) {
+  const result = loginScenario(baseUrl, { userName, password });
+  return result.success ? result.token : null;
 }

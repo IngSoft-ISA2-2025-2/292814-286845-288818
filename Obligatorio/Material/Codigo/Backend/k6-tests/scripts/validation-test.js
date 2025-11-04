@@ -21,7 +21,7 @@ export const options = {
 const setupData = {};
 
 export function setup() {
-  const authToken = login(BASE_URL, 'owner@owner.com', 'owner123');
+  const authToken = login(BASE_URL, 'owner1', 'Aqwertyu2.');
   
   if (!authToken) {
     throw new Error('Failed to authenticate in setup phase');
@@ -30,11 +30,11 @@ export function setup() {
   const publicKeys = [];
   for (let i = 0; i < 10; i++) {
     const drugs = [
-      { drugCode: 'ABC123', quantity: 1 },
-      { drugCode: 'XYZ789', quantity: 2 }
+      { drugName: 'Novemina', drugQuantity: 1 },
+      { drugName: 'Perifar Flex', drugQuantity: 2 }
     ];
     
-    const publicKey = createReservation(BASE_URL, authToken, 1, drugs);
+    const publicKey = createReservation(BASE_URL, authToken, 'Farmacia 1234', drugs);
     if (publicKey) {
       publicKeys.push(publicKey);
     }
