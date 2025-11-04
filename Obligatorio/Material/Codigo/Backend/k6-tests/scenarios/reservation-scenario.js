@@ -1,7 +1,8 @@
 import http from 'k6/http';
 import { check } from 'k6';
 import { 
-  recordReservationCreationMetrics 
+  recordReservationCreationMetrics,
+  recordReservationValidationMetrics
 } from '../utils/custom-metrics.js';
 
 export function createReservation(baseUrl, authToken, pharmacyId, drugs) {
@@ -71,6 +72,8 @@ export function validateReservation(baseUrl, publicKey) {
       return body.pharmacyName !== undefined;
     }
   });
+
+  recordReservationValidationMetrics(response, duration);
 
   return response;
 }
