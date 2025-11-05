@@ -10,32 +10,22 @@ def save_json(data, filename):
     with open(f"data/{filename}", 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
-def calculate_deployment_frequency():
-    print("="*60)
-    print("Cálculo de Deployment Frequency (DF)")
-    print("="*60)
-    print()
-    
-    pull_requests = load_json("pull_requests.json")
-    
+def calculate_for_branch(branch_name, pull_requests):
     deployments = []
     for pr in pull_requests:
-        if pr["base_branch"] == "main" and pr["merged_at"]:
+        if pr["base_branch"] == branch_name and pr["merged_at"]:
             deployments.append({
                 "number": pr["number"],
                 "title": pr["title"],
                 "merged_at": pr["merged_at"],
-                "author": pr["author"]
+                "author": pr["author"],
+                "head_branch": pr["head_branch"]
             })
     
     deployments.sort(key=lambda x: x["merged_at"])
     
     if not deployments:
-        print("No se encontraron deployments (merges a main)")
-        return
-    
-    print(f"Total de deployments encontrados: {len(deployments)}")
-    print()
+        return None
     
     first_deploy = date_parser.parse(deployments[0]["merged_at"])
     last_deploy = date_parser.parse(deployments[-1]["merged_at"])
@@ -43,37 +33,9 @@ def calculate_deployment_frequency():
     period_weeks = period_days / 7
     period_months = period_days / 30
     
-    print(f"Primer deployment: {first_deploy.strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"Último deployment: {last_deploy.strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"Período analizado: {period_days} días ({period_weeks:.1f} semanas)")
-    print()
-    
     deploys_per_day = len(deployments) / period_days if period_days > 0 else 0
     deploys_per_week = len(deployments) / period_weeks if period_weeks > 0 else 0
     deploys_per_month = len(deployments) / period_months if period_months > 0 else 0
-    
-    print(f"Frecuencia de deployments:")
-    print(f"  - Por día:    {deploys_per_day:.2f} deploys/día")
-    print(f"  - Por semana: {deploys_per_week:.2f} deploys/semana")
-    print(f"  - Por mes:    {deploys_per_month:.2f} deploys/mes")
-    print()
-    
-    if deploys_per_day >= 1:
-        level = "Elite"
-        description = "Múltiples deployments por día"
-    elif deploys_per_week >= 1:
-        level = "High"
-        description = "Entre 1 deployment por día y 1 por semana"
-    elif deploys_per_month >= 1:
-        level = "Medium"
-        description = "Entre 1 deployment por semana y 1 por mes"
-    else:
-        level = "Low"
-        description = "Menos de 1 deployment por mes"
-    
-    print(f"Nivel DORA: {level}")
-    print(f"Descripción: {description}")
-    print()
     
     deployments_by_week = {}
     for deploy in deployments:
@@ -83,15 +45,9 @@ def calculate_deployment_frequency():
             deployments_by_week[week_key] = []
         deployments_by_week[week_key].append(deploy)
     
-    print(f"Distribución por semana:")
-    for week in sorted(deployments_by_week.keys())[-5:]:
-        count = len(deployments_by_week[week])
-        print(f"  {week}: {count} deployment(s)")
-    print()
-    
-    result = {
-        "metric": "Deployment Frequency",
-        "calculation_date": datetime.now().isoformat(),
+    return {
+        "branch": branch_name,
+        "total_deployments": len(deployments),
         "period": {
             "start": deployments[0]["merged_at"],
             "end": deployments[-1]["merged_at"],
@@ -99,30 +55,58 @@ def calculate_deployment_frequency():
             "weeks": round(period_weeks, 1),
             "months": round(period_months, 1)
         },
-        "total_deployments": len(deployments),
         "frequency": {
             "per_day": round(deploys_per_day, 2),
             "per_week": round(deploys_per_week, 2),
             "per_month": round(deploys_per_month, 2)
-        },
-        "dora_level": level,
-        "dora_description": description,
-        "benchmarks": {
-            "Elite": "Múltiples deployments por día",
-            "High": "Entre 1 por día y 1 por semana",
-            "Medium": "Entre 1 por semana y 1 por mes",
-            "Low": "Menos de 1 por mes"
         },
         "deployments": deployments,
         "weekly_distribution": {
             week: len(deploys) for week, deploys in deployments_by_week.items()
         }
     }
+
+def calculate_deployment_frequency():
+    print("Deployment Frequency - Análisis")
+    print("-" * 50)
+    
+    pull_requests = load_json("pull_requests.json")
+    
+    main_results = calculate_for_branch("main", pull_requests)
+    develop_results = calculate_for_branch("develop", pull_requests)
+    
+    if main_results:
+        print(f"\nBranch: main")
+        print(f"  Deployments: {main_results['total_deployments']} en {main_results['period']['days']} días")
+        print(f"  Frecuencia: {main_results['frequency']['per_week']:.1f} deploys/semana")
+    
+    if develop_results:
+        print(f"\nBranch: develop")
+        print(f"  Deployments: {develop_results['total_deployments']} en {develop_results['period']['days']} días")
+        print(f"  Frecuencia: {develop_results['frequency']['per_week']:.1f} deploys/semana")
+    
+    print("\nJustificación:")
+    print("Se analizan ambas branches por el flujo GitFlow del proyecto.")
+    print("Main refleja releases a producción, mientras que develop muestra")
+    print("la integración continua de features durante el desarrollo.")
+    print()
+    
+    result = {
+        "metric": "Deployment Frequency",
+        "calculation_date": datetime.now().isoformat(),
+        "workflow_justification": {
+            "reason": "Flujo de trabajo GitFlow con develop y main",
+            "develop": "Integración continua de features durante desarrollo",
+            "main": "Releases a producción cada 2-3 semanas"
+        },
+        "results": {
+            "main": main_results,
+            "develop": develop_results
+        }
+    }
     
     save_json(result, "deployment_frequency.json")
-    print("="*60)
-    print("Resultados guardados en: data/deployment_frequency.json")
-    print("="*60)
+    print("Guardado en: data/deployment_frequency.json")
 
 if __name__ == "__main__":
     calculate_deployment_frequency()
