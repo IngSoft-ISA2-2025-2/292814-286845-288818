@@ -1,0 +1,73 @@
+{
+  "metric": "Deployment Frequency",
+  "calculation_date": "2025-11-05T19:12:34.790050",
+  "period": {
+    "start": "2025-09-30T17:19:06Z",
+    "end": "2025-10-28T00:13:56Z",
+    "days": 28,
+    "weeks": 4.0,
+    "months": 0.9
+  },
+  "total_deployments": 7,
+  "frequency": {
+    "per_day": 0.25,
+    "per_week": 1.75,
+    "per_month": 7.5
+  },
+  "dora_level": "High",
+  "dora_description": "Entre 1 deployment por día y 1 por semana",
+  "benchmarks": {
+    "Elite": "Múltiples deployments por día",
+    "High": "Entre 1 por día y 1 por semana",
+    "Medium": "Entre 1 por semana y 1 por mes",
+    "Low": "Menos de 1 por mes"
+  },
+  "deployments": [
+    {
+      "number": 29,
+      "title": "feat(ci): agregar build al ci",
+      "merged_at": "2025-09-30T17:19:06Z",
+      "author": "chrisingrey"
+    },
+    {
+      "number": 31,
+      "title": "feat(ci): Merge a main solo desde develop",
+      "merged_at": "2025-09-30T17:32:43Z",
+      "author": "chrisingrey"
+    },
+    {
+      "number": 33,
+      "title": "feat(ci): separacion de archivos y code coverage",
+      "merged_at": "2025-09-30T17:54:12Z",
+      "author": "chrisingrey"
+    },
+    {
+      "number": 44,
+      "title": "Workflows con pipeline completo y issues resueltos",
+      "merged_at": "2025-10-03T13:06:04Z",
+      "author": "chrisingrey"
+    },
+    {
+      "number": 48,
+      "title": "Actualizacion final main",
+      "merged_at": "2025-10-03T22:30:02Z",
+      "author": "JuanPeMiche"
+    },
+    {
+      "number": 73,
+      "title": "Develop",
+      "merged_at": "2025-10-28T00:03:07Z",
+      "author": "chrisingrey"
+    },
+    {
+      "number": 74,
+      "title": "fix",
+      "merged_at": "2025-10-28T00:13:56Z",
+      "author": "chrisingrey"
+    }
+  ],
+  "weekly_distribution": {
+    "2025-W39": 5,
+    "2025-W43": 2
+  }
+}
