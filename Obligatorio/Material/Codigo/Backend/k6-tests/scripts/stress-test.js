@@ -65,12 +65,55 @@ export default function() {
 
 export function handleSummary(data) {
   const summary = generateSummary(data);
+  const html = generateHTMLReport(data);
   
   return {
     'stdout': summary,
     'results/stress-test-summary.json': JSON.stringify(data),
-    'results/stress-test-report.txt': summary
+    'results/stress-test-summary.html': html
   };
+}
+
+function generateHTMLReport(data) {
+  const duration = data.metrics.http_req_duration?.values;
+  const iterations = data.metrics.iterations?.values.count || 0;
+  const httpReqs = data.metrics.http_reqs?.values.count || 0;
+  const failRate = (data.metrics.http_req_failed?.values.rate * 100 || 0).toFixed(2);
+  
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stress Test Report - PharmaGo</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+    .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h1 { color: #333; border-bottom: 3px solid #FF5722; padding-bottom: 10px; }
+    .metric { background: #f9f9f9; padding: 15px; margin: 10px 0; border-left: 4px solid #FF5722; }
+    .status-pass { color: #4CAF50; font-weight: bold; }
+    .status-fail { color: #f44336; font-weight: bold; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background-color: #FF5722; color: white; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💥 Stress Test Report - PharmaGo API</h1>
+    <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
+    <p><strong>Max VUs:</strong> 100 | <strong>Duration:</strong> 16 minutes</p>
+    <h2>Summary</h2>
+    <div class="metric">
+      <div>Total Requests: ${httpReqs}</div>
+      <div>Failed: <span class="${failRate > 5 ? 'status-fail' : 'status-pass'}">${failRate}%</span></div>
+      <div>p95: ${duration?.['p(95)'].toFixed(2) || 'N/A'} ms (threshold: &lt; 1000ms)</div>
+      <div>p99: ${duration?.['p(99)'].toFixed(2) || 'N/A'} ms (threshold: &lt; 2000ms)</div>
+    </div>
+    <p>${failRate < 5 && duration?.['p(95)'] < 1000 ? '<span class="status-pass">✓ PASSED</span>' : '<span class="status-fail">✗ FAILED</span>'}</p>
+  </div>
+</body>
+</html>
+  `;
 }
 
 function generateSummary(data) {
