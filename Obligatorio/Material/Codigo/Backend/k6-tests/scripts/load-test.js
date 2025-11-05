@@ -102,25 +102,25 @@ function htmlReport(data) {
       <tr><th>Metric</th><th>Value</th><th>Threshold</th><th>Status</th></tr>
       <tr>
         <td>Average</td>
-        <td>${duration?.avg.toFixed(2) || 'N/A'} ms</td>
+        <td>${duration?.avg?.toFixed(2) || 'N/A'} ms</td>
         <td>-</td>
         <td>-</td>
       </tr>
       <tr>
         <td>p95</td>
-        <td>${duration?.['p(95)'].toFixed(2) || 'N/A'} ms</td>
+        <td>${duration?.['p(95)']?.toFixed(2) || 'N/A'} ms</td>
         <td>&lt; 500 ms</td>
         <td class="${duration?.['p(95)'] < 500 ? 'status-pass' : 'status-fail'}">${duration?.['p(95)'] < 500 ? '✓ PASS' : '✗ FAIL'}</td>
       </tr>
       <tr>
         <td>p99</td>
-        <td>${duration?.['p(99)'].toFixed(2) || 'N/A'} ms</td>
+        <td>${duration?.['p(99)']?.toFixed(2) || 'N/A'} ms</td>
         <td>&lt; 1000 ms</td>
         <td class="${duration?.['p(99)'] < 1000 ? 'status-pass' : 'status-fail'}">${duration?.['p(99)'] < 1000 ? '✓ PASS' : '✗ FAIL'}</td>
       </tr>
       <tr>
         <td>Max</td>
-        <td>${duration?.max.toFixed(2) || 'N/A'} ms</td>
+        <td>${duration?.max?.toFixed(2) || 'N/A'} ms</td>
         <td>-</td>
         <td>-</td>
       </tr>
@@ -155,13 +155,13 @@ function textSummary(data, options) {
   if (data.metrics.http_req_duration) {
     const duration = data.metrics.http_req_duration.values;
     summary += `${indent}Response Time:\n`;
-    summary += `${indent}  avg: ${duration.avg.toFixed(2)}ms\n`;
-    summary += `${indent}  p95: ${duration['p(95)'].toFixed(2)}ms\n`;
-    summary += `${indent}  p99: ${duration['p(99)'].toFixed(2)}ms\n`;
+    summary += `${indent}  avg: ${duration.avg?.toFixed(2) || 'N/A'}ms\n`;
+    summary += `${indent}  p95: ${duration['p(95)']?.toFixed(2) || 'N/A'}ms\n`;
+    summary += `${indent}  p99: ${duration['p(99)']?.toFixed(2) || 'N/A'}ms\n`;
   }
   
   if (data.metrics.http_req_failed) {
-    const failRate = (data.metrics.http_req_failed.values.rate * 100).toFixed(2);
+    const failRate = ((data.metrics.http_req_failed.values.rate || 0) * 100).toFixed(2);
     summary += `${indent}Failed Requests: ${failRate}%\n`;
   }
   
