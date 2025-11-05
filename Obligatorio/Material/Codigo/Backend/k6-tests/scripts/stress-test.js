@@ -106,10 +106,10 @@ function generateHTMLReport(data) {
     <div class="metric">
       <div>Total Requests: ${httpReqs}</div>
       <div>Failed: <span class="${failRate > 5 ? 'status-fail' : 'status-pass'}">${failRate}%</span></div>
-      <div>p95: ${duration?.['p(95)'].toFixed(2) || 'N/A'} ms (threshold: &lt; 1000ms)</div>
-      <div>p99: ${duration?.['p(99)'].toFixed(2) || 'N/A'} ms (threshold: &lt; 2000ms)</div>
+      <div>p95: ${duration?.['p(95)']?.toFixed(2) || 'N/A'} ms (threshold: &lt; 1000ms)</div>
+      <div>p99: ${duration?.['p(99)']?.toFixed(2) || 'N/A'} ms (threshold: &lt; 2000ms)</div>
     </div>
-    <p>${failRate < 5 && duration?.['p(95)'] < 1000 ? '<span class="status-pass">✓ PASSED</span>' : '<span class="status-fail">✗ FAILED</span>'}</p>
+    <p>${failRate < 5 && duration?.['p(95)'] < 1000 ? '<span class="status-pass">✓ PASSED</span>' : '<span class="status-fail">✗ FAILED - Sistema bajo estrés extremo muestra degradación</span>'}</p>
   </div>
 </body>
 </html>
@@ -148,12 +148,12 @@ function generateSummary(data) {
   
   if (data.metrics.http_req_duration) {
     const duration = data.metrics.http_req_duration.values;
-    summary += `Average: ${duration.avg.toFixed(2)}ms\n`;
-    summary += `Median (p50): ${duration.med.toFixed(2)}ms\n`;
-    summary += `p90: ${duration['p(90)'].toFixed(2)}ms\n`;
-    summary += `p95: ${duration['p(95)'].toFixed(2)}ms\n`;
-    summary += `p99: ${duration['p(99)'].toFixed(2)}ms\n`;
-    summary += `Max: ${duration.max.toFixed(2)}ms\n`;
+    summary += `Average: ${duration.avg?.toFixed(2) || 'N/A'}ms\n`;
+    summary += `Median (p50): ${duration.med?.toFixed(2) || 'N/A'}ms\n`;
+    summary += `p90: ${duration['p(90)']?.toFixed(2) || 'N/A'}ms\n`;
+    summary += `p95: ${duration['p(95)']?.toFixed(2) || 'N/A'}ms\n`;
+    summary += `p99: ${duration['p(99)']?.toFixed(2) || 'N/A'}ms\n`;
+    summary += `Max: ${duration.max?.toFixed(2) || 'N/A'}ms\n`;
   }
   
   summary += '\nERROR ANALYSIS\n';
