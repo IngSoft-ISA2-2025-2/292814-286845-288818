@@ -1,0 +1,2312 @@
+[
+  {
+    "sha": "87f94e0ee6966084f8a9492a93155c9c2e010676",
+    "message": "Merge pull request #74 from IngSoft-ISA2-2025-2/hotfix/fix-cypress\n\nfix",
+    "author": "Christian Ingrey",
+    "date": "2025-10-28T00:13:56Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/87f94e0ee6966084f8a9492a93155c9c2e010676"
+  },
+  {
+    "sha": "54512baf9d580f422eb08e4cf844593ee5e0b70f",
+    "message": "fix",
+    "author": "chrisingrey",
+    "date": "2025-10-28T00:13:37Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/54512baf9d580f422eb08e4cf844593ee5e0b70f"
+  },
+  {
+    "sha": "a53486e75a65a50071b683efb9007e9fa5b95134",
+    "message": "Merge pull request #73 from IngSoft-ISA2-2025-2/develop\n\nDevelop",
+    "author": "Christian Ingrey",
+    "date": "2025-10-28T00:03:07Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/a53486e75a65a50071b683efb9007e9fa5b95134"
+  },
+  {
+    "sha": "3404161705de898a97889e2a9df567b37ca6277e",
+    "message": "Merge pull request #72 from IngSoft-ISA2-2025-2/chore/actualizacion-docs-features-steps-tests\n\nChore/actualizacion docs features steps tests",
+    "author": "Christian Ingrey",
+    "date": "2025-10-28T00:02:47Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/3404161705de898a97889e2a9df567b37ca6277e"
+  },
+  {
+    "sha": "7ff953d3254d4b34fdecf646d806849f500aea3e",
+    "message": "Fix",
+    "author": "chrisingrey",
+    "date": "2025-10-28T00:02:23Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/7ff953d3254d4b34fdecf646d806849f500aea3e"
+  },
+  {
+    "sha": "84b453a80de14d4323debe781e5321ad2cfbcaaa",
+    "message": "fix(General): Arreglos para buen funcionamiento de la web",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-27T23:23:11Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/84b453a80de14d4323debe781e5321ad2cfbcaaa"
+  },
+  {
+    "sha": "46a2933fa89af08c57bfebcfc12151af0787bb8c",
+    "message": "docs(README): total escenarios corregido",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-27T18:16:24Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/46a2933fa89af08c57bfebcfc12151af0787bb8c"
+  },
+  {
+    "sha": "95ef60e58333319457628bfe83b3ccd86eda1b76",
+    "message": "Fix migrations",
+    "author": "chrisingrey",
+    "date": "2025-10-27T16:36:39Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/95ef60e58333319457628bfe83b3ccd86eda1b76"
+  },
+  {
+    "sha": "7916f24dad4c352418fea21936175b1a8dc165ed",
+    "message": "chore: merge develop - update workflows and cypress tests",
+    "author": "chrisingrey",
+    "date": "2025-10-27T14:19:07Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/7916f24dad4c352418fea21936175b1a8dc165ed"
+  },
+  {
+    "sha": "eab8bd60585ed2ec2152c28eacd9b9a65a48085d",
+    "message": "Merge pull request #68 from IngSoft-ISA2-2025-2/chore/pipeline-actualization\n\nchore(pipeline-configuration): fix frontend-e2e-cypress",
+    "author": "Christian Ingrey",
+    "date": "2025-10-27T14:05:50Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/eab8bd60585ed2ec2152c28eacd9b9a65a48085d"
+  },
+  {
+    "sha": "6943557ac31b7446d032f148d4ddf7e39cef9812",
+    "message": "fix(workflows): update to docker compose V2 and add --legacy-peer-deps\n\n- Change docker-compose to docker compose (V2 syntax)\n- Add --legacy-peer-deps flag for npm ci\n- Update Node.js cache key to include version 20\n- Change formatting checks to continue-on-error with warnings\n- Remove Install formatting tools step (dependencies already in package.json)\n- Simplify prettier config check (don't auto-create)\n- Add docker logs on backend/frontend startup failures",
+    "author": "chrisingrey",
+    "date": "2025-10-27T13:56:27Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/6943557ac31b7446d032f148d4ddf7e39cef9812"
+  },
+  {
+    "sha": "ec291c458ff50d1e3e1c192fba422be1f27806b4",
+    "message": "Merge pull request #71 from IngSoft-ISA2-2025-2/test/workflow-validation\n\ntest: trigger updated workflows",
+    "author": "Christian Ingrey",
+    "date": "2025-10-27T13:52:02Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ec291c458ff50d1e3e1c192fba422be1f27806b4"
+  },
+  {
+    "sha": "7b5ceae4aa0b93a164ff95bc03d8b9c5e11fe94e",
+    "message": "test: trigger updated workflows",
+    "author": "chrisingrey",
+    "date": "2025-10-27T13:50:27Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/7b5ceae4aa0b93a164ff95bc03d8b9c5e11fe94e"
+  },
+  {
+    "sha": "f5293f76261e4d8d1f37b18554f350c23c189e2b",
+    "message": "Merge pull request #70 from IngSoft-ISA2-2025-2/hotfix/frontend-formatting\n\nFix ymls",
+    "author": "Christian Ingrey",
+    "date": "2025-10-27T13:35:57Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f5293f76261e4d8d1f37b18554f350c23c189e2b"
+  },
+  {
+    "sha": "941749c511c85ac8cb30752f310684f3736fdaab",
+    "message": "Fix ymls",
+    "author": "chrisingrey",
+    "date": "2025-10-27T13:35:03Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/941749c511c85ac8cb30752f310684f3736fdaab"
+  },
+  {
+    "sha": "1c3098af153c223a87667560b7d099c2e2304f53",
+    "message": "Merge branch 'develop' into chore/pipeline-actualization",
+    "author": "Christian Ingrey",
+    "date": "2025-10-27T13:31:08Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/1c3098af153c223a87667560b7d099c2e2304f53"
+  },
+  {
+    "sha": "4eecdb2ead6a36388351e4b14502ebec85612b24",
+    "message": "Merge pull request #69 from IngSoft-ISA2-2025-2/hotfix/frontend-formatting\n\nUpdate frontend-formatting.yml",
+    "author": "Christian Ingrey",
+    "date": "2025-10-27T13:29:14Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/4eecdb2ead6a36388351e4b14502ebec85612b24"
+  },
+  {
+    "sha": "b757cb2fbad126e7646ac931c5a8b33989f77a05",
+    "message": "Update frontend-e2e-cypress.yml",
+    "author": "chrisingrey",
+    "date": "2025-10-27T13:25:00Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/b757cb2fbad126e7646ac931c5a8b33989f77a05"
+  },
+  {
+    "sha": "9979b4ff185bac9b643e36abd2028c5f3b7513dc",
+    "message": "Update frontend-formatting.yml",
+    "author": "chrisingrey",
+    "date": "2025-10-27T13:22:14Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/9979b4ff185bac9b643e36abd2028c5f3b7513dc"
+  },
+  {
+    "sha": "086f2cfb3e70dae891d26181310b351fdb1b6054",
+    "message": "Update frontend-formatting.yml",
+    "author": "chrisingrey",
+    "date": "2025-10-27T13:17:42Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/086f2cfb3e70dae891d26181310b351fdb1b6054"
+  },
+  {
+    "sha": "557a70d7b62580227ad11226454202e425f17398",
+    "message": "chore(pipeline-configuration): fix steps y .feature fix cypress.config",
+    "author": "chrisingrey",
+    "date": "2025-10-27T13:14:32Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/557a70d7b62580227ad11226454202e425f17398"
+  },
+  {
+    "sha": "e61afe54ac91496d5c5f3f8b4cc0502f59c67029",
+    "message": "chore(Idioma): cambio de español a ingles de manage-reservation",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-27T12:33:35Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e61afe54ac91496d5c5f3f8b4cc0502f59c67029"
+  },
+  {
+    "sha": "e0f4d40dae404cf279eec5cfb08e2bdf790fd367",
+    "message": "chore(pipeline-configuration): fix frontend-e2e-cypress + fix cypress.config",
+    "author": "chrisingrey",
+    "date": "2025-10-27T12:15:30Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e0f4d40dae404cf279eec5cfb08e2bdf790fd367"
+  },
+  {
+    "sha": "3eb0d980c440803944a5bb21c941dd4b0d933db0",
+    "message": "chore(pipeline-configuration): fix frontend-e2e-cypress",
+    "author": "chrisingrey",
+    "date": "2025-10-27T12:04:11Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/3eb0d980c440803944a5bb21c941dd4b0d933db0"
+  },
+  {
+    "sha": "72bac0e4dae1919748bfd581d0d3111598d179a0",
+    "message": "chore(pipeline-configuration): fix frontend-e2e-cypress",
+    "author": "chrisingrey",
+    "date": "2025-10-27T12:00:10Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/72bac0e4dae1919748bfd581d0d3111598d179a0"
+  },
+  {
+    "sha": "8afcc0972d250cddd7e9dbebe99b7037df6609fb",
+    "message": "Merge pull request #67 from IngSoft-ISA2-2025-2/chore/pipeline-actualization\n\nchore(pipeline-configuration): Refactor pipeline activation main and …",
+    "author": "Christian Ingrey",
+    "date": "2025-10-27T11:55:40Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/8afcc0972d250cddd7e9dbebe99b7037df6609fb"
+  },
+  {
+    "sha": "48445696e1652103f0a89de34e23204bce510b5b",
+    "message": "chore(pipeline-configuration): Refactor pipeline activation main and develop + Cypress E2E Tests",
+    "author": "chrisingrey",
+    "date": "2025-10-27T11:54:51Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/48445696e1652103f0a89de34e23204bce510b5b"
+  },
+  {
+    "sha": "de3983a4beb088b3a7cd77d2bebdf09cc860f141",
+    "message": "docs(nuevas-features): actualizacion de confirmar reserva con escenarios finales",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-27T02:53:32Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/de3983a4beb088b3a7cd77d2bebdf09cc860f141"
+  },
+  {
+    "sha": "8cb52f61ec6a1d77502b05644adc5c8614b6f2a2",
+    "message": "chore(.feature Cancel y Confirm): Arreglos de idioma y de steps duplciados por merge",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-27T02:48:16Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/8cb52f61ec6a1d77502b05644adc5c8614b6f2a2"
+  },
+  {
+    "sha": "3c933eb2dcd806aee935d3b0b105ab88374dedf8",
+    "message": "Merge branch 'develop' into chore/actualizacion-docs",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-27T02:13:24Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/3c933eb2dcd806aee935d3b0b105ab88374dedf8"
+  },
+  {
+    "sha": "1166a6372633c1d57243a4270d80b4316701accd",
+    "message": "feat(confirm-reservation): BDD GREEN - feature completa",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T01:38:10Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/1166a6372633c1d57243a4270d80b4316701accd"
+  },
+  {
+    "sha": "677fac4eb4bc465e28d587f799ccd6ddc14e8496",
+    "message": "feat: TDD GREEN - component implementation confirmar reserva",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T00:51:24Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/677fac4eb4bc465e28d587f799ccd6ddc14e8496"
+  },
+  {
+    "sha": "5b84dca20a3ef8933f28d214dcf7900312995baa",
+    "message": "chore: eliminacion de carpeta innecesaria",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-27T00:48:35Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/5b84dca20a3ef8933f28d214dcf7900312995baa"
+  },
+  {
+    "sha": "da396b481e5fee414b3d9f85d69388963c02bcda",
+    "message": "docs(nuevas-features): actualizacion de cancelar reserva con escenarios finales",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-27T00:35:51Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/da396b481e5fee414b3d9f85d69388963c02bcda"
+  },
+  {
+    "sha": "f1a1643a566c029f88e35f5b78fa6e7e179a5e8c",
+    "message": "feat: TDD GREEN - service confirmar reserva (escenario 5: exito)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T00:28:40Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f1a1643a566c029f88e35f5b78fa6e7e179a5e8c"
+  },
+  {
+    "sha": "8b7d734bc1203ae1bdd636769eab450dc94948da",
+    "message": "feat: TDD RED - service confirmar reserva (escenario 5: exito)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T00:26:26Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/8b7d734bc1203ae1bdd636769eab450dc94948da"
+  },
+  {
+    "sha": "fcf4df0d15d82ef1b554d33f520f1cd84a652320",
+    "message": "feat: TDD GREEN - controller confirmar reserva (escenario 5: exito)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T00:24:05Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/fcf4df0d15d82ef1b554d33f520f1cd84a652320"
+  },
+  {
+    "sha": "9b27e0168faf207690d1c69b5775fe4a30aea0c8",
+    "message": "feat: TDD GREEN - service confirmar reserva (escenario 4: expirada)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T00:23:01Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/9b27e0168faf207690d1c69b5775fe4a30aea0c8"
+  },
+  {
+    "sha": "d82c26788c45a6f49828a362eb7c1a01f76d77c0",
+    "message": "feat: TDD RED - service confirmar reserva (escenario 4: expirada)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T00:21:16Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/d82c26788c45a6f49828a362eb7c1a01f76d77c0"
+  },
+  {
+    "sha": "cece36744b7e3f3ff0046c01fb985631851621d2",
+    "message": "feat: TDD GREEN - controller confirmar reserva (escenario 4: expirada)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T00:19:45Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/cece36744b7e3f3ff0046c01fb985631851621d2"
+  },
+  {
+    "sha": "7288dc3e9847da8df5b725183b6b73ae707e8c4f",
+    "message": "feat: TDD GREEN - service confirmar reserva (escenario 3: cancelada)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T00:18:12Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/7288dc3e9847da8df5b725183b6b73ae707e8c4f"
+  },
+  {
+    "sha": "0c4600c7fcf5b74bfd7ea409fcdd255d2bcab380",
+    "message": "feat: TDD RED - service confirmar reserva (escenario 3: cancelada)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T00:15:34Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/0c4600c7fcf5b74bfd7ea409fcdd255d2bcab380"
+  },
+  {
+    "sha": "8078d9efa0c76ae7936a4539d1e9581cbfe7af93",
+    "message": "feat: TDD GREEN - controller confirmar reserva (escenario 3: cancelada)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T00:13:17Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/8078d9efa0c76ae7936a4539d1e9581cbfe7af93"
+  },
+  {
+    "sha": "c22dcc3467517d9566f9ad140c23f42e63258f82",
+    "message": "refactor(MERGE): arreglos necesarios para funcionamiento total luego de merge develop",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-27T00:11:03Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/c22dcc3467517d9566f9ad140c23f42e63258f82"
+  },
+  {
+    "sha": "a437f3b6e1cdc63e0735ff27aff04bd37d869798",
+    "message": "feat: TDD GREEN - service confirmar reserva (escenario 2: ya confirmada)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T00:10:11Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/a437f3b6e1cdc63e0735ff27aff04bd37d869798"
+  },
+  {
+    "sha": "ad3ab0fdcbd244ef37688bfdaa866c9138f9e3bc",
+    "message": "feat: TDD GREEN - controller confirmar reserva (escenario 2: ya confirmada)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T00:05:56Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ad3ab0fdcbd244ef37688bfdaa866c9138f9e3bc"
+  },
+  {
+    "sha": "287875b18a2b225bea71d5dc95bd90a603db6fd6",
+    "message": "feat: TDD GREEN - service confirmar reserva (escenario 1: no encontrada)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T00:03:05Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/287875b18a2b225bea71d5dc95bd90a603db6fd6"
+  },
+  {
+    "sha": "13d45a3830b803aebe29e071a049a1aa7ece1c0b",
+    "message": "feat: TDD RED - service confirmar reserva (escenario 1: no encontrada)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-27T00:00:54Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/13d45a3830b803aebe29e071a049a1aa7ece1c0b"
+  },
+  {
+    "sha": "4e3edb31dfbdceba60fd624d88b6e3ad0d5d15a3",
+    "message": "feat: TDD GREEN - controller confirmar reserva (escenario 1: reserva no encontrada)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-26T23:57:56Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/4e3edb31dfbdceba60fd624d88b6e3ad0d5d15a3"
+  },
+  {
+    "sha": "62462b49603de53b5b0d54aa7897f52c5c0788b7",
+    "message": "feat: TDD RED - controller test confirmar reserva (escenario 1: no encontrada)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-26T23:50:02Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/62462b49603de53b5b0d54aa7897f52c5c0788b7"
+  },
+  {
+    "sha": "3e5f37c420312a934874238a0c8fad014241214b",
+    "message": "feat(confirm-reservation): TDD RED - component test",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-26T23:39:16Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/3e5f37c420312a934874238a0c8fad014241214b"
+  },
+  {
+    "sha": "c3a4b49fb3b541fbc2fa5085265f91aa4ab5389a",
+    "message": "feat(confirm-reservation): BDD RED (Cypress) - feature confirm reservation",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-26T23:35:58Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/c3a4b49fb3b541fbc2fa5085265f91aa4ab5389a"
+  },
+  {
+    "sha": "94488808e623fdc3a690d9bb7be032e10f5927d6",
+    "message": "chore(eliminacion): eliminacion de archivos autogenerados innecesarios",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-26T23:20:32Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/94488808e623fdc3a690d9bb7be032e10f5927d6"
+  },
+  {
+    "sha": "756a15594bc5a7ab58df05e539694d410709965d",
+    "message": "Merge branch 'develop' into chore/actualizacion-docs",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-26T23:16:01Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/756a15594bc5a7ab58df05e539694d410709965d"
+  },
+  {
+    "sha": "d95725c295d6c18b03731eaae653a70447fbdb70",
+    "message": "refactor(component.spec.ts): arreglo de tests fallidos",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-26T23:11:49Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/d95725c295d6c18b03731eaae653a70447fbdb70"
+  },
+  {
+    "sha": "e61aa141ef5d6954562a2d1d1153ce03e090c53f",
+    "message": "Merge branch 'feature/cancelar-reservas' into develop",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-26T23:04:09Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e61aa141ef5d6954562a2d1d1153ce03e090c53f"
+  },
+  {
+    "sha": "054fc40c176ec0b8fbb17b58af7e6ec8f6cf2f9f",
+    "message": "docs(): Actualizacion de documentos para Entreag 3",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-26T21:19:58Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/054fc40c176ec0b8fbb17b58af7e6ec8f6cf2f9f"
+  },
+  {
+    "sha": "a2dd72b9fc4694d41621b8da82c5a1967444f3ab",
+    "message": "docs(nuevas-features.md): Actualizacion de escenarios con version final de requerimietnos 1,2,5 y 6",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-26T19:53:13Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/a2dd72b9fc4694d41621b8da82c5a1967444f3ab"
+  },
+  {
+    "sha": "e83680bc024259e8ae9857011ff94fdaf395ff9a",
+    "message": "feat(cancelar-reserva): BDD GREEN (Cypress) - feature completa",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-26T01:30:11Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e83680bc024259e8ae9857011ff94fdaf395ff9a"
+  },
+  {
+    "sha": "a34ff5e580f04ad4ad1f9ad874e841db3874209b",
+    "message": "Merge pull request #65 from IngSoft-ISA2-2025-2/feature/gestion-de-estados\n\nFeature/gestion de estados",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-26T01:08:53Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/a34ff5e580f04ad4ad1f9ad874e841db3874209b"
+  },
+  {
+    "sha": "ef9448f5d00ce58eb9163affc0821b3bc653fa40",
+    "message": "feat(GestionDeEstados): BDD GREEN - feature Gestion de Estados completa, con separacion de responsabilidades con gestion de reservas y refactor de page gestionar reserva para cumplimiento al 100 de ambos requerimientos",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-26T00:40:23Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ef9448f5d00ce58eb9163affc0821b3bc653fa40"
+  },
+  {
+    "sha": "92d841551cee18a193dcba5963b38f2b7837dcc5",
+    "message": "refactor: arreglo test public key en from entity",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T23:56:58Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/92d841551cee18a193dcba5963b38f2b7837dcc5"
+  },
+  {
+    "sha": "34f12e1686cb2c5e1ebebc41f7c593e7a1f6d1f9",
+    "message": "feat(cancelar-reserva): Frontend TDD GREEN: component implementation",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T23:54:38Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/34f12e1686cb2c5e1ebebc41f7c593e7a1f6d1f9"
+  },
+  {
+    "sha": "901a7534400681cad0de35ac2b528c497a7c76a4",
+    "message": "refactor: atributos de reserva a ingles",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T23:52:26Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/901a7534400681cad0de35ac2b528c497a7c76a4"
+  },
+  {
+    "sha": "2ea33b9a8e90726558c7e81c07ccc2e48822075c",
+    "message": "Merge branch 'develop' into feature/gestion-de-estados",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T23:36:50Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/2ea33b9a8e90726558c7e81c07ccc2e48822075c"
+  },
+  {
+    "sha": "a85fc17f6d874147756280ce6f83ff6246396c3f",
+    "message": "Merge pull request #64 from IngSoft-ISA2-2025-2/feature/secure-reservations\n\nFeature/secure reservations",
+    "author": "Christian Ingrey",
+    "date": "2025-10-25T23:32:52Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/a85fc17f6d874147756280ce6f83ff6246396c3f"
+  },
+  {
+    "sha": "4b89b1020f96e0ba876bc22fad0d02a7e6e69128",
+    "message": "BDD GREEN - Feature Completa",
+    "author": "chrisingrey",
+    "date": "2025-10-25T23:31:39Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/4b89b1020f96e0ba876bc22fad0d02a7e6e69128"
+  },
+  {
+    "sha": "aded73e642e3844daaf5534478b14ac1ed46b0db",
+    "message": "feat(cancelar-reserva) - Service TDD GREEN - CancelReservation_WithMultipleReservationsSameEmail_CancelsOnlyMatchingSecret()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T23:22:48Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/aded73e642e3844daaf5534478b14ac1ed46b0db"
+  },
+  {
+    "sha": "32d14324ceec767f509ed43e75f6f82e1d3126d7",
+    "message": "feat(cancelar-reserva) - Controller TDD GREEN - CancelReservation_WithMultipleReservations_CancelsOnlyMatchingSecret()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T23:20:09Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/32d14324ceec767f509ed43e75f6f82e1d3126d7"
+  },
+  {
+    "sha": "e662630333303f31fb4f53868614315f9d95ea08",
+    "message": "feat(cancelar-reserva) - Service TDD GREEN - CancelReservation_WithValidEmailAndSecret_SuccessfullyCancelsReservation()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T23:16:59Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e662630333303f31fb4f53868614315f9d95ea08"
+  },
+  {
+    "sha": "ccc3c1c61cb22675884e89d7396db83fda1ad18e",
+    "message": "feat(cancelar-reserva) - Controller TDD GREEN - CancelReservation_WithValidEmailAndSecret_ReturnsOkAndCancelsReservation()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T23:14:15Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ccc3c1c61cb22675884e89d7396db83fda1ad18e"
+  },
+  {
+    "sha": "1277159fa30bb63398cee25da7e8b04bee892f0b",
+    "message": "feat(cancelar-reserva) - Service TDD GREEN - CancelReservation_WhenAlreadyCancelled_ReturnsReservationIdempotent()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T23:09:56Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/1277159fa30bb63398cee25da7e8b04bee892f0b"
+  },
+  {
+    "sha": "61d486b896a8ae1e69206c82e0f6ee14984af729",
+    "message": "Frontend TDD GREEN - Service Implementation",
+    "author": "chrisingrey",
+    "date": "2025-10-25T23:06:45Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/61d486b896a8ae1e69206c82e0f6ee14984af729"
+  },
+  {
+    "sha": "a267dbf116af4ae7d4450606a40113528962a9d2",
+    "message": "feat(secure-reservation): TDD REFACTOR - service ReservaEstadoConfirmada",
+    "author": "chrisingrey",
+    "date": "2025-10-25T23:06:09Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/a267dbf116af4ae7d4450606a40113528962a9d2"
+  },
+  {
+    "sha": "010422d104197e10df9e92485d83fd2022a78de4",
+    "message": "feat (cancelar-reserva) - Controller TDD GREEN - CancelReservation_WhenAlreadyCancelled_ReturnsOkIdempotent()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T23:04:29Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/010422d104197e10df9e92485d83fd2022a78de4"
+  },
+  {
+    "sha": "3b3769b4d280633f9509510272e9ead4378ace43",
+    "message": "feat(cancelar-reserva) - Controller TDD RED - CancelReservation_WhenAlreadyCancelled_ReturnsOkIdempotent()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T23:00:32Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/3b3769b4d280633f9509510272e9ead4378ace43"
+  },
+  {
+    "sha": "f319105eec9df7173e9d63591170d786553d4c2c",
+    "message": "feat(GestionDeEstados): TDD GREEN - controller test casos de filtrado frontend",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:58:39Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f319105eec9df7173e9d63591170d786553d4c2c"
+  },
+  {
+    "sha": "f31d570e55c3e4c95c551708f3efaa5749a3d32b",
+    "message": "feat(secure-reservation): TDD REFACTOR - Scenarios",
+    "author": "chrisingrey",
+    "date": "2025-10-25T22:58:23Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f31d570e55c3e4c95c551708f3efaa5749a3d32b"
+  },
+  {
+    "sha": "77c9c51dd0e05b2f5f07175fca2c330feb94503f",
+    "message": "feat(cancelar-reserva) - Service TDD GREEN - CancelReservation_WithExpiredReservation_ThrowsInvalidOperationException()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T22:55:47Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/77c9c51dd0e05b2f5f07175fca2c330feb94503f"
+  },
+  {
+    "sha": "af483855936a0d5db5fe3a2b7a0d3e8e3edca39c",
+    "message": "feat (cancelar-reserva) - Service TDD RED - CancelReservation_WithExpiredReservation_ThrowsInvalidOperationException()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T22:53:46Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/af483855936a0d5db5fe3a2b7a0d3e8e3edca39c"
+  },
+  {
+    "sha": "88e41eaa69cf2d8e8c8c3d7574ea6d568efa159c",
+    "message": "feat(GestionDeEstados): TDD GREEN - service test Reservas diferentes estados",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:52:35Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/88e41eaa69cf2d8e8c8c3d7574ea6d568efa159c"
+  },
+  {
+    "sha": "6bbc07e314c444b14d0012b0dfdca1ed3c6cd4ed",
+    "message": "feat(secure-reservation): TDD GREEN - service test CancelledReservation",
+    "author": "chrisingrey",
+    "date": "2025-10-25T22:50:33Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/6bbc07e314c444b14d0012b0dfdca1ed3c6cd4ed"
+  },
+  {
+    "sha": "42080df49cc0f8e45dd12a5bd257b921d0b32f9a",
+    "message": "feat(cancelar-reserva) - Controller TDD GREEN - CancelReservation_WithExpiredReservation_ThrowsInvalidOperationException()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T22:50:23Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/42080df49cc0f8e45dd12a5bd257b921d0b32f9a"
+  },
+  {
+    "sha": "70e43aeb9d5ba56ec7c7c21b4b2c3f61b0bec325",
+    "message": "feat(GestionDeEstados): TDD RED - service test Reservas diferentes estados",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:50:03Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/70e43aeb9d5ba56ec7c7c21b4b2c3f61b0bec325"
+  },
+  {
+    "sha": "ab3305eb69930079217bb0082f0ce4c2184015c9",
+    "message": "feat(secure-reservation): TDD RED - service test CancelledReservation",
+    "author": "chrisingrey",
+    "date": "2025-10-25T22:48:54Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ab3305eb69930079217bb0082f0ce4c2184015c9"
+  },
+  {
+    "sha": "c9911258c40cea9592f1436014f62bfb9aa834a4",
+    "message": "feat(secure-reservation): TDD GREEN - service test ExpiredReservation",
+    "author": "chrisingrey",
+    "date": "2025-10-25T22:46:40Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/c9911258c40cea9592f1436014f62bfb9aa834a4"
+  },
+  {
+    "sha": "bf3c4b66d3b69cf22484459bdc9a0707c9ea7dc1",
+    "message": "feat (cancelar-reserva) - Service TDD GREEN - CancelReservation_WithEmptyEmail_ThrowsArgumentException()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T22:46:38Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/bf3c4b66d3b69cf22484459bdc9a0707c9ea7dc1"
+  },
+  {
+    "sha": "fcf83dca152b60329accfa9020b2ef77213ffeda",
+    "message": "feat(GestionDeEstados): TDD RED - controller test Reservas diferentes estados",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:45:10Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/fcf83dca152b60329accfa9020b2ef77213ffeda"
+  },
+  {
+    "sha": "131bb1ad9a4413748741313f43f00c393bab6e87",
+    "message": "feat(cancelar-reserva) - Service TDD RED -  CancelReservation_WithEmptyEmail_ThrowsArgumentException()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T22:44:33Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/131bb1ad9a4413748741313f43f00c393bab6e87"
+  },
+  {
+    "sha": "8c7a8aeb50c73b47a520cf07b6518617533dfe9c",
+    "message": "feat(secure-reservation): TDD RED - service test ExpiredReservation",
+    "author": "chrisingrey",
+    "date": "2025-10-25T22:42:37Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/8c7a8aeb50c73b47a520cf07b6518617533dfe9c"
+  },
+  {
+    "sha": "1b0710de7fd27c86f835c995f37c11439ae1229e",
+    "message": "feat (cancelar-reserva) - Controller TDD GREEN -  CancelReservation_WithMissingEmail_ThrowsArgumentException()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T22:42:26Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/1b0710de7fd27c86f835c995f37c11439ae1229e"
+  },
+  {
+    "sha": "2b00c1fbfebcca40610925cc53ebbe0ebf77ea4e",
+    "message": "feat(GestionDeEstados): TDD RED - component test Reservas diferentes estados",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:40:28Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/2b00c1fbfebcca40610925cc53ebbe0ebf77ea4e"
+  },
+  {
+    "sha": "e00aed86936156748a26bdbbb31a33585a3a4fac",
+    "message": "feat(cancelar-reserva) - Service TDD GREEN - CancelReservation_WithInvalidSecret_ThrowsUnauthorizedException()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T22:39:15Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e00aed86936156748a26bdbbb31a33585a3a4fac"
+  },
+  {
+    "sha": "7e4264a6820a94edd2db700e185a7f0313dd7f47",
+    "message": "feat(GestionDeEstados): TDD GREEN - service test Reserva Retirada ya abarcado en gestionar reserva",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:38:37Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/7e4264a6820a94edd2db700e185a7f0313dd7f47"
+  },
+  {
+    "sha": "e9c5d21f11eea84e3d23a691b28a9700de0fe90f",
+    "message": "feat(GestionDeEstados): TDD GREEN - controller test Reserva Retirada ya abarcado en gestionar reserva",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:37:57Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e9c5d21f11eea84e3d23a691b28a9700de0fe90f"
+  },
+  {
+    "sha": "06792968c03232d440904bf2cdd2841e9db142ee",
+    "message": "feat(GestionDeEstados): TDD RED - component test Reserva Retirada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:36:47Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/06792968c03232d440904bf2cdd2841e9db142ee"
+  },
+  {
+    "sha": "86c9bca567558245ea9973681ab02635cd54a29f",
+    "message": "feat(GestionDeEstados): TDD GREEN - service test Reserva Cancelada ya abarcado en gestionar reserva",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:28:21Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/86c9bca567558245ea9973681ab02635cd54a29f"
+  },
+  {
+    "sha": "ce4d477f9808eccd4a276d6743e2acecb9ac11c2",
+    "message": "feat(GestionDeEstados): TDD GREEN - controller test Reserva Cancelada ya abarcado en gestionar reserva",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:26:55Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ce4d477f9808eccd4a276d6743e2acecb9ac11c2"
+  },
+  {
+    "sha": "3f4aabf7178a051be4ea1d7c25ecf826fea8c344",
+    "message": "feat(GestionDeEstados): TDD RED - component test Reserva Cancelada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:25:15Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/3f4aabf7178a051be4ea1d7c25ecf826fea8c344"
+  },
+  {
+    "sha": "00762130026047e81fcda9563c5a0aad84d3fb46",
+    "message": "feat(cancelar-reserva) - Controller TDD RED - CancelReservation_WithInvalidSecret_ThrowsUnauthorizedException",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T22:23:00Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/00762130026047e81fcda9563c5a0aad84d3fb46"
+  },
+  {
+    "sha": "5c3523b7b6b620bb12b10e36575c22852457e03b",
+    "message": "feat(GestionDeEstados): TDD GREEN - service test Reserva Expirada ya abarcado en gestionar reserva",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:22:01Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/5c3523b7b6b620bb12b10e36575c22852457e03b"
+  },
+  {
+    "sha": "8627873b5c458b91f679f097c37671fe935ecfbc",
+    "message": "feat(GestionDeEstados): TDD GREEN - controller test Reserva Expirada ya abarcado en gestionar reserva",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:19:22Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/8627873b5c458b91f679f097c37671fe935ecfbc"
+  },
+  {
+    "sha": "f9769b29f4d96c6231c66cef3e0a254ecfe42a3c",
+    "message": "feat(cancelar-reserva) - TDD GREEN - CancelReservation_WithNonExistentReservation_ThrowsNotFoundException()/ Service",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T22:17:33Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f9769b29f4d96c6231c66cef3e0a254ecfe42a3c"
+  },
+  {
+    "sha": "fa292c136dee4b2fcb96e06588f8fc1ae00340ce",
+    "message": "feat(GestionDeEstados): TDD RED - component test Reserva Expirada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:15:35Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/fa292c136dee4b2fcb96e06588f8fc1ae00340ce"
+  },
+  {
+    "sha": "273ebbfe342642a7c21cb493105153f34c2fd78e",
+    "message": "feat(GestionDeEstados): TDD GREEN - service test Reserva Confirmada ya abarcado en gestionar reserva",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:13:42Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/273ebbfe342642a7c21cb493105153f34c2fd78e"
+  },
+  {
+    "sha": "0f566de47e42335c77ef412aa3c3d92b84a009cf",
+    "message": "feat: TDD RED - CancelReservation_WithNonExistentReservation_ThrowsKeyNotFoundException()/ Service implementation",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T22:12:40Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/0f566de47e42335c77ef412aa3c3d92b84a009cf"
+  },
+  {
+    "sha": "443a75c36d9c6f3ea3fe03f8cdb6339fb0506aa5",
+    "message": "feat(GestionDeEstados): TDD GREEN - controller test Reserva Confirmada ya abarcado en gestionar reserva",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:11:52Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/443a75c36d9c6f3ea3fe03f8cdb6339fb0506aa5"
+  },
+  {
+    "sha": "b821e9fe74829a3d22be08ff7f003f8df575fff5",
+    "message": "feat(GestionDeEstados): TDD RED - component test Reserva Confirmada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:07:50Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/b821e9fe74829a3d22be08ff7f003f8df575fff5"
+  },
+  {
+    "sha": "220d78748562f290082536c3f089167adde77b21",
+    "message": "feat: TDD GREEN - CancelReservation_WithNonExistentReservation_ThrowsNotFoundException()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T22:06:40Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/220d78748562f290082536c3f089167adde77b21"
+  },
+  {
+    "sha": "485bf9a5fb74cf5b23b6efaab4e184aea410fe04",
+    "message": "feat(GestionDeEstados): TDD GREEN - service implementation Crear reserva estado pendiente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T22:05:05Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/485bf9a5fb74cf5b23b6efaab4e184aea410fe04"
+  },
+  {
+    "sha": "0038d912d6abe5f9e4839161ca39f188337e7c0e",
+    "message": "feat: TDD RED - CancelReservation_WithNonExistentReservation_ThrowsNotFoundException()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T21:48:26Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/0038d912d6abe5f9e4839161ca39f188337e7c0e"
+  },
+  {
+    "sha": "45d495022d814e97ba43184263a91b4adfe866a9",
+    "message": "feat(GestionDeEstados): TDD RED - service test Reserva recien creada Pendiente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T21:07:55Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/45d495022d814e97ba43184263a91b4adfe866a9"
+  },
+  {
+    "sha": "a2ff436b25d3fc2216313e2631443bf86255e71a",
+    "message": "feat(secure-reservation): TDD GREEN - service test ClaveIncorrecta",
+    "author": "chrisingrey",
+    "date": "2025-10-25T21:05:22Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/a2ff436b25d3fc2216313e2631443bf86255e71a"
+  },
+  {
+    "sha": "82a8fbe16f38f6c7113b12e57b6114fb4137ade1",
+    "message": "feat(secure-reservation): TDD RED - service test ClaveIncorrecta",
+    "author": "chrisingrey",
+    "date": "2025-10-25T21:04:01Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/82a8fbe16f38f6c7113b12e57b6114fb4137ade1"
+  },
+  {
+    "sha": "6fcb8fcdebd43abe370206a3463ac94fe337814b",
+    "message": "feat(GestionDeEstados): TDD REFACTOR - controller test Reserva recien creada Pendiente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T21:03:18Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/6fcb8fcdebd43abe370206a3463ac94fe337814b"
+  },
+  {
+    "sha": "22d61535401b25ec1f77f30d2e41525f26bc405a",
+    "message": "feat(secure-reservatins): TDD GREEN - service test ValidateReservation",
+    "author": "chrisingrey",
+    "date": "2025-10-25T20:58:53Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/22d61535401b25ec1f77f30d2e41525f26bc405a"
+  },
+  {
+    "sha": "fdf2273c92ebb59ebe1249274863221f2a5a6249",
+    "message": "feat(GestionDeEstados): TDD GREEN - controller test Reserva recien creada Pendiente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T20:57:57Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/fdf2273c92ebb59ebe1249274863221f2a5a6249"
+  },
+  {
+    "sha": "08a07fedb13e38742e15395cba4e970d4f7c5ee0",
+    "message": "feat(secure-reservatins): TDD RED - service test ValidateReservation",
+    "author": "chrisingrey",
+    "date": "2025-10-25T20:54:31Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/08a07fedb13e38742e15395cba4e970d4f7c5ee0"
+  },
+  {
+    "sha": "f8a861ceda8775a1e71d34df36e9bf03db8f1fa8",
+    "message": "feat: TDD RED -component test",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T20:53:58Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f8a861ceda8775a1e71d34df36e9bf03db8f1fa8"
+  },
+  {
+    "sha": "ce2848e230922e021d51634926934d8a57fb03f2",
+    "message": "feat: BDD RED - feature cancelar reserva",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-25T20:53:09Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ce2848e230922e021d51634926934d8a57fb03f2"
+  },
+  {
+    "sha": "f118a5fa6bc0d447f7a4b2428f8eb25447f56f3e",
+    "message": "feat(GestionDeEstados): TDD RED - controller test Reserva recien creada Pendiente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T20:52:44Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f118a5fa6bc0d447f7a4b2428f8eb25447f56f3e"
+  },
+  {
+    "sha": "340f0af81051fb7170cd25d7a1c9f0616b000ebf",
+    "message": "feat(secure-reservatins): TDD GREEN - controller test ValidateReservation",
+    "author": "chrisingrey",
+    "date": "2025-10-25T20:47:12Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/340f0af81051fb7170cd25d7a1c9f0616b000ebf"
+  },
+  {
+    "sha": "e5c63ac014c40f225c39ff01de11c5dc594813bf",
+    "message": "feat(secure-reservatins): TDD RED - controller test ValidateReservation",
+    "author": "chrisingrey",
+    "date": "2025-10-25T20:39:04Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e5c63ac014c40f225c39ff01de11c5dc594813bf"
+  },
+  {
+    "sha": "1c6b22ae5968d67efc05f4f96b81b4abec224a40",
+    "message": "feat(secure-reservatins): TDD GREEN - service test CreateReservation",
+    "author": "chrisingrey",
+    "date": "2025-10-25T20:33:43Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/1c6b22ae5968d67efc05f4f96b81b4abec224a40"
+  },
+  {
+    "sha": "f4ff3e5dba284e8f174c2e2bf1fbedcb452a21ff",
+    "message": "feat(GestionDeEstados): TDD RED - component test Reserva recien creada Pendiente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T20:25:40Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f4ff3e5dba284e8f174c2e2bf1fbedcb452a21ff"
+  },
+  {
+    "sha": "ea2f9a52d27d966ce8b01e031d10edf179b0d24a",
+    "message": "feat(secure-reservatins): TDD RED - service test CreateReservation",
+    "author": "chrisingrey",
+    "date": "2025-10-25T20:19:32Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ea2f9a52d27d966ce8b01e031d10edf179b0d24a"
+  },
+  {
+    "sha": "1adcb2d06f52060431922882be5aa75740b5bc49",
+    "message": "feat(secure-reservation): TDD RED - component test ValidateReservation",
+    "author": "chrisingrey",
+    "date": "2025-10-25T20:10:02Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/1adcb2d06f52060431922882be5aa75740b5bc49"
+  },
+  {
+    "sha": "133c2c7ac2ed9de003a6fa04047d3d173c926316",
+    "message": "feat(GestionDeEstados): BDD RED - feature gestion de estados",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T20:05:56Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/133c2c7ac2ed9de003a6fa04047d3d173c926316"
+  },
+  {
+    "sha": "cc0d6e59407002ea520ef5ce8c3074304f90f721",
+    "message": "feat(secure-reservations): BDD RED - feature secure reservations",
+    "author": "chrisingrey",
+    "date": "2025-10-25T20:05:16Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/cc0d6e59407002ea520ef5ce8c3074304f90f721"
+  },
+  {
+    "sha": "04061f15ad448e6e252aaaaf23bcdec800893528",
+    "message": "Merge pull request #63 from IngSoft-ISA2-2025-2/feature/gestionar-reserva\n\nFeature/gestionar reserva",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T19:38:36Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/04061f15ad448e6e252aaaaf23bcdec800893528"
+  },
+  {
+    "sha": "dce8b815012a987027c414cdf2ccfa34180d9397",
+    "message": "feat(GestionarReserva): Cambios Necesarios por merge para funcionamiento de todo",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T19:36:12Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/dce8b815012a987027c414cdf2ccfa34180d9397"
+  },
+  {
+    "sha": "568c267a767afe8b25cac1570fcc69439b2a3ba7",
+    "message": "Merge branch 'develop' into feature/gestionar-reserva",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T19:35:28Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/568c267a767afe8b25cac1570fcc69439b2a3ba7"
+  },
+  {
+    "sha": "49fcc0013df657d23bb514c11617f68fcc36bae7",
+    "message": "feat(GestionarReserva): BDD GREEN - feature Gestionar Reservas",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T18:02:24Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/49fcc0013df657d23bb514c11617f68fcc36bae7"
+  },
+  {
+    "sha": "fd2161dfc860e3edaaf1c98ed98619cd071f3a6a",
+    "message": "feat(GestionarReserva): TDD GREEN + REFACTOR PRUEBAS - component implementation GestionarReservas",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T16:42:27Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/fd2161dfc860e3edaaf1c98ed98619cd071f3a6a"
+  },
+  {
+    "sha": "c4447d1034d00ce139445818a424e0bf85725516",
+    "message": "feat(GestionarReserva): TDD GREEN - reservation service",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T16:11:09Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/c4447d1034d00ce139445818a424e0bf85725516"
+  },
+  {
+    "sha": "0ccd95552e4a557a739d85ff214797e9d1586632",
+    "message": "feat(GestionarReserva): Escenarios faltantes para front,TDD RED",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T16:00:23Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/0ccd95552e4a557a739d85ff214797e9d1586632"
+  },
+  {
+    "sha": "97b752275af54a0dd0de5a127d6a5523b2cf4686",
+    "message": "feat(GestionarReserva): TDD GREEN - service test Reserva Retirada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:57:27Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/97b752275af54a0dd0de5a127d6a5523b2cf4686"
+  },
+  {
+    "sha": "aac9628aeff1a28fbaac5efc55bb96d9121b2d8d",
+    "message": "feat(GestionarReserva): TDD GREEN- controller test Reserva Retirada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:55:21Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/aac9628aeff1a28fbaac5efc55bb96d9121b2d8d"
+  },
+  {
+    "sha": "b20b4f41d3c2cb6bbad672bb6dcfe2ca666c38ca",
+    "message": "feat(GestionarReserva): TDD RED - controller test Reserva Retirada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:53:00Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/b20b4f41d3c2cb6bbad672bb6dcfe2ca666c38ca"
+  },
+  {
+    "sha": "559aa84c3ba21885a786cde5759276263b7cbab5",
+    "message": "feat(GestionarReserva): TDD RED - component test Reserva Retirada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:48:49Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/559aa84c3ba21885a786cde5759276263b7cbab5"
+  },
+  {
+    "sha": "6e5959d673564902043360c9c27d4f45eaa1a6f2",
+    "message": "feat(GestionarReserva): TDD GREEN - service test Reserva Cancelada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:46:48Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/6e5959d673564902043360c9c27d4f45eaa1a6f2"
+  },
+  {
+    "sha": "7f6c17c241496b6cb59eec93fb43365ef0a8a46a",
+    "message": "feat(GestionarReserva): TDD GREEN - controller test Reserva Cancelada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:44:34Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/7f6c17c241496b6cb59eec93fb43365ef0a8a46a"
+  },
+  {
+    "sha": "27f1aad93fe3e4c2bfcf809d6e555cf81464cfda",
+    "message": "feat(GestionarReserva): TDD RED - controller test Reserva Cancelada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:39:17Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/27f1aad93fe3e4c2bfcf809d6e555cf81464cfda"
+  },
+  {
+    "sha": "3841b11eec0eb632276a09b52b936ef65624d72f",
+    "message": "feat(GestionarReserva): TDD RED - component test Reserva Cancelada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:36:57Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/3841b11eec0eb632276a09b52b936ef65624d72f"
+  },
+  {
+    "sha": "c1fb599081561ff83c2aab6daf4899ce319d232f",
+    "message": "feat(GestionarReserva): TDD GREEN - service test Reserva Expirada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:31:26Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/c1fb599081561ff83c2aab6daf4899ce319d232f"
+  },
+  {
+    "sha": "0fabdf0ec8b6e87e2830f560e9e642d7d369da10",
+    "message": "feat(GestionarReserva): TDD GREEN - controller test Reserva Expirada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:25:05Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/0fabdf0ec8b6e87e2830f560e9e642d7d369da10"
+  },
+  {
+    "sha": "084ab27d8be31b469a9a4aec6446a2b853938a35",
+    "message": "feat(GestionarReserva): TDD RED - controller test Reserva Expirada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:21:53Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/084ab27d8be31b469a9a4aec6446a2b853938a35"
+  },
+  {
+    "sha": "e8b5c215a902b3d619d272caaca8b6c235072f0f",
+    "message": "feat(GestionarReserva): TDD RED - component test Reserva Expirada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:16:37Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e8b5c215a902b3d619d272caaca8b6c235072f0f"
+  },
+  {
+    "sha": "e16265b7adb83ee09f14cf5f60bef09eb5bc291d",
+    "message": "feat(GestionarReserva): TDD GREEN - service test Reserva Confirmada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:14:12Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e16265b7adb83ee09f14cf5f60bef09eb5bc291d"
+  },
+  {
+    "sha": "d375e74080c63750172f5a32f9ec75d6c0181196",
+    "message": "feat(GestionarReserva): TDD GREEN - controller test Reserva Confirmada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:07:53Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/d375e74080c63750172f5a32f9ec75d6c0181196"
+  },
+  {
+    "sha": "b8e886adb6a3af356974e171277e5118225ffff6",
+    "message": "feat(GestionarReserva): TDD RED - component test Reserva Confirmada",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T15:01:05Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/b8e886adb6a3af356974e171277e5118225ffff6"
+  },
+  {
+    "sha": "d7079ae1acd985cdb41f80198f4ee2fe4e7960db",
+    "message": "feat(GestionarReserva): TDD GREEN - service test Reserva Pendiente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T14:57:41Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/d7079ae1acd985cdb41f80198f4ee2fe4e7960db"
+  },
+  {
+    "sha": "83e8fe3a5f3b38f10629cc113ac420a02574d9f9",
+    "message": "feat(GestionarReserva): TDD REFACTOR - controller test Reserva Pendiente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T14:49:17Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/83e8fe3a5f3b38f10629cc113ac420a02574d9f9"
+  },
+  {
+    "sha": "696a3ffffd8c9753644f6241b182b5da2cdeb118",
+    "message": "feat(GestionarReserva): TDD GREEN - controller test Reserva Pendiente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T14:47:51Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/696a3ffffd8c9753644f6241b182b5da2cdeb118"
+  },
+  {
+    "sha": "0ff4e5267a27fbffdf323fd86ea944c7b146fd0a",
+    "message": "feat(GestionarReserva): TDD RED - controller test Reserva Pendiente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T14:40:48Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/0ff4e5267a27fbffdf323fd86ea944c7b146fd0a"
+  },
+  {
+    "sha": "dd229b8140cc1d3a46b0f6151a9050722d3547de",
+    "message": "feat(GestionarReserva): TDD RED - component test Reserva Pendiente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T14:30:20Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/dd229b8140cc1d3a46b0f6151a9050722d3547de"
+  },
+  {
+    "sha": "3b89b5e01f6dde76257bbee9c9cf563039e29331",
+    "message": "feat(GestionarReserva): TDD REFACTOR - service test Secret incorrecto",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T14:25:40Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/3b89b5e01f6dde76257bbee9c9cf563039e29331"
+  },
+  {
+    "sha": "19bdb464dffcc2af71df232d32cfa74144377bed",
+    "message": "feat(GestionarReserva): TDD GREEN - service test Secret incorrecto",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T14:22:01Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/19bdb464dffcc2af71df232d32cfa74144377bed"
+  },
+  {
+    "sha": "5ecfc5855fa041d2bb3d0609a84add622ff2f448",
+    "message": "feat(GestionarReserva): TDD RED - service test Secret incorrecto",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T14:20:15Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/5ecfc5855fa041d2bb3d0609a84add622ff2f448"
+  },
+  {
+    "sha": "07f186821fd1c7b0a97f1fb7525050568f27dedb",
+    "message": "feat(GestionarReserva): TDD RED + GREEN - controller test Secret incorrecto",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T14:17:45Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/07f186821fd1c7b0a97f1fb7525050568f27dedb"
+  },
+  {
+    "sha": "85bcddaae068380231e918353084bd3db15ac608",
+    "message": "feat(GestionarReserva): TDD RED - component test Secret incorrecto",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T14:11:27Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/85bcddaae068380231e918353084bd3db15ac608"
+  },
+  {
+    "sha": "2cf674818515d0da4c14a76a0578ee6dadce8d69",
+    "message": "refactor(GestionarReserva): Eliminacion de boton detalles por falta de tiempo y no pedido en la consigna",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T14:09:05Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/2cf674818515d0da4c14a76a0578ee6dadce8d69"
+  },
+  {
+    "sha": "ea78eeb0f82eda3591c9ad8e7908fe3856315aaf",
+    "message": "feat(GestionarReserva): TDD RED - component test Reserva Inexistente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T13:54:21Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ea78eeb0f82eda3591c9ad8e7908fe3856315aaf"
+  },
+  {
+    "sha": "1bebb5284bb3b995a182d195d9005853303888e3",
+    "message": "feat(GestionarReserva): TDD GREEN + REFACTOR - service test Filtrado por estado",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T13:51:39Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/1bebb5284bb3b995a182d195d9005853303888e3"
+  },
+  {
+    "sha": "022551afc5221b51c2e204b74f3bf1fd57c1db8a",
+    "message": "feat(GestionarReserva): TDD RED - service test Filtrado por estado",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T13:37:33Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/022551afc5221b51c2e204b74f3bf1fd57c1db8a"
+  },
+  {
+    "sha": "05b2c1d04e2d2c936063032438e9ad9d34ccc9ca",
+    "message": "feat(GestionarReserva): TDD GREEN - controller test Filtrado por estado",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T13:16:34Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/05b2c1d04e2d2c936063032438e9ad9d34ccc9ca"
+  },
+  {
+    "sha": "d6f0d68e3a628e3f8f724a29057cffe62cffc6f4",
+    "message": "feat(GestionarReserva): TDD RED - component test Filtrado por estado",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T13:05:53Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/d6f0d68e3a628e3f8f724a29057cffe62cffc6f4"
+  },
+  {
+    "sha": "82c108e9803851465cd97a36523989558fe28000",
+    "message": "chore: Package lock json con librerias actualizadas",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T12:56:46Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/82c108e9803851465cd97a36523989558fe28000"
+  },
+  {
+    "sha": "bd75feaebbbdd5c7c2aa4cc696511adc4db76a93",
+    "message": "chore: Creacion de archivo cypress cucumber preprocessor para funcionamiento de cypress",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T12:48:40Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/bd75feaebbbdd5c7c2aa4cc696511adc4db76a93"
+  },
+  {
+    "sha": "cec68a03b426163f0ac7b3740de60abd088404f5",
+    "message": "chore: Actualizacion de archivos para buen funcionamiento",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-25T12:44:55Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/cec68a03b426163f0ac7b3740de60abd088404f5"
+  },
+  {
+    "sha": "adbc24543ea57e1970e112ef0c94857fb3821911",
+    "message": "Merge pull request #61 from IngSoft-ISA2-2025-2/feature/crear-reserva\n\nFeature/crear reserva",
+    "author": "Christian Ingrey",
+    "date": "2025-10-25T00:20:47Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/adbc24543ea57e1970e112ef0c94857fb3821911"
+  },
+  {
+    "sha": "c5c4213b968dd6e01822cdb160c90aa2230ab678",
+    "message": "BDD GREEN - Feature Completa",
+    "author": "chrisingrey",
+    "date": "2025-10-25T00:20:18Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/c5c4213b968dd6e01822cdb160c90aa2230ab678"
+  },
+  {
+    "sha": "5d68698c47b0b7f35bc6078f685ef3274b0bf406",
+    "message": "feat(crear-reserva): Frontend TDD GREEN - Component Implementation",
+    "author": "chrisingrey",
+    "date": "2025-10-24T22:54:48Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/5d68698c47b0b7f35bc6078f685ef3274b0bf406"
+  },
+  {
+    "sha": "ca58976fcee89a9528f18f776b52cc12598d0b43",
+    "message": "feat(GestionarReserva): TDD GREEN + REFACTOR- service test Reservations List With Information",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T22:51:48Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ca58976fcee89a9528f18f776b52cc12598d0b43"
+  },
+  {
+    "sha": "fbf6d626728c9dd3b0747a2dd75e55fec79ec11f",
+    "message": "feat(GestionarReserva): TDD RED - component test Reservations List With Information",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T22:40:25Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/fbf6d626728c9dd3b0747a2dd75e55fec79ec11f"
+  },
+  {
+    "sha": "b5f04a8d00d9da385a5f6abdb36dae4d4f75b59e",
+    "message": "feat(GestionarReserva): TDD GREEN- service test Empty Reservations List",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T22:27:32Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/b5f04a8d00d9da385a5f6abdb36dae4d4f75b59e"
+  },
+  {
+    "sha": "6464ca93da62e45556508ecf5e30f825b87e4483",
+    "message": "feat(GestionarReserva): TDD GREEN- controller test Empty Reservations List",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T22:14:49Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/6464ca93da62e45556508ecf5e30f825b87e4483"
+  },
+  {
+    "sha": "11961a8e4f9b192ab45bafa9d7f9352246cb0360",
+    "message": "feat(crear-reserva): TDD GREEN - service DiscountsStock CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T22:10:24Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/11961a8e4f9b192ab45bafa9d7f9352246cb0360"
+  },
+  {
+    "sha": "3f20d317051d36e5418d0f56dfb56bc99fb94223",
+    "message": "feat(crear-reserva): TDD RED - service DiscountsStock CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T22:04:47Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/3f20d317051d36e5418d0f56dfb56bc99fb94223"
+  },
+  {
+    "sha": "43e64ddbf5ea12b6815b87db7b7c56bedca69477",
+    "message": "feat(GestionarReserva): TDD RED - component test Empty Reservations List",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T22:04:45Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/43e64ddbf5ea12b6815b87db7b7c56bedca69477"
+  },
+  {
+    "sha": "7c9969bb5b07ed5280273f57ec3ffc0760a28659",
+    "message": "feat(crear-reserva): TDD GREEN - service createRervationPending CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T22:00:57Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/7c9969bb5b07ed5280273f57ec3ffc0760a28659"
+  },
+  {
+    "sha": "de7cdf4af2c4411e6f7ccd1b779d21ced804164c",
+    "message": "feat(crear-reserva): TDD RED - service createRervationPending CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T21:59:08Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/de7cdf4af2c4411e6f7ccd1b779d21ced804164c"
+  },
+  {
+    "sha": "1594c41572da287fff07ec2acaeab929a408538b",
+    "message": "feat(crear-reserva): TDD GREEN - service WhenDrugHasNoStock CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T21:49:45Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/1594c41572da287fff07ec2acaeab929a408538b"
+  },
+  {
+    "sha": "e2cb0ae6fa317a2869a692617041a0ccba022b59",
+    "message": "feat: TDD REFACTOR - service test Unauthorized user (empty email and secret)",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T21:45:35Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e2cb0ae6fa317a2869a692617041a0ccba022b59"
+  },
+  {
+    "sha": "4b324d93cd97c320fa50f297a7e8890967f89b76",
+    "message": "feat(crear-reserva): TDD RED - service WhenDrugHasNoStock CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T21:43:09Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/4b324d93cd97c320fa50f297a7e8890967f89b76"
+  },
+  {
+    "sha": "bbb066aa18915558376d24bc4bd6332be40436c4",
+    "message": "feat(crear-reserva): TDD GREEN - service WhenInvalidDrug CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T21:37:34Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/bbb066aa18915558376d24bc4bd6332be40436c4"
+  },
+  {
+    "sha": "06e2927740b5857d9c0c7e5229bbc815fbdb5bb0",
+    "message": "feat: TDD GREEN - service test Unauthorized user (empty email and secret)",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T21:28:19Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/06e2927740b5857d9c0c7e5229bbc815fbdb5bb0"
+  },
+  {
+    "sha": "83c87306908be0d2326f12f4f89aec7742c3ac23",
+    "message": "feat: TDD RED - service test Unauthorized user (empty email and secret)",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T21:22:51Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/83c87306908be0d2326f12f4f89aec7742c3ac23"
+  },
+  {
+    "sha": "05ecbe05e752b9dee17ce8867003a1656374db22",
+    "message": "feat: TDD REFACTOR - controller test Unauthorized user (empty email and secret)",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T21:16:20Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/05ecbe05e752b9dee17ce8867003a1656374db22"
+  },
+  {
+    "sha": "04e4073056797b959661460a7ec45d1442f932d0",
+    "message": "feat(crear-reserva): TDD GREEN - service invalidFarmacy CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T21:08:53Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/04e4073056797b959661460a7ec45d1442f932d0"
+  },
+  {
+    "sha": "07d8c0ffa3df262c0d327907091bb3f79bf638e9",
+    "message": "feat: TDD GREEN - controller test Unauthorized user (empty email and secret)",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T21:06:58Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/07d8c0ffa3df262c0d327907091bb3f79bf638e9"
+  },
+  {
+    "sha": "fd6b832204e2d6078c2a4f2d66a9d336d8fd769d",
+    "message": "TDD RED - service invalidFarmacy CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T21:05:50Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/fd6b832204e2d6078c2a4f2d66a9d336d8fd769d"
+  },
+  {
+    "sha": "4294946ce94bbc61c0faa79325e2f8004b489950",
+    "message": "feat: TDD RED - controller test Unauthorized user (empty email and secret)",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T21:03:28Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/4294946ce94bbc61c0faa79325e2f8004b489950"
+  },
+  {
+    "sha": "301d4cba1c30a7b285688e2ed2f5af51a2201493",
+    "message": "feat: TDD RED - component test Unauthorized user",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T21:01:44Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/301d4cba1c30a7b285688e2ed2f5af51a2201493"
+  },
+  {
+    "sha": "79ac3118d7bb7a9550b8a1abefa40ca8a29151a3",
+    "message": "feat(crear-reserva): TDD GREEN - service unauthorizedUser CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T20:53:54Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/79ac3118d7bb7a9550b8a1abefa40ca8a29151a3"
+  },
+  {
+    "sha": "498172f3e19610547e71c5ba3ed0178757fffefc",
+    "message": "feat(crear-reserva): TDD RED- service userAuthentication CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T20:38:17Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/498172f3e19610547e71c5ba3ed0178757fffefc"
+  },
+  {
+    "sha": "70cb048c0c2ad5353e1d13c261ec32040561622e",
+    "message": "feat(GestionarReserva): TDD REFACTOR - dataAccess test GestionarReservaOk",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T20:15:49Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/70cb048c0c2ad5353e1d13c261ec32040561622e"
+  },
+  {
+    "sha": "0f0eb2a3bb38462970468d3a1f6ba9db24701e49",
+    "message": "feat(GestionarReserva): TDD GREEN - dataAccess test GestionarReservaOk",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T19:58:53Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/0f0eb2a3bb38462970468d3a1f6ba9db24701e49"
+  },
+  {
+    "sha": "bb8f85318f9292631d2a93c310bc27a26d4c8a04",
+    "message": "feat(GestionarReserva): TDD RED - dataAccess test GestionarReservaOk",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T19:17:32Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/bb8f85318f9292631d2a93c310bc27a26d4c8a04"
+  },
+  {
+    "sha": "0cc8af028acb90a8b4a7c80b61814e6c2b3230b7",
+    "message": "feat(GestionarReserva): TDD REFACTOR- service test GestionarReservaOk",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T18:55:35Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/0cc8af028acb90a8b4a7c80b61814e6c2b3230b7"
+  },
+  {
+    "sha": "5e02b66e2374fe121696b1c378c5b46dfd20c8c0",
+    "message": "feat(GestionarReserva): TDD GREEN (Anterior RED, me comi la palabra RED)- service test GestionarReservaOk",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T18:52:52Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/5e02b66e2374fe121696b1c378c5b46dfd20c8c0"
+  },
+  {
+    "sha": "dea545cd6c8072b3ce2fad4383817c7422a67914",
+    "message": "feat(GestionarReserva): TDD - service test GestionarReservaOk",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T18:31:23Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/dea545cd6c8072b3ce2fad4383817c7422a67914"
+  },
+  {
+    "sha": "2a337bdc489637245d2ff9bbca5afddd648de79c",
+    "message": "feat(GestionarReserva): TDD REFACTOR - controller test GestionarReservaOk",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T17:18:41Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/2a337bdc489637245d2ff9bbca5afddd648de79c"
+  },
+  {
+    "sha": "b749c6bd076372daf6a2621f6ed99c6000e83811",
+    "message": "feat(GestionarReserva): TDD GREEN - controller test GestionarReservaOk",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T16:45:13Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/b749c6bd076372daf6a2621f6ed99c6000e83811"
+  },
+  {
+    "sha": "43c361769c4a40eb05b2c944f698cbec34b5c6cc",
+    "message": "feat(GestionarReserva): TDD RED - controller test GestionarReservaOk",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T16:29:58Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/43c361769c4a40eb05b2c944f698cbec34b5c6cc"
+  },
+  {
+    "sha": "bd74cd50647f96cc4346b68d53b56e19c7a13a46",
+    "message": "feat(GestionarReserva): BDD REFACTOR- Refactor usuario autenticado a email and secret",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T16:16:17Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/bd74cd50647f96cc4346b68d53b56e19c7a13a46"
+  },
+  {
+    "sha": "e4453d739d64edea0bab4a66b281a7f2631bfe15",
+    "message": "feat(crear-reserva): BDD REFACTOR- Refactor usuario autenticado a email and secret",
+    "author": "chrisingrey",
+    "date": "2025-10-24T15:40:50Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e4453d739d64edea0bab4a66b281a7f2631bfe15"
+  },
+  {
+    "sha": "ee349f2dd64e93cb311ae4fe40a20db9558a6d5d",
+    "message": "feat(GestionarReserva): TDD RED - component test GestionarReservaOk",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T15:26:01Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ee349f2dd64e93cb311ae4fe40a20db9558a6d5d"
+  },
+  {
+    "sha": "63b6f66f0e1a92bd572d927391177e55a146a711",
+    "message": "feat(crear-reserva): TDD GREEN - controller unauthorizedUser CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T15:08:34Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/63b6f66f0e1a92bd572d927391177e55a146a711"
+  },
+  {
+    "sha": "5cae59e6ee98d1a416e2d696d27ebb5b6849293b",
+    "message": "feat(crear-reserva): TDD REFACTOR - repository implementation CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T15:00:42Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/5cae59e6ee98d1a416e2d696d27ebb5b6849293b"
+  },
+  {
+    "sha": "dd8f0b9bfb71e873ab9b527cc1d17a817f0b085d",
+    "message": "feat(crear-reserva): TDD GREEN - repository implementation CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T14:58:34Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/dd8f0b9bfb71e873ab9b527cc1d17a817f0b085d"
+  },
+  {
+    "sha": "074b8d334260caf9fc86f99eeb08b44bccaea6ca",
+    "message": "feat(GestionarReserva): REFACTOR .steps de .ts a .js",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T14:58:19Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/074b8d334260caf9fc86f99eeb08b44bccaea6ca"
+  },
+  {
+    "sha": "021028d5a9dad06a07407d95343d86c2dba8fe5c",
+    "message": "feat(GestionarReserva): BDD RED - feature gestionar reserva",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-24T14:54:18Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/021028d5a9dad06a07407d95343d86c2dba8fe5c"
+  },
+  {
+    "sha": "b5347bb85a68e0e3899da90023fba647b8c23ce4",
+    "message": "feat(crear-reserva): TDD RED - repository implementation CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T14:51:18Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/b5347bb85a68e0e3899da90023fba647b8c23ce4"
+  },
+  {
+    "sha": "2e45c618d671a345034c495d13b684dd9e66ca0c",
+    "message": "feat(crear-reserva): TDD REFACTOR- service implementation CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T14:41:35Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/2e45c618d671a345034c495d13b684dd9e66ca0c"
+  },
+  {
+    "sha": "2031f6963f91bcfff1870fae324067bfe562751d",
+    "message": "feat(crear-reserva): TDD GREEN - service implementation CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T14:36:18Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/2031f6963f91bcfff1870fae324067bfe562751d"
+  },
+  {
+    "sha": "8935077e6f67aff9605b50799cc5613d4d8419f0",
+    "message": "feat(crear-reserva): TDD RED- service implementation CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T14:26:06Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/8935077e6f67aff9605b50799cc5613d4d8419f0"
+  },
+  {
+    "sha": "ee332097b7825fac0a8cc4eaed7e3564cd8c256b",
+    "message": "feat(crear-reserva): TDD REFACTOR- controller implementation CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T14:01:21Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ee332097b7825fac0a8cc4eaed7e3564cd8c256b"
+  },
+  {
+    "sha": "0023eb08b88bd28e6444ca448c3c92e43709768a",
+    "message": "feat(crear-reserva): TDD GREEN - controller implementation CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T13:37:24Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/0023eb08b88bd28e6444ca448c3c92e43709768a"
+  },
+  {
+    "sha": "2c88717dac5a555d626f29e4e06603d971b64f07",
+    "message": "feat(crear-reserva): TDD RED - controller test CrearReservaOk",
+    "author": "chrisingrey",
+    "date": "2025-10-24T13:20:53Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/2c88717dac5a555d626f29e4e06603d971b64f07"
+  },
+  {
+    "sha": "747b781994935c211155ce1ee0cfa84c6c3dad41",
+    "message": "feat(crear-reserva): TDD RED - component test CrearReserva",
+    "author": "chrisingrey",
+    "date": "2025-10-24T12:47:39Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/747b781994935c211155ce1ee0cfa84c6c3dad41"
+  },
+  {
+    "sha": "f444d77eda9496200c8842ff16e813515daba00e",
+    "message": "feat(crear-reserva): BDD RED - feature crear reservas",
+    "author": "chrisingrey",
+    "date": "2025-10-24T12:34:09Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f444d77eda9496200c8842ff16e813515daba00e"
+  },
+  {
+    "sha": "55ffea9657a081523770ad95e489191e09c171ea",
+    "message": "Merge branch 'develop' of https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818 into develop",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-21T12:43:50Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/55ffea9657a081523770ad95e489191e09c171ea"
+  },
+  {
+    "sha": "cc508446485da4c6142846b84329a0662b36fd46",
+    "message": "chore(BDD): Instalacion de cypress-cucumber",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-21T12:43:37Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/cc508446485da4c6142846b84329a0662b36fd46"
+  },
+  {
+    "sha": "41d31e349e3e6dc570855357e574186c12bffa7c",
+    "message": "fix(Gestion de estados): Update escenarios Gherkin",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-21T11:38:00Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/41d31e349e3e6dc570855357e574186c12bffa7c"
+  },
+  {
+    "sha": "84f3d17a2f3508b4cbb0f434e93fc0ca5255a443",
+    "message": "Merge branch 'feature/nuevos-requerimientos' into develop",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-17T16:56:23Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/84f3d17a2f3508b4cbb0f434e93fc0ca5255a443"
+  },
+  {
+    "sha": "c5e7dea6d9c74a76285551fe411ec191c452e63c",
+    "message": "Add: Escenarios Gherkin US 5) Gestión de estados de reservas",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-17T16:50:57Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/c5e7dea6d9c74a76285551fe411ec191c452e63c"
+  },
+  {
+    "sha": "73b88c601158b7743a9a31764719645e3ca1e8e4",
+    "message": "Merge pull request #54 from IngSoft-ISA2-2025-2/feature/nuevos-requerimientos2y3\n\n Feature/nuevos requerimientos Gestionar (2) y Cancelar (3) Reservas",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-17T16:41:07Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/73b88c601158b7743a9a31764719645e3ca1e8e4"
+  },
+  {
+    "sha": "3693eb346af6cf06e9c43b3bd4e4552076cb1ffc",
+    "message": "docs(Req2y3): Escenarios de Gherkin requerimientos 2 y 3",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-17T16:10:48Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/3693eb346af6cf06e9c43b3bd4e4552076cb1ffc"
+  },
+  {
+    "sha": "fb9db7daecff22913dae2843529197cce86d9df1",
+    "message": "Add: Escenarios Gherkin US 4) Confirmar Reservas (interno)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-17T15:44:54Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/fb9db7daecff22913dae2843529197cce86d9df1"
+  },
+  {
+    "sha": "e45b613a2e449783e1e314dbd95201762c3ceee2",
+    "message": "Create nuevas-features.md",
+    "author": "chrisingrey",
+    "date": "2025-10-16T22:33:17Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e45b613a2e449783e1e314dbd95201762c3ceee2"
+  },
+  {
+    "sha": "55fb80d3e29f61c8f7924b8168fa9155eb660cfb",
+    "message": "Merge pull request #48 from IngSoft-ISA2-2025-2/develop\n\nActualizacion final main",
+    "author": "Christian Ingrey",
+    "date": "2025-10-03T22:30:02Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/55fb80d3e29f61c8f7924b8168fa9155eb660cfb"
+  },
+  {
+    "sha": "a4640e4525673f6b96b8f65afadfda100571d7df",
+    "message": "Merge pull request #51 from IngSoft-ISA2-2025-2/hotfix/github-workflow-actions\n\nFix(ci):  .yml builds",
+    "author": "Christian Ingrey",
+    "date": "2025-10-03T22:23:11Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/a4640e4525673f6b96b8f65afadfda100571d7df"
+  },
+  {
+    "sha": "e694e6086f426741e07fb627b484e5d56bb3b3b6",
+    "message": "Delete backend-build.yml",
+    "author": "chrisingrey",
+    "date": "2025-10-03T22:22:57Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e694e6086f426741e07fb627b484e5d56bb3b3b6"
+  },
+  {
+    "sha": "15e73db34b3450a2b721d4cc3bfedf97d4866111",
+    "message": "Fix(ci):  .yml builds",
+    "author": "chrisingrey",
+    "date": "2025-10-03T22:21:52Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/15e73db34b3450a2b721d4cc3bfedf97d4866111"
+  },
+  {
+    "sha": "7433ab05c1a02c31c7468b15ecae6145d46340a5",
+    "message": "Merge pull request #50 from IngSoft-ISA2-2025-2/hotfix/github-workflow-actions\n\nfix(ci): builds working",
+    "author": "Christian Ingrey",
+    "date": "2025-10-03T22:16:59Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/7433ab05c1a02c31c7468b15ecae6145d46340a5"
+  },
+  {
+    "sha": "5b69bb0ed6af1b0f4d0a1244f30c3d4d59f9fc86",
+    "message": "fix(ci): builds working",
+    "author": "chrisingrey",
+    "date": "2025-10-03T22:16:19Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/5b69bb0ed6af1b0f4d0a1244f30c3d4d59f9fc86"
+  },
+  {
+    "sha": "e2128e16c384cb1f78609bf8bd0842950ff478f0",
+    "message": "Merge pull request #49 from IngSoft-ISA2-2025-2/hotfix/github-workflow-actions\n\nfix(ci): Actions siempre se ejecutan pero en caso de no tener cambios…",
+    "author": "Christian Ingrey",
+    "date": "2025-10-03T22:11:10Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e2128e16c384cb1f78609bf8bd0842950ff478f0"
+  },
+  {
+    "sha": "184e18328910464b40f23089f39181ead74d209b",
+    "message": "fix(ci): Actions siempre se ejecutan pero en caso de no tener cambios continuar",
+    "author": "chrisingrey",
+    "date": "2025-10-03T22:08:05Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/184e18328910464b40f23089f39181ead74d209b"
+  },
+  {
+    "sha": "ad671824ef336c5743619a15a99c7a08aa9dc82c",
+    "message": "chore(.idea): Eliminacion de carpeta innecesaria",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-03T21:54:40Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ad671824ef336c5743619a15a99c7a08aa9dc82c"
+  },
+  {
+    "sha": "f8c3d1c023f411f6df8fb6b82736037d65661035",
+    "message": "Merge branch 'main' into develop",
+    "author": "Christian Ingrey",
+    "date": "2025-10-03T21:36:50Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f8c3d1c023f411f6df8fb6b82736037d65661035"
+  },
+  {
+    "sha": "ad1a159ab100ab0502a26726e9c8c2b0b5c0026d",
+    "message": "Merge pull request #46 from IngSoft-ISA2-2025-2/feature/revision-docs\n\nActualizacion de kanban_y_roles, modelo_de_calidad, proceso_ingenieria y pipeline",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-03T21:29:25Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ad1a159ab100ab0502a26726e9c8c2b0b5c0026d"
+  },
+  {
+    "sha": "d44beba319abbdcd1885336e35c197616ad55c07",
+    "message": "docs(E2): Actualizacion de kanban_y_roles, modelo_de_calidad, proceso_ingenieria y creacion de documentacion de pipeline",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-03T21:27:01Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/d44beba319abbdcd1885336e35c197616ad55c07"
+  },
+  {
+    "sha": "062c6b1991e21d971742f845d34ec3329b502e34",
+    "message": "Merge pull request #44 from IngSoft-ISA2-2025-2/develop\n\nWorkflows con pipeline completo y issues resueltos",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-03T13:06:04Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/062c6b1991e21d971742f845d34ec3329b502e34"
+  },
+  {
+    "sha": "1c7a071f651475cf4532df8367e27b22f7e12bff",
+    "message": "fix(ci): names of jobs",
+    "author": "chrisingrey",
+    "date": "2025-10-03T11:55:00Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/1c7a071f651475cf4532df8367e27b22f7e12bff"
+  },
+  {
+    "sha": "6c7f689c1ce15250cc0f8071fb5c9c26768d6609",
+    "message": "fix(ci): Updated names of Jobs",
+    "author": "chrisingrey",
+    "date": "2025-10-03T11:50:42Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/6c7f689c1ce15250cc0f8071fb5c9c26768d6609"
+  },
+  {
+    "sha": "abf933cbd2ecd9eb71e67d8e30f7c653421e9951",
+    "message": "Merge pull request #45 from IngSoft-ISA2-2025-2/feature/frontend-actions\n\nfix(ci): Code coverage minimun 85",
+    "author": "Christian Ingrey",
+    "date": "2025-10-02T22:51:25Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/abf933cbd2ecd9eb71e67d8e30f7c653421e9951"
+  },
+  {
+    "sha": "5a478c9fe01c5fa69fe8ed560d858fa61177fcf4",
+    "message": "fix(ci): Code coverage minimun 85",
+    "author": "chrisingrey",
+    "date": "2025-10-02T22:48:59Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/5a478c9fe01c5fa69fe8ed560d858fa61177fcf4"
+  },
+  {
+    "sha": "0dd81eb5c7fa13c367b10f3020dfc0ff66a09642",
+    "message": "Merge pull request #43 from IngSoft-ISA2-2025-2/feature/frontend-actions\n\nfeat(ci): Build and Formating Frontend y Fix de coverage",
+    "author": "Christian Ingrey",
+    "date": "2025-10-02T22:38:45Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/0dd81eb5c7fa13c367b10f3020dfc0ff66a09642"
+  },
+  {
+    "sha": "12a3b1220a6ec9b3da2251fcb0728bffb864adef",
+    "message": "fix(ci): Tabla mostrando coberturas especificas",
+    "author": "chrisingrey",
+    "date": "2025-10-02T22:38:28Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/12a3b1220a6ec9b3da2251fcb0728bffb864adef"
+  },
+  {
+    "sha": "de270ffe26a4ee12bb3533d5ed0c8db4cd142489",
+    "message": "Merge pull request #41 from IngSoft-ISA2-2025-2/hotfix/arreglo-test-codigoFuente\n\nHotfix/arreglo test codigo fuente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-02T22:27:40Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/de270ffe26a4ee12bb3533d5ed0c8db4cd142489"
+  },
+  {
+    "sha": "4c9fd2d58991f82078a5eeb1e10a552264eb6304",
+    "message": "feat(ci): Build and Formating Frontend y Fix de coverage",
+    "author": "chrisingrey",
+    "date": "2025-10-02T22:27:33Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/4c9fd2d58991f82078a5eeb1e10a552264eb6304"
+  },
+  {
+    "sha": "ce65df080f2d260de208f4b97b0f7f6e3f30dda8",
+    "message": "feat(testCodigoFuente): merge develop",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-02T22:25:34Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ce65df080f2d260de208f4b97b0f7f6e3f30dda8"
+  },
+  {
+    "sha": "8eb8304e9d82f9fb8341be3c9bfeafaeefa81093",
+    "message": "Merge branch 'develop' into hotfix/arreglo-test-codigoFuente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-02T22:23:03Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/8eb8304e9d82f9fb8341be3c9bfeafaeefa81093"
+  },
+  {
+    "sha": "67967b71505efea8290e9baf2af6e02da736cb4c",
+    "message": "Merge branch 'bugfix/purchases-empleados' into develop",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-01T21:29:53Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/67967b71505efea8290e9baf2af6e02da736cb4c"
+  },
+  {
+    "sha": "7b2457a6b9395975b174271df9df0ad58118bd7d",
+    "message": "(REFACTOR) purchases",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-01T21:14:05Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/7b2457a6b9395975b174271df9df0ad58118bd7d"
+  },
+  {
+    "sha": "d84ce2fad0e05da1b987acd4d978694bd6f50a35",
+    "message": "test(purchasesDetailRepoTest): Correcion de prueba que venia erronea desde el codigo fuente",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-01T20:52:02Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/d84ce2fad0e05da1b987acd4d978694bd6f50a35"
+  },
+  {
+    "sha": "09195e0f1872c676fa4723b94a00c905ae88e439",
+    "message": "Merge pull request #39 from IngSoft-ISA2-2025-2/bugfix/contrasenias-texto-plano\n\nBugfix/contrasenias texto plano",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-01T20:42:35Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/09195e0f1872c676fa4723b94a00c905ae88e439"
+  },
+  {
+    "sha": "ec535a2594652aeda193f2cc583b9c59a95879b7",
+    "message": "refactor(Database): Configure explicit MaxLength for User.Password field",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-01T20:02:22Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ec535a2594652aeda193f2cc583b9c59a95879b7"
+  },
+  {
+    "sha": "fbef11135b03b2d6d71d8ec8d18a8d1ea65c9251",
+    "message": "(REFACTOR) GetAllPurchases",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-01T19:29:52Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/fbef11135b03b2d6d71d8ec8d18a8d1ea65c9251"
+  },
+  {
+    "sha": "164c9ffb266d9910bd23b608e3a0cdcc4a3ca093",
+    "message": "Test (GREEN): GetAllPurchases_Should_Return_EmptyList_When_User_Has_No_Pharmacy()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-01T19:24:37Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/164c9ffb266d9910bd23b608e3a0cdcc4a3ca093"
+  },
+  {
+    "sha": "c7752923f757bafb9d70687281c70c844433d56f",
+    "message": "Update: Test (RED) GetAllPurchases_Should_ThrowNullReferenceException_When_User_Has_No_Pharmacy()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-01T19:18:54Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/c7752923f757bafb9d70687281c70c844433d56f"
+  },
+  {
+    "sha": "ef75c39e386caffb130a675cb9092b049e06836b",
+    "message": "Test (RED) GetAllPurchases_Should_Return_EmptyList_When_User_Has_No_Pharmacy()",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-10-01T19:14:50Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ef75c39e386caffb130a675cb9092b049e06836b"
+  },
+  {
+    "sha": "ab13094a52413d1d14aadd439294a85f930359d9",
+    "message": "test(UserManager): [REFACTOR] Extract constants and improve code maintainability in UsersManager",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-01T18:55:59Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ab13094a52413d1d14aadd439294a85f930359d9"
+  },
+  {
+    "sha": "ad0c201e79d5b350d6cf52bcb892e79f94fcbedd",
+    "message": "test(UserManager): [GREEN] Add comprehensive BCrypt verification test CreateUser_ShouldGenerateVerifiablePasswordHash",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-01T18:45:51Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/ad0c201e79d5b350d6cf52bcb892e79f94fcbedd"
+  },
+  {
+    "sha": "99687aa0fd51f7c88b029303b2188ad05ad291f6",
+    "message": "test(UserManager): [REFACTOR] Extract methods in UsersManager for better code organization",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-01T18:39:03Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/99687aa0fd51f7c88b029303b2188ad05ad291f6"
+  },
+  {
+    "sha": "b9da3e551295092748038bfe14cdc629fd77ca62",
+    "message": "test(UserManager): [GREEN] Implement hashing password in UsersManager for test CreateUser_ShouldNotStorePasswordInPlainText",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-01T18:34:34Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/b9da3e551295092748038bfe14cdc629fd77ca62"
+  },
+  {
+    "sha": "292dc826d0b5204d0055e2e40e6a981935ac511c",
+    "message": "test(UserManager): [RED] Add failing test CreateUser_ShouldNotStorePasswordInPlainText",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-10-01T18:29:27Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/292dc826d0b5204d0055e2e40e6a981935ac511c"
+  },
+  {
+    "sha": "68987df4538abe3bcdbd44c6412bc18b668a1760",
+    "message": "Merge pull request #37 from IngSoft-ISA2-2025-2/feature/formating-ci\n\nFixing formating",
+    "author": "Christian Ingrey",
+    "date": "2025-09-30T18:31:20Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/68987df4538abe3bcdbd44c6412bc18b668a1760"
+  },
+  {
+    "sha": "da7d7b95e061b02bac57bd87f105cbdd7b687693",
+    "message": "bug(ci): fix formating",
+    "author": "chrisingrey",
+    "date": "2025-09-30T18:28:53Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/da7d7b95e061b02bac57bd87f105cbdd7b687693"
+  },
+  {
+    "sha": "cc2ebb4275b1cc181156a1911c307288c3274740",
+    "message": "feat(ci): updating to v4 github artifacts",
+    "author": "chrisingrey",
+    "date": "2025-09-30T18:17:40Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/cc2ebb4275b1cc181156a1911c307288c3274740"
+  },
+  {
+    "sha": "eadce7797cc7158f76a185c4cb93a68ca361cf23",
+    "message": "dotnet format",
+    "author": "chrisingrey",
+    "date": "2025-09-30T18:14:49Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/eadce7797cc7158f76a185c4cb93a68ca361cf23"
+  },
+  {
+    "sha": "9a5b075c86b677a6c1e66fe703ec49f4ca54a8fc",
+    "message": "Merge pull request #36 from IngSoft-ISA2-2025-2/feature/formating-ci\n\nfeat(ci): Add formating backend checks",
+    "author": "Christian Ingrey",
+    "date": "2025-09-30T18:12:08Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/9a5b075c86b677a6c1e66fe703ec49f4ca54a8fc"
+  },
+  {
+    "sha": "20cdda08768251a258ec052d7e745500d5ac7fb4",
+    "message": "Merge pull request #35 from IngSoft-ISA2-2025-2/feature/bugs-seleccionados\n\nFeature/bugs seleccionados",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-09-30T18:11:42Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/20cdda08768251a258ec052d7e745500d5ac7fb4"
+  },
+  {
+    "sha": "f694e4d20e76dd0ccb49755500e82fcafd10b82a",
+    "message": "feat(ci): Add formating backend checks",
+    "author": "chrisingrey",
+    "date": "2025-09-30T18:10:49Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f694e4d20e76dd0ccb49755500e82fcafd10b82a"
+  },
+  {
+    "sha": "f60657be63ac503851c79a30543025321a7a25b9",
+    "message": "docs (bugs: Update bugs_seleccionados, #Issue 13)",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-09-30T18:09:37Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f60657be63ac503851c79a30543025321a7a25b9"
+  },
+  {
+    "sha": "f4c99f8ca677f80a6fcfce3411b9fb79a7a6777d",
+    "message": "docs (bugs): Update bugs_seleccionados.md, Issue 2",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-30T17:58:31Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f4c99f8ca677f80a6fcfce3411b9fb79a7a6777d"
+  },
+  {
+    "sha": "dc991f3bead5289cf1875d6b7bc2e0692d863bb7",
+    "message": "Merge pull request #33 from IngSoft-ISA2-2025-2/feature/dotnet-build-ci\n\nfeat(ci): separacion de archivos y code coverage",
+    "author": "Christian Ingrey",
+    "date": "2025-09-30T17:54:12Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/dc991f3bead5289cf1875d6b7bc2e0692d863bb7"
+  },
+  {
+    "sha": "992ce8de1b4575c336c85a95062bf5b8b4056c4c",
+    "message": "feat(ci): separacion de archivos y code coverage",
+    "author": "chrisingrey",
+    "date": "2025-09-30T17:39:42Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/992ce8de1b4575c336c85a95062bf5b8b4056c4c"
+  },
+  {
+    "sha": "30a148d25cd5c38049fb38deb03d9f81a3634f0d",
+    "message": "docs (bugs): Init and Update bugs_seleccionados.md",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-30T17:37:57Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/30a148d25cd5c38049fb38deb03d9f81a3634f0d"
+  },
+  {
+    "sha": "6b1a6492a24af270378c1011acf6af471b242c67",
+    "message": "Merge pull request #31 from IngSoft-ISA2-2025-2/feature/dotnet-build-ci\n\nfeat(ci): Merge a main solo desde develop",
+    "author": "Christian Ingrey",
+    "date": "2025-09-30T17:32:42Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/6b1a6492a24af270378c1011acf6af471b242c67"
+  },
+  {
+    "sha": "90f58fee4353c98303819f98f5375e0668257011",
+    "message": "feat(ci): Merge a main solo desde develop",
+    "author": "chrisingrey",
+    "date": "2025-09-30T17:31:44Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/90f58fee4353c98303819f98f5375e0668257011"
+  },
+  {
+    "sha": "d096cedfa3c0bae2c58337a6cfc95c220d8f9a8c",
+    "message": "Merge pull request #29 from IngSoft-ISA2-2025-2/feature/dotnet-build-ci\n\nfeat(ci): agregar build al ci",
+    "author": "Christian Ingrey",
+    "date": "2025-09-30T17:19:06Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/d096cedfa3c0bae2c58337a6cfc95c220d8f9a8c"
+  },
+  {
+    "sha": "61511705341a2e547c6486d769b67dbd0da117a2",
+    "message": "feat(ci): agregar build al ci",
+    "author": "chrisingrey",
+    "date": "2025-09-30T17:18:27Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/61511705341a2e547c6486d769b67dbd0da117a2"
+  },
+  {
+    "sha": "4680493ead11c159f6a551a98f1dee02aee53f9b",
+    "message": "Update README.md",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-22T21:20:59Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/4680493ead11c159f6a551a98f1dee02aee53f9b"
+  },
+  {
+    "sha": "f0db892cbd27d14b6f0bbf4cd7e90c5a94cd533f",
+    "message": "Merge branch 'main' of https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-22T20:59:07Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f0db892cbd27d14b6f0bbf4cd7e90c5a94cd533f"
+  },
+  {
+    "sha": "61b68a4c17e9d39d6dd49df5dc52a05b9e45198b",
+    "message": "Update modelo de calidad, issues y clasificacion y README",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-22T20:58:54Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/61b68a4c17e9d39d6dd49df5dc52a05b9e45198b"
+  },
+  {
+    "sha": "c83757983fbd5679854fee4470d099b8247f123a",
+    "message": "Update modelo_de_calidad.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-22T20:25:46Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/c83757983fbd5679854fee4470d099b8247f123a"
+  },
+  {
+    "sha": "318b8d322fb8d76cd201e5c4323a1d9b9ad7b0a8",
+    "message": "Merge branch 'ajustesModeloDeCalidad'",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-22T20:24:12Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/318b8d322fb8d76cd201e5c4323a1d9b9ad7b0a8"
+  },
+  {
+    "sha": "d0bd5cabcc42344a5dffcc2363480a661954bfe9",
+    "message": "Update modelo_de_calidad",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-22T20:23:33Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/d0bd5cabcc42344a5dffcc2363480a661954bfe9"
+  },
+  {
+    "sha": "352bf9947ead81b81cde4509ee4ccc85a05ec358",
+    "message": "Update deuda_tecnica.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-22T20:22:44Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/352bf9947ead81b81cde4509ee4ccc85a05ec358"
+  },
+  {
+    "sha": "d54d8d5af328dc06b3e503bcc3419611742b43ae",
+    "message": "Update deuda_tecnica.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-22T20:22:30Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/d54d8d5af328dc06b3e503bcc3419611742b43ae"
+  },
+  {
+    "sha": "0549166f1f9a78d89bfb9d24be027b5c2491d15f",
+    "message": "Merge branch 'deuda-tecnica'",
+    "author": "chrisingrey",
+    "date": "2025-09-22T20:02:54Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/0549166f1f9a78d89bfb9d24be027b5c2491d15f"
+  },
+  {
+    "sha": "f807b13cb6fe0b1fd58390fabd5b44801a29b520",
+    "message": "Update deuda_tecnica.md",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-09-22T19:11:12Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f807b13cb6fe0b1fd58390fabd5b44801a29b520"
+  },
+  {
+    "sha": "e00b4a764d9ae238fbd75b64908d451462f42d5e",
+    "message": "Merge branch 'feature/deuda-tecnica'",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-09-22T12:52:21Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e00b4a764d9ae238fbd75b64908d451462f42d5e"
+  },
+  {
+    "sha": "cdb19eabb5af39b4cfb5c7778b6d694b67f7c2ac",
+    "message": "Update deuda_tecnica.md",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-09-22T12:51:44Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/cdb19eabb5af39b4cfb5c7778b6d694b67f7c2ac"
+  },
+  {
+    "sha": "8dc8b0c779875d53c343568aca73eb4f13f65378",
+    "message": "Update deuda_tecnica.md",
+    "author": "chrisingrey",
+    "date": "2025-09-22T01:13:09Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/8dc8b0c779875d53c343568aca73eb4f13f65378"
+  },
+  {
+    "sha": "010aecf205e1a412d34ae5961a51e97d65c93030",
+    "message": "Update deuda tecnica",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-22T00:49:12Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/010aecf205e1a412d34ae5961a51e97d65c93030"
+  },
+  {
+    "sha": "f830c96a06bc985c48e6248cfcac273f009bf045",
+    "message": "Update deuda_tecnica",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-09-20T22:05:15Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/f830c96a06bc985c48e6248cfcac273f009bf045"
+  },
+  {
+    "sha": "0b42727c9f947bf473619eab5b899e53b3ec0b21",
+    "message": "Update deuda_tecnica.md",
+    "author": "chrisingrey",
+    "date": "2025-09-20T21:01:44Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/0b42727c9f947bf473619eab5b899e53b3ec0b21"
+  },
+  {
+    "sha": "d27414f8405e120278ec76fd9482ec5107610cb7",
+    "message": "Update deuda_tecnica.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-20T15:17:22Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/d27414f8405e120278ec76fd9482ec5107610cb7"
+  },
+  {
+    "sha": "cbfda2f4262e6cdcffc443b5d5fe68a9d5c58dd0",
+    "message": "Merge branch 'deuda-tecnica'",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-09-19T21:04:41Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/cbfda2f4262e6cdcffc443b5d5fe68a9d5c58dd0"
+  },
+  {
+    "sha": "04530cc6a7026b5c837d8a3b994d74d3cb784233",
+    "message": "Update deuda_tecnica",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-09-19T21:02:57Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/04530cc6a7026b5c837d8a3b994d74d3cb784233"
+  },
+  {
+    "sha": "fde2c8efb13666c000d2fda2aa1f78a0c66bda1d",
+    "message": "Update modelo_de_calidad.md",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-19T19:10:22Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/fde2c8efb13666c000d2fda2aa1f78a0c66bda1d"
+  },
+  {
+    "sha": "006363582eb218e37b16eb6ad8c8c6b76fdc7864",
+    "message": "Create deuda_tecnica.md",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-09-19T18:48:37Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/006363582eb218e37b16eb6ad8c8c6b76fdc7864"
+  },
+  {
+    "sha": "0f93733cfb5181b3448f31c3de80235753928f6b",
+    "message": "Update de modelo_de_calidad.md",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-09-18T22:23:16Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/0f93733cfb5181b3448f31c3de80235753928f6b"
+  },
+  {
+    "sha": "3ea510ac070873eed21d19a8007c1ba815f38da7",
+    "message": "Merge branch 'modelo-calidad'",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-09-18T22:07:07Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/3ea510ac070873eed21d19a8007c1ba815f38da7"
+  },
+  {
+    "sha": "2fd98b172db37eaccf62ba3b97673766e6b6746c",
+    "message": "Update modelo_de_calidad.md",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-09-18T22:06:32Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/2fd98b172db37eaccf62ba3b97673766e6b6746c"
+  },
+  {
+    "sha": "a55ee6b0d3d1fcaba58f13d614a64dcd48d7d721",
+    "message": "proceso ingenieria terminado",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-18T21:49:02Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/a55ee6b0d3d1fcaba58f13d614a64dcd48d7d721"
+  },
+  {
+    "sha": "c4614b96a53d21dd75fce2ef42219938149abf75",
+    "message": "Create modelo_de_calidad.md",
+    "author": "Juan Diego Fagnoni Barera",
+    "date": "2025-09-18T21:24:10Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/c4614b96a53d21dd75fce2ef42219938149abf75"
+  },
+  {
+    "sha": "feae9cde8d17b7992fefd571b1cd4807914e36b9",
+    "message": "Create proceso_ingenieria.md",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-17T22:00:05Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/feae9cde8d17b7992fefd571b1cd4807914e36b9"
+  },
+  {
+    "sha": "1dd30c1772cadcf36eea0892664676ac1861ee2a",
+    "message": "Update reglas_de_trabajo_y_configuracion_repo.md",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-17T21:55:41Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/1dd30c1772cadcf36eea0892664676ac1861ee2a"
+  },
+  {
+    "sha": "e5b8682b0bb78b19904850e09f29b196847d6395",
+    "message": "Update reglas_de_trabajo_y_configuracion_repo.md",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-17T21:55:20Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e5b8682b0bb78b19904850e09f29b196847d6395"
+  },
+  {
+    "sha": "6af4a025914c9b00d8950fa4d76c7a445788bf84",
+    "message": "Rename proceso_ingenieria.md to reglas_de_trabajo_y_configuracion_repo.md",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-17T21:54:00Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/6af4a025914c9b00d8950fa4d76c7a445788bf84"
+  },
+  {
+    "sha": "3b3fdf5daa1be63b9f744f46a6b1994792d96f7b",
+    "message": "Update proceso_ingenieria.md",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-17T20:18:08Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/3b3fdf5daa1be63b9f744f46a6b1994792d96f7b"
+  },
+  {
+    "sha": "e4ebaac59053641760211d2dcc916df3986367b8",
+    "message": "Update proceso_ingenieria.md",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-17T20:14:56Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e4ebaac59053641760211d2dcc916df3986367b8"
+  },
+  {
+    "sha": "b3962708a57f5d3df71ab82814df224b1b00c31a",
+    "message": "Update kanban_y_roles.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-17T20:00:10Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/b3962708a57f5d3df71ab82814df224b1b00c31a"
+  },
+  {
+    "sha": "e16b8067fac263716494f5f8cfeecf028f999a0b",
+    "message": "Update kanban_y_roles.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-17T19:59:44Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/e16b8067fac263716494f5f8cfeecf028f999a0b"
+  },
+  {
+    "sha": "99ccde446f4b3a9785c130d88da5706bf5f0f693",
+    "message": "Update proceso_ingenieria.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-17T19:52:03Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/99ccde446f4b3a9785c130d88da5706bf5f0f693"
+  },
+  {
+    "sha": "6f2c3dadd06e01edb2915473040cdf00e269366e",
+    "message": "Update proceso_ingenieria.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-17T19:51:34Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/6f2c3dadd06e01edb2915473040cdf00e269366e"
+  },
+  {
+    "sha": "a6064ef52ad15031eb3b0aefe29fd722f7e0c532",
+    "message": "Update kanban_y_roles.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-17T19:51:06Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/a6064ef52ad15031eb3b0aefe29fd722f7e0c532"
+  },
+  {
+    "sha": "cc68d93f125f6c3d52e897b3f49d7e9344657e1d",
+    "message": "Create proceso_ingenieria.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-17T19:50:26Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/cc68d93f125f6c3d52e897b3f49d7e9344657e1d"
+  },
+  {
+    "sha": "99160b9d488cf7ee9bfd1e8318f5ceae90cde74d",
+    "message": "Update and rename marco_de_gestion.md to kanban_y_roles.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-17T19:48:51Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/99160b9d488cf7ee9bfd1e8318f5ceae90cde74d"
+  },
+  {
+    "sha": "93c844b40bead279211b8f622217c43fe82731a7",
+    "message": "Update and rename kanban_y_roles.md to marco_de_gestion.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-17T19:46:37Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/93c844b40bead279211b8f622217c43fe82731a7"
+  },
+  {
+    "sha": "9a50f5aa71abf4b56d44e141f85e01f687ea1824",
+    "message": "Update kanban_y_roles.md",
+    "author": "Juan Pedro Michelini Lopez",
+    "date": "2025-09-17T19:42:47Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/9a50f5aa71abf4b56d44e141f85e01f687ea1824"
+  },
+  {
+    "sha": "734716b64a2149e4403871ff158b9ba8699ac32d",
+    "message": "Update kanban_y_roles.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-17T19:30:31Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/734716b64a2149e4403871ff158b9ba8699ac32d"
+  },
+  {
+    "sha": "30c99bad6eec0f37cdf36ae0f13b7ce506217f40",
+    "message": "Update kanban_y_roles.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-17T14:06:29Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/30c99bad6eec0f37cdf36ae0f13b7ce506217f40"
+  },
+  {
+    "sha": "353432f8dd347dcadfa8a4bcd794de114c4d7967",
+    "message": "Update kanban_y_roles.md",
+    "author": "Christian Ingrey",
+    "date": "2025-09-17T13:41:00Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/353432f8dd347dcadfa8a4bcd794de114c4d7967"
+  },
+  {
+    "sha": "bcf5407e38f31f614764770d1ea5764d5f00b919",
+    "message": "Documentacion Inicial",
+    "author": "chrisingrey",
+    "date": "2025-09-17T13:27:46Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/bcf5407e38f31f614764770d1ea5764d5f00b919"
+  },
+  {
+    "sha": "44c06094adfedff35917ab3d3c691b83ee174372",
+    "message": "Initial commit",
+    "author": "chrisingrey",
+    "date": "2025-09-17T13:12:53Z",
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/commit/44c06094adfedff35917ab3d3c691b83ee174372"
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "metric": "Mean Time To Recovery",
+  "calculation_date": "2025-11-05T20:02:45.539918",
+  "methodology": {
+    "detection": "Deployments a main seguidos de hotfixes",
+    "calculation": "Tiempo entre el merge del deployment problemático y el merge del hotfix que lo resuelve",
+    "scope": "Solo incidentes en la rama main (producción/release)",
+    "rationale": "Mide el tiempo real de recuperación de incidentes en deployments, excluyendo fallas normales durante desarrollo"
+  },
+  "statistics": {
+    "mean_hours": 0.18,
+    "mean_minutes": 10.8,
+    "median_hours": 0.18,
+    "median_minutes": 10.8,
+    "min_hours": 0.18,
+    "max_hours": 0.18
+  },
+  "total_incidents": 1,
+  "incidents": [
+    {
+      "deployment_pr": 73,
+      "deployment_title": "Develop",
+      "deployment_time": "2025-10-28T00:03:07Z",
+      "fix_pr": 74,
+      "fix_title": "fix",
+      "fix_time": "2025-10-28T00:13:56Z",
+      "mttr_hours": 0.18,
+      "mttr_minutes": 10.8
+    }
+  ]
+}
