@@ -1,0 +1,432 @@
+[
+  {
+    "number": 66,
+    "title": "Validación Segura de Reservas",
+    "state": "closed",
+    "created_at": "2025-10-26T20:01:29Z",
+    "updated_at": "2025-10-26T20:01:58Z",
+    "closed_at": "2025-10-26T20:01:58Z",
+    "author": "JuanPeMiche",
+    "labels": [],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/66"
+  },
+  {
+    "number": 62,
+    "title": "Crear Reserva",
+    "state": "closed",
+    "created_at": "2025-10-25T00:22:10Z",
+    "updated_at": "2025-10-26T19:57:30Z",
+    "closed_at": "2025-10-25T00:24:38Z",
+    "author": "chrisingrey",
+    "labels": [],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/62"
+  },
+  {
+    "number": 60,
+    "title": "Gestión de estados",
+    "state": "closed",
+    "created_at": "2025-10-17T17:00:36Z",
+    "updated_at": "2025-10-26T19:58:50Z",
+    "closed_at": "2025-10-26T15:00:54Z",
+    "author": "JdFagnoni",
+    "labels": [],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/60"
+  },
+  {
+    "number": 59,
+    "title": "Confirmar reserva",
+    "state": "closed",
+    "created_at": "2025-10-17T16:58:36Z",
+    "updated_at": "2025-10-27T02:56:07Z",
+    "closed_at": "2025-10-26T19:05:00Z",
+    "author": "JdFagnoni",
+    "labels": [],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/59"
+  },
+  {
+    "number": 56,
+    "title": "Cancelar Reservas",
+    "state": "closed",
+    "created_at": "2025-10-17T16:49:03Z",
+    "updated_at": "2025-10-27T00:53:16Z",
+    "closed_at": "2025-10-26T15:04:28Z",
+    "author": "JuanPeMiche",
+    "labels": [],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/56"
+  },
+  {
+    "number": 55,
+    "title": "Gestionar Reservas",
+    "state": "closed",
+    "created_at": "2025-10-17T16:47:52Z",
+    "updated_at": "2025-10-26T19:58:10Z",
+    "closed_at": "2025-10-26T15:00:44Z",
+    "author": "JuanPeMiche",
+    "labels": [],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/55"
+  },
+  {
+    "number": 28,
+    "title": "Click en configuración no responde",
+    "state": "open",
+    "created_at": "2025-09-22T21:31:40Z",
+    "updated_at": "2025-09-22T21:34:38Z",
+    "closed_at": null,
+    "author": "JdFagnoni",
+    "labels": [
+      "Completitud Funcional"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/28"
+  },
+  {
+    "number": 27,
+    "title": "Cobertura de casos borde",
+    "state": "open",
+    "created_at": "2025-09-22T21:31:22Z",
+    "updated_at": "2025-09-22T21:39:02Z",
+    "closed_at": null,
+    "author": "JdFagnoni",
+    "labels": [
+      "Completitud Funcional"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/27"
+  },
+  {
+    "number": 26,
+    "title": "Mensaje de error no explicativo al crear un drug",
+    "state": "open",
+    "created_at": "2025-09-22T21:29:58Z",
+    "updated_at": "2025-09-22T21:31:44Z",
+    "closed_at": null,
+    "author": "JuanPeMiche",
+    "labels": [
+      "Usabilidad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/26"
+  },
+  {
+    "number": 25,
+    "title": "Eliminación física vs. lógica",
+    "state": "open",
+    "created_at": "2025-09-22T21:29:48Z",
+    "updated_at": "2025-09-22T21:38:37Z",
+    "closed_at": null,
+    "author": "JdFagnoni",
+    "labels": [
+      "Completitud Funcional"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/25"
+  },
+  {
+    "number": 24,
+    "title": "No hay logging",
+    "state": "open",
+    "created_at": "2025-09-22T21:29:36Z",
+    "updated_at": "2025-09-22T21:40:21Z",
+    "closed_at": null,
+    "author": "JdFagnoni",
+    "labels": [
+      "Completitud Funcional"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/24"
+  },
+  {
+    "number": 23,
+    "title": "Se permiten auto-invitaciones",
+    "state": "open",
+    "created_at": "2025-09-22T21:29:24Z",
+    "updated_at": "2025-09-22T21:40:01Z",
+    "closed_at": null,
+    "author": "JdFagnoni",
+    "labels": [
+      "Completitud Funcional"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/23"
+  },
+  {
+    "number": 22,
+    "title": "Validaciones incompletas",
+    "state": "open",
+    "created_at": "2025-09-22T21:28:42Z",
+    "updated_at": "2025-09-22T21:39:02Z",
+    "closed_at": null,
+    "author": "JdFagnoni",
+    "labels": [
+      "Completitud Funcional"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/22"
+  },
+  {
+    "number": 21,
+    "title": "Respuestas HTTP poco informativas",
+    "state": "open",
+    "created_at": "2025-09-22T21:28:28Z",
+    "updated_at": "2025-09-22T21:40:44Z",
+    "closed_at": null,
+    "author": "JdFagnoni",
+    "labels": [
+      "Completitud Funcional"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/21"
+  },
+  {
+    "number": 20,
+    "title": "Validación insuficiente en frontend",
+    "state": "open",
+    "created_at": "2025-09-22T21:28:14Z",
+    "updated_at": "2025-09-22T21:36:35Z",
+    "closed_at": null,
+    "author": "JdFagnoni",
+    "labels": [
+      "Completitud Funcional"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/20"
+  },
+  {
+    "number": 19,
+    "title": "Persistencia innecesaria de mensajes de error en la interfaz",
+    "state": "open",
+    "created_at": "2025-09-22T21:27:41Z",
+    "updated_at": "2025-09-22T21:32:10Z",
+    "closed_at": null,
+    "author": "JuanPeMiche",
+    "labels": [
+      "Usabilidad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/19"
+  },
+  {
+    "number": 18,
+    "title": "Acceso al registro",
+    "state": "open",
+    "created_at": "2025-09-22T21:27:07Z",
+    "updated_at": "2025-09-22T21:32:25Z",
+    "closed_at": null,
+    "author": "JuanPeMiche",
+    "labels": [
+      "Usabilidad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/18"
+  },
+  {
+    "number": 17,
+    "title": "Redirección al login",
+    "state": "open",
+    "created_at": "2025-09-22T21:26:25Z",
+    "updated_at": "2025-09-22T21:32:40Z",
+    "closed_at": null,
+    "author": "JuanPeMiche",
+    "labels": [
+      "Usabilidad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/17"
+  },
+  {
+    "number": 16,
+    "title": "Desaparición del botón de logout en modo employee al achicar la pantalla",
+    "state": "open",
+    "created_at": "2025-09-22T21:25:46Z",
+    "updated_at": "2025-09-22T21:31:41Z",
+    "closed_at": null,
+    "author": "JuanPeMiche",
+    "labels": [
+      "Usabilidad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/16"
+  },
+  {
+    "number": 15,
+    "title": "Mensajes de error y formato claro en registro",
+    "state": "open",
+    "created_at": "2025-09-22T21:24:56Z",
+    "updated_at": "2025-09-22T21:31:34Z",
+    "closed_at": null,
+    "author": "JuanPeMiche",
+    "labels": [
+      "Usabilidad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/15"
+  },
+  {
+    "number": 14,
+    "title": "Falta de manejo de errores inesperados",
+    "state": "open",
+    "created_at": "2025-09-22T21:24:45Z",
+    "updated_at": "2025-09-22T21:32:48Z",
+    "closed_at": null,
+    "author": "chrisingrey",
+    "labels": [
+      "Completitud Funcional"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/14"
+  },
+  {
+    "number": 13,
+    "title": "No es posible visualizar compras como empleado",
+    "state": "closed",
+    "created_at": "2025-09-22T21:24:24Z",
+    "updated_at": "2025-10-01T22:24:37Z",
+    "closed_at": "2025-10-01T22:24:37Z",
+    "author": "chrisingrey",
+    "labels": [
+      "Completitud Funcional"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/13"
+  },
+  {
+    "number": 12,
+    "title": "Referencias nulas no controladas",
+    "state": "open",
+    "created_at": "2025-09-22T21:24:05Z",
+    "updated_at": "2025-09-22T21:31:07Z",
+    "closed_at": null,
+    "author": "chrisingrey",
+    "labels": [
+      "Completitud Funcional"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/12"
+  },
+  {
+    "number": 11,
+    "title": "Mensajes de error en login que revelan información",
+    "state": "open",
+    "created_at": "2025-09-22T21:23:09Z",
+    "updated_at": "2025-09-22T21:32:15Z",
+    "closed_at": null,
+    "author": "chrisingrey",
+    "labels": [
+      "Seguridad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/11"
+  },
+  {
+    "number": 10,
+    "title": "Mensajes de error detallados",
+    "state": "open",
+    "created_at": "2025-09-22T21:22:14Z",
+    "updated_at": "2025-09-22T21:32:09Z",
+    "closed_at": null,
+    "author": "chrisingrey",
+    "labels": [
+      "Seguridad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/10"
+  },
+  {
+    "number": 9,
+    "title": "Inconsistencia en el formato de nombres de métodos",
+    "state": "open",
+    "created_at": "2025-09-22T21:21:51Z",
+    "updated_at": "2025-09-22T21:43:03Z",
+    "closed_at": null,
+    "author": "JdFagnoni",
+    "labels": [
+      "Mantenibilidad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/9"
+  },
+  {
+    "number": 8,
+    "title": "Validación insuficiente de tokens y sesiones",
+    "state": "open",
+    "created_at": "2025-09-22T21:21:30Z",
+    "updated_at": "2025-09-22T21:32:02Z",
+    "closed_at": null,
+    "author": "chrisingrey",
+    "labels": [
+      "Seguridad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/8"
+  },
+  {
+    "number": 7,
+    "title": "Métodos largos y lógica repetida",
+    "state": "open",
+    "created_at": "2025-09-22T21:19:24Z",
+    "updated_at": "2025-09-22T21:43:06Z",
+    "closed_at": null,
+    "author": "JdFagnoni",
+    "labels": [
+      "Mantenibilidad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/7"
+  },
+  {
+    "number": 6,
+    "title": "Acoplamiento elevado",
+    "state": "open",
+    "created_at": "2025-09-22T21:16:53Z",
+    "updated_at": "2025-09-22T21:31:55Z",
+    "closed_at": null,
+    "author": "JdFagnoni",
+    "labels": [
+      "Mantenibilidad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/6"
+  },
+  {
+    "number": 5,
+    "title": "Sin control de acceso",
+    "state": "open",
+    "created_at": "2025-09-22T21:16:36Z",
+    "updated_at": "2025-09-22T21:30:47Z",
+    "closed_at": null,
+    "author": "chrisingrey",
+    "labels": [
+      "Seguridad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/5"
+  },
+  {
+    "number": 4,
+    "title": "Validaciones duplicadas",
+    "state": "open",
+    "created_at": "2025-09-22T21:16:30Z",
+    "updated_at": "2025-09-22T21:31:48Z",
+    "closed_at": null,
+    "author": "JdFagnoni",
+    "labels": [
+      "Mantenibilidad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/4"
+  },
+  {
+    "number": 3,
+    "title": "Conversión manual y repetitiva de entidades a DTOs",
+    "state": "open",
+    "created_at": "2025-09-22T21:15:53Z",
+    "updated_at": "2025-09-22T21:30:41Z",
+    "closed_at": null,
+    "author": "JdFagnoni",
+    "labels": [
+      "Mantenibilidad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/3"
+  },
+  {
+    "number": 2,
+    "title": "Contraseñas en texto plano",
+    "state": "closed",
+    "created_at": "2025-09-22T21:15:40Z",
+    "updated_at": "2025-10-01T20:03:19Z",
+    "closed_at": "2025-10-01T20:03:19Z",
+    "author": "chrisingrey",
+    "labels": [
+      "Seguridad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/2"
+  },
+  {
+    "number": 1,
+    "title": "Rutas de archivos hardcodeadas",
+    "state": "open",
+    "created_at": "2025-09-22T21:12:48Z",
+    "updated_at": "2025-09-22T21:30:20Z",
+    "closed_at": null,
+    "author": "JdFagnoni",
+    "labels": [
+      "Mantenibilidad"
+    ],
+    "url": "https://github.com/IngSoft-ISA2-2025-2/292814-286845-288818/issues/1"
+  }
+]
