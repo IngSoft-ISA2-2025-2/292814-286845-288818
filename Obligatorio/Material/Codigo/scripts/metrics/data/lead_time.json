@@ -1,0 +1,356 @@
+{
+  "metric": "Lead Time for Changes",
+  "calculation_date": "2025-11-05T19:39:01.271923",
+  "measurement_note": "Medido desde creación del PR hasta merge. No incluye tiempo de desarrollo en la branch antes del PR.",
+  "workflow_justification": {
+    "reason": "Flujo de trabajo GitFlow con develop y main",
+    "develop": "Tiempo de integración de features",
+    "main": "Tiempo de preparación de releases"
+  },
+  "results": {
+    "main": {
+      "branch": "main",
+      "total_prs_analyzed": 7,
+      "statistics": {
+        "mean_hours": 2.17,
+        "mean_days": 0.09,
+        "median_hours": 0.0,
+        "median_days": 0.0,
+        "min_hours": 0.0,
+        "max_hours": 14.44
+      },
+      "percentiles": {
+        "p50_hours": 0.0,
+        "p50_days": 0.0,
+        "p75_hours": 0.76,
+        "p75_days": 0.03,
+        "p95_hours": 14.44,
+        "p95_days": 0.6
+      },
+      "pull_requests": [
+        {
+          "number": 74,
+          "title": "fix",
+          "author": "chrisingrey",
+          "created_at": "2025-10-28T00:13:49Z",
+          "merged_at": "2025-10-28T00:13:56Z",
+          "lead_time_hours": 0.0,
+          "lead_time_days": 0.0,
+          "head_branch": "hotfix/fix-cypress"
+        },
+        {
+          "number": 73,
+          "title": "Develop",
+          "author": "chrisingrey",
+          "created_at": "2025-10-28T00:02:58Z",
+          "merged_at": "2025-10-28T00:03:07Z",
+          "lead_time_hours": 0.0,
+          "lead_time_days": 0.0,
+          "head_branch": "develop"
+        },
+        {
+          "number": 48,
+          "title": "Actualizacion final main",
+          "author": "JuanPeMiche",
+          "created_at": "2025-10-03T21:44:19Z",
+          "merged_at": "2025-10-03T22:30:02Z",
+          "lead_time_hours": 0.76,
+          "lead_time_days": 0.03,
+          "head_branch": "develop"
+        },
+        {
+          "number": 44,
+          "title": "Workflows con pipeline completo y issues resueltos",
+          "author": "chrisingrey",
+          "created_at": "2025-10-02T22:39:52Z",
+          "merged_at": "2025-10-03T13:06:04Z",
+          "lead_time_hours": 14.44,
+          "lead_time_days": 0.6,
+          "head_branch": "develop"
+        },
+        {
+          "number": 33,
+          "title": "feat(ci): separacion de archivos y code coverage",
+          "author": "chrisingrey",
+          "created_at": "2025-09-30T17:54:06Z",
+          "merged_at": "2025-09-30T17:54:12Z",
+          "lead_time_hours": 0.0,
+          "lead_time_days": 0.0,
+          "head_branch": "feature/dotnet-build-ci"
+        },
+        {
+          "number": 31,
+          "title": "feat(ci): Merge a main solo desde develop",
+          "author": "chrisingrey",
+          "created_at": "2025-09-30T17:32:35Z",
+          "merged_at": "2025-09-30T17:32:43Z",
+          "lead_time_hours": 0.0,
+          "lead_time_days": 0.0,
+          "head_branch": "feature/dotnet-build-ci"
+        },
+        {
+          "number": 29,
+          "title": "feat(ci): agregar build al ci",
+          "author": "chrisingrey",
+          "created_at": "2025-09-30T17:18:52Z",
+          "merged_at": "2025-09-30T17:19:06Z",
+          "lead_time_hours": 0.0,
+          "lead_time_days": 0.0,
+          "head_branch": "feature/dotnet-build-ci"
+        }
+      ]
+    },
+    "develop": {
+      "branch": "develop",
+      "total_prs_analyzed": 23,
+      "statistics": {
+        "mean_hours": 0.13,
+        "mean_days": 0.01,
+        "median_hours": 0.01,
+        "median_days": 0.0,
+        "min_hours": 0.0,
+        "max_hours": 2.08
+      },
+      "percentiles": {
+        "p50_hours": 0.01,
+        "p50_days": 0.0,
+        "p75_hours": 0.1,
+        "p75_days": 0.0,
+        "p95_hours": 0.27,
+        "p95_days": 0.01
+      },
+      "pull_requests": [
+        {
+          "number": 72,
+          "title": "Chore/actualizacion docs features steps tests",
+          "author": "chrisingrey",
+          "created_at": "2025-10-27T23:56:35Z",
+          "merged_at": "2025-10-28T00:02:47Z",
+          "lead_time_hours": 0.1,
+          "lead_time_days": 0.0,
+          "head_branch": "chore/actualizacion-docs-features-steps-tests"
+        },
+        {
+          "number": 71,
+          "title": "test: trigger updated workflows",
+          "author": "chrisingrey",
+          "created_at": "2025-10-27T13:51:06Z",
+          "merged_at": "2025-10-27T13:52:02Z",
+          "lead_time_hours": 0.02,
+          "lead_time_days": 0.0,
+          "head_branch": "test/workflow-validation"
+        },
+        {
+          "number": 70,
+          "title": "Fix ymls",
+          "author": "chrisingrey",
+          "created_at": "2025-10-27T13:35:47Z",
+          "merged_at": "2025-10-27T13:35:57Z",
+          "lead_time_hours": 0.0,
+          "lead_time_days": 0.0,
+          "head_branch": "hotfix/frontend-formatting"
+        },
+        {
+          "number": 69,
+          "title": "Update frontend-formatting.yml",
+          "author": "chrisingrey",
+          "created_at": "2025-10-27T13:22:49Z",
+          "merged_at": "2025-10-27T13:29:14Z",
+          "lead_time_hours": 0.11,
+          "lead_time_days": 0.0,
+          "head_branch": "hotfix/frontend-formatting"
+        },
+        {
+          "number": 68,
+          "title": "chore(pipeline-configuration): fix frontend-e2e-cypress",
+          "author": "chrisingrey",
+          "created_at": "2025-10-27T12:00:46Z",
+          "merged_at": "2025-10-27T14:05:50Z",
+          "lead_time_hours": 2.08,
+          "lead_time_days": 0.09,
+          "head_branch": "chore/pipeline-actualization"
+        },
+        {
+          "number": 67,
+          "title": "chore(pipeline-configuration): Refactor pipeline activation main and …",
+          "author": "chrisingrey",
+          "created_at": "2025-10-27T11:55:34Z",
+          "merged_at": "2025-10-27T11:55:40Z",
+          "lead_time_hours": 0.0,
+          "lead_time_days": 0.0,
+          "head_branch": "chore/pipeline-actualization"
+        },
+        {
+          "number": 65,
+          "title": "Feature/gestion de estados",
+          "author": "JuanPeMiche",
+          "created_at": "2025-10-26T01:08:35Z",
+          "merged_at": "2025-10-26T01:08:53Z",
+          "lead_time_hours": 0.01,
+          "lead_time_days": 0.0,
+          "head_branch": "feature/gestion-de-estados"
+        },
+        {
+          "number": 64,
+          "title": "Feature/secure reservations",
+          "author": "chrisingrey",
+          "created_at": "2025-10-25T23:32:34Z",
+          "merged_at": "2025-10-25T23:32:52Z",
+          "lead_time_hours": 0.01,
+          "lead_time_days": 0.0,
+          "head_branch": "feature/secure-reservations"
+        },
+        {
+          "number": 63,
+          "title": "Feature/gestionar reserva",
+          "author": "JuanPeMiche",
+          "created_at": "2025-10-25T19:37:14Z",
+          "merged_at": "2025-10-25T19:38:36Z",
+          "lead_time_hours": 0.02,
+          "lead_time_days": 0.0,
+          "head_branch": "feature/gestionar-reserva"
+        },
+        {
+          "number": 61,
+          "title": "Feature/crear reserva",
+          "author": "chrisingrey",
+          "created_at": "2025-10-25T00:20:37Z",
+          "merged_at": "2025-10-25T00:20:47Z",
+          "lead_time_hours": 0.0,
+          "lead_time_days": 0.0,
+          "head_branch": "feature/crear-reserva"
+        },
+        {
+          "number": 58,
+          "title": "Feature/nuevos requerimientos",
+          "author": "JdFagnoni",
+          "created_at": "2025-10-17T16:54:26Z",
+          "merged_at": "2025-10-17T16:56:28Z",
+          "lead_time_hours": 0.03,
+          "lead_time_days": 0.0,
+          "head_branch": "feature/nuevos-requerimientos"
+        },
+        {
+          "number": 54,
+          "title": " Feature/nuevos requerimientos Gestionar (2) y Cancelar (3) Reservas",
+          "author": "JuanPeMiche",
+          "created_at": "2025-10-17T16:28:34Z",
+          "merged_at": "2025-10-17T16:41:07Z",
+          "lead_time_hours": 0.21,
+          "lead_time_days": 0.01,
+          "head_branch": "feature/nuevos-requerimientos2y3"
+        },
+        {
+          "number": 51,
+          "title": "Fix(ci):  .yml builds",
+          "author": "chrisingrey",
+          "created_at": "2025-10-03T22:22:26Z",
+          "merged_at": "2025-10-03T22:23:12Z",
+          "lead_time_hours": 0.01,
+          "lead_time_days": 0.0,
+          "head_branch": "hotfix/github-workflow-actions"
+        },
+        {
+          "number": 50,
+          "title": "fix(ci): builds working",
+          "author": "chrisingrey",
+          "created_at": "2025-10-03T22:16:54Z",
+          "merged_at": "2025-10-03T22:16:59Z",
+          "lead_time_hours": 0.0,
+          "lead_time_days": 0.0,
+          "head_branch": "hotfix/github-workflow-actions"
+        },
+        {
+          "number": 49,
+          "title": "fix(ci): Actions siempre se ejecutan pero en caso de no tener cambios…",
+          "author": "chrisingrey",
+          "created_at": "2025-10-03T22:11:04Z",
+          "merged_at": "2025-10-03T22:11:10Z",
+          "lead_time_hours": 0.0,
+          "lead_time_days": 0.0,
+          "head_branch": "hotfix/github-workflow-actions"
+        },
+        {
+          "number": 46,
+          "title": "Actualizacion de kanban_y_roles, modelo_de_calidad, proceso_ingenieria y pipeline",
+          "author": "JuanPeMiche",
+          "created_at": "2025-10-03T21:29:15Z",
+          "merged_at": "2025-10-03T21:29:25Z",
+          "lead_time_hours": 0.0,
+          "lead_time_days": 0.0,
+          "head_branch": "feature/revision-docs"
+        },
+        {
+          "number": 45,
+          "title": "fix(ci): Code coverage minimun 85",
+          "author": "chrisingrey",
+          "created_at": "2025-10-02T22:51:18Z",
+          "merged_at": "2025-10-02T22:51:25Z",
+          "lead_time_hours": 0.0,
+          "lead_time_days": 0.0,
+          "head_branch": "feature/frontend-actions"
+        },
+        {
+          "number": 43,
+          "title": "feat(ci): Build and Formating Frontend y Fix de coverage",
+          "author": "chrisingrey",
+          "created_at": "2025-10-02T22:29:13Z",
+          "merged_at": "2025-10-02T22:38:45Z",
+          "lead_time_hours": 0.16,
+          "lead_time_days": 0.01,
+          "head_branch": "feature/frontend-actions"
+        },
+        {
+          "number": 41,
+          "title": "Hotfix/arreglo test codigo fuente",
+          "author": "JuanPeMiche",
+          "created_at": "2025-10-02T22:26:34Z",
+          "merged_at": "2025-10-02T22:27:40Z",
+          "lead_time_hours": 0.02,
+          "lead_time_days": 0.0,
+          "head_branch": "hotfix/arreglo-test-codigoFuente"
+        },
+        {
+          "number": 39,
+          "title": "Bugfix/contrasenias texto plano",
+          "author": "JuanPeMiche",
+          "created_at": "2025-10-01T20:40:29Z",
+          "merged_at": "2025-10-01T20:42:35Z",
+          "lead_time_hours": 0.04,
+          "lead_time_days": 0.0,
+          "head_branch": "bugfix/contrasenias-texto-plano"
+        },
+        {
+          "number": 37,
+          "title": "dotnet format",
+          "author": "chrisingrey",
+          "created_at": "2025-09-30T18:15:24Z",
+          "merged_at": "2025-09-30T18:31:20Z",
+          "lead_time_hours": 0.27,
+          "lead_time_days": 0.01,
+          "head_branch": "feature/formating-ci"
+        },
+        {
+          "number": 36,
+          "title": "feat(ci): Add formating backend checks",
+          "author": "chrisingrey",
+          "created_at": "2025-09-30T18:11:35Z",
+          "merged_at": "2025-09-30T18:12:08Z",
+          "lead_time_hours": 0.01,
+          "lead_time_days": 0.0,
+          "head_branch": "feature/formating-ci"
+        },
+        {
+          "number": 35,
+          "title": "Feature/bugs seleccionados",
+          "author": "JdFagnoni",
+          "created_at": "2025-09-30T18:11:28Z",
+          "merged_at": "2025-09-30T18:11:43Z",
+          "lead_time_hours": 0.0,
+          "lead_time_days": 0.0,
+          "head_branch": "feature/bugs-seleccionados"
+        }
+      ]
+    }
+  }
+}

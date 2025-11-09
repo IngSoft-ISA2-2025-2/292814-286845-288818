@@ -1,0 +1,14 @@
+{
+  "extraction_date": "2025-11-05T19:02:24.327538",
+  "repository": "IngSoft-ISA2-2025-2/292814-286845-288818",
+  "period": {
+    "since": "2025-08-07T19:01:44.520930",
+    "until": "2025-11-05T19:02:24.327569"
+  },
+  "totals": {
+    "commits": 330,
+    "pull_requests": 40,
+    "issues": 34,
+    "workflow_runs": 759
+  }
+}

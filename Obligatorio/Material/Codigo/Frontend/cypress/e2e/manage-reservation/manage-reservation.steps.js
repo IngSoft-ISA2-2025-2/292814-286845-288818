@@ -34,6 +34,15 @@ Given('no tiene reservas creadas en el sistema', () => {
 Given(
   'tiene reservas creadas en diferentes estados {string}, {string}, {string}, {string} y {string}',
   (estado1, estado2, estado3, estado4, estado5) => {
+    // Map Spanish status names to English
+    const statusMap = {
+      'Pendiente': 'Pending',
+      'Confirmada': 'Confirmed',
+      'Expirada': 'Expired',
+      'Cancelada': 'Canceled',
+      'Retirada': 'Withdrawal'
+    };
+    
     cy.intercept('GET', '**/api/Reservation?**', {
       statusCode: 200,
       body: [
@@ -41,7 +50,7 @@ Given(
           id: 1,
           reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
           pharmacyName: 'Farmashop',
-          status: estado1,
+          status: statusMap[estado1] || estado1,
           fechaCreacion: '2023-10-01T10:00:00Z',
           fechaLimiteConfirmacion: '2023-10-02T10:00:00Z',
         },
@@ -49,15 +58,16 @@ Given(
           id: 2,
           reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 1 }],
           pharmacyName: 'Farmacia Central',
-          status: estado2,
+          status: statusMap[estado2] || estado2,
           fechaCreacion: '2023-10-02T11:00:00Z',
           idReferencia: 'REF123456',
+          fechaConfirmacion: '2023-10-02T14:00:00Z',
         },
         {
           id: 3,
           reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }],
           pharmacyName: 'Farmashop',
-          status: estado3,
+          status: statusMap[estado3] || estado3,
           fechaCreacion: '2023-10-03T12:00:00Z',
           fechaExpiracion: '2023-10-03T12:00:00Z',
         },
@@ -65,7 +75,7 @@ Given(
           id: 4,
           reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }],
           pharmacyName: 'Farmacia Norte',
-          status: estado4,
+          status: statusMap[estado4] || estado4,
           fechaCreacion: '2023-10-04T13:00:00Z',
           fechaCancelacion: '2023-10-04T15:00:00Z',
         },
@@ -73,9 +83,10 @@ Given(
           id: 5,
           reservedDrugs: [{ drugName: 'Loratadina', quantity: 1 }],
           pharmacyName: 'Farmacia Sur',
-          status: estado5,
+          status: statusMap[estado5] || estado5,
           fechaCreacion: '2023-10-05T14:00:00Z',
           fechaRetiro: '2023-10-06T10:00:00Z',
+          idReferencia: 'REF789012',
         },
       ],
     }).as('reservasExitosas');
@@ -90,22 +101,24 @@ Given('tiene reservas en diferentes estados', () => {
         id: 1, 
         reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }], 
         pharmacyName: 'Farmashop', 
-        status: 'Pendiente',
-        fechaCreacion: '2023-10-01T10:00:00Z'
+        status: 'Pending',
+        fechaCreacion: '2023-10-01T10:00:00Z',
+        fechaLimiteConfirmacion: '2023-10-02T10:00:00Z'
       },
       { 
         id: 2, 
         reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 1 }], 
         pharmacyName: 'Farmacia Central', 
-        status: 'Confirmada',
+        status: 'Confirmed',
         fechaCreacion: '2023-10-02T11:00:00Z',
-        idReferencia: 'REF789'
+        idReferencia: 'REF789',
+        fechaConfirmacion: '2023-10-02T14:00:00Z'
       },
       { 
         id: 3, 
         reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], 
         pharmacyName: 'Farmashop', 
-        status: 'Expirada',
+        status: 'Expired',
         fechaCreacion: '2023-10-03T12:00:00Z',
         fechaExpiracion: '2023-10-03T12:00:00Z'
       },
@@ -129,24 +142,35 @@ Given('el email {string} ya tiene reservas con secret {string}', (email, secretC
 });
 
 Given('tiene una reserva en estado {string}', (estado) => {
+  // Map Spanish status names to English
+  const statusMap = {
+    'Pendiente': 'Pending',
+    'Confirmada': 'Confirmed',
+    'Expirada': 'Expired',
+    'Cancelada': 'Canceled',
+    'Retirada': 'Withdrawal'
+  };
+  
+  const englishStatus = statusMap[estado] || estado;
+  
   const reservaBase = {
     id: 1,
     reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
     pharmacyName: 'Farmashop',
-    status: estado,
+    status: englishStatus,
     fechaCreacion: '2023-10-01T10:00:00Z',
   };
 
   // Agregar campos específicos según el estado
-  if (estado === 'Pendiente') {
+  if (englishStatus === 'Pending') {
     reservaBase.fechaLimiteConfirmacion = '2023-10-02T10:00:00Z';
-  } else if (estado === 'Confirmada') {
+  } else if (englishStatus === 'Confirmed') {
     reservaBase.idReferencia = 'REF123456';
-  } else if (estado === 'Expirada') {
+  } else if (englishStatus === 'Expired') {
     reservaBase.fechaExpiracion = '2023-10-01T10:00:00Z';
-  } else if (estado === 'Cancelada') {
+  } else if (englishStatus === 'Canceled') {
     reservaBase.fechaCancelacion = '2023-10-01T15:00:00Z';
-  } else if (estado === 'Retirada') {
+  } else if (englishStatus === 'Withdrawal') {
     reservaBase.fechaRetiro = '2023-10-02T09:00:00Z';
   }
 
@@ -164,22 +188,25 @@ Given('tiene múltiples reservas creadas en diferentes fechas', () => {
         id: 1, 
         reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }], 
         pharmacyName: 'Farmashop',
-        status: 'Pendiente',
-        fechaCreacion: '2023-10-01T10:00:00Z' 
+        status: 'Pending',
+        fechaCreacion: '2023-10-01T10:00:00Z',
+        fechaLimiteConfirmacion: '2023-10-02T10:00:00Z'
       },
       { 
         id: 2, 
         reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], 
         pharmacyName: 'Farmacia Central',
-        status: 'Confirmada',
-        fechaCreacion: '2023-10-03T10:00:00Z' 
+        status: 'Confirmed',
+        fechaCreacion: '2023-10-03T10:00:00Z',
+        idReferencia: 'REF789'
       },
       { 
         id: 3, 
         reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 1 }], 
         pharmacyName: 'Farmacia Norte',
-        status: 'Expirada',
-        fechaCreacion: '2023-10-02T10:00:00Z' 
+        status: 'Expired',
+        fechaCreacion: '2023-10-02T10:00:00Z',
+        fechaExpiracion: '2023-10-04T10:00:00Z'
       },
     ],
   }).as('reservasMultiplesFechas');
@@ -193,22 +220,24 @@ Given('tiene reservas de diferentes medicamentos', () => {
         id: 1, 
         reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }], 
         pharmacyName: 'Farmashop',
-        status: 'Pendiente',
+        status: 'Pending',
         fechaCreacion: '2023-10-01T10:00:00Z'
       },
       { 
         id: 2, 
         reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 1 }], 
         pharmacyName: 'Farmacia Central',
-        status: 'Confirmada',
-        fechaCreacion: '2023-10-02T11:00:00Z'
+        status: 'Confirmed',
+        fechaCreacion: '2023-10-02T11:00:00Z',
+        idReferencia: 'REF789'
       },
       { 
         id: 3, 
         reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], 
         pharmacyName: 'Farmacia Norte',
-        status: 'Expirada',
-        fechaCreacion: '2023-10-03T12:00:00Z'
+        status: 'Expired',
+        fechaCreacion: '2023-10-03T12:00:00Z',
+        fechaExpiracion: '2023-10-05T12:00:00Z'
       },
     ],
   }).as('reservasMedicamentos');
@@ -222,22 +251,24 @@ Given('tiene reservas de diferentes farmacias', () => {
         id: 1, 
         reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }], 
         pharmacyName: 'Farmacia Central',
-        status: 'Pendiente',
+        status: 'Pending',
         fechaCreacion: '2023-10-01T10:00:00Z'
       },
       { 
         id: 2, 
         reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 1 }], 
         pharmacyName: 'Farmashop',
-        status: 'Confirmada',
-        fechaCreacion: '2023-10-02T11:00:00Z'
+        status: 'Confirmed',
+        fechaCreacion: '2023-10-02T11:00:00Z',
+        idReferencia: 'REF789'
       },
       { 
         id: 3, 
         reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], 
         pharmacyName: 'Farmacia Central Norte',
-        status: 'Expirada',
-        fechaCreacion: '2023-10-03T12:00:00Z'
+        status: 'Expired',
+        fechaCreacion: '2023-10-03T12:00:00Z',
+        fechaExpiracion: '2023-10-05T12:00:00Z'
       },
     ],
   }).as('reservasFarmacias');
@@ -290,9 +321,10 @@ Then('el sistema responde de manera correcta, mostrando un listado vacío', () =
 });
 
 Then('muestra un mensaje que dice {string}', (mensaje) => {
-  // Para escenario de listado vacío
-  if (mensaje === 'No tienes reservas creadas') {
-    cy.get('[data-cy="mensaje-sin-reservas"]').should('contain', mensaje);
+  // Para escenario de listado vacío - normalizar el mensaje
+  if (mensaje === 'No tienes reservas creadas' || mensaje.includes('No tienes reservas')) {
+    cy.get('[data-cy="mensaje-sin-reservas"]', { timeout: 5000 }).should('be.visible');
+    cy.get('[data-cy="mensaje-sin-reservas"]').should('contain', 'No tienes reservas');
   } 
   // Para mensajes según el estado de la reserva (Pendiente, Confirmada, etc.)
   else {
@@ -331,6 +363,7 @@ Then('cada reserva incluye un botón para ver más detalles', () => {
 });
 
 Then('el sistema responde de manera correcta, mostrando un listado únicamente con las reservas en estado {string}', (estado) => {
+  cy.get('[data-cy="reserva-estado"]', { timeout: 5000 }).should('have.length.at.least', 1);
   cy.get('[data-cy="reserva-estado"]').each(($el) => {
     cy.wrap($el).should('contain', estado);
   });

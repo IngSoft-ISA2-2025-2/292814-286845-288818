@@ -1,0 +1,23 @@
+{
+  "metric": "Change Failure Rate",
+  "calculation_date": "2025-11-05T19:46:42.668733",
+  "methodology": {
+    "detection": "PRs a main con 'fix' en título o nombre de branch",
+    "assumption": "PRs con fix indican corrección de fallos post-deploy anterior"
+  },
+  "results": {
+    "main": {
+      "total_deployments": 7,
+      "failed_deployments": 1,
+      "failure_rate_percentage": 14.29,
+      "fixes": [
+        {
+          "number": 74,
+          "title": "fix",
+          "branch": "hotfix/fix-cypress",
+          "merged_at": "2025-10-28T00:13:56Z"
+        }
+      ]
+    }
+  }
+}
