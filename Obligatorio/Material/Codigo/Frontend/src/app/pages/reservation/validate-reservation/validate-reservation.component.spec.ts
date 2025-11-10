@@ -52,10 +52,13 @@ describe('ValidateReservationComponent', () => {
   it('should display reservation information when validacionExitosa is true', () => {
     component.validacionExitosa = true;
     component.reservaInfo = {
-      medicamento: 'Aspirina',
-      cantidad: 2,
-      cliente: 'usuario@test.com',
-      farmacia: 'Farmashop'
+      pharmacyName: 'Farmashop',
+      drugs: [
+        {
+          drugName: 'Aspirina',
+          drugQuantity: 2
+        }
+      ]
     };
     fixture.detectChanges();
 

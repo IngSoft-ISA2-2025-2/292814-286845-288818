@@ -50,7 +50,7 @@ describe('ManageReservationComponent - State Management', () => {
     mockReservationService.getReservations.and.returnValue(of([reservaCreada]));
 
     // Act
-    component.consultarReservas();
+    component.consultReservations();
     fixture.detectChanges();
 
     // Assert
@@ -78,7 +78,7 @@ describe('ManageReservationComponent - State Management', () => {
     mockReservationService.getReservations.and.returnValue(of([reservaConfirmada]));
 
     // Act
-    component.consultarReservas();
+    component.consultReservations();
     fixture.detectChanges();
 
     // Assert
@@ -112,7 +112,7 @@ describe('ManageReservationComponent - State Management', () => {
     mockReservationService.getReservations.and.returnValue(of([reservaExpirada]));
 
     // Act
-    component.consultarReservas();
+    component.consultReservations();
     fixture.detectChanges();
 
     // Assert
@@ -146,7 +146,7 @@ describe('ManageReservationComponent - State Management', () => {
     mockReservationService.getReservations.and.returnValue(of([reservaCancelada]));
 
     // Act
-    component.consultarReservas();
+    component.consultReservations();
     fixture.detectChanges();
 
     // Assert
@@ -180,7 +180,7 @@ describe('ManageReservationComponent - State Management', () => {
     mockReservationService.getReservations.and.returnValue(of([reservaRetirada]));
 
     // Act
-    component.consultarReservas();
+    component.consultReservations();
     fixture.detectChanges();
 
     // Assert
@@ -240,7 +240,7 @@ describe('ManageReservationComponent - State Management', () => {
     mockReservationService.getReservations.and.returnValue(of(reservas));
 
     // Act
-    component.consultarReservas();
+    component.consultReservations();
     fixture.detectChanges();
 
     // Assert
@@ -281,11 +281,11 @@ describe('ManageReservationComponent - State Management', () => {
     mockReservationService.getReservations.and.returnValue(of(reservas));
 
     // Act
-    component.consultarReservas();
+    component.consultReservations();
     fixture.detectChanges();
 
-    component.estadoFiltro = 'Pendiente';
-    component.aplicarFiltroPorEstado();
+    component.statusFilter = 'Pendiente';
+    component.applyStatusFilter();
     fixture.detectChanges();
 
     // Assert
@@ -310,11 +310,11 @@ describe('ManageReservationComponent - State Management', () => {
     mockReservationService.getReservations.and.returnValue(of(reservas));
 
     // Act
-    component.consultarReservas();
+    component.consultReservations();
     fixture.detectChanges();
 
-    component.estadoFiltro = 'Confirmada';
-    component.aplicarFiltroPorEstado();
+    component.statusFilter = 'Confirmada';
+    component.applyStatusFilter();
     fixture.detectChanges();
 
     // Assert
@@ -339,11 +339,11 @@ describe('ManageReservationComponent - State Management', () => {
     mockReservationService.getReservations.and.returnValue(of(reservas));
 
     // Act
-    component.consultarReservas();
+    component.consultReservations();
     fixture.detectChanges();
 
-    component.estadoFiltro = 'Expirada';
-    component.aplicarFiltroPorEstado();
+    component.statusFilter = 'Expirada';
+    component.applyStatusFilter();
     fixture.detectChanges();
 
     // Assert
@@ -368,11 +368,11 @@ describe('ManageReservationComponent - State Management', () => {
     mockReservationService.getReservations.and.returnValue(of(reservas));
 
     // Act
-    component.consultarReservas();
+    component.consultReservations();
     fixture.detectChanges();
 
-    component.estadoFiltro = 'Cancelada';
-    component.aplicarFiltroPorEstado();
+    component.statusFilter = 'Cancelada';
+    component.applyStatusFilter();
     fixture.detectChanges();
 
     // Assert
@@ -397,11 +397,11 @@ describe('ManageReservationComponent - State Management', () => {
     mockReservationService.getReservations.and.returnValue(of(reservas));
 
     // Act
-    component.consultarReservas();
+    component.consultReservations();
     fixture.detectChanges();
 
-    component.estadoFiltro = 'Retirada';
-    component.aplicarFiltroPorEstado();
+    component.statusFilter = 'Retirada';
+    component.applyStatusFilter();
     fixture.detectChanges();
 
     // Assert
