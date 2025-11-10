@@ -811,6 +811,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(2, result.Count());
         }
 
+        [TestMethod]
         public void CreateStockRequest_Should_Call_Metrics()
         {
             // Arrange
