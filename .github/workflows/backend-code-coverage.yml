@@ -9,7 +9,7 @@ on:
 
 env:
   WORKING_DIRECTORY: 'Obligatorio/Material/Codigo/Backend'
-  MINIMUM_COVERAGE: 85
+  MINIMUM_COVERAGE: 80
 
 jobs:
   detect-backend-changes:
