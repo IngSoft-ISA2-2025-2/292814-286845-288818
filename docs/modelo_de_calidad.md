@@ -1,4 +1,4 @@
-# Modelo de Calidad (ISO 25010) - E3
+# Modelo de Calidad (ISO 25010) - E4
 Para nuestro modelo de calidad tomamos como referencia el estándar ISO 25010, con este definimos las principales características para evaluar la calidad del software. Seleccionamos los atributos más relevantes para el proyecto, a fin de guiar el análisis y la mejora continua.
 
 ## Propósito y alcance del modelo

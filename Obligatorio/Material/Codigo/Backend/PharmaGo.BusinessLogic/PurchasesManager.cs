@@ -5,6 +5,7 @@ using PharmaGo.Domain.Entities;
 using PharmaGo.Exceptions;
 using PharmaGo.IBusinessLogic;
 using PharmaGo.IDataAccess;
+using InstrumentationInterface;
 
 
 namespace PharmaGo.BusinessLogic
@@ -17,6 +18,7 @@ namespace PharmaGo.BusinessLogic
         private readonly IRepository<PurchaseDetail> _purchaseDetailRepository;
         private readonly IRepository<Session> _sessionRepository;
         private readonly IRepository<User> _userRepository;
+        private readonly ICustomMetrics _metrics;
 
         private readonly string PENDING = "Pending";
         private readonly string REJECTED = "Rejected";
@@ -27,7 +29,8 @@ namespace PharmaGo.BusinessLogic
                                 IRepository<Drug> drugsRepository,
                                 IRepository<PurchaseDetail> purchaseDetailRepository,
                                 IRepository<Session> sessionRespository,
-                                IRepository<User> userRespository)
+                                IRepository<User> userRespository,
+                                ICustomMetrics metrics)
         {
             _purchasesRepository = purchasesRepository;
             _pharmacysRepository = pharmacysRepository;
@@ -35,6 +38,7 @@ namespace PharmaGo.BusinessLogic
             _purchaseDetailRepository = purchaseDetailRepository;
             _sessionRepository = sessionRespository;
             _userRepository = userRespository;
+            _metrics = metrics;
         }
 
         public Purchase CreatePurchase(Purchase purchase)
@@ -93,6 +97,9 @@ namespace PharmaGo.BusinessLogic
             purchase.TrackingCode = generateTrackingCode();
             _purchasesRepository.InsertOne(purchase);
             _purchasesRepository.Save();
+
+            // Registrar métrica de negocio: compra completada
+            _metrics.IncrementPurchasesCompleted();
 
             return purchase;
         }

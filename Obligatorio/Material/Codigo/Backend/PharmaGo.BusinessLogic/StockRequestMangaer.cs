@@ -3,6 +3,7 @@ using PharmaGo.Domain.SearchCriterias;
 using PharmaGo.Exceptions;
 using PharmaGo.IBusinessLogic;
 using PharmaGo.IDataAccess;
+using InstrumentationInterface;
 
 namespace PharmaGo.BusinessLogic
 {
@@ -12,14 +13,17 @@ namespace PharmaGo.BusinessLogic
         private readonly IRepository<User> _employeeRepository;
         private readonly IRepository<Drug> _drugRepository;
         private readonly IRepository<Session> _sessionRepository;
+        private readonly ICustomMetrics _metrics;
 
         public StockRequestManager(IRepository<StockRequest> stockRequestRepository,
-            IRepository<User> employeeRepository, IRepository<Drug> drugRepository, IRepository<Session> sessionRepository)
+            IRepository<User> employeeRepository, IRepository<Drug> drugRepository, IRepository<Session> sessionRepository,
+            ICustomMetrics metrics)
         {
             _stockRequestRepository = stockRequestRepository;
             _employeeRepository = employeeRepository;
             _drugRepository = drugRepository;
             _sessionRepository = sessionRepository;
+            _metrics = metrics;
         }
 
         public bool ApproveStockRequest(int id)
@@ -61,6 +65,8 @@ namespace PharmaGo.BusinessLogic
             _drugRepository.Save();
             _stockRequestRepository.Save();
 
+            _metrics.RecordDrugRequest(success: true);
+
             return true;
         }
 
@@ -88,6 +94,8 @@ namespace PharmaGo.BusinessLogic
             stockRequest.Status = Domain.Enums.StockRequestStatus.Rejected;
             _stockRequestRepository.UpdateOne(stockRequest);
             _stockRequestRepository.Save();
+
+            _metrics.RecordDrugRequest(success: false);
 
             return true;
         }

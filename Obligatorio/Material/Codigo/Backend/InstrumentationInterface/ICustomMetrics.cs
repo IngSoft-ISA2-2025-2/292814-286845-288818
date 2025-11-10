@@ -8,14 +8,20 @@ namespace InstrumentationInterface
 {
     public interface ICustomMetrics
     {
-        // Counters
+        // Métricas originales (ya existentes)
         void LoginInvocations(long value = 1);
-
-        // Gauges
         void SetActiveUserCount(int count);
-
-        // Histograms / Timings
         void RequestDuration(double milliseconds);
-
+        
+        // Métricas de negocio (nuevas - Punto 3)
+        void IncrementPurchasesCompleted();
+        void RecordDrugRequest(bool success);
+        
+        // Métricas de aplicación (nuevas - Punto 3)
+        void RecordHttpRequest(string method, string endpoint, int statusCode, double durationSeconds);
+        
+        // Métricas de infraestructura (nuevas - Punto 3)
+        void UpdateMemoryUsage(long workingSetBytes, long privateBytes);
+        void UpdateDatabaseConnections(int activeConnections);
     }
 }

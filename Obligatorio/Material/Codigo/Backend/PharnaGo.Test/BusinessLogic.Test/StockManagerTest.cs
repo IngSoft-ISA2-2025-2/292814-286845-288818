@@ -5,6 +5,7 @@ using PharmaGo.Domain.Entities;
 using PharmaGo.Domain.SearchCriterias;
 using PharmaGo.Exceptions;
 using PharmaGo.IDataAccess;
+using InstrumentationInterface;
 
 namespace PharmaGo.Test.BusinessLogic.Test
 {
@@ -15,6 +16,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
         private Mock<IRepository<User>> _employeeMock;
         private Mock<IRepository<Drug>> _drugMock;
         private Mock<IRepository<Session>> _sessionMock;
+        private Mock<ICustomMetrics> _metricsMock;
         private StockRequestManager _stockRequestManager;
         private StockRequest _stockRequest;
         private string token = "c80da9ed-1b41-4768-8e34-b728cae25d2f";
@@ -28,8 +30,9 @@ namespace PharmaGo.Test.BusinessLogic.Test
             _employeeMock = new Mock<IRepository<User>>(MockBehavior.Strict);
             _drugMock = new Mock<IRepository<Drug>>(MockBehavior.Strict);
             _sessionMock = new Mock<IRepository<Session>>(MockBehavior.Strict);
+            _metricsMock = new Mock<ICustomMetrics>(MockBehavior.Loose);
             _stockRequestManager = new StockRequestManager(_stockRequestMock.Object,
-            _employeeMock.Object, _drugMock.Object, _sessionMock.Object);
+            _employeeMock.Object, _drugMock.Object, _sessionMock.Object, _metricsMock.Object);
 
             _stockRequest = new StockRequest()
             {
@@ -808,6 +811,66 @@ namespace PharmaGo.Test.BusinessLogic.Test
             Assert.AreEqual(2, result.Count());
         }
 
+        [TestMethod]
+        public void ApproveStockRequest_Should_Call_Metrics()
+        {
+            // Arrange
+            var drug = new Drug() { Id = 1, Code = "XF324", Stock = 50 };
+            var stockRequest = new StockRequest()
+            {
+                Id = 1,
+                Status = Domain.Enums.StockRequestStatus.Pending,
+                Employee = new User() { Id = 1, UserName = "jcastro" },
+                Details = new List<StockRequestDetail>()
+                {
+                    new StockRequestDetail() { Id = 1, Drug = drug, Quantity = 50 }
+                },
+                RequestDate = DateTime.Now
+            };
+
+            _stockRequestMock.Setup(s => s.GetOneByExpression(sr => sr.Id == 1))
+                .Returns(stockRequest);
+            _drugMock.Setup(d => d.GetOneByExpression(It.IsAny<Expression<Func<Drug, bool>>>()))
+                .Returns(drug);
+            _drugMock.Setup(d => d.UpdateOne(drug));
+            _stockRequestMock.Setup(s => s.UpdateOne(stockRequest));
+            _drugMock.Setup(d => d.Save());
+            _stockRequestMock.Setup(s => s.Save());
+
+            // Act
+            var result = _stockRequestManager.ApproveStockRequest(stockRequest.Id);
+
+            // Assert
+            _metricsMock.Verify(m => m.RecordDrugRequest(true), Times.Once);
+        }
+
+        [TestMethod]
+        public void RejectStockRequest_Should_Call_Metrics()
+        {
+            // Arrange
+            var stockRequest = new StockRequest()
+            {
+                Id = 1,
+                Status = Domain.Enums.StockRequestStatus.Pending,
+                Employee = new User() { Id = 1, UserName = "jcastro" },
+                Details = new List<StockRequestDetail>()
+                {
+                    new StockRequestDetail() { Id = 1, Drug = new Drug() { Id = 1, Code = "XF324" }, Quantity = 50 }
+                },
+                RequestDate = DateTime.Now
+            };
+
+            _stockRequestMock.Setup(m => m.GetOneByExpression(sr => sr.Id == 1))
+                .Returns(stockRequest);
+            _stockRequestMock.Setup(s => s.UpdateOne(stockRequest));
+            _stockRequestMock.Setup(s => s.Save());
+
+            // Act
+            var result = _stockRequestManager.RejectStockRequest(stockRequest.Id);
+
+            // Assert
+            _metricsMock.Verify(m => m.RecordDrugRequest(false), Times.Once);
+        }
     }
 }
 
