@@ -1,8 +1,10 @@
 using InstrumentationInterface;
 using Microsoft.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PharmaGo.WebApi.Services
 {
+    [ExcludeFromCodeCoverage]
     public class InfrastructureMetricsService : BackgroundService
     {
         private readonly ICustomMetrics _metrics;

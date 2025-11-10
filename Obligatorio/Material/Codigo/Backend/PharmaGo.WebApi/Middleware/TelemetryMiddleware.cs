@@ -1,8 +1,10 @@
 using InstrumentationInterface;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PharmaGo.WebApi.Middleware
 {
+    [ExcludeFromCodeCoverage]
     public class TelemetryMiddleware
     {
         private readonly RequestDelegate _next;
