@@ -5,6 +5,7 @@ using PharmaGo.Domain.Entities;
 using PharmaGo.Domain.SearchCriterias;
 using PharmaGo.Exceptions;
 using PharmaGo.IDataAccess;
+using InstrumentationInterface;
 
 namespace PharmaGo.Test.BusinessLogic.Test
 {
@@ -15,6 +16,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
         private Mock<IRepository<User>> _employeeMock;
         private Mock<IRepository<Drug>> _drugMock;
         private Mock<IRepository<Session>> _sessionMock;
+        private Mock<ICustomMetrics> _metricsMock;
         private StockRequestManager _stockRequestManager;
         private StockRequest _stockRequest;
         private string token = "c80da9ed-1b41-4768-8e34-b728cae25d2f";
@@ -28,8 +30,9 @@ namespace PharmaGo.Test.BusinessLogic.Test
             _employeeMock = new Mock<IRepository<User>>(MockBehavior.Strict);
             _drugMock = new Mock<IRepository<Drug>>(MockBehavior.Strict);
             _sessionMock = new Mock<IRepository<Session>>(MockBehavior.Strict);
+            _metricsMock = new Mock<ICustomMetrics>(MockBehavior.Loose);
             _stockRequestManager = new StockRequestManager(_stockRequestMock.Object,
-            _employeeMock.Object, _drugMock.Object, _sessionMock.Object);
+            _employeeMock.Object, _drugMock.Object, _sessionMock.Object, _metricsMock.Object);
 
             _stockRequest = new StockRequest()
             {
