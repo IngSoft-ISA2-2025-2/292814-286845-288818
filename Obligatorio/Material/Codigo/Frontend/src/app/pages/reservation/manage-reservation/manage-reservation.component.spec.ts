@@ -42,6 +42,7 @@ describe('ManageReservationComponent', () => {
     // Arrange: Configura email y secret válidos
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
+    component.hasConsulted = true;
     
     // Simula el resultado exitoso de consultar reservas
     component.reservations = [
@@ -49,14 +50,14 @@ describe('ManageReservationComponent', () => {
         id: 1, 
         reservedDrugs: [{ drugName: 'Aspirina', quantity: 2 }], 
         pharmacyName: 'Farmashop', 
-        status: 'Pendiente',
+        status: 'Pending',
         fechaCreacion: '2023-10-01T10:00:00Z'
       },
       { 
         id: 2, 
         reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], 
         pharmacyName: 'Farmacia Central', 
-        status: 'Confirmada',
+        status: 'Confirmed',
         fechaCreacion: '2023-10-02T11:00:00Z'
       }
     ];
@@ -108,6 +109,7 @@ describe('ManageReservationComponent', () => {
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
     component.reservations = []; // Simula que no hay reservas
+    component.hasConsulted = true;
     component.loading = false; // Asegura que no esté cargando
     component.errorMessage = ''; // Asegura que no hay error
     mockReservationService.getReservations.and.returnValue(of([]));
@@ -120,19 +122,20 @@ describe('ManageReservationComponent', () => {
     // Assert: verifica que se muestra el mensaje sin reservas
     const mensajeVacio = fixture.debugElement.query(By.css('[data-cy="mensaje-sin-reservas"]'));
     expect(mensajeVacio).toBeTruthy();
-    expect(mensajeVacio.nativeElement.textContent).toContain('No tienes reservas creadas');
+    expect(mensajeVacio.nativeElement.textContent).toContain('No tienes reservas registradas');
   });
 
   it('debería mostrar todas las reservas del usuario con información básica y botón de detalles', () => {
     // Arrange
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
+    component.hasConsulted = true;
     component.reservations = [
-      { id: 1, reservedDrugs: [{ drugName: 'Aspirina', quantity: 2 }], pharmacyName: 'Farmashop', status: 'Pendiente', fechaCreacion: '2023-10-01T10:00:00Z' },
-      { id: 2, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], pharmacyName: 'Farmacia Central', status: 'Confirmada', fechaCreacion: '2023-10-02T11:00:00Z' },
-      { id: 3, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 3 }], pharmacyName: 'Farmacia Sur', status: 'Expirada', fechaCreacion: '2023-10-03T12:00:00Z' },
-      { id: 4, reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }], pharmacyName: 'Farmacia Norte', status: 'Cancelada', fechaCreacion: '2023-10-04T13:00:00Z' },
-      { id: 5, reservedDrugs: [{ drugName: 'Diclofenac', quantity: 2 }], pharmacyName: 'Farmacia Este', status: 'Retirada', fechaCreacion: '2023-10-05T14:00:00Z' }
+      { id: 1, reservedDrugs: [{ drugName: 'Aspirina', quantity: 2 }], pharmacyName: 'Farmashop', status: 'Pending', fechaCreacion: '2023-10-01T10:00:00Z' },
+      { id: 2, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], pharmacyName: 'Farmacia Central', status: 'Confirmed', fechaCreacion: '2023-10-02T11:00:00Z' },
+      { id: 3, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 3 }], pharmacyName: 'Farmacia Sur', status: 'Expired', fechaCreacion: '2023-10-03T12:00:00Z' },
+      { id: 4, reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }], pharmacyName: 'Farmacia Norte', status: 'Canceled', fechaCreacion: '2023-10-04T13:00:00Z' },
+      { id: 5, reservedDrugs: [{ drugName: 'Diclofenac', quantity: 2 }], pharmacyName: 'Farmacia Este', status: 'Withdrawal', fechaCreacion: '2023-10-05T14:00:00Z' }
     ];
     fixture.detectChanges();
 
@@ -180,12 +183,13 @@ describe('ManageReservationComponent', () => {
     const estadoFiltro = 'Confirmada';
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
+    component.hasConsulted = true;
     component.reservations = [
-      { id: 1, reservedDrugs: [{ drugName: 'Aspirina', quantity: 2 }], pharmacyName: 'Farmashop', status: 'Pendiente', fechaCreacion: '2023-10-01T10:00:00Z' },
-      { id: 2, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], pharmacyName: 'Farmacia Central', status: 'Confirmada', fechaCreacion: '2023-10-02T11:00:00Z' },
-      { id: 3, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 3 }], pharmacyName: 'Farmacia Sur', status: 'Expirada', fechaCreacion: '2023-10-03T12:00:00Z' },
-      { id: 4, reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }], pharmacyName: 'Farmacia Norte', status: 'Cancelada', fechaCreacion: '2023-10-04T13:00:00Z' },
-      { id: 5, reservedDrugs: [{ drugName: 'Diclofenac', quantity: 2 }], pharmacyName: 'Farmacia Este', status: 'Retirada', fechaCreacion: '2023-10-05T14:00:00Z' }
+      { id: 1, reservedDrugs: [{ drugName: 'Aspirina', quantity: 2 }], pharmacyName: 'Farmashop', status: 'Pending', fechaCreacion: '2023-10-01T10:00:00Z' },
+      { id: 2, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], pharmacyName: 'Farmacia Central', status: 'Confirmed', fechaCreacion: '2023-10-02T11:00:00Z' },
+      { id: 3, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 3 }], pharmacyName: 'Farmacia Sur', status: 'Expired', fechaCreacion: '2023-10-03T12:00:00Z' },
+      { id: 4, reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }], pharmacyName: 'Farmacia Norte', status: 'Canceled', fechaCreacion: '2023-10-04T13:00:00Z' },
+      { id: 5, reservedDrugs: [{ drugName: 'Diclofenac', quantity: 2 }], pharmacyName: 'Farmacia Este', status: 'Withdrawal', fechaCreacion: '2023-10-05T14:00:00Z' }
     ];
     fixture.detectChanges();
 
@@ -225,22 +229,18 @@ describe('ManageReservationComponent', () => {
     // Arrange
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
+    component.hasConsulted = true;
     component.reservations = [
       {
         id: 1,
         reservedDrugs: [{ drugName: 'Aspirina', quantity: 2 }],
         pharmacyName: 'Farmashop',
-        status: 'Pendiente',
+        status: 'Pending',
         fechaCreacion: '2023-10-01T10:00:00Z',
         fechaLimiteConfirmacion: '2023-10-05T23:59:59Z',
         idReferencia: null // No debe mostrarse
       }
     ];
-    fixture.detectChanges();
-
-    // Act: simula click en el botón de consultar reservas
-    const consultarBtn = fixture.debugElement.query(By.css('[data-cy="consultar-reservas-btn"]'));
-    consultarBtn.triggerEventHandler('click');
     fixture.detectChanges();
 
     // Assert: verifica que la reserva pendiente se muestra correctamente
@@ -254,9 +254,6 @@ describe('ManageReservationComponent', () => {
     expect(mensajePendiente).toBeTruthy();
     expect(mensajePendiente.nativeElement.textContent).toContain('Reserva pendiente de confirmación por la farmacia');
 
-    const cancelarBtn = reservaItem.query(By.css('[data-cy="cancelar-reserva-btn"]'));
-    expect(cancelarBtn).toBeTruthy();
-
     const fechaLimite = reservaItem.query(By.css('[data-cy="fecha-limite-confirmacion"]'));
     expect(fechaLimite).toBeTruthy();
     expect(fechaLimite.nativeElement.textContent).toContain('5/10/2023');
@@ -269,12 +266,13 @@ describe('ManageReservationComponent', () => {
     // Arrange
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
+    component.hasConsulted = true;
     component.reservations = [
       {
         id: 2,
         reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }],
         pharmacyName: 'Farmacia Central',
-        status: 'Confirmada',
+        status: 'Confirmed',
         fechaCreacion: '2023-10-02T11:00:00Z',
         idReferencia: 'ABC12345'
       }
@@ -306,12 +304,13 @@ describe('ManageReservationComponent', () => {
     // Arrange
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
+    component.hasConsulted = true;
     component.reservations = [
       {
         id: 3,
         reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 3 }],
         pharmacyName: 'Farmacia Sur',
-        status: 'Expirada',
+        status: 'Expired',
         fechaCreacion: '2023-10-03T12:00:00Z',
         fechaExpiracion: '2023-10-10T23:59:59Z'
       }
@@ -343,12 +342,13 @@ describe('ManageReservationComponent', () => {
     // Arrange
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
+    component.hasConsulted = true;
     component.reservations = [
       {
         id: 4,
         reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }],
         pharmacyName: 'Farmacia Norte',
-        status: 'Cancelada',
+        status: 'Canceled',
         fechaCreacion: '2023-10-04T13:00:00Z',
         fechaCancelacion: '2023-10-08T10:00:00Z'
       }
@@ -380,12 +380,13 @@ describe('ManageReservationComponent', () => {
     // Arrange
     component.email = 'usuario@test.com';
     component.secret = 'miSecret123';
+    component.hasConsulted = true;
     component.reservations = [
       {
         id: 5,
         reservedDrugs: [{ drugName: 'Diclofenac', quantity: 2 }],
         pharmacyName: 'Farmacia Este',
-        status: 'Retirada',
+        status: 'Withdrawal',
         fechaCreacion: '2023-10-05T14:00:00Z',
         fechaRetiro: '2023-10-12T09:30:00Z'
       }

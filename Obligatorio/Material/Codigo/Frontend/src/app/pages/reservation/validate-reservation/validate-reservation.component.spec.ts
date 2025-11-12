@@ -65,7 +65,7 @@ describe('ValidateReservationComponent', () => {
     expect(fixture.debugElement.query(By.css('[data-cy="validacion-exitosa"]'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('[data-cy="reserva-medicamento"]'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('[data-cy="reserva-cantidad"]'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('[data-cy="reserva-cliente"]'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('[data-cy="reserva-farmacia"]'))).not.toBeNull();
   });
 
   it('should show estado reserva when estadoReserva is set', () => {

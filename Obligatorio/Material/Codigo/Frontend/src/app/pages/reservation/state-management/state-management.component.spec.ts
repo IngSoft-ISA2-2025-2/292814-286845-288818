@@ -44,7 +44,7 @@ describe('ManageReservationComponent - State Management', () => {
       id: 1,
       reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
       pharmacyName: 'Farmashop',
-      status: 'Pendiente',
+      status: 'Pending',
       fechaCreacion: '2023-10-01T10:00:00Z'
     };
     mockReservationService.getReservations.and.returnValue(of([reservaCreada]));
@@ -71,7 +71,7 @@ describe('ManageReservationComponent - State Management', () => {
       id: 42,
       reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
       pharmacyName: 'Farmashop',
-      status: 'Confirmada',
+      status: 'Confirmed',
       idReferencia: 'ABC123',
       fechaConfirmacion: '2023-10-10T12:00:00Z'
     };
@@ -106,7 +106,7 @@ describe('ManageReservationComponent - State Management', () => {
       id: 99,
       reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
       pharmacyName: 'Farmashop',
-      status: 'Expirada',
+      status: 'Expired',
       fechaExpiracion: '2023-10-15T18:00:00Z'
     };
     mockReservationService.getReservations.and.returnValue(of([reservaExpirada]));
@@ -140,7 +140,7 @@ describe('ManageReservationComponent - State Management', () => {
       id: 77,
       reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
       pharmacyName: 'Farmashop',
-      status: 'Cancelada',
+      status: 'Canceled',
       fechaCancelacion: '2023-10-20T09:30:00Z'
     };
     mockReservationService.getReservations.and.returnValue(of([reservaCancelada]));
@@ -174,8 +174,8 @@ describe('ManageReservationComponent - State Management', () => {
       id: 88,
       reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
       pharmacyName: 'Farmashop',
-      status: 'Retirada',
-      fechaRetiro: '2023-10-25T14:00:00Z'
+      status: 'Withdrawal',
+      fechaRetiro: '2023-10-25T14:15:00Z'
     };
     mockReservationService.getReservations.and.returnValue(of([reservaRetirada]));
 
@@ -209,32 +209,32 @@ describe('ManageReservationComponent - State Management', () => {
         id: 1,
         reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }],
         pharmacyName: 'Farmashop',
-        status: 'Pendiente'
+        status: 'Pending'
       },
       {
         id: 2,
         reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 2 }],
         pharmacyName: 'Farmashop',
-        status: 'Confirmada',
+        status: 'Confirmed',
         idReferencia: 'CONF123'
       },
       {
         id: 3,
         reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }],
         pharmacyName: 'Farmashop',
-        status: 'Expirada'
+        status: 'Expired'
       },
       {
         id: 4,
         reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }],
         pharmacyName: 'Farmashop',
-        status: 'Cancelada'
+        status: 'Canceled'
       },
       {
         id: 5,
         reservedDrugs: [{ drugName: 'Loratadina', quantity: 1 }],
         pharmacyName: 'Farmashop',
-        status: 'Retirada'
+        status: 'Withdrawal'
       }
     ];
     mockReservationService.getReservations.and.returnValue(of(reservas));
@@ -272,11 +272,11 @@ describe('ManageReservationComponent - State Management', () => {
     component.secret = 'secret123';
 
     const reservas = [
-      { id: 1, status: 'Pendiente' },
-      { id: 2, status: 'Confirmada' },
-      { id: 3, status: 'Expirada' },
-      { id: 4, status: 'Cancelada' },
-      { id: 5, status: 'Retirada' }
+      { id: 1, reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Pending' },
+      { id: 2, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Confirmed' },
+      { id: 3, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Expired' },
+      { id: 4, reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Canceled' },
+      { id: 5, reservedDrugs: [{ drugName: 'Loratadina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Withdrawal' }
     ];
     mockReservationService.getReservations.and.returnValue(of(reservas));
 
@@ -301,11 +301,11 @@ describe('ManageReservationComponent - State Management', () => {
     component.secret = 'secret123';
 
     const reservas = [
-      { id: 1, status: 'Pendiente' },
-      { id: 2, status: 'Confirmada' },
-      { id: 3, status: 'Expirada' },
-      { id: 4, status: 'Cancelada' },
-      { id: 5, status: 'Retirada' }
+      { id: 1, reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Pending' },
+      { id: 2, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Confirmed' },
+      { id: 3, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Expired' },
+      { id: 4, reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Canceled' },
+      { id: 5, reservedDrugs: [{ drugName: 'Loratadina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Withdrawal' }
     ];
     mockReservationService.getReservations.and.returnValue(of(reservas));
 
@@ -330,11 +330,11 @@ describe('ManageReservationComponent - State Management', () => {
     component.secret = 'secret123';
 
     const reservas = [
-      { id: 1, status: 'Pendiente' },
-      { id: 2, status: 'Confirmada' },
-      { id: 3, status: 'Expirada' },
-      { id: 4, status: 'Cancelada' },
-      { id: 5, status: 'Retirada' }
+      { id: 1, reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Pending' },
+      { id: 2, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Confirmed' },
+      { id: 3, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Expired' },
+      { id: 4, reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Canceled' },
+      { id: 5, reservedDrugs: [{ drugName: 'Loratadina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Withdrawal' }
     ];
     mockReservationService.getReservations.and.returnValue(of(reservas));
 
@@ -359,11 +359,11 @@ describe('ManageReservationComponent - State Management', () => {
     component.secret = 'secret123';
 
     const reservas = [
-      { id: 1, status: 'Pendiente' },
-      { id: 2, status: 'Confirmada' },
-      { id: 3, status: 'Expirada' },
-      { id: 4, status: 'Cancelada' },
-      { id: 5, status: 'Retirada' }
+      { id: 1, reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Pending' },
+      { id: 2, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Confirmed' },
+      { id: 3, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Expired' },
+      { id: 4, reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Canceled' },
+      { id: 5, reservedDrugs: [{ drugName: 'Loratadina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Withdrawal' }
     ];
     mockReservationService.getReservations.and.returnValue(of(reservas));
 
@@ -388,11 +388,11 @@ describe('ManageReservationComponent - State Management', () => {
     component.secret = 'secret123';
 
     const reservas = [
-      { id: 1, status: 'Pendiente' },
-      { id: 2, status: 'Confirmada' },
-      { id: 3, status: 'Expirada' },
-      { id: 4, status: 'Cancelada' },
-      { id: 5, status: 'Retirada' }
+      { id: 1, reservedDrugs: [{ drugName: 'Aspirina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Pending' },
+      { id: 2, reservedDrugs: [{ drugName: 'Ibuprofeno', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Confirmed' },
+      { id: 3, reservedDrugs: [{ drugName: 'Paracetamol', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Expired' },
+      { id: 4, reservedDrugs: [{ drugName: 'Amoxicilina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Canceled' },
+      { id: 5, reservedDrugs: [{ drugName: 'Loratadina', quantity: 1 }], pharmacyName: 'Farmashop', status: 'Withdrawal' }
     ];
     mockReservationService.getReservations.and.returnValue(of(reservas));
 
