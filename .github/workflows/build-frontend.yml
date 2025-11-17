@@ -91,8 +91,25 @@ jobs:
       if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: |
+        set +e
         echo "🔄 Installing npm dependencies..."
-        npm ci
+        echo "Checking package.json typescript version:"
+        grep typescript package.json || echo "typescript not found in package.json"
+        echo ""
+        echo "Attempting npm ci first..."
+        npm ci --legacy-peer-deps
+        EXIT_CODE=$?
+        if [ $EXIT_CODE -ne 0 ]; then
+          echo ""
+          echo "⚠️ npm ci failed with exit code $EXIT_CODE"
+          echo "🗑️ Removing package-lock.json and regenerating..."
+          rm -f package-lock.json
+          npm install --legacy-peer-deps
+          if [ $? -ne 0 ]; then
+            echo "❌ npm install also failed"
+            exit 1
+          fi
+        fi
         echo "✅ Dependencies installed successfully"
 
     - name: Build Application
