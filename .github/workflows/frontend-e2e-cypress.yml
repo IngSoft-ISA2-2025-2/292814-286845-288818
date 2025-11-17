@@ -75,7 +75,15 @@ jobs:
       working-directory: ${{ env.FRONTEND_DIRECTORY }}
       run: |
         echo "📦 Installing dependencies..."
-        npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+        echo "Checking package.json typescript version:"
+        grep typescript package.json || echo "typescript not found in package.json"
+        echo ""
+        echo "Attempting npm ci first..."
+        if ! npm ci --legacy-peer-deps 2>&1; then
+          echo ""
+          echo "⚠️ npm ci failed, falling back to npm install to sync lock file..."
+          npm install --legacy-peer-deps
+        fi
 
     - name: Set up Docker Compose
       run: |
