@@ -6,6 +6,9 @@ import { of, throwError } from 'rxjs';
 import { ConfirmReservationComponent } from './confirm-reservation.component';
 import { ReservationService } from '../../../services/reservation.service';
 import { CommonService } from '../../../services/CommonService';
+import { CustomToastComponent } from '../../../custom/custom-toast/custom-toast.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Subject } from 'rxjs';
 
 describe('ConfirmReservationComponent', () => {
   let component: ConfirmReservationComponent;
@@ -16,10 +19,12 @@ describe('ConfirmReservationComponent', () => {
   beforeEach(async () => {
     const reservationServiceSpy = jasmine.createSpyObj('ReservationService', ['confirmReservation']);
     const commonServiceSpy = jasmine.createSpyObj('CommonService', ['updateToastData']);
+    commonServiceSpy.onToastDataUpdate = new Subject();
 
     await TestBed.configureTestingModule({
-      declarations: [ ConfirmReservationComponent ],
+      declarations: [ ConfirmReservationComponent, CustomToastComponent ],
       imports: [ ReactiveFormsModule, HttpClientTestingModule ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
       providers: [
         { provide: ReservationService, useValue: reservationServiceSpy },
         { provide: CommonService, useValue: commonServiceSpy }

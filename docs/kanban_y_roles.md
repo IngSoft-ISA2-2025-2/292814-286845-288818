@@ -6,7 +6,7 @@
 - Christian Ingrey
 
 Todos somos desarrollador y tester en todas las entregas. 
-> Rol de la etapa: **Product Owner (Etapa 3)** → Juan Diego Fagnoni. El PO rota en las siguientes etapas.
+> Rol de la etapa: **Product Owner (Etapa 4)** → Juan Pedro Michelini. El PO rota en las siguientes etapas.
 
 #### **Roles y Responsabilidades en BDD**
 

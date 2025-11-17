@@ -1,0 +1,46 @@
+{
+  "users": {
+    "admin": {
+      "userName": "admin",
+      "email": "admin@gmail.com",
+      "password": "Aqwertyu2."
+    },
+    "owner": {
+      "userName": "owner1",
+      "email": "owner1@gmail.com",
+      "password": "Aqwertyu2."
+    },
+    "employee": {
+      "userName": "employee1",
+      "email": "employee1@gmail.com",
+      "password": "Aqwertyu2."
+    }
+  },
+  "pharmacies": [
+    {
+      "id": 1,
+      "name": "Farmacia 1234"
+    },
+    {
+      "id": 2,
+      "name": "Farmacia Av. Italia"
+    }
+  ],
+  "drugs": [
+    {
+      "code": "XDEA",
+      "name": "Novemina",
+      "stock": 1933
+    },
+    {
+      "code": "ABCD",
+      "name": "Perifar Flex",
+      "stock": 1155
+    },
+    {
+      "code": "ZASW",
+      "name": "Aspirina",
+      "stock": 199956
+    }
+  ]
+}

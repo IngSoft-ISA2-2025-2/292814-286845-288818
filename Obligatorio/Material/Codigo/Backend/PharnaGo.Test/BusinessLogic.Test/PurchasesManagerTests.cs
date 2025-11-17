@@ -4,6 +4,7 @@ using PharmaGo.BusinessLogic;
 using PharmaGo.Domain.Entities;
 using PharmaGo.Exceptions;
 using PharmaGo.IDataAccess;
+using InstrumentationInterface;
 
 namespace PharmaGo.Test.BusinessLogic.Test
 {
@@ -17,6 +18,7 @@ namespace PharmaGo.Test.BusinessLogic.Test
         private Mock<IRepository<User>> _userRespository;
         private Mock<IRepository<Session>> _sessionRespository;
         private Mock<IRepository<PurchaseDetail>> _purchaseDetailRespository;
+        private Mock<ICustomMetrics> _metricsMock;
         private PurchasesManager _purchasesManager;
         private Purchase purchase;
         private Purchase purchase_2;
@@ -42,8 +44,9 @@ namespace PharmaGo.Test.BusinessLogic.Test
             _userRespository = new Mock<IRepository<User>>(MockBehavior.Strict);
             _sessionRespository = new Mock<IRepository<Session>>(MockBehavior.Strict);
             _purchaseDetailRespository = new Mock<IRepository<PurchaseDetail>>(MockBehavior.Strict);
+            _metricsMock = new Mock<ICustomMetrics>(MockBehavior.Loose);
             _purchasesManager = new PurchasesManager(_purchaseRespository.Object, _pharmacyRespository.Object, _drugsRespository.Object,
-            _purchaseDetailRespository.Object, _sessionRespository.Object, _userRespository.Object);
+            _purchaseDetailRespository.Object, _sessionRespository.Object, _userRespository.Object, _metricsMock.Object);
 
             unitMeasure1 = new UnitMeasure { Id = 1, Deleted = false, Name = "ml" };
             unitMeasure2 = new UnitMeasure { Id = 2, Deleted = false, Name = "mg" };
@@ -698,22 +701,39 @@ namespace PharmaGo.Test.BusinessLogic.Test
                 Id = 1,
                 UserName = "TestEmployee",
                 Email = "employee@test.com",
-                Pharmacy = null // Usuario sin farmacia asignada
+                Pharmacy = null
             };
             
             var session = new Session { Id = 1, Token = guidToken, UserId = 1 };
             
-            _sessionRespository.Setup(s => s.GetOneByExpression(It.IsAny<System.Linq.Expressions.Expression<Func<Session, bool>>>()))
+            _sessionRespository.Setup(s => s.GetOneByExpression(se => se.Token == guidToken))
                 .Returns(session);
-            _userRespository.Setup(u => u.GetOneDetailByExpression(It.IsAny<System.Linq.Expressions.Expression<Func<User, bool>>>()))
+            _userRespository.Setup(u => u.GetOneDetailByExpression(us => us.Id == 1))
                 .Returns(userWithoutPharmacy);
 
             // Act
             var result = _purchasesManager.GetAllPurchases(token);
 
-            // Assert - Ahora esperamos una lista vacía en lugar de una excepción
+            // Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count);
+        }
+
+        [TestMethod]
+        public void Create_Purchase_Should_Call_Metrics()
+        {
+            //Arrange
+            pharmacy.Drugs = new List<Drug> { drug1, drug2 };
+            _pharmacyRespository.Setup(y => y.GetOneByExpression(x => x.Id == 1)).Returns(pharmacy);
+            _pharmacyRespository.Setup(y => y.GetOneByExpression(x => x.Id == 2)).Returns(pharmacy2);
+            _purchaseRespository.Setup(x => x.InsertOne(purchase));
+            _purchaseRespository.Setup(x => x.Save());
+
+            //Act
+            var response = _purchasesManager.CreatePurchase(purchase);
+
+            //Assert
+            _metricsMock.Verify(m => m.IncrementPurchasesCompleted(), Times.Once);
         }
 
     }

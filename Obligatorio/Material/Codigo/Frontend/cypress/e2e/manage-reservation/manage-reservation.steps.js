@@ -61,6 +61,7 @@ Given(
           status: statusMap[estado2] || estado2,
           fechaCreacion: '2023-10-02T11:00:00Z',
           idReferencia: 'REF123456',
+          fechaConfirmacion: '2023-10-02T14:00:00Z',
         },
         {
           id: 3,
@@ -85,6 +86,7 @@ Given(
           status: statusMap[estado5] || estado5,
           fechaCreacion: '2023-10-05T14:00:00Z',
           fechaRetiro: '2023-10-06T10:00:00Z',
+          idReferencia: 'REF789012',
         },
       ],
     }).as('reservasExitosas');

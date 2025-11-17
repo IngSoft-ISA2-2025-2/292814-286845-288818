@@ -52,17 +52,20 @@ describe('ValidateReservationComponent', () => {
   it('should display reservation information when validacionExitosa is true', () => {
     component.validacionExitosa = true;
     component.reservaInfo = {
-      medicamento: 'Aspirina',
-      cantidad: 2,
-      cliente: 'usuario@test.com',
-      farmacia: 'Farmashop'
+      pharmacyName: 'Farmashop',
+      drugs: [
+        {
+          drugName: 'Aspirina',
+          drugQuantity: 2
+        }
+      ]
     };
     fixture.detectChanges();
 
     expect(fixture.debugElement.query(By.css('[data-cy="validacion-exitosa"]'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('[data-cy="reserva-medicamento"]'))).not.toBeNull();
     expect(fixture.debugElement.query(By.css('[data-cy="reserva-cantidad"]'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('[data-cy="reserva-cliente"]'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('[data-cy="reserva-farmacia"]'))).not.toBeNull();
   });
 
   it('should show estado reserva when estadoReserva is set', () => {

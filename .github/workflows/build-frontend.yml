@@ -2,9 +2,9 @@ name: Frontend Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
   workflow_dispatch:
 
 env:
@@ -74,7 +74,7 @@ jobs:
       if: needs.detect-frontend-changes.outputs.frontend-changed == 'true'
       uses: actions/setup-node@v4
       with:
-        node-version: '18.x'
+        node-version: '20.x'
         cache: 'npm'
         cache-dependency-path: ${{ env.WORKING_DIRECTORY }}/package-lock.json
 

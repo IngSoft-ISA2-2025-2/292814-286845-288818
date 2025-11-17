@@ -56,6 +56,15 @@ Proyecto-DevOps/
 - state-management: 11
 - secure-reservation: 5 
 
+
+### Entrega 4 - Observabilidad, Telemetría y Performance (2 semanas)
+
+| Requerimiento | Documento | Puntos |
+|---------------|-----------|--------|
+| **Testing de Performance** | [Testing de Performance](docs/testing_performance.md) | Ejecución de pruebas de carga con k6 sobre endpoints críticos. Análisis de resultados, cuellos de botella y aspectos a mejorar. |
+| **Análisis de Métricas DevOps** | [Análisis Métricas DevOps](docs/analisis_metricas_devops.md) | Cálculo y análisis de métricas DORA (Deployment Frequency, Lead Time, Change Failure Rate, MTTR) con scripts automáticos. Evaluación de madurez DevOps y feedback para mejora continua. |
+| **Implementación de Telemetría (logs y métricas)** | [Estrategia de Telemetría](docs/estrategia_telemetria.md) | Instrumentación completa de logs estructurados y 6 métricas (2 negocio, 2 aplicación, 2 infraestructura) con OpenTelemetry, Prometheus y Serilog. Evidencia de integración y queries en Prometheus. |
+
 ## Marco de Gestión
 
 El proyecto se realizará en el marco de gestión **Kanban**. Se espera que cada integrante dedique un **mínimo de 5 horas semanales** a las actividades de ingeniería del proyecto (sin incluir gestión y retrospectivas).

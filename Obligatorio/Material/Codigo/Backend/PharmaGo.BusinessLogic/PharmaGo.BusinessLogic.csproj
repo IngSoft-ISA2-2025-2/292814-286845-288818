@@ -12,6 +12,7 @@
     <ProjectReference Include="..\PharmaGo.Exceptions\PharmaGo.Exceptions.csproj" />
     <ProjectReference Include="..\PharmaGo.IBusinessLogic\PharmaGo.IBusinessLogic.csproj" />
     <ProjectReference Include="..\PharmaGo.IDataAccess\PharmaGo.IDataAccess.csproj" />
+    <ProjectReference Include="..\InstrumentationInterface\InstrumentationInterface.csproj" />
   </ItemGroup>
 
   <ItemGroup>
