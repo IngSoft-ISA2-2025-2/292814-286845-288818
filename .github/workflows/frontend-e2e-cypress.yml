@@ -74,16 +74,25 @@ jobs:
     - name: Install dependencies for Cypress
       working-directory: ${{ env.FRONTEND_DIRECTORY }}
       run: |
+        set +e
         echo "📦 Installing dependencies..."
         echo "Checking package.json typescript version:"
         grep typescript package.json || echo "typescript not found in package.json"
         echo ""
         echo "Attempting npm ci first..."
-        if ! npm ci --legacy-peer-deps 2>&1; then
+        npm ci --legacy-peer-deps
+        EXIT_CODE=$?
+        if [ $EXIT_CODE -ne 0 ]; then
           echo ""
-          echo "⚠️ npm ci failed, falling back to npm install to sync lock file..."
+          echo "⚠️ npm ci failed with exit code $EXIT_CODE"
+          echo "📦 Falling back to npm install to sync lock file..."
           npm install --legacy-peer-deps
+          if [ $? -ne 0 ]; then
+            echo "❌ npm install also failed"
+            exit 1
+          fi
         fi
+        echo "✅ Dependencies installed successfully"
 
     - name: Set up Docker Compose
       run: |
