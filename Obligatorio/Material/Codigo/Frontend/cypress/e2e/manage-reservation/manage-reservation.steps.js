@@ -283,8 +283,9 @@ When('hace click en el botón de consultar reservas', () => {
 
 When('aplica filtro para ver solo reservas en estado {string}', (estado) => {
   cy.get('[data-cy="consultar-reservas-btn"]').click();
-  cy.wait(500); // Esperar a que carguen las reservas
+  cy.wait(1000); // Esperar a que carguen las reservas
   cy.get('[data-cy="filtro-estado"]').select(estado);
+  cy.wait(500); // Esperar a que se aplique el filtro
 });
 
 When('solicita ordenar por fecha de creación más reciente', () => {
