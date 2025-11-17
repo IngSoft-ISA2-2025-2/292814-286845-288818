@@ -49,22 +49,14 @@ jobs:
     name: Cypress E2E Tests
     runs-on: ubuntu-latest
     needs: detect-code-changes
-    if: always()
+    if: needs.detect-code-changes.outputs.code-changed == 'true'
     
     steps:
-    - name: Skip if no code changes
-      if: needs.detect-code-changes.outputs.code-changed != 'true'
-      run: |
-        echo "⏭️ Skipping Cypress E2E tests - no code changes detected"
-        echo "✅ This check passes automatically when no code changes are present"
-        exit 0
 
     - name: Checkout code
-      if: needs.detect-code-changes.outputs.code-changed == 'true'
       uses: actions/checkout@v4
 
     - name: Set up Node.js
-      if: needs.detect-code-changes.outputs.code-changed == 'true'
       uses: actions/setup-node@v4
       with:
         node-version: '20.x'
@@ -72,7 +64,6 @@ jobs:
         cache-dependency-path: ${{ env.FRONTEND_DIRECTORY }}/package-lock.json
 
     - name: Cache node modules
-      if: needs.detect-code-changes.outputs.code-changed == 'true'
       uses: actions/cache@v4
       with:
         path: ${{ env.FRONTEND_DIRECTORY }}/node_modules
@@ -81,21 +72,17 @@ jobs:
           ${{ runner.os }}-node-20-
 
     - name: Install dependencies for Cypress
-      if: needs.detect-code-changes.outputs.code-changed == 'true'
       working-directory: ${{ env.FRONTEND_DIRECTORY }}
       run: |
         echo "📦 Installing dependencies..."
-        npm install --package-lock-only
-        npm ci --legacy-peer-deps
+        npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
     - name: Set up Docker Compose
-      if: needs.detect-code-changes.outputs.code-changed == 'true'
       run: |
         echo "🐳 Starting Docker Compose services..."
         docker compose -f Obligatorio/Material/Codigo/docker-compose.yml up -d --build
 
     - name: Wait for Backend to be ready
-      if: needs.detect-code-changes.outputs.code-changed == 'true'
       run: |
         echo "⏳ Waiting for Backend to be ready..."
         for i in {1..30}; do
@@ -115,7 +102,6 @@ jobs:
         fi
 
     - name: Wait for Frontend to be ready
-      if: needs.detect-code-changes.outputs.code-changed == 'true'
       run: |
         echo "⏳ Waiting for Frontend to be ready..."
         for i in {1..30}; do
@@ -135,20 +121,19 @@ jobs:
         fi
 
     - name: Run Cypress E2E tests
-      if: needs.detect-code-changes.outputs.code-changed == 'true'
       working-directory: ${{ env.FRONTEND_DIRECTORY }}
       run: |
         echo "🧪 Running Cypress E2E tests..."
         npx cypress run
 
     - name: Show Docker Compose logs (on failure)
-      if: failure() && needs.detect-code-changes.outputs.code-changed == 'true'
+      if: failure()
       run: |
         echo "📋 Docker Compose logs:"
         docker compose -f Obligatorio/Material/Codigo/docker-compose.yml logs
 
     - name: Upload Cypress Screenshots (on failure)
-      if: failure() && needs.detect-code-changes.outputs.code-changed == 'true'
+      if: failure()
       uses: actions/upload-artifact@v4
       with:
         name: cypress-screenshots
@@ -156,7 +141,7 @@ jobs:
         retention-days: 7
 
     - name: Upload Cypress Videos
-      if: always() && needs.detect-code-changes.outputs.code-changed == 'true'
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: cypress-videos
@@ -164,7 +149,7 @@ jobs:
         retention-days: 7
 
     - name: Tear down Docker Compose
-      if: always() && needs.detect-code-changes.outputs.code-changed == 'true'
+      if: always()
       run: |
         echo "🧹 Cleaning up Docker Compose..."
         docker compose -f Obligatorio/Material/Codigo/docker-compose.yml down -v
@@ -173,20 +158,31 @@ jobs:
       if: always()
       run: |
         echo "## 🧪 Cypress E2E Tests Results" >> $GITHUB_STEP_SUMMARY
-        if [ "${{ needs.detect-code-changes.outputs.code-changed }}" = "true" ]; then
-          echo "### Configuration" >> $GITHUB_STEP_SUMMARY
-          echo "- Node.js Version: 20.x" >> $GITHUB_STEP_SUMMARY
-          echo "- Frontend Directory: \`${{ env.FRONTEND_DIRECTORY }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- Backend Directory: \`${{ env.BACKEND_DIRECTORY }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
-          if [ "${{ job.status }}" = "success" ]; then
-            echo "✅ **Status**: All E2E tests passed" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ **Status**: Some E2E tests failed" >> $GITHUB_STEP_SUMMARY
-            echo "- Check the uploaded screenshots and videos for details" >> $GITHUB_STEP_SUMMARY
-          fi
+        echo "### Configuration" >> $GITHUB_STEP_SUMMARY
+        echo "- Node.js Version: 20.x" >> $GITHUB_STEP_SUMMARY
+        echo "- Frontend Directory: \`${{ env.FRONTEND_DIRECTORY }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- Backend Directory: \`${{ env.BACKEND_DIRECTORY }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ job.status }}" = "success" ]; then
+          echo "✅ **Status**: All E2E tests passed" >> $GITHUB_STEP_SUMMARY
         else
-          echo "⏭️ **Status**: Skipped (no code changes detected)" >> $GITHUB_STEP_SUMMARY
-          echo "- This check passes automatically when no code changes are present in \`Obligatorio/Material/Codigo/\`" >> $GITHUB_STEP_SUMMARY
+          echo "❌ **Status**: Some E2E tests failed" >> $GITHUB_STEP_SUMMARY
+          echo "- Check the uploaded screenshots and videos for details" >> $GITHUB_STEP_SUMMARY
         fi
+  
+  skip-cypress-e2e:
+    name: Cypress E2E Tests
+    runs-on: ubuntu-latest
+    needs: detect-code-changes
+    if: needs.detect-code-changes.outputs.code-changed != 'true'
+    
+    steps:
+    - name: Skip Cypress E2E tests
+      run: |
+        echo "⏭️ Skipping Cypress E2E tests - no code changes detected in Obligatorio/Material/Codigo/"
+        echo "✅ This check passes automatically when no code changes are present"
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## 🧪 Cypress E2E Tests Results" >> $GITHUB_STEP_SUMMARY
+        echo "⏭️ **Status**: Skipped (no code changes detected)" >> $GITHUB_STEP_SUMMARY
+        echo "- This check passes automatically when no code changes are present in \`Obligatorio/Material/Codigo/\`" >> $GITHUB_STEP_SUMMARY
