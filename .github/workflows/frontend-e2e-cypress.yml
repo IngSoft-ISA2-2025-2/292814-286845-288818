@@ -85,8 +85,7 @@ jobs:
       working-directory: ${{ env.FRONTEND_DIRECTORY }}
       run: |
         echo "📦 Installing dependencies..."
-        npm install --package-lock-only
-        npm ci --legacy-peer-deps
+        npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
     - name: Set up Docker Compose
       if: needs.detect-code-changes.outputs.code-changed == 'true'
