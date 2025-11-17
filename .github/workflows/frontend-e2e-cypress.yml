@@ -84,9 +84,25 @@ jobs:
       if: needs.detect-code-changes.outputs.code-changed == 'true'
       working-directory: ${{ env.FRONTEND_DIRECTORY }}
       run: |
+        set +e
         echo "📦 Installing dependencies..."
-        npm install --package-lock-only
+        echo "Checking package.json typescript version:"
+        grep typescript package.json || echo "typescript not found in package.json"
+        echo ""
+        echo "Attempting npm ci first..."
         npm ci --legacy-peer-deps
+        EXIT_CODE=$?
+        if [ $EXIT_CODE -ne 0 ]; then
+          echo ""
+          echo "⚠️ npm ci failed with exit code $EXIT_CODE"
+          echo "📦 Falling back to npm install to sync lock file..."
+          npm install --legacy-peer-deps
+          if [ $? -ne 0 ]; then
+            echo "❌ npm install also failed"
+            exit 1
+          fi
+        fi
+        echo "✅ Dependencies installed successfully"
 
     - name: Set up Docker Compose
       if: needs.detect-code-changes.outputs.code-changed == 'true'
